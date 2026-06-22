@@ -160,7 +160,7 @@ export const EnhancedAgreementSchema = z
   .superRefine((data, ctx) => {
     if (data.installments && data.installments.length > 0) {
       const firstInstallment = data.installments[0];
-      if (firstInstallment && firstInstallment.due_date < data.start_date) {
+      if (firstInstallment && new Date(firstInstallment.due_date).getTime() < new Date(data.start_date).getTime()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:

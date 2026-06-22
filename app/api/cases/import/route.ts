@@ -93,7 +93,7 @@ async function POST_handler(req: NextRequest) {
     for (const [index, row] of data.entries()) {
       try {
         // Pré-processa 'Prioridade' para contornar acentuação e variações
-        const preRow: any = { ...row };
+        const preRow: any = { ...(row as Record<string, any>) };
         if (typeof preRow['Prioridade'] === 'string') {
           const pr = preRow['Prioridade'].normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
           if (pr === 'media') preRow['Prioridade'] = 'MǸdia';
@@ -116,7 +116,7 @@ async function POST_handler(req: NextRequest) {
           throw new Error(`Executado "${validatedRow.Executado}" não encontrado no sistema. Cadastre-o primeiro.`);
         }
 
-        const mappedStatus = mapStatus(validatedRow.Status);
+        const mappedStatus = mapStatus(validatedRow.Status || '');
         // Normaliza prioridade para valores aceitos pelo banco
         const prNorm = (validatedRow.Prioridade ?? '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
         const mappedPriority = prNorm === 'alta' ? 'Alta' : prNorm === 'baixa' ? 'Baixa' : 'Média';

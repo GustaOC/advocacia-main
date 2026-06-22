@@ -734,7 +734,7 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setExpandedAgreements(new Set())} className="border-2 border-slate-200 rounded-xl">Recolher Todos</Button>
-              <Button variant="outline" onClick={() => setExpandedAgreements(new Set(filteredAgreements.map(a => a.id)))} className="border-2 border-slate-200 rounded-xl">Expandir Todos</Button>
+              <Button variant="outline" onClick={() => setExpandedAgreements(new Set(filteredAgreements.map(a => Number(a.id))))} className="border-2 border-slate-200 rounded-xl">Expandir Todos</Button>
               <Button onClick={onNewAgreement} className="bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl"><Plus className="mr-2 h-4 w-4" /> Novo Acordo</Button>
             </div>
           </div>
@@ -762,7 +762,7 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
         ) : (
           <div className="space-y-2">
             {filteredAgreements.map((agreement) => (
-              <AgreementDetailsCard key={agreement.id} agreement={agreement} isExpanded={expandedAgreements.has(agreement.id)} onToggle={() => toggleExpanded(agreement.id)} onSendMessage={onSendMessage} />
+              <AgreementDetailsCard key={agreement.id} agreement={agreement} isExpanded={expandedAgreements.has(Number(agreement.id))} onToggle={() => toggleExpanded(Number(agreement.id))} onSendMessage={onSendMessage} />
             ))}
           </div>
         )}
@@ -952,8 +952,8 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
 
   const filteredExpenses = useMemo(() => {
     return expenses.filter(expense => {
-      const expYear = parseInt(expense.date.split('-')[0], 10);
-      const expMonth = parseInt(expense.date.split('-')[1], 10);
+      const expYear = parseInt((expense.date || '').split('-')[0] || '', 10);
+      const expMonth = parseInt((expense.date || '').split('-')[1] || '', 10);
       const dateMatch = expYear === selectedDate.year && expMonth === selectedDate.month;
 
       const searchMatch = expense.description.toLowerCase().includes(searchTerm.toLowerCase());

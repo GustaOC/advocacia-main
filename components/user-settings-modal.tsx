@@ -103,8 +103,8 @@ const roleInfo = ROLE_LABELS[roleKey]
                 ) : (
                   <Users className="h-4 w-4 text-slate-400" />
                 )}
-                <Badge variant={roleInfo.variant} className="text-xs px-2 py-0.5">
-                  {roleInfo.label}
+                <Badge variant={roleInfo?.variant as any} className="text-xs px-2 py-0.5">
+                  {roleInfo?.label || user?.role}
                 </Badge>
               </div>
             </div>

@@ -2,24 +2,24 @@
 
 import Image from "next/image"
 import { Scale, ShieldCheck, AlertTriangle, ScrollText, ChevronRight } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 
-const fadeInUp = {
+const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
 }
 
-const fadeInLeft = {
+const fadeInLeft: Variants = {
   hidden: { opacity: 0, x: -40 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
 }
 
-const fadeInRight = {
+const fadeInRight: Variants = {
   hidden: { opacity: 0, x: 40 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
 }
 
-const staggerContainer = {
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,

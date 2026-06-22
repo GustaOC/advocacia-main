@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { apiClient } from '@/lib/api-client'
-import { Role, Permission } from '@/lib/auth'
+import { Permission } from '@/lib/auth'
 
 export function RoleManagement() {
-  const [roles, setRoles] = useState<Role[]>([])
+  const [roles, setRoles] = useState<any[]>([])
   const [permissions, setPermissions] = useState<Permission[]>([])
 
   useEffect(() => {

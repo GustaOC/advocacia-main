@@ -62,16 +62,16 @@ export function EnhancedFinancialAgreementModal({ isOpen, onClose, agreementId, 
   } = useForm<AgreementFormData>({
     resolver: zodResolver(EnhancedAgreementSchema),
     defaultValues: {
-      case_id: '',
-      debtor_id: '',
-      creditor_id: '',
+      case_id: '' as any,
+      debtor_id: '' as any,
+      creditor_id: '' as any,
       total_amount: 0,
       down_payment: 0,
       number_of_installments: 12,
-      start_date: new Date(),
-      end_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)), // Garante que a data final seja após a de início por defeito
+      start_date: new Date() as any,
+      end_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)) as any, // Garante que a data final seja após a de início por defeito
       status: 'ATIVO',
-      agreement_type: 'SOMENTE_PARCELADO',
+      agreement_type: 'Judicial',
       notes: '',
     },
   })
@@ -79,17 +79,17 @@ export function EnhancedFinancialAgreementModal({ isOpen, onClose, agreementId, 
   useEffect(() => {
     if (initialData && isOpen) {
       reset({
-        case_id: initialData.id || '',
-        debtor_id: initialData.debtor_id || '',
-        creditor_id: initialData.creditor_id || '',
+        case_id: (initialData.id || '') as any,
+        debtor_id: (initialData.debtor_id || '') as any,
+        creditor_id: (initialData.creditor_id || '') as any,
         // Reseta o resto para valores padrão
         total_amount: 0,
         down_payment: 0,
         number_of_installments: 12,
-        start_date: new Date(),
-        end_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+        start_date: new Date() as any,
+        end_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)) as any,
         status: 'ATIVO',
-        agreement_type: 'SOMENTE_PARCELADO',
+        agreement_type: 'Judicial',
         notes: '',
       });
     } else if (!isOpen) {
@@ -126,7 +126,7 @@ export function EnhancedFinancialAgreementModal({ isOpen, onClose, agreementId, 
               render={({ field }) => (
                 <div className="space-y-1">
                   <Label>Processo</Label>
-                  <Select onValueChange={field.onChange} value={field.value} disabled={!!initialData}>
+                  <Select onValueChange={field.onChange} value={field.value?.toString() || ''} disabled={!!initialData}>
                     <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
                     <SelectContent>
                       {mockCases.map((c) => (<SelectItem key={c.id} value={c.id}>{c.case_number}</SelectItem>))}
@@ -142,7 +142,7 @@ export function EnhancedFinancialAgreementModal({ isOpen, onClose, agreementId, 
               render={({ field }) => (
                 <div className="space-y-1">
                   <Label>Devedor</Label>
-                  <Select onValueChange={field.onChange} value={field.value} disabled={!!initialData}>
+                  <Select onValueChange={field.onChange} value={field.value?.toString() || ''} disabled={!!initialData}>
                     <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
                     <SelectContent>
                       {mockEntities.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
@@ -158,7 +158,7 @@ export function EnhancedFinancialAgreementModal({ isOpen, onClose, agreementId, 
               render={({ field }) => (
                 <div className="space-y-1 col-span-2">
                   <Label>Credor</Label>
-                  <Select onValueChange={field.onChange} value={field.value} disabled={!!initialData}>
+                  <Select onValueChange={field.onChange} value={field.value?.toString() || ''} disabled={!!initialData}>
                     <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
                     <SelectContent>
                       {mockEntities.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}
@@ -209,7 +209,7 @@ export function EnhancedFinancialAgreementModal({ isOpen, onClose, agreementId, 
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
-                      <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                      <Calendar mode="single" selected={field.value as any} onSelect={field.onChange} initialFocus />
                     </PopoverContent>
                   </Popover>
                   {errors.start_date && <p className="text-red-500 text-xs">{errors.start_date.message as string}</p>}

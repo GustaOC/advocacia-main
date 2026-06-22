@@ -62,13 +62,13 @@ export function FinancialAgreementModal({ isOpen, onClose, caseData }: Financial
     queryKey: ['cases'],
     queryFn: () => apiClient.getCases()
   });
-  const casesList = casesData?.cases || casesData?.data || casesData || [];
+  const casesList = casesData?.cases || (casesData as any)?.data || (Array.isArray(casesData) ? casesData : []);
 
   const { data: entitiesData } = useQuery({
     queryKey: ['entities'],
     queryFn: () => apiClient.getEntities()
   });
-  const entitiesList = Array.isArray(entitiesData) ? entitiesData : (entitiesData?.data || entitiesData?.entities || []);
+  const entitiesList = Array.isArray(entitiesData) ? entitiesData : ((entitiesData as any)?.data || (entitiesData as any)?.entities || []);
 
   // Efeito para pré-preencher o formulário quando os dados do caso são recebidos
   useEffect(() => {

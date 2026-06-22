@@ -252,8 +252,8 @@ export async function POST(req: NextRequest) {
       const startStr =
         typeof payload.start_date === 'string' && payload.start_date
           ? payload.start_date
-          : payload.start_date instanceof Date
-            ? ymdUTC(payload.start_date)
+          : (payload.start_date as any) instanceof Date
+            ? ymdUTC((payload.start_date as any) as Date)
             : ymdUTC(new Date()); // fallback: hoje (UTC)
 
       installmentsToInsert = generateInstallments({

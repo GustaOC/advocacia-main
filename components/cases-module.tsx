@@ -138,7 +138,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                     installments: agreement.number_of_installments,
                     installment_due_date: agreement.start_date ? String(agreement.start_date).split('T')[0] : null,
                     financial_agreement_id: agreement.id,
-                };
+                } as ExtendedCase;
             }
             return c;
         });
