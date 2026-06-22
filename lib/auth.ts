@@ -1,0 +1,89 @@
+// lib/auth.ts 
+
+import { createAdminClient, createSupabaseServerClient } from "@/lib/supabase/server";
+
+const userCache = new Map<string, { user: AuthUser, timestamp: number }>();
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutos
+
+export type Permission = string;
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name?: string; // adicione essa linha
+  role?: string;
+  permissions?: Permission[];
+}
+
+export async function getSessionUser(): Promise<AuthUser | null> {
+  try {
+    const supabase = createSupabaseServerClient();
+    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !authUser) {
+      return null;
+    }
+
+    const cachedEntry = userCache.get(authUser.id);
+    if (cachedEntry && (Date.now() - cachedEntry.timestamp < CACHE_DURATION_MS)) {
+      return cachedEntry.user;
+    }
+
+    const admin = createAdminClient();
+    
+    // Busca o perfil em user_profiles. Se estiver vazio, não quebra o sistema.
+    const { data: profile, error: profileError } = await admin
+      .from("user_profiles")
+      .select("*")
+      .eq("id", authUser.id)
+      .single();
+
+    if (profileError) {
+      console.warn(`[Auth] Perfil não encontrado em user_profiles para ${authUser.email}. Assumindo dados da autenticação.`);
+    }
+
+    const user: AuthUser = {
+    id: authUser.id,
+    email: authUser.email ?? "",
+    name: profile?.name || profile?.full_name || authUser.user_metadata?.full_name || authUser.email,
+    role: profile?.role || 'member',
+    permissions: profile?.permissions || [],
+  };
+
+    userCache.set(user.id, { user, timestamp: Date.now() });
+    return user;
+  } catch (error) {
+    console.error("[Auth] Erro inesperado em getSessionUser:", error);
+    return null;
+  }
+}
+
+export async function requireAuth(): Promise<AuthUser> {
+  const user = await getSessionUser();
+  if (!user) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return user;
+}
+
+export async function requirePermission(permission: Permission): Promise<AuthUser> {
+  const user = await requireAuth();
+  if (user.role === "admin" || (user.permissions && user.permissions.includes(permission))) {
+    return user;
+  }
+  console.error(`[Auth] Acesso negado para o usuário ${user.email}. Permissão necessária: '${permission}'. Permissões do usuário: [${user.permissions?.join(', ')}]`);
+  throw new Error("FORBIDDEN");
+}
+
+export function clearAuthCache(userId: string) {
+  if (userCache.has(userId)) {
+    userCache.delete(userId);
+    console.log(`[Auth] Cache limpo para o usuário: ${userId}`);
+  }
+}
+
+/**
+ * ALIAS PARA COMPATIBILIDADE: 
+ * Exporta a mesma função com o nome que o código estava esperando
+ */
+export const getCurrentUser = getSessionUser;
