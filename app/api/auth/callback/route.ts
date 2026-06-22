@@ -1,40 +1,70 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
-import { withRateLimit } from "@/lib/with-rate-limit";
+import { NextResponse, type NextRequest } from 'next/server'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
 
-async function GET_handler(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/'
+  const next = searchParams.get('next') ?? '/dashboard'
 
   if (code) {
-    const cookieStore = cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options })
-          },
-          remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options })
-          },
-        },
-      }
-    )
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const res = NextResponse.next()
+    const supabase = createSupabaseServerClient(request, res)
+    
+    // Troca o código temporário por uma sessão real
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+    
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      const user = data?.session?.user
+      if (user) {
+        const createdAt = new Date(user.created_at)
+        const now = new Date()
+        // Calcula a diferença em segundos desde a criação
+        const diffInSeconds = (now.getTime() - createdAt.getTime()) / 1000
+
+        if (diffInSeconds < 10) {
+          // IDENTIFICOU UM NOVO CADASTRO VIA GOOGLE!
+          console.log("[Novo Cadastro] Enviar email de aprovação para admin sobre:", user.email)
+          
+          // TODO: Coloque aqui a chamada para sua API de envio de email
+          // Ex: await fetch('sua-api/enviar-email-admin', { body: { email: user.email } })
+        }
+      }
+
+      const redirectResponse = NextResponse.redirect(
+        new URL(next, origin)
+      )
+
+      res.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie)
+      })
+
+      // SALVA OS TOKENS DO GOOGLE PARA USO FUTURO NA API DO GMAIL
+      if (data.session?.provider_token) {
+        redirectResponse.cookies.set({
+          name: 'google_access_token',
+          value: data.session.provider_token,
+          path: '/',
+          maxAge: 3500, // Expira um pouco antes de 1 hora para evitar falhas
+          httpOnly: true,
+        })
+      }
+      
+      // Salva o Refresh Token se o Google enviar (dura meses/anos)
+      if (data.session?.provider_refresh_token) {
+        redirectResponse.cookies.set({
+          name: 'google_refresh_token',
+          value: data.session.provider_refresh_token,
+          path: '/',
+          maxAge: 60 * 60 * 24 * 365, // 1 ano de duração
+          httpOnly: true,
+        })
+      }
+
+      return redirectResponse
     }
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+  // Em caso de erro, volta para o login
+  console.error("[Auth Callback] Erro na troca de código")
+  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`)
 }
-export const GET = withRateLimit(GET_handler);
