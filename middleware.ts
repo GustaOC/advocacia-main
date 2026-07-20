@@ -17,6 +17,7 @@ const PUBLIC_API_PATTERNS = [
   '/api/auth/login',
   '/api/auth/logout',
   '/api/auth/callback',
+  '/api/auth/verify-invite',
 ];
 
 function isPublic(pathname: string): boolean {
