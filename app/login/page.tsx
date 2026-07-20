@@ -44,12 +44,7 @@ export default function LoginPage() {
           Entrar com o Google
         </button>
 
-        <p className="text-center text-sm text-gray-500">
-          Ainda não possui conta?{' '}
-          <a href="/register" className="text-blue-600 hover:underline">
-            Cadastre-se
-          </a>
-        </p>
+
       </div>
     </div>
   );
