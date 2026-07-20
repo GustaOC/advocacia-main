@@ -72,7 +72,11 @@ const config = {
           500: "hsl(var(--gold-500))",
           600: "hsl(var(--gold-600))",
         },
-
+        slate: {
+          50: "hsl(var(--slate-50))",
+          100: "hsl(var(--slate-100))",
+          900: "hsl(var(--slate-900))",
+        },
         success: "hsl(var(--success))",
         warning: "hsl(var(--warning))",
         danger: "hsl(var(--danger))",
