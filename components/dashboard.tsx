@@ -303,7 +303,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
             </div>
 
             {/* Sidebar Premium com Glassmorphism */}
-            <aside className={`fixed left-0 top-0 h-screen backdrop-blur-xl bg-slate-900/95 text-white shadow-2xl z-50 transition-all duration-500 ease-in-out ${
+            <aside className={`fixed flex flex-col left-0 top-0 h-screen backdrop-blur-xl bg-slate-900/95 text-white shadow-2xl z-50 transition-all duration-500 ease-in-out ${
                 isCollapsed ? 'w-20' : 'w-72'
             } ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 border-r border-white/10`}>
                 
