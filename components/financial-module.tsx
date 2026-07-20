@@ -679,12 +679,13 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
-  const [expandedAgreements, setExpandedAgreements] = useState<Set<number>>(new Set());
+  const [expandedAgreements, setExpandedAgreements] = useState<Set<string>>(new Set());
 
-  const toggleExpanded = useCallback((id: number) => {
+  const toggleExpanded = useCallback((id: string | number) => {
     setExpandedAgreements(prev => {
       const s = new Set(prev);
-      s.has(id) ? s.delete(id) : s.add(id);
+      const strId = String(id);
+      s.has(strId) ? s.delete(strId) : s.add(strId);
       return s;
     });
   }, []);
@@ -762,7 +763,7 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
         ) : (
           <div className="space-y-2">
             {filteredAgreements.map((agreement) => (
-              <AgreementDetailsCard key={agreement.id} agreement={agreement} isExpanded={expandedAgreements.has(Number(agreement.id))} onToggle={() => toggleExpanded(Number(agreement.id))} onSendMessage={onSendMessage} />
+              <AgreementDetailsCard key={agreement.id} agreement={agreement} isExpanded={expandedAgreements.has(String(agreement.id))} onToggle={() => toggleExpanded(String(agreement.id))} onSendMessage={onSendMessage} />
             ))}
           </div>
         )}

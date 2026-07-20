@@ -308,8 +308,8 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                     const isPago = currentCase.status === 'Pago';
                     const amount = Number(currentCase.agreement_value) || Number(currentCase.value) || 0;
                     const installmentsCount = Number(currentCase.installments) || 1;
-                    const defaultDate = new Date().toISOString().split('T')[0];
-                    const startDateStr = currentCase.installment_due_date || defaultDate;
+                    const today = new Date().toISOString().split('T')[0];
+                    const startDateStr = currentCase.installment_due_date || today;
                     
                     const startDate = new Date(startDateStr + 'T12:00:00Z');
                     const endDate = new Date(startDate);
