@@ -735,7 +735,7 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setExpandedAgreements(new Set())} className="border-2 border-slate-200 rounded-xl">Recolher Todos</Button>
-              <Button variant="outline" onClick={() => setExpandedAgreements(new Set(filteredAgreements.map(a => Number(a.id))))} className="border-2 border-slate-200 rounded-xl">Expandir Todos</Button>
+              <Button variant="outline" onClick={() => setExpandedAgreements(new Set(filteredAgreements.map(a => String(a.id))))} className="border-2 border-slate-200 rounded-xl">Expandir Todos</Button>
               <Button onClick={onNewAgreement} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg rounded-xl border-0"><Plus className="mr-2 h-4 w-4" /> Novo Acordo</Button>
             </div>
           </div>
