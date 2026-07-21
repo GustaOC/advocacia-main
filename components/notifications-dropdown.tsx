@@ -134,6 +134,8 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
       if (onNavigate) onNavigate('tasks');
     } else if (type === 'entidade' || title.includes('cliente') || msg.includes('cliente') || title.includes('entidade')) {
       if (onNavigate) onNavigate('entities');
+    } else if (type === 'processo' || title.includes('processo') || msg.includes('processo') || title.includes('caso')) {
+      if (onNavigate) onNavigate('cases');
     } else if (title.includes('petição') || title.includes('documento')) {
       if (onNavigate) onNavigate('petitions');
     }
