@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -30,10 +29,13 @@ interface Notification {
   created_at: string;
 }
 
-export function NotificationsDropdown() {
+interface NotificationsDropdownProps {
+  onNavigate?: (tab: string) => void;
+}
+
+export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps = {}) {
   const { toast } = useToast();
   const { user } = useAuth();
-  const router = useRouter();
 
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [loading, setLoading] = useState(true)
@@ -120,20 +122,20 @@ export function NotificationsDropdown() {
       markAsRead(notification.id);
     }
     
-    if (!router) return;
+    if (!onNavigate) return;
 
     const title = notification.title?.toLowerCase() || '';
     const msg = notification.message?.toLowerCase() || '';
     const type = notification.type?.toLowerCase() || '';
 
     if (type === 'financeiro' || title.includes('financeiro') || msg.includes('financeiro') || msg.includes('parcela') || msg.includes('acordo') || msg.includes('vencimento')) {
-      router.push('/dashboard/financeiro');
+      if (onNavigate) onNavigate('financial');
     } else if (type === 'tarefa' || title.includes('tarefa') || msg.includes('tarefa')) {
-      router.push('/dashboard/tarefas');
+      if (onNavigate) onNavigate('tasks');
     } else if (type === 'entidade' || title.includes('cliente') || msg.includes('cliente') || title.includes('entidade')) {
-      router.push('/dashboard/clientes');
+      if (onNavigate) onNavigate('entities');
     } else if (title.includes('petição') || title.includes('documento')) {
-      router.push('/dashboard/peticoes');
+      if (onNavigate) onNavigate('petitions');
     }
   };
 

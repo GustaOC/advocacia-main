@@ -451,7 +451,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                             
                             <div className="flex items-center gap-4">
                                 {/* Premium Notifications */}
-                                <NotificationsDropdown />
+                                <NotificationsDropdown onNavigate={setActiveTab} />
 
                                 {/* Premium Quick Actions */}
                                 
