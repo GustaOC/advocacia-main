@@ -129,7 +129,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
         return baseCases.map(c => {
             // Tenta encontrar um acordo financeiro correspondente a este processo
             const agreement = financialAgreements?.find((ag: any) => Number(ag.case_id) === Number(c.id));
-            if (agreement && c.status === 'Acordo') {
+            if (agreement && (c.status === 'Acordo' || c.status === 'Pago')) {
                 return {
                     ...c,
                     agreement_type: agreement.agreement_type as any,
