@@ -1,23 +1,27 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/auth";
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('user_id');
-
-  if (!userId) {
-    return NextResponse.json({ error: "user_id é obrigatório" }, { status: 400 });
-  }
-
   try {
+    const user = await getSessionUser();
+    if (!user) {
+      return NextResponse.json({ error: "Sessão expirada ou não autorizado" }, { status: 401 });
+    }
+
     const supabase = createAdminClient();
-    
-    const { data: notifications, error } = await supabase
+
+    let query = supabase
       .from("notifications")
       .select("*")
-      .eq("user_id", userId)
       .order("created_at", { ascending: false })
-      .limit(20);
+      .limit(50);
+
+    if (user.role !== 'admin') {
+      query = query.eq("user_id", user.id);
+    }
+
+    const { data: notifications, error } = await query;
 
     if (error) throw error;
 

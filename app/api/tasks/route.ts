@@ -60,6 +60,16 @@ export async function PATCH(request: Request) {
       throw error;
     }
 
+    if (updates.assigned_to) {
+      await supabase.from("notifications").insert([{
+        user_id: updates.assigned_to,
+        title: "Nova tarefa atribuída",
+        message: `A tarefa "${data.title}" foi atribuída a você.`,
+        type: "info",
+        is_read: false
+      }]);
+    }
+
     return NextResponse.json(data);
   } catch (error: any) {
     console.error("Erro PATCH /api/tasks:", error);
@@ -119,6 +129,16 @@ export async function POST(request: Request) {
 
     if (error) {
       throw error;
+    }
+
+    if (body.assigned_to) {
+      await supabase.from("notifications").insert([{
+        user_id: body.assigned_to,
+        title: "Nova tarefa",
+        message: `Uma nova tarefa "${body.title}" foi atribuída a você.`,
+        type: "info",
+        is_read: false
+      }]);
     }
 
     return NextResponse.json(data);
