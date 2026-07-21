@@ -110,12 +110,15 @@ export default function EntitiesModule() {
   const [listType, setListType] = useState<'Cliente' | 'Executado'>('Cliente');
   const { toast } = useToast();
 
+  const [isImporting, setIsImporting] = useState(false);
+
   async function handleImport() {
     try {
       if (!file) {
         toast({ title: "Selecione um arquivo", description: "Escolha uma planilha (.xlsx) para importar.", variant: "destructive" });
         return;
       }
+      setIsImporting(true);
       const fd = new FormData();
       fd.append("file", file);
       fd.append("type", importModal.type);
@@ -141,6 +144,8 @@ export default function EntitiesModule() {
       await queryClient.refetchQueries({ queryKey: ["entities"] });
     } catch (err: any) {
       toast({ title: "Erro ao importar", description: err?.message ?? String(err), variant: "destructive" });
+    } finally {
+      setIsImporting(false);
     }
   }
 
@@ -411,8 +416,11 @@ export default function EntitiesModule() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setImportModal((m)=>({...m, isOpen:false})); setFile(null); }} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
-            <Button onClick={handleImport} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl"><Upload className="mr-2 h-4 w-4" /> Importar</Button>
+            <Button variant="outline" onClick={() => { setImportModal((m)=>({...m, isOpen:false})); setFile(null); }} className="border-2 border-slate-200 rounded-xl" disabled={isImporting}>Cancelar</Button>
+            <Button onClick={handleImport} disabled={isImporting} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
+              {isImporting ? <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Upload className="mr-2 h-4 w-4" />}
+              {isImporting ? "Importando..." : "Importar"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
