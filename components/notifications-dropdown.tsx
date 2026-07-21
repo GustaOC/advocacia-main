@@ -19,7 +19,7 @@ import { createClient } from "@/lib/supabase/client"
 
 
 interface Notification {
-  id: number;
+  id: string;
   user_id: string;
   title: string;
   message: string;
@@ -32,6 +32,13 @@ interface Notification {
 export function NotificationsDropdown() {
   const { toast } = useToast();
   const { user } = useAuth();
+  const router = import("next/navigation").then(mod => mod.useRouter).catch(() => null); // Import dinâmico ou estático
+  const [routerInstance, setRouterInstance] = useState<any>(null);
+  
+  useEffect(() => {
+    import("next/navigation").then(mod => setRouterInstance(mod.useRouter())).catch(() => {});
+  }, []);
+
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [loading, setLoading] = useState(true)
   const [unreadCount, setUnreadCount] = useState(0)
@@ -94,7 +101,7 @@ export function NotificationsDropdown() {
     };
   }, [currentUserId, toast]);
 
-  const markAsRead = async (id: number) => {
+  const markAsRead = async (id: string) => {
     try {
       const response = await fetch(`/api/notifications/${id}/read`, {
         method: 'PUT',
@@ -109,6 +116,28 @@ export function NotificationsDropdown() {
       }
     } catch (error) {
       console.error("Erro ao marcar notificação como lida:", error);
+    }
+  };
+
+  const handleNotificationClick = (e: any, notification: Notification) => {
+    if (!notification.is_read) {
+      markAsRead(notification.id);
+    }
+    
+    if (!routerInstance) return;
+
+    const title = notification.title?.toLowerCase() || '';
+    const msg = notification.message?.toLowerCase() || '';
+    const type = notification.type?.toLowerCase() || '';
+
+    if (type === 'financeiro' || title.includes('financeiro') || msg.includes('financeiro') || msg.includes('parcela') || msg.includes('acordo') || msg.includes('vencimento')) {
+      routerInstance.push('/dashboard/financeiro');
+    } else if (type === 'tarefa' || title.includes('tarefa') || msg.includes('tarefa')) {
+      routerInstance.push('/dashboard/tarefas');
+    } else if (type === 'entidade' || title.includes('cliente') || msg.includes('cliente') || title.includes('entidade')) {
+      routerInstance.push('/dashboard/clientes');
+    } else if (title.includes('petição') || title.includes('documento')) {
+      routerInstance.push('/dashboard/peticoes');
     }
   };
 
@@ -152,12 +181,7 @@ export function NotificationsDropdown() {
               <DropdownMenuItem 
                 key={notification.id} 
                 className={`p-4 cursor-pointer border-b last:border-b-0 transition-colors ${!notification.is_read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-slate-50'}`}
-                onSelect={(e) => {
-                  e.preventDefault(); // Evita fechar o menu ao marcar como lida
-                  if (!notification.is_read) {
-                    markAsRead(notification.id);
-                  }
-                }}
+                onSelect={(e) => handleNotificationClick(e, notification)}
               >
                 <div className="flex items-start space-x-3 w-full">
                     <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>

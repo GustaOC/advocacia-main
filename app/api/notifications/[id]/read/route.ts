@@ -21,17 +21,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       )
     }
 
-    // ✅ CORREÇÃO: Validação numérica do ID (assumindo que notifications usa ID numérico)
-    const numericId = parseInt(notificationId)
-    if (isNaN(numericId) || numericId <= 0) {
-      console.warn(`[API Notification Read] ❌ ID inválido: ${notificationId}`)
-      return NextResponse.json(
-        { error: "ID da notificação deve ser um número válido", success: false }, 
-        { status: 400 }
-      )
-    }
-
-    console.log(`[API Notification Read] Processando notificação ID: ${numericId}`)
+    console.log(`[API Notification Read] Processando notificação ID: ${notificationId}`)
 
     // ✅ CORREÇÃO: Modo desenvolvimento
     if (process.env.NODE_ENV === 'development') {
@@ -39,7 +29,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       
       return NextResponse.json({
         notification: {
-          id: numericId,
+          id: notificationId,
           is_read: true,
           updated_at: new Date().toISOString(),
           updated_by: user.id
@@ -59,7 +49,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       const { data: existingNotification, error: checkError } = await supabase
         .from("notifications")
         .select("id, user_id, is_read")
-        .eq("id", numericId)
+        .eq("id", notificationId)
         .single()
 
       if (checkError) {
@@ -86,7 +76,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
       // ✅ CORREÇÃO: Verificar se já está marcada como lida
       if (existingNotification.is_read) {
-        console.log(`[API Notification Read] ℹ️  Notificação ${numericId} já estava marcada como lida`)
+        console.log(`[API Notification Read] ℹ️  Notificação ${notificationId} já estava marcada como lida`)
         return NextResponse.json({ 
           notification: existingNotification,
           success: true,
@@ -104,7 +94,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
           read_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
-        .eq("id", numericId)
+        .eq("id", notificationId)
         .select()
         .single()
 
@@ -113,7 +103,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         throw error
       }
 
-      console.log(`[API Notification Read] ✅ Notificação ${numericId} marcada como lida`)
+      console.log(`[API Notification Read] ✅ Notificação ${notificationId} marcada como lida`)
 
       return NextResponse.json({ 
         notification,
