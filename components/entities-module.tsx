@@ -168,7 +168,8 @@ export default function EntitiesModule() {
     
     return raw.map(c => ({
       ...c,
-      case_count: c.case_parties?.[0]?.count || 0
+      case_count: c.case_parties?.[0]?.count || 0,
+      has_extrajudicial_agreement: c.financial_agreements?.some((a: any) => a.agreement_type === 'Extrajudicial') || false
     }));
   }, [rawData]);
 
@@ -371,6 +372,9 @@ export default function EntitiesModule() {
                             <User className="h-4 w-4 text-emerald-600" />
                           </div>
                           <span className="group-hover:text-emerald-700 transition-colors">{client.name}</span>
+                          {client.has_extrajudicial_agreement && (
+                            <Badge variant="outline" className="ml-2 text-amber-600 border-amber-300 bg-amber-50">Tem acordo extrajudicial</Badge>
+                          )}
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-sm">{maskCPFCNPJ(client.document)}</TableCell>

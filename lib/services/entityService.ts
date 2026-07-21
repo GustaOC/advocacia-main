@@ -49,7 +49,7 @@ export async function getEntities() {
   while (hasMore) {
     const { data, error, count } = await supabase
       .from("entities")
-      .select("*, case_parties(count)", { count: 'exact' })
+      .select("*, case_parties(count), financial_agreements!fk_financial_agreements_debtor(agreement_type)", { count: 'exact' })
       .order("name", { ascending: true })
       .range(from, from + pageSize - 1);
 

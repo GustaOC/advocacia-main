@@ -47,6 +47,8 @@ export interface Entity {
   // Propriedades anexadas para o frontend
   case_parties?: { count: number }[];
   case_count?: number;
+  financial_agreements?: { agreement_type: string }[];
+  has_extrajudicial_agreement?: boolean;
 }
 
 // Interface para as Partes de um Processo
