@@ -373,7 +373,7 @@ export default function EntitiesModule() {
                           </div>
                           <span className="group-hover:text-emerald-700 transition-colors">{client.name}</span>
                           {client.has_extrajudicial_agreement && (
-                            <Badge variant="outline" className="ml-2 text-amber-600 border-amber-300 bg-amber-50">Tem acordo extrajudicial</Badge>
+                            <Badge variant="outline" className="ml-2 text-amber-600 border-amber-300 bg-amber-50">Acordo extrajudicial vigente</Badge>
                           )}
                         </div>
                       </TableCell>
