@@ -67,25 +67,37 @@ function generateInstallments(params: {
 
   const n = Math.max(1, Number(numberOfInstallments || 1));
   const baseAmount = Math.max(0, Number(totalAmount) - Number(downPayment || 0));
-  if (baseAmount === 0) return [];
-
-  // parcela base truncada em 2 casas, e última absorve a diferença
-  const raw = Math.floor((baseAmount / n) * 100) / 100;
-  const lastAdj = Number((baseAmount - raw * (n - 1)).toFixed(2));
-
   const base = fromYmdUTC(startDate);
-  const out = Array.from({ length: n }).map((_, i) => {
-    const due = addMonthsClampedUTC(base, i);
-    const amount = i === n - 1 ? lastAdj : raw;
+  
+  const out = [];
 
-    return {
+  // Se tem entrada, registra como parcela 0, já PAGA na data de início (ou data atual)
+  if (downPayment && downPayment > 0) {
+    out.push({
       agreement_id: agreementId,
-      installment_number: i + 1,
-      amount,
-      due_date: ymdUTC(due), // YYYY-MM-DD
-      status: agreementStatus === 'CONCLUIDO' ? 'PAGA' : 'PENDENTE',
-    };
-  });
+      installment_number: 0,
+      due_date: base.toISOString().slice(0, 10),
+      amount: downPayment,
+      status: 'PAGA',
+    });
+  }
+
+  if (baseAmount > 0) {
+    const raw = Math.floor((baseAmount / n) * 100) / 100;
+    const lastAdj = Number((baseAmount - raw * (n - 1)).toFixed(2));
+
+    for (let i = 0; i < n; i++) {
+      const due = addMonthsClampedUTC(base, i);
+      const amount = i === n - 1 ? lastAdj : raw;
+      out.push({
+        agreement_id: agreementId,
+        installment_number: i + 1,
+        due_date: due.toISOString().slice(0, 10),
+        amount: amount,
+        status: agreementStatus === 'CONCLUIDO' ? 'PAGA' : 'PENDENTE',
+      });
+    }
+  }
 
   return out;
 }
@@ -286,9 +298,10 @@ export async function POST(req: NextRequest) {
       } else {
         console.log(`${insertedInstallments?.length || 0} parcelas criadas para o acordo ${insertedAgreement.id}`);
         
-        // Cria registros de pagamento automaticamente se o acordo já nasce CONCLUIDO
-        if (payload.status === 'CONCLUIDO' && insertedInstallments && insertedInstallments.length > 0) {
-          const paymentsToInsert = insertedInstallments.map((inst: any) => ({
+        // Cria registros de pagamento automaticamente para parcelas que já nascem PAGAS (Entrada ou Acordo Concluído)
+        const paidInstallments = insertedInstallments.filter((inst: any) => inst.status === 'PAGA');
+        if (paidInstallments.length > 0) {
+          const paymentsToInsert = paidInstallments.map((inst: any) => ({
             installment_id: inst.id,
             amount_paid: inst.amount,
             payment_date: new Date().toISOString(),
