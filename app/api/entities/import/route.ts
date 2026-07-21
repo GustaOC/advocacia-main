@@ -205,15 +205,58 @@ if (file) {
     let errorCount = 0;
     const errors: { row: number; error: string }[] = [];
     const processedCPFs = new Set<string>();
+    
+    // Cache de CEPs para evitar bater na API repetidas vezes com o mesmo CEP
+    const cepCache = new Map<string, any>();
 
     for (const [index, row] of data.entries()) {
       try {
         // Normalizar os dados da linha
         const normalizedRow = normalizeRowData(row);
         
+        // ---- 1. Lógica de extração de Estado pela Cidade (ex: "Campo Grande - MS") ----
+        if (normalizedRow["Cidade"] && !normalizedRow["Estado"]) {
+          const partes = normalizedRow["Cidade"].split('-');
+          if (partes.length > 1) {
+            normalizedRow["Estado"] = partes.pop().trim().toUpperCase();
+            normalizedRow["Cidade"] = partes.join('-').trim();
+          }
+        }
+
+        // ---- 2. Lógica de ViaCEP para auto-completar endereço ----
+        if (normalizedRow["Cep"]) {
+          const cepLimpo = String(normalizedRow["Cep"]).replace(/\D/g, '');
+          if (cepLimpo.length === 8) {
+            if (!cepCache.has(cepLimpo)) {
+              try {
+                const viacepRes = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+                if (viacepRes.ok) {
+                  const viacepData = await viacepRes.json();
+                  if (!viacepData.erro) {
+                    cepCache.set(cepLimpo, viacepData);
+                  } else {
+                    cepCache.set(cepLimpo, null);
+                  }
+                }
+              } catch (e) {
+                console.log(`[Import] Erro ao buscar ViaCEP para ${cepLimpo}`);
+                cepCache.set(cepLimpo, null);
+              }
+            }
+            
+            const enderecoViaCep = cepCache.get(cepLimpo);
+            if (enderecoViaCep) {
+              if (!normalizedRow["Bairro"]) normalizedRow["Bairro"] = enderecoViaCep.bairro;
+              if (!normalizedRow["Estado"]) normalizedRow["Estado"] = enderecoViaCep.uf;
+              if (!normalizedRow["Cidade"]) normalizedRow["Cidade"] = enderecoViaCep.localidade;
+              if (!normalizedRow["Endereço"]) normalizedRow["Endereço"] = enderecoViaCep.logradouro;
+            }
+          }
+        }
+        
         // Log para debug
         if (index === 0) {
-          console.log("[Import] Primeira linha normalizada:", normalizedRow);
+          console.log("[Import] Primeira linha normalizada e processada com CEP:", normalizedRow);
         }
         
         // Validar com o schema flexível
