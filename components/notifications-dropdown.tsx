@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -32,12 +33,7 @@ interface Notification {
 export function NotificationsDropdown() {
   const { toast } = useToast();
   const { user } = useAuth();
-  const router = import("next/navigation").then(mod => mod.useRouter).catch(() => null); // Import dinâmico ou estático
-  const [routerInstance, setRouterInstance] = useState<any>(null);
-  
-  useEffect(() => {
-    import("next/navigation").then(mod => setRouterInstance(mod.useRouter())).catch(() => {});
-  }, []);
+  const router = useRouter();
 
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [loading, setLoading] = useState(true)
@@ -124,20 +120,20 @@ export function NotificationsDropdown() {
       markAsRead(notification.id);
     }
     
-    if (!routerInstance) return;
+    if (!router) return;
 
     const title = notification.title?.toLowerCase() || '';
     const msg = notification.message?.toLowerCase() || '';
     const type = notification.type?.toLowerCase() || '';
 
     if (type === 'financeiro' || title.includes('financeiro') || msg.includes('financeiro') || msg.includes('parcela') || msg.includes('acordo') || msg.includes('vencimento')) {
-      routerInstance.push('/dashboard/financeiro');
+      router.push('/dashboard/financeiro');
     } else if (type === 'tarefa' || title.includes('tarefa') || msg.includes('tarefa')) {
-      routerInstance.push('/dashboard/tarefas');
+      router.push('/dashboard/tarefas');
     } else if (type === 'entidade' || title.includes('cliente') || msg.includes('cliente') || title.includes('entidade')) {
-      routerInstance.push('/dashboard/clientes');
+      router.push('/dashboard/clientes');
     } else if (title.includes('petição') || title.includes('documento')) {
-      routerInstance.push('/dashboard/peticoes');
+      router.push('/dashboard/peticoes');
     }
   };
 
