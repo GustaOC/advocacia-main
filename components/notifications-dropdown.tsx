@@ -95,7 +95,21 @@ export function NotificationsDropdown() {
   }, [currentUserId, toast]);
 
   const markAsRead = async (id: number) => {
-    // Implementar lógica para marcar como lida
+    try {
+      const response = await fetch(`/api/notifications/${id}/read`, {
+        method: 'PUT',
+      });
+      if (response.ok) {
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+        setUnreadCount(prev => {
+          // Apenas reduz a contagem se a notificação era não-lida antes
+          const wasUnread = !notifications.find(n => n.id === id)?.is_read;
+          return wasUnread ? Math.max(0, prev - 1) : prev;
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao marcar notificação como lida:", error);
+    }
   };
 
   const getNotificationIcon = (type: string) => {
@@ -109,16 +123,18 @@ export function NotificationsDropdown() {
   
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative h-10 w-10">
-          <Bell className="h-5 w-5" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
-              {unreadCount > 99 ? '99+' : unreadCount}
-            </span>
-          )}
-        </Button>
-      </DropdownMenuTrigger>
+      <div className="relative inline-block">
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-10 w-10">
+            <Bell className="h-5 w-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        {unreadCount > 0 && (
+          <span className="pointer-events-none absolute -right-1 -top-1 z-50 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
+            {unreadCount > 99 ? '99+' : unreadCount}
+          </span>
+        )}
+      </div>
       <DropdownMenuContent align="end" className="w-96">
         <DropdownMenuLabel className="text-base p-3">Notificações</DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -133,13 +149,29 @@ export function NotificationsDropdown() {
             </div>
           ) : (
             notifications.map((notification) => (
-              <DropdownMenuItem key={notification.id} className="p-4 cursor-pointer border-b last:border-b-0">
-                <div className="flex items-start space-x-3">
-                    <div>{getNotificationIcon(notification.type)}</div>
+              <DropdownMenuItem 
+                key={notification.id} 
+                className={`p-4 cursor-pointer border-b last:border-b-0 transition-colors ${!notification.is_read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-slate-50'}`}
+                onSelect={(e) => {
+                  e.preventDefault(); // Evita fechar o menu ao marcar como lida
+                  if (!notification.is_read) {
+                    markAsRead(notification.id);
+                  }
+                }}
+              >
+                <div className="flex items-start space-x-3 w-full">
+                    <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
                     <div className="flex-1">
-                        <p className="font-semibold text-sm text-slate-800">{notification.title}</p>
-                        <p className="text-xs text-slate-600">{notification.message}</p>
+                        <p className={`text-sm ${!notification.is_read ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}`}>
+                          {notification.title}
+                        </p>
+                        <p className={`text-xs mt-1 ${!notification.is_read ? 'text-slate-700 font-medium' : 'text-slate-500'}`}>
+                          {notification.message}
+                        </p>
                     </div>
+                    {!notification.is_read && (
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0" />
+                    )}
                 </div>
               </DropdownMenuItem>
             ))
