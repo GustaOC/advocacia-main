@@ -108,6 +108,7 @@ export default function EntitiesModule() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentClient, setCurrentClient] = useState<Partial<Client>>({});
   const [listType, setListType] = useState<'Cliente' | 'Executado'>('Cliente');
+  const [caseStatusFilter, setCaseStatusFilter] = useState<'Todos' | 'Com Processos' | 'Sem Processos'>('Todos');
   const { toast } = useToast();
 
   const [isImporting, setIsImporting] = useState(false);
@@ -159,11 +160,16 @@ export default function EntitiesModule() {
   });
 
   const clients: Client[] = useMemo(() => {
+    let raw: Client[] = [];
     if (!rawData) return [];
-    if (Array.isArray(rawData)) return rawData;
-    if (rawData.data && Array.isArray(rawData.data)) return rawData.data;
-    if (rawData.entities && Array.isArray(rawData.entities)) return rawData.entities;
-    return [];
+    if (Array.isArray(rawData)) raw = rawData;
+    else if (rawData.data && Array.isArray(rawData.data)) raw = rawData.data;
+    else if (rawData.entities && Array.isArray(rawData.entities)) raw = rawData.entities;
+    
+    return raw.map(c => ({
+      ...c,
+      case_count: c.case_parties?.[0]?.count || 0
+    }));
   }, [rawData]);
 
   const saveMutation = useMutation({
@@ -245,11 +251,17 @@ export default function EntitiesModule() {
         const type = String(client.type || 'Cliente').trim().toLowerCase();
         return type === listType.toLowerCase() || type === listType.toLowerCase() + 's';
       })
+      .filter(client => {
+        if (caseStatusFilter === 'Todos') return true;
+        const count = client.case_count || 0;
+        if (caseStatusFilter === 'Com Processos') return count > 0;
+        return count === 0;
+      })
       .filter(client => 
         (client.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (client.document || "").toLowerCase().includes(searchTerm.toLowerCase())
       ),
-    [clients, searchTerm, listType]
+    [clients, searchTerm, listType, caseStatusFilter]
   );
 
   if (isLoading) {
@@ -300,14 +312,24 @@ export default function EntitiesModule() {
                   className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-emerald-400 rounded-xl"
                 />
               </div>
-              <div className="w-48">
+              <div className="flex gap-2">
                 <Select value={listType} onValueChange={(v) => setListType(v as 'Cliente' | 'Executado')}>
-                  <SelectTrigger className="h-12 bg-white border-2 border-slate-200 rounded-xl">
+                  <SelectTrigger className="h-12 w-40 bg-white border-2 border-slate-200 rounded-xl">
                     <SelectValue placeholder="Tipo" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Cliente">Clientes</SelectItem>
                     <SelectItem value="Executado">Executados</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={caseStatusFilter} onValueChange={(v) => setCaseStatusFilter(v as 'Todos' | 'Com Processos' | 'Sem Processos')}>
+                  <SelectTrigger className="h-12 w-48 bg-white border-2 border-slate-200 rounded-xl">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Todos">Todos</SelectItem>
+                    <SelectItem value="Com Processos">Com Processos</SelectItem>
+                    <SelectItem value="Sem Processos">Sem Processos</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -49,7 +49,7 @@ export async function getEntities() {
   while (hasMore) {
     const { data, error, count } = await supabase
       .from("entities")
-      .select("*", { count: 'exact' })
+      .select("*, case_parties(count)", { count: 'exact' })
       .order("name", { ascending: true })
       .range(from, from + pageSize - 1);
 

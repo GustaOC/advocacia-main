@@ -43,6 +43,10 @@ export interface Entity {
   observations?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
+
+  // Propriedades anexadas para o frontend
+  case_parties?: { count: number }[];
+  case_count?: number;
 }
 
 // Interface para as Partes de um Processo
