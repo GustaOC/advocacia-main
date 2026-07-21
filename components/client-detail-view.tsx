@@ -63,11 +63,17 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
     staleTime: 1000 * 60 * 2, // 2 minutos de cache
   });
 
-  const allCases = casesResponse?.cases ?? [];
+  const allCases = useMemo(() => {
+    if (!casesResponse) return [];
+    if (Array.isArray(casesResponse)) return casesResponse;
+    if ((casesResponse as any).data && Array.isArray((casesResponse as any).data)) return (casesResponse as any).data;
+    if ((casesResponse as any).cases && Array.isArray((casesResponse as any).cases)) return (casesResponse as any).cases;
+    return [];
+  }, [casesResponse]);
 
   // Filtra os casos que pertencem a este cliente
   const clientCases = useMemo(() => {
-    if (!Array.isArray(allCases)) return [];
+    if (!allCases.length) return [];
     const targetId = String(client.id);
     return allCases.filter((c: any) =>
       Array.isArray(c.case_parties) &&
