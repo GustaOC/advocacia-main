@@ -31,8 +31,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         notification: {
           id: notificationId,
           is_read: true,
-          updated_at: new Date().toISOString(),
-          updated_by: user.id
+          read: true
         },
         success: true,
         message: "Executando em modo desenvolvimento"
@@ -89,10 +88,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       // ✅ CORREÇÃO: Atualizar com informações de auditoria
       const { data: notification, error } = await supabase
         .from("notifications")
-        .update({ 
+        .update({
           is_read: true,
-          read_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          read: true
         })
         .eq("id", notificationId)
         .select()
