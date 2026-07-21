@@ -59,32 +59,40 @@ function findCorrectSheet(workbook: XLSX.WorkBook): { sheet: XLSX.WorkSheet; she
   return null;
 }
 
+// Função para remover espaços, acentos e caracteres especiais das chaves
+function cleanKey(k: string) {
+  return k.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, "") // Remove acentos
+    .replace(/[^a-z0-9]/g, ''); // Mantém apenas letras e números
+}
+
 // Função para normalizar os dados da linha
 function normalizeRowData(row: any): any {
   const normalized: any = {};
   
-  // Mapear campos com variações de nomes
+  // Mapear campos com variações de nomes (já em versão limpa)
   const fieldMappings: Record<string, string[]> = {
-    "Nome Completo": ["nome completo", "nome", "nome_completo", "nomecompleto", "loja", "executado", "cliente", "empresa", "razão social", "razao social", "requerente", "requerido"],
+    "Nome Completo": ["nomecompleto", "nome", "loja", "executado", "cliente", "empresa", "razaosocial", "requerente", "requerido"],
     "Cpf": ["cpf", "documento", "cnpj"],
-    "Email": ["email", "e-mail"],
-    "Endereço": ["endereço", "endereco", "endereço completo", "logradouro", "rua", "avenida"],
-    "Nº": ["nº", "n°", "número", "numero", "n"],
+    "Email": ["email"],
+    "Endereço": ["endereco", "enderecocompleto", "logradouro", "rua", "avenida"],
+    "Nº": ["n", "numero"],
     "Bairro": ["bairro", "distrito", "setor", "vila"],
-    "Cidade": ["cidade", "municipio", "município"],
-    "Estado": ["estado", "uf", "provincia", "província"],
-    "Cep": ["cep", "c.e.p."],
-    "Celular 1": ["celular 1", "celular1", "celular", "telefone 1", "telefone", "tel1", "fone1"],
-    "Celular 2": ["celular 2", "celular2", "telefone 2", "tel2", "fone2"],
+    "Cidade": ["cidade", "municipio"],
+    "Estado": ["estado", "uf", "provincia"],
+    "Cep": ["cep"],
+    "Celular 1": ["celular1", "celular", "telefone1", "telefone", "tel1", "fone1"],
+    "Celular 2": ["celular2", "telefone2", "tel2", "fone2"],
   };
   
   const originalEntries = Object.entries(row);
   
-  // Mapear campos conhecidos (case insensitive)
+  // Mapear campos conhecidos
   for (const [targetField, possibleNames] of Object.entries(fieldMappings)) {
     let found = false;
     for (const [key, value] of originalEntries) {
-      if (possibleNames.includes(key.toLowerCase().trim())) {
+      const cleanedOriginalKey = cleanKey(key);
+      if (possibleNames.includes(cleanedOriginalKey)) {
         if (value !== undefined && value !== null && value !== "") {
           normalized[targetField] = value;
         }
