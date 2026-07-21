@@ -20,7 +20,7 @@ export interface Entity {
   address?: string | null;
   address_number?: string | null;
   address_complement?: string | null;
-  district?: string | null;
+  neighborhood?: string | null;
   city?: string | null;
   state?: string | null;
   zip_code?: string | null;

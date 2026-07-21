@@ -19,7 +19,7 @@ interface Client {
   email?: string | null;
   address?: string | null;
   address_number?: string | null;
-  district?: string | null;
+  neighborhood?: string | null;
   city?: string | null;
   zip_code?: string | null;
   cellphone1?: string | null;

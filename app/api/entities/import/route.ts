@@ -229,8 +229,8 @@ if (file) {
           city: validatedRow.Cidade || null,
           state: validatedRow.Estado || null,
           zip_code: validatedRow.Cep || null,
-          phone: validatedRow["Celular 1"] ? String(validatedRow["Celular 1"]) : null,
-          phone2: validatedRow["Celular 2"] ? String(validatedRow["Celular 2"]) : null,
+          cellphone1: validatedRow["Celular 1"] ? String(validatedRow["Celular 1"]) : null,
+          cellphone2: validatedRow["Celular 2"] ? String(validatedRow["Celular 2"]) : null,
           type: entityType,
         };
 

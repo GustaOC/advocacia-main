@@ -34,7 +34,7 @@ function cleanEntityPayload(input: Partial<Client>): Partial<Client> {
         observations: input.observations?.trim() || undefined,
         address: input.address?.trim() || undefined,
         address_number: input.address_number?.trim() || undefined,
-        district: input.district?.trim() || undefined,
+        neighborhood: input.neighborhood?.trim() || undefined,
         state: input.state?.trim() || undefined,
         zip_code: onlyDigits(input.zip_code),
         birth_date: input.birth_date || undefined,
@@ -510,7 +510,7 @@ export default function EntitiesModule() {
                 </div>
                  <div>
                   <Label className="text-slate-700 font-semibold">Bairro</Label>
-                  <Input value={currentClient.district || ""} onChange={(e) => handleInputChange('district', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                  <Input value={currentClient.neighborhood || ""} onChange={(e) => handleInputChange('neighborhood', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
