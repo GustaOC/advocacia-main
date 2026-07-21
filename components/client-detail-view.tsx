@@ -71,7 +71,7 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
     const targetId = String(client.id);
     return allCases.filter((c: any) =>
       Array.isArray(c.case_parties) &&
-      c.case_parties.some((p: any) => String(p?.entities?.id) === targetId)
+      c.case_parties.some((p: any) => String(p?.entities?.id) === targetId || String(p?.entity_id) === targetId)
     );
   }, [allCases, client.id]);
 
