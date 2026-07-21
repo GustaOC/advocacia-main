@@ -18,23 +18,12 @@ function toDbEntity(input: any) {
   const ALLOWED = [
     'id','name','document','type',
     'email','cellphone1','cellphone2','phone',
-    'address','address_number',
-    /* usamos neighborhood no DB; 'district' vem da UI */
+    'address','address_number','neighborhood',
     'city','state','zip_code','observations'
   ] as const;
 
   for (const k of ALLOWED) {
     if (input[k] !== undefined) out[k] = input[k];
-  }
-
-  // CORREÇÃO APLICADA AQUI
-  // district -> neighborhood (mantemos apenas a coluna existente no DB)
-  if (input.district !== undefined && out.neighborhood === undefined) {
-    out.neighborhood = input.district;
-  }
-  // Se vier neighborhood diretamente, mantemos
-  if (input.neighborhood !== undefined) {
-    out.neighborhood = input.neighborhood;
   }
 
   // Campos ainda não migrados no DB: ignorar para não quebrar o insert/update

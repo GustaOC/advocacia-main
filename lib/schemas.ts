@@ -283,7 +283,7 @@ export const EntitySchema = z.object({
   phone: z.string().optional().nullable(),
   address: z.string().optional().nullable(),
   address_number: z.string().optional().nullable(),
-  district: z.string().optional().nullable(),
+  neighborhood: z.string().optional().nullable(),
   city: z.string().optional().nullable(),
   state: z.string().optional().nullable(),
   zip_code: z.string().optional().nullable(),

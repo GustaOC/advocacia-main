@@ -229,27 +229,28 @@ if (file) {
           if (cepLimpo.length === 8) {
             if (!cepCache.has(cepLimpo)) {
               try {
-                const viacepRes = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
-                if (viacepRes.ok) {
-                  const viacepData = await viacepRes.json();
-                  if (!viacepData.erro) {
-                    cepCache.set(cepLimpo, viacepData);
+                // Usando BrasilAPI que não bloqueia IPs de datacenter como Vercel
+                const cepRes = await fetch(`https://brasilapi.com.br/api/cep/v1/${cepLimpo}`);
+                if (cepRes.ok) {
+                  const cepData = await cepRes.json();
+                  if (!cepData.errors) {
+                    cepCache.set(cepLimpo, cepData);
                   } else {
                     cepCache.set(cepLimpo, null);
                   }
                 }
               } catch (e) {
-                console.log(`[Import] Erro ao buscar ViaCEP para ${cepLimpo}`);
+                console.log(`[Import] Erro ao buscar CEP para ${cepLimpo}`);
                 cepCache.set(cepLimpo, null);
               }
             }
             
-            const enderecoViaCep = cepCache.get(cepLimpo);
-            if (enderecoViaCep) {
-              if (!normalizedRow["Bairro"]) normalizedRow["Bairro"] = enderecoViaCep.bairro;
-              if (!normalizedRow["Estado"]) normalizedRow["Estado"] = enderecoViaCep.uf;
-              if (!normalizedRow["Cidade"]) normalizedRow["Cidade"] = enderecoViaCep.localidade;
-              if (!normalizedRow["Endereço"]) normalizedRow["Endereço"] = enderecoViaCep.logradouro;
+            const enderecoCep = cepCache.get(cepLimpo);
+            if (enderecoCep) {
+              if (!normalizedRow["Bairro"]) normalizedRow["Bairro"] = enderecoCep.neighborhood;
+              if (!normalizedRow["Estado"]) normalizedRow["Estado"] = enderecoCep.state;
+              if (!normalizedRow["Cidade"]) normalizedRow["Cidade"] = enderecoCep.city;
+              if (!normalizedRow["Endereço"]) normalizedRow["Endereço"] = enderecoCep.street;
             }
           }
         }
