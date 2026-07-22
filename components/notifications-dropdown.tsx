@@ -75,16 +75,21 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
 
     const supabase = createClient();
 
+    const channelParams: any = {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'notifications',
+    };
+
+    if (user?.role !== 'admin') {
+      channelParams.filter = `user_id=eq.${currentUserId}`;
+    }
+
     const channel = supabase
       .channel('realtime-notifications')
       .on(
         'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${currentUserId}`,
-        },
+        channelParams,
         (payload) => {
           const novaNotificacao = payload.new as Notification;
           toast({ title: novaNotificacao.title, description: novaNotificacao.message });
