@@ -69,18 +69,22 @@ export async function middleware(req: NextRequest) {
   res.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
   res.headers.set("Referrer-Policy", "origin-when-cross-origin");
 
-  // Se a rota for pública, permite o acesso sem verificar a sessão
-  if (isPublic(pathname)) {
-    return res;
-  }
-
   try {
     const supabase = createSupabaseServerClient(req, res);
     
     // Verifica se há um usuário na sessão
     const { data: { user }, error } = await supabase.auth.getUser();
+
+    // Se a rota for pública
+    if (isPublic(pathname)) {
+      // Se for uma página de auth (login, register) ou a raiz, e o usuário estiver logado, manda pro dashboard
+      if (user && !error && (pathname === '/login' || pathname === '/register' || pathname === '/')) {
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+      }
+      return res;
+    }
     
-    // Se houver erro ou nenhum usuário, redireciona para a página de login
+    // Se houver erro ou nenhum usuário (em rota protegida), redireciona para a página de login
     if (error || !user) {
       console.warn(`[Middleware] Acesso negado para rota protegida: ${pathname}. Redirecionando para login.`);
       
