@@ -99,10 +99,41 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
       )
       .subscribe();
 
+    const chatChannel = supabase
+      .channel('realtime-chat-popups')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `receiver_id=eq.${currentUserId}`,
+        },
+        async (payload) => {
+          const msg = payload.new;
+          
+          // Buscar nome do remetente
+          const { data: sender } = await supabase
+            .from('users')
+            .select('name, email')
+            .eq('id', msg.sender_id)
+            .single();
+            
+          const senderName = sender?.name || sender?.email || 'Novo remetente';
+          
+          toast({ 
+            title: `Nova mensagem de ${senderName}`, 
+            description: msg.content || 'Enviou um arquivo' 
+          });
+        }
+      )
+      .subscribe();
+
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(chatChannel);
     };
-  }, [currentUserId, toast]);
+  }, [currentUserId, toast, user?.role]);
 
   const markAsRead = async (id: string) => {
     try {
