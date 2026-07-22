@@ -138,6 +138,7 @@ export function ChatWidget() {
                 .then(({ error }) => {
                   if (error) console.error("Erro ao marcar como lida:", error);
                 });
+            } else {
               // Chat fechado ou outra conversa aberta: exibe toast e incrementa a bolinha
               
               // Busca o nome do remetente
