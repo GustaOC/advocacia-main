@@ -15,6 +15,7 @@ import { Plus, Clock, Loader2, TrendingUp, Calendar as CalendarIcon, AlertCircle
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/hooks/use-auth';
 import { apiClient } from '@/lib/api-client';
 
 const localizer = momentLocalizer(moment);
@@ -84,7 +85,7 @@ export function CalendarModule() {
     description: ''
   });
 
-  const currentUserId = "user_123";
+  const { user, can } = useAuth();
 
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
@@ -112,15 +113,20 @@ export function CalendarModule() {
         };
       });
 
-      // Mostra as tarefas de todos os usuários
-      setEvents(mappedEvents);
+      // Filtra as tarefas para mostrar apenas as do usuário atual, a não ser que seja admin
+      const visibleEvents = mappedEvents.filter(event => {
+        if (user?.role === 'admin' || (can && can('tasks_view_all'))) return true;
+        return event.userId === user?.id;
+      });
+
+      setEvents(visibleEvents);
     } catch (err) {
       console.error(err);
       toast({ title: "Erro", description: "Não foi possível carregar as tarefas na agenda", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  }, [toast, user, can]);
 
   useEffect(() => {
     fetchEvents();
@@ -157,12 +163,13 @@ export function CalendarModule() {
         due_date: newEvent.start.toISOString(),
         status: 'Em Andamento',
         priority: 'Média',
+        assigned_to: user?.id,
       });
       
       const eventToSave: CalendarEvent = {
           ...newEvent,
           id: createdTask.id,
-          userId: currentUserId,
+          userId: user?.id || 'unassigned',
       };
       setEvents([...events, eventToSave]);
       toast({ title: "Sucesso!", description: "Evento criado e sincronizado com as tarefas." });
