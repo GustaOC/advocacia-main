@@ -7,7 +7,8 @@ export async function GET(request: Request) {
     let accessToken = cookieStore.get('google_access_token')?.value || request.headers.get('x-provider-token') || '';
     const refreshToken = cookieStore.get('google_refresh_token')?.value;
 
-    if (!accessToken) {
+    // Se não tem nem access token nem refresh token, aí sim falhamos direto
+    if (!accessToken && !refreshToken) {
       return NextResponse.json(
         { error: 'Sessão do Google expirada. Faça login com o Google novamente.' },
         { status: 401 }
@@ -21,13 +22,17 @@ export async function GET(request: Request) {
     url.searchParams.append('maxResults', '10');
     if (pageToken) url.searchParams.append('pageToken', pageToken);
 
-    // 1. Tenta buscar a lista de e-mails
-    let response = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    let response;
 
-    // 2. Se o token estiver expirado (401) e tivermos o refresh token, tentamos renovar e buscar de novo
-    if (response.status === 401 && refreshToken) {
+    // 1. Tenta buscar a lista de e-mails se tivermos um access token prévio
+    if (accessToken) {
+      response = await fetch(url.toString(), {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    }
+
+    // 2. Se não tínhamos accessToken ou se o token estava expirado (401), tentamos usar o refresh token
+    if ((!response || response.status === 401) && refreshToken) {
       const clientId = process.env.GOOGLE_CLIENT_ID;
       const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
@@ -55,9 +60,9 @@ export async function GET(request: Request) {
       }
     }
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error?.message || `Erro da API do Google: ${response.status}`);
+    if (!response || !response.ok) {
+      const errorData = response ? await response.json().catch(() => ({})) : {};
+      throw new Error(errorData.error?.message || `Erro da API do Google: ${response?.status || 'desconhecido'}`);
     }
 
     const data = await response.json();
