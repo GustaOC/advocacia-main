@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
+import { useToast } from "@/hooks/use-toast";
 
 const CHAT_BUCKET = 'chat-files';
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
@@ -27,6 +28,7 @@ function getFileIcon(fileType: string): string {
 }
 
 export function ChatWidget() {
+  const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [users, setUsers] = useState<any[]>([]);
@@ -136,8 +138,17 @@ export function ChatWidget() {
                 .then(({ error }) => {
                   if (error) console.error("Erro ao marcar como lida:", error);
                 });
-            } else {
-              // Chat fechado ou outra conversa aberta: apenas incrementa a bolinha
+              // Chat fechado ou outra conversa aberta: exibe toast e incrementa a bolinha
+              
+              // Busca o nome do remetente
+              supabase.from('users').select('name, email').eq('id', newMsg.sender_id).single().then(({ data: sender }) => {
+                const senderName = sender?.name || sender?.email || 'Novo remetente';
+                toast({
+                  title: `Nova mensagem de ${senderName}`,
+                  description: newMsg.content || 'Enviou um arquivo'
+                });
+              });
+
               setUnreadCount((prev) => prev + 1);
               setUnreadPerUser((prev) => ({
                 ...prev,
