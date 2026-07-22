@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
-import { Bell, AlertTriangle, CheckCircle, FileText, Loader2 } from "lucide-react"
+import { Bell, AlertTriangle, CheckCircle, FileText, Loader2, CheckCheck } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/use-auth"
 import { apiClient } from "@/lib/api-client"
@@ -117,6 +117,22 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
     }
   };
 
+  const markAllAsRead = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const response = await fetch(`/api/notifications/read-all`, {
+        method: 'PUT',
+      });
+      if (response.ok) {
+        setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+        setUnreadCount(0);
+      }
+    } catch (error) {
+      console.error("Erro ao marcar todas as notificações como lidas:", error);
+    }
+  };
+
   const handleNotificationClick = (e: any, notification: Notification) => {
     if (!notification.is_read) {
       markAsRead(notification.id);
@@ -165,7 +181,20 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         )}
       </div>
       <DropdownMenuContent align="end" className="w-96">
-        <DropdownMenuLabel className="text-base p-3">Notificações</DropdownMenuLabel>
+        <div className="flex items-center justify-between p-3 pb-2">
+          <DropdownMenuLabel className="text-base p-0">Notificações</DropdownMenuLabel>
+          {unreadCount > 0 && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={markAllAsRead} 
+              className="h-7 px-2 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+            >
+              <CheckCheck className="h-3 w-3 mr-1" />
+              Marcar todas como lidas
+            </Button>
+          )}
+        </div>
         <DropdownMenuSeparator />
         <div className="max-h-96 overflow-y-auto">
           {loading ? (
