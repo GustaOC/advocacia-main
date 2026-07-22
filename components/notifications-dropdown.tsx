@@ -92,15 +92,49 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         channelParams,
         (payload) => {
           const novaNotificacao = payload.new as Notification;
-          toast({ title: novaNotificacao.title, description: novaNotificacao.message });
-          setNotifications(prev => [novaNotificacao, ...prev]);
-          setUnreadCount(prev => prev + 1);
+          setNotifications(prev => {
+            if (prev.find(n => n.id === novaNotificacao.id)) return prev;
+            toast({ title: novaNotificacao.title, description: novaNotificacao.message });
+            setUnreadCount(count => count + 1);
+            return [novaNotificacao, ...prev];
+          });
         }
       )
       .subscribe();
 
+    // Polling de fallback (10 segundos) caso o Realtime não esteja ativado na tabela
+    const interval = setInterval(async () => {
+      const client = createClient();
+      let query = client
+        .from('notifications')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (user?.role !== 'admin') {
+        query = query.eq('user_id', currentUserId);
+      }
+
+      const { data } = await query;
+      if (data) {
+        setNotifications(prev => {
+          const newNotifs = data.filter(n => !prev.find(p => p.id === n.id));
+          if (newNotifs.length > 0) {
+            // Inverter para mostrar os mais antigos primeiro (dentre os novos)
+            newNotifs.reverse().forEach(notif => {
+              toast({ title: notif.title, description: notif.message });
+            });
+            setUnreadCount(count => count + newNotifs.filter(n => !n.is_read).length);
+            return [...newNotifs.reverse(), ...prev];
+          }
+          return prev;
+        });
+      }
+    }, 10000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(interval);
     };
   }, [currentUserId, toast, user?.role]);
 
