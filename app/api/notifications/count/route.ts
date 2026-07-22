@@ -14,11 +14,8 @@ export async function GET(req: Request) {
     let query = supabase
       .from("notifications")
       .select("*", { count: 'exact', head: true })
-      .eq("is_read", false);
-
-    if (user.role !== 'admin') {
-      query = query.eq("user_id", user.id);
-    }
+      .eq("is_read", false)
+      .eq("user_id", user.id);
 
     const { count, error } = await query;
 

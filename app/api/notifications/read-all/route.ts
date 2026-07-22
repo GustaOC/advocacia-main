@@ -14,12 +14,8 @@ export async function PUT() {
         is_read: true,
         read: true
       })
-      .eq("is_read", false);
-
-    // Se não for admin, atualiza apenas as suas próprias notificações
-    if (user.role !== 'admin') {
-      query = query.eq("user_id", user.id);
-    }
+      .eq("is_read", false)
+      .eq("user_id", user.id);
 
     const { error } = await query;
 

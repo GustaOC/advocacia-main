@@ -15,11 +15,8 @@ export async function GET(req: Request) {
       .from("notifications")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(50);
-
-    if (user.role !== 'admin') {
-      query = query.eq("user_id", user.id);
-    }
+      .limit(50)
+      .eq("user_id", user.id);
 
     const { data: notifications, error } = await query;
 

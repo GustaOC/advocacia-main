@@ -79,11 +79,8 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
       event: 'INSERT',
       schema: 'public',
       table: 'notifications',
+      filter: `user_id=eq.${currentUserId}`,
     };
-
-    if (user?.role !== 'admin') {
-      channelParams.filter = `user_id=eq.${currentUserId}`;
-    }
 
     const channel = supabase
       .channel('realtime-notifications')
@@ -109,11 +106,8 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         .from('notifications')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(5);
-
-      if (user?.role !== 'admin') {
-        query = query.eq('user_id', currentUserId);
-      }
+        .limit(5)
+        .eq('user_id', currentUserId);
 
       const { data } = await query;
       if (data) {
