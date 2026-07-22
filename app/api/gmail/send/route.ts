@@ -1,10 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
   try {
-    const providerToken = req.headers.get('x-provider-token');
+    const cookieStore = cookies();
+    const providerToken = cookieStore.get('google_access_token')?.value || req.headers.get('x-provider-token') || '';
 
-    if (!providerToken || providerToken === "") {
+    if (!providerToken) {
       return NextResponse.json({ error: "Token do Google não encontrado. Saia do sistema e faça login novamente utilizando o botão do Google." }, { status: 403 });
     }
 

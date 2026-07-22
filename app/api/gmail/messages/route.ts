@@ -7,8 +7,27 @@ export async function GET(request: Request) {
     let accessToken = cookieStore.get('google_access_token')?.value || request.headers.get('x-provider-token') || '';
     const refreshToken = cookieStore.get('google_refresh_token')?.value;
 
-    // 1. Tenta renovar o token automaticamente se ele expirou mas temos o refresh token
-    if (!accessToken && refreshToken) {
+    if (!accessToken) {
+      return NextResponse.json(
+        { error: 'Sessão do Google expirada. Faça login com o Google novamente.' },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const pageToken = searchParams.get('pageToken');
+
+    const url = new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages');
+    url.searchParams.append('maxResults', '10');
+    if (pageToken) url.searchParams.append('pageToken', pageToken);
+
+    // 1. Tenta buscar a lista de e-mails
+    let response = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    // 2. Se o token estiver expirado (401) e tivermos o refresh token, tentamos renovar e buscar de novo
+    if (response.status === 401 && refreshToken) {
       const clientId = process.env.GOOGLE_CLIENT_ID;
       const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
@@ -27,31 +46,14 @@ export async function GET(request: Request) {
         const tokenData = await tokenResponse.json();
         if (tokenResponse.ok && tokenData.access_token) {
           accessToken = tokenData.access_token;
-        } else {
-          console.error('[Google Auto-Refresh Falhou]', tokenData);
+          
+          // Refaz a requisição com o novo token
+          response = await fetch(url.toString(), {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
         }
       }
     }
-
-    // 2. Valida se conseguiu obter um Access Token válido
-    if (!accessToken) {
-      return NextResponse.json(
-        { error: 'Sessão do Google expirada. Faça login com o Google novamente.' },
-        { status: 401 }
-      );
-    }
-
-    const { searchParams } = new URL(request.url);
-    const pageToken = searchParams.get('pageToken');
-
-    const url = new URL('https://gmail.googleapis.com/gmail/v1/users/me/messages');
-    url.searchParams.append('maxResults', '10');
-    if (pageToken) url.searchParams.append('pageToken', pageToken);
-
-    // 3. Busca lista de e-mails
-    const response = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
