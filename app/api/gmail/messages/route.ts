@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies();
-    let accessToken = cookieStore.get('google_access_token')?.value;
+    let accessToken = cookieStore.get('google_access_token')?.value || request.headers.get('x-provider-token') || '';
     const refreshToken = cookieStore.get('google_refresh_token')?.value;
 
     // 1. Tenta renovar o token automaticamente se ele expirou mas temos o refresh token
