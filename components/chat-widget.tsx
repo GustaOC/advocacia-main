@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const CHAT_BUCKET = 'chat-files';
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
@@ -32,6 +33,7 @@ export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [users, setUsers] = useState<any[]>([]);
+  const usersRef = useRef<any[]>([]);
   const [activeChat, setActiveChat] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -76,7 +78,10 @@ export function ChatWidget() {
         .select('id, name, avatar_url')
         .neq('id', session.user.id);
         
-      if (profiles) setUsers(profiles);
+      if (profiles) {
+        setUsers(profiles);
+        usersRef.current = profiles;
+      }
     };
 
     initChat();
@@ -141,13 +146,23 @@ export function ChatWidget() {
             } else {
               // Chat fechado ou outra conversa aberta: exibe toast e incrementa a bolinha
               
-              // Busca o nome do remetente
-              supabase.from('users').select('name, email').eq('id', newMsg.sender_id).single().then(({ data: sender }) => {
-                const senderName = sender?.name || sender?.email || 'Novo remetente';
-                toast({
-                  title: `Nova mensagem de ${senderName}`,
-                  description: newMsg.content || 'Enviou um arquivo'
-                });
+              const senderUser = usersRef.current.find(u => u.id === newMsg.sender_id);
+              const senderName = senderUser?.name || senderUser?.email || 'Novo remetente';
+              const senderAvatar = senderUser?.avatar_url;
+
+              toast({
+                title: `Nova mensagem de ${senderName}`,
+                description: (
+                  <div className="flex items-center gap-3 mt-2">
+                    <Avatar className="h-8 w-8 shadow-sm">
+                      <AvatarImage src={senderAvatar} />
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                        {senderName.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm">{newMsg.content || 'Enviou um arquivo'}</span>
+                  </div>
+                )
               });
 
               setUnreadCount((prev) => prev + 1);
