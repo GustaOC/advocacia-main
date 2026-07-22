@@ -46,10 +46,11 @@ export default function RegisterPage() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
-        scopes: 'https://www.googleapis.com/auth/gmail.readonly',
+        redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard`,
+        scopes: 'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send',
         queryParams: {
           access_type: 'offline',
+          prompt: 'select_account',
         },
       },
     });
