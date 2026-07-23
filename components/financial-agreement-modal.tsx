@@ -167,7 +167,28 @@ export function FinancialAgreementModal({ isOpen, onClose, caseData }: Financial
               <Label>Processo *</Label>
               <Select
                 value={String(formData.case_id || '')}
-                onValueChange={value => handleChange('case_id', Number(value))}
+                onValueChange={value => {
+                  const caseId = Number(value);
+                  const selectedCase = casesList.find((c: any) => c.id === caseId);
+                  
+                  let newCreditorId = formData.creditor_id;
+                  let newDebtorId = formData.debtor_id;
+
+                  if (selectedCase && selectedCase.case_parties) {
+                    const clientParty = selectedCase.case_parties.find((p: any) => p.role === 'Cliente');
+                    const executedParty = selectedCase.case_parties.find((p: any) => p.role === 'Executado');
+                    
+                    if (clientParty?.entities?.id) newCreditorId = String(clientParty.entities.id);
+                    if (executedParty?.entities?.id) newDebtorId = String(executedParty.entities.id);
+                  }
+
+                  setFormData(prev => ({ 
+                    ...prev, 
+                    case_id: caseId,
+                    creditor_id: newCreditorId,
+                    debtor_id: newDebtorId
+                  }));
+                }}
                 disabled={!!caseData}
               >
                 <SelectTrigger><SelectValue placeholder="Selecione o processo" /></SelectTrigger>
@@ -212,19 +233,27 @@ export function FinancialAgreementModal({ isOpen, onClose, caseData }: Financial
             <div className="space-y-2">
               <Label>Valor Total do Acordo *</Label>
               <Input
-                type="number"
-                placeholder="5000,00"
-                value={String(formData.total_amount)}
-                onChange={e => handleChange('total_amount', e.target.value)}
+                type="text"
+                placeholder="0,00"
+                value={formData.total_amount != null && formData.total_amount !== '' ? Number(formData.total_amount).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+                onChange={e => {
+                  const digits = e.target.value.replace(/\D/g, "");
+                  const val = digits ? parseInt(digits, 10) / 100 : '';
+                  handleChange('total_amount', val);
+                }}
               />
             </div>
             <div className="space-y-2">
               <Label>Valor de Entrada (Opcional)</Label>
               <Input
-                type="number"
-                placeholder="1000,00"
-                value={String(formData.down_payment || '')}
-                onChange={e => handleChange('down_payment', e.target.value)}
+                type="text"
+                placeholder="0,00"
+                value={formData.down_payment != null && formData.down_payment !== '' ? Number(formData.down_payment).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+                onChange={e => {
+                  const digits = e.target.value.replace(/\D/g, "");
+                  const val = digits ? parseInt(digits, 10) / 100 : '';
+                  handleChange('down_payment', val);
+                }}
               />
             </div>
           </div>
