@@ -33,8 +33,8 @@ export interface Entity {
   zip_code?: string | null;
   phone?: string | null;
   phone2?: string | null;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface Case {
