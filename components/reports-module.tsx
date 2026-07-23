@@ -75,8 +75,9 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
     casesData?.cases?.forEach(c => {
       if (c.created_at) {
         const date = new Date(c.created_at);
-        if (date.getFullYear() === currentYear && data[date.getMonth()]) {
-          data[date.getMonth()].value += 1;
+        const item = data[date.getMonth()];
+        if (date.getFullYear() === currentYear && item) {
+          item.value += 1;
         }
       }
     });
@@ -88,8 +89,9 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
     agreementsData?.data?.forEach(a => {
       if (a.created_at) {
         const date = new Date(a.created_at);
-        if (date.getFullYear() === currentYear && data[date.getMonth()]) {
-          data[date.getMonth()].value += Number(a.total_amount || 0);
+        const item = data[date.getMonth()];
+        if (date.getFullYear() === currentYear && item) {
+          item.value += Number(a.total_amount || 0);
         }
       }
     });
