@@ -304,7 +304,11 @@ export function FinancialAgreementModal({ isOpen, onClose, caseData }: Financial
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleSave} disabled={createAgreementMutation.isPending}>
+          <Button 
+            onClick={handleSave} 
+            disabled={createAgreementMutation.isPending}
+            className="bg-green-600 hover:bg-green-700 text-white shadow-lg rounded-xl"
+          >
             {createAgreementMutation.isPending
               ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               : <Save className="mr-2 h-4 w-4" />
