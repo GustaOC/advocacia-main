@@ -652,15 +652,15 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 <div><Label className="text-slate-700 font-semibold">Executado</Label><p className="text-sm font-medium">{getEntityName(selectedCaseForView.case_parties.find(p => p.role === 'Executado')?.entities.id)}</p></div>
                                 <div><Label className="text-slate-700 font-semibold">Status</Label><div>{getStatusBadge(selectedCaseForView.status)}</div></div>
                                 <div><Label className="text-slate-700 font-semibold">Prioridade</Label><div>{getPriorityBadge(selectedCaseForView.priority)}</div></div>
-                                <div><Label className="text-slate-700 font-semibold">Valor da Causa</Label><p className="text-sm">{selectedCaseForView.value ? `R$ ${selectedCaseForView.value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}</p></div>
+                                <div><Label className="text-slate-700 font-semibold">Valor da Causa</Label><p className="text-sm">{selectedCaseForView.value != null ? `R$ ${Number(selectedCaseForView.value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}</p></div>
                             </div>
                             {selectedCaseForView.status === 'Acordo' && (
                                 <div className="border-t pt-4 mt-4 space-y-4">
                                     <h4 className="font-semibold flex items-center"><DollarSign className="mr-2 h-4 w-4 text-green-600"/> Detalhes do Acordo</h4>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="flex items-center"><Label className="text-slate-700 font-semibold">Tipo:</Label><div className="flex items-center ml-2">{renderAgreementTypeIcon(selectedCaseForView.agreement_type)}<p className="text-sm">{selectedCaseForView.agreement_type || 'N/A'}</p></div></div>
-                                        <div><Label className="text-slate-700 font-semibold">Valor do Acordo:</Label><p className="text-sm">{selectedCaseForView.agreement_value ? `R$ ${selectedCaseForView.agreement_value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}</p></div>
-                                        <div><Label className="text-slate-700 font-semibold">Valor de Entrada:</Label><p className="text-sm">{selectedCaseForView.down_payment ? `R$ ${selectedCaseForView.down_payment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}</p></div>
+                                        <div><Label className="text-slate-700 font-semibold">Valor do Acordo:</Label><p className="text-sm">{selectedCaseForView.agreement_value != null ? `R$ ${Number(selectedCaseForView.agreement_value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}</p></div>
+                                        <div><Label className="text-slate-700 font-semibold">Valor de Entrada:</Label><p className="text-sm">{selectedCaseForView.down_payment != null ? `R$ ${Number(selectedCaseForView.down_payment).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}</p></div>
                                         <div><Label className="text-slate-700 font-semibold">Parcelas:</Label><p className="text-sm">{selectedCaseForView.installments || 'N/A'}</p></div>
                                         <div><Label className="text-slate-700 font-semibold">Vencimento da Parcela:</Label><p className="text-sm">{selectedCaseForView.installment_due_date ? new Date(selectedCaseForView.installment_due_date).toLocaleDateString('pt-BR') : 'N/A'}</p></div>
                                     </div>
@@ -676,7 +676,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                             <div className="flex justify-between items-center">
                                                 <Label className="text-slate-700 font-semibold">Valor do Alvará:</Label>
                                                 <p className="text-sm font-bold text-green-700">
-                                                    {selectedCaseForView.alvara_value ? `R$ ${selectedCaseForView.alvara_value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}
+                                                    {selectedCaseForView.alvara_value != null ? `R$ ${Number(selectedCaseForView.alvara_value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}
                                                 </p>
                                             </div>
                                         )}
@@ -710,7 +710,22 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2"><Label htmlFor="court" className="text-slate-700 font-semibold">Vara/Tribunal</Label><Input id="court" value={currentCase.court || ''} onChange={(e) => setCurrentCase({ ...currentCase, court: e.target.value })} placeholder="Ex: 1ª Vara Cível de Campo Grande" className="bg-white border-2 border-slate-200 rounded-xl" /></div>
-                            <div className="space-y-2"><Label htmlFor="value" className="text-slate-700 font-semibold">Valor da Causa</Label><Input id="value" type="number" value={currentCase.value ?? ''} onChange={(e) => setCurrentCase({ ...currentCase, value: parseFloat(e.target.value) })} disabled={isEditMode} placeholder="0,00" className="bg-white border-2 border-slate-200 rounded-xl" /></div>
+                            <div className="space-y-2">
+                                <Label htmlFor="value" className="text-slate-700 font-semibold">Valor da Causa</Label>
+                                <Input 
+                                    id="value" 
+                                    type="text" 
+                                    value={currentCase.value != null ? Number(currentCase.value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} 
+                                    onChange={(e) => {
+                                        const digits = e.target.value.replace(/\D/g, "");
+                                        const val = digits ? parseInt(digits, 10) / 100 : null;
+                                        setCurrentCase({ ...currentCase, value: val });
+                                    }} 
+                                    disabled={isEditMode} 
+                                    placeholder="0,00" 
+                                    className="bg-white border-2 border-slate-200 rounded-xl" 
+                                />
+                            </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -737,10 +752,10 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 <h4 className="font-semibold text-lg flex items-center text-slate-800"><DollarSign className="mr-2 h-5 w-5 text-yellow-600"/> Detalhes do Acordo</h4>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2"><Label className="text-slate-700 font-semibold">Tipo de Acordo</Label><Select value={currentCase.agreement_type || ''} onValueChange={(value) => setCurrentCase({ ...currentCase, agreement_type: value as ExtendedCase['agreement_type'] })}><SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger><SelectContent><SelectItem value="Judicial">Judicial</SelectItem><SelectItem value="Extrajudicial">Extrajudicial</SelectItem><SelectItem value="Em Audiência">Em Audiência</SelectItem><SelectItem value="Pela Loja">Pela Loja</SelectItem></SelectContent></Select></div>
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor do Acordo</Label><Input type="number" placeholder="5000,00" value={currentCase.agreement_value ?? ''} onChange={(e) => setCurrentCase({ ...currentCase, agreement_value: parseFloat(e.target.value) })} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor do Acordo</Label><Input type="text" placeholder="0,00" value={currentCase.agreement_value != null ? Number(currentCase.agreement_value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); const val = digits ? parseInt(digits, 10) / 100 : null; setCurrentCase({ ...currentCase, agreement_value: val }); }} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4">
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor de Entrada</Label><Input type="number" placeholder="1000,00" value={currentCase.down_payment ?? ''} onChange={(e) => setCurrentCase({ ...currentCase, down_payment: parseFloat(e.target.value) })} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor de Entrada</Label><Input type="text" placeholder="0,00" value={currentCase.down_payment != null ? Number(currentCase.down_payment).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); const val = digits ? parseInt(digits, 10) / 100 : null; setCurrentCase({ ...currentCase, down_payment: val }); }} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
                                     <div className="space-y-2"><Label className="text-slate-700 font-semibold">Nº de Parcelas</Label><Input type="number" value={currentCase.installments ?? ''} onChange={(e) => setCurrentCase({ ...currentCase, installments: parseInt(e.target.value, 10) })} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
                                     <div className="space-y-2"><Label className="text-slate-700 font-semibold">Vencimento da 1ª Parcela</Label><Input type="date" value={currentCase.installment_due_date || ''} onChange={(e) => setCurrentCase({ ...currentCase, installment_due_date: e.target.value })} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
                                 </div>
@@ -770,15 +785,14 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                         </Label>
                                         <Input
                                             id="alvara_value"
-                                            type="number"
-                                            placeholder="5000,00"
-                                            value={currentCase.alvara_value ?? ''}
-                                            onChange={(e) =>
-                                            setCurrentCase({
-                                                ...currentCase,
-                                                alvara_value: parseFloat(e.target.value)
-                                            })
-                                            }
+                                            type="text"
+                                            placeholder="0,00"
+                                            value={currentCase.alvara_value != null ? Number(currentCase.alvara_value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+                                            onChange={(e) => {
+                                                const digits = e.target.value.replace(/\D/g, "");
+                                                const val = digits ? parseInt(digits, 10) / 100 : null;
+                                                setCurrentCase({ ...currentCase, alvara_value: val });
+                                            }}
                                             className="bg-white border-2 border-slate-200 rounded-xl"
                                         />
                                         </div>
