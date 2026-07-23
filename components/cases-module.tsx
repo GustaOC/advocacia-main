@@ -730,14 +730,14 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label className="text-slate-700 font-semibold">Cliente *</Label>
-                                <Select value={String(currentCase.client_entity_id || '')} onValueChange={(value) => setCurrentCase({ ...currentCase, client_entity_id: value })} disabled={isEditMode}>
+                                <Select value={String(currentCase.client_entity_id || '')} onValueChange={(value) => setCurrentCase({ ...currentCase, client_entity_id: value })}>
                                     <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione o cliente" /></SelectTrigger>
                                     <SelectContent>{allEntities.filter(e => String(e.type || '').trim().toLowerCase().startsWith('cliente')).map(e => <SelectItem key={String(e.id)} value={String(e.id)}>{e.name}</SelectItem>)}</SelectContent>
                                 </Select>
                             </div>
                             <div className="space-y-2">
                                 <Label className="text-slate-700 font-semibold">Executado *</Label>
-                                <Select value={String(currentCase.executed_entity_id || '')} onValueChange={(value) => setCurrentCase({ ...currentCase, executed_entity_id: value })} disabled={isEditMode}>
+                                <Select value={String(currentCase.executed_entity_id || '')} onValueChange={(value) => setCurrentCase({ ...currentCase, executed_entity_id: value })}>
                                     <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione o executado" /></SelectTrigger>
                                     <SelectContent>{allEntities.filter(e => String(e.type || '').trim().toLowerCase().startsWith('executado')).map(e => <SelectItem key={String(e.id)} value={String(e.id)}>{e.name}</SelectItem>)}</SelectContent>
                                 </Select>

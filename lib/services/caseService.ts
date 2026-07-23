@@ -427,6 +427,23 @@ export async function updateCase(id: number, caseData: unknown, user: AuthUser) 
             changed_by_user_id: user.id, changed_by_user_email: user.email,
         });
     }
+    
+    const { client_entity_id, executed_entity_id } = parsedData;
+    if (client_entity_id !== undefined) {
+        const existingClient = currentCase.case_parties.find((p: any) => p.role === 'Cliente');
+        if (existingClient && String(existingClient.entity_id) !== String(client_entity_id)) {
+            await supabase.from('case_parties').update({ entity_id: client_entity_id }).eq('case_id', id).eq('role', 'Cliente');
+            existingClient.entity_id = client_entity_id; // Atualiza referência local
+        }
+    }
+    if (executed_entity_id !== undefined) {
+        const existingExecuted = currentCase.case_parties.find((p: any) => p.role === 'Executado');
+        if (existingExecuted && String(existingExecuted.entity_id) !== String(executed_entity_id)) {
+            await supabase.from('case_parties').update({ entity_id: executed_entity_id }).eq('case_id', id).eq('role', 'Executado');
+            existingExecuted.entity_id = executed_entity_id; // Atualiza referência local
+        }
+    }
+
     await logAudit('CASE_UPDATE', user, { caseId: updatedCase.id, updatedFields: Object.keys(parsedData) });
 
     // --- LÓGICA ROBUSTA PARA GERENCIAR ACORDOS FINANCEIROS ---
