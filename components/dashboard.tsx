@@ -83,7 +83,7 @@ function QuickStats() {
   
   // Clientes criados neste mês vs mês passado (simplificado)
   const currentMonthStart = new Date(currentYear, currentMonth - 1, 1).toISOString();
-  const newClientsCount = entitiesData?.filter(e => e.type === 'Cliente' && e.created_at >= currentMonthStart)?.length || (entitiesData?.filter(e => e.type === 'Cliente')?.length || 0);
+  const newClientsCount = entitiesData?.filter(e => e.type === 'Cliente' && e.created_at && e.created_at >= currentMonthStart)?.length || (entitiesData?.filter(e => e.type === 'Cliente')?.length || 0);
   
   const currentMonthRevenue = paymentsData?.reduce((acc, curr) => acc + Number(curr.amount_paid), 0) || 0;
   
