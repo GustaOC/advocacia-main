@@ -1,18 +1,19 @@
 // components/reports-module.tsx
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-// ✅ CORREÇÃO: Adicionados os ícones Briefcase e AlertTriangle que estavam faltando
-import { FileText, Users, DollarSign, Clock, AlertTriangle, Briefcase } from 'lucide-react';
+import { FileText, Users, DollarSign, Clock, AlertTriangle, Briefcase, Loader2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
 
 // Tipos para os dados e props
 interface ChartData { name: string; value: number; }
 interface KpiCardProps {
   title: string;
-  value: string;
+  value: string | number;
   description: string;
   icon: React.ElementType;
   onClick: () => void;
@@ -21,16 +22,6 @@ interface KpiCardProps {
 interface ReportsModuleProps {
   onNavigate: (tab: string, filters?: any) => void;
 }
-
-const casesData: ChartData[] = [
-  { name: 'Jan', value: 12 }, { name: 'Fev', value: 19 }, { name: 'Mar', value: 3 },
-  { name: 'Abr', value: 5 }, { name: 'Mai', value: 2 }, { name: 'Jun', value: 3 },
-];
-
-const financialData: ChartData[] = [
-  { name: 'Jan', value: 24000 }, { name: 'Fev', value: 13980 }, { name: 'Mar', value: 98000 },
-  { name: 'Abr', value: 39080 }, { name: 'Mai', value: 48000 }, { name: 'Jun', value: 38000 },
-];
 
 // Componente de Card de KPI reutilizável e clicável
 const KpiCard: React.FC<KpiCardProps> = ({ title, value, description, icon: Icon, onClick, colorClass }) => (
@@ -51,15 +42,70 @@ const KpiCard: React.FC<KpiCardProps> = ({ title, value, description, icon: Icon
   </Card>
 );
 
+const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
 export function ReportsModule({ onNavigate }: ReportsModuleProps) {
   const [period, setPeriod] = useState<'month' | 'week' | 'year'>('month');
 
-  // A lógica de dados aqui seria dinâmica com base no filtro 'period'
+  // Buscando os dados reais da API
+  const { data: casesData, isLoading: loadingCases } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
+  const { data: entitiesData, isLoading: loadingEntities } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
+  const { data: tasksData, isLoading: loadingTasks } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
+  const { data: agreementsData, isLoading: loadingAgreements } = useQuery({ queryKey: ['agreements'], queryFn: () => apiClient.getFinancialAgreementsPaginated(1, 1000) });
+
+  // Cálculos baseados nos dados reais
+  const activeClientsCount = entitiesData?.filter(e => e.type === 'Cliente').length || 0;
+  
+  const inProgressCases = casesData?.cases?.filter(c => c.status === 'Em andamento').length || 0;
+  
+  // Receita baseada nos acordos financeiros
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+  
+  const revenueAmount = useMemo(() => {
+    if (!agreementsData?.data) return 0;
+    return agreementsData.data.reduce((acc, curr) => acc + (Number(curr.paid_amount) || 0), 0);
+  }, [agreementsData]);
+
+  const urgentDeadlines = tasksData?.filter(t => t.priority === 'Alta' && t.status !== 'Concluída').length || 0;
+
+  // Calculando dados dos Gráficos dinamicamente (Baseado no ano atual)
+  const casesChartData = useMemo(() => {
+    const data = MONTHS.map(name => ({ name, value: 0 }));
+    casesData?.cases?.forEach(c => {
+      if (c.created_at) {
+        const date = new Date(c.created_at);
+        if (date.getFullYear() === currentYear) {
+          data[date.getMonth()].value += 1;
+        }
+      }
+    });
+    return data;
+  }, [casesData, currentYear]);
+
+  const financialChartData = useMemo(() => {
+    const data = MONTHS.map(name => ({ name, value: 0 }));
+    agreementsData?.data?.forEach(a => {
+      if (a.created_at) {
+        const date = new Date(a.created_at);
+        if (date.getFullYear() === currentYear) {
+          data[date.getMonth()].value += Number(a.total_amount || 0);
+        }
+      }
+    });
+    return data;
+  }, [agreementsData, currentYear]);
+
+  const formatCurrency = (val: number) => {
+    if (val >= 1000) return `R$ ${(val/1000).toFixed(1)}k`;
+    return `R$ ${val}`;
+  };
+
   const kpiData = {
-    clients: { value: '248', description: '+12% este mês' },
-    activeCases: { value: '89', description: '+5 esta semana' },
-    revenue: { value: 'R$ 45.2k', description: '+8% vs mês anterior' },
-    upcomingDeadlines: { value: '7', description: 'Próximos 7 dias' },
+    clients: { value: activeClientsCount.toString(), description: 'Total de clientes cadastrados' },
+    activeCases: { value: inProgressCases.toString(), description: 'Processos em andamento' },
+    revenue: { value: formatCurrency(revenueAmount), description: 'Receita recebida total' },
+    upcomingDeadlines: { value: urgentDeadlines.toString(), description: 'Tarefas de alta prioridade pendentes' },
   };
 
   return (
@@ -74,7 +120,7 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
           title="Clientes Ativos"
-          value={kpiData.clients.value}
+          value={loadingEntities ? '...' : kpiData.clients.value}
           description={kpiData.clients.description}
           icon={Users}
           colorClass="text-slate-900"
@@ -82,27 +128,27 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
         />
         <KpiCard
           title="Processos em Andamento"
-          value={kpiData.activeCases.value}
+          value={loadingCases ? '...' : kpiData.activeCases.value}
           description={kpiData.activeCases.description}
           icon={Briefcase}
           colorClass="text-slate-900"
           onClick={() => onNavigate('cases', { cases: { status: 'Em andamento' } })}
         />
         <KpiCard
-          title="Receita no Período"
-          value={kpiData.revenue.value}
+          title="Receita Recebida"
+          value={loadingAgreements ? '...' : kpiData.revenue.value}
           description={kpiData.revenue.description}
           icon={DollarSign}
           colorClass="text-green-600"
           onClick={() => onNavigate('financial')}
         />
         <KpiCard
-          title="Prazos Urgentes"
-          value={kpiData.upcomingDeadlines.value}
+          title="Tarefas Urgentes"
+          value={loadingTasks ? '...' : kpiData.upcomingDeadlines.value}
           description={kpiData.upcomingDeadlines.description}
           icon={AlertTriangle}
           colorClass="text-red-600"
-          onClick={() => onNavigate('petitions')} // Futuramente, filtrar por prazos
+          onClick={() => onNavigate('tasks')} 
         />
       </div>
       
@@ -113,7 +159,7 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={casesData}>
+              <BarChart data={casesChartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
@@ -126,11 +172,11 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
         </Card>
         <Card className="border-0 shadow-lg">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2"><DollarSign className="h-5 w-5"/> Receita Mensal</CardTitle>
+                <CardTitle className="flex items-center gap-2"><DollarSign className="h-5 w-5"/> Previsão de Receita por Mês (Acordos)</CardTitle>
             </CardHeader>
             <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={financialData}>
+                <BarChart data={financialChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />

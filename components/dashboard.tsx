@@ -2,6 +2,8 @@
 "use client"
 import { useAuth } from '@/hooks/use-auth'
 import { useState, useCallback, ReactNode, useEffect } from "react"
+import { useQuery } from '@tanstack/react-query';
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import {
@@ -62,7 +64,31 @@ const menuItems = [
 ]
 
 // Componente de estatísticas com animações aprimoradas
+
+// Componente de estatísticas com animações aprimoradas
 function QuickStats() {
+  const { data: casesData } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
+  const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
+  const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
+  
+  // Para a receita mensal, vamos pegar os pagamentos recebidos no mês atual
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const { data: paymentsData } = useQuery({ 
+    queryKey: ['payments', currentYear, currentMonth], 
+    queryFn: () => apiClient.getReceivedByMonth(currentYear, currentMonth) 
+  });
+
+  const activeCasesCount = casesData?.cases?.filter(c => c.status !== 'Extinto').length || 0;
+  
+  // Clientes criados neste mês vs mês passado (simplificado)
+  const currentMonthStart = new Date(currentYear, currentMonth - 1, 1).toISOString();
+  const newClientsCount = entitiesData?.filter(e => e.type === 'Cliente' && e.created_at >= currentMonthStart)?.length || (entitiesData?.filter(e => e.type === 'Cliente')?.length || 0);
+  
+  const currentMonthRevenue = paymentsData?.reduce((acc, curr) => acc + Number(curr.amount_paid), 0) || 0;
+  
+  const pendingTasksCount = tasksData?.filter(t => t.status === 'Pendente' || t.status === 'Em Andamento').length || 0;
+
   // Estado individual para cada valor animado
   const [processosAtivos, setProcessosAtivos] = useState(0);
   const [novosClientes, setNovosClientes] = useState(0);
@@ -72,7 +98,7 @@ function QuickStats() {
   const stats = [
     { 
       label: "Processos Ativos", 
-      value: 42, 
+      value: activeCasesCount, 
       animatedValue: processosAtivos,
       setAnimatedValue: setProcessosAtivos,
       prefix: "", 
@@ -84,7 +110,7 @@ function QuickStats() {
     },
     { 
       label: "Novos Clientes", 
-      value: 8, 
+      value: newClientsCount, 
       animatedValue: novosClientes,
       setAnimatedValue: setNovosClientes,
       prefix: "", 
@@ -96,7 +122,7 @@ function QuickStats() {
     },
     { 
       label: "Faturamento Mensal", 
-      value: 45200, 
+      value: currentMonthRevenue, 
       animatedValue: faturamento,
       setAnimatedValue: setFaturamento,
       prefix: "R$ ", 
@@ -108,7 +134,7 @@ function QuickStats() {
     },
     { 
       label: "Tarefas Pendentes", 
-      value: 15, 
+      value: pendingTasksCount, 
       animatedValue: tarefasPendentes,
       setAnimatedValue: setTarefasPendentes,
       prefix: "", 
@@ -122,11 +148,15 @@ function QuickStats() {
 
   // Animação de contagem dos números
   useEffect(() => {
-    const timers: ReturnType<typeof setInterval>[] = [];
+    const timers = [];
     
     stats.forEach((stat) => {
-      const duration = 2000;
-      const steps = 50;
+      if (stat.value === 0) {
+        stat.setAnimatedValue(0);
+        return;
+      }
+      const duration = 1500;
+      const steps = 30;
       const increment = stat.value / steps;
       let current = 0;
       
@@ -146,15 +176,17 @@ function QuickStats() {
     return () => {
       timers.forEach(timer => clearInterval(timer));
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeCasesCount, newClientsCount, currentMonthRevenue, pendingTasksCount]); // Re-run animation if data changes
 
-  const formatValue = (value: number, prefix: string, suffix: string) => {
+  const formatValue = (value, prefix, suffix) => {
     if (prefix === "R$ ") {
       return `${prefix}${(value / 1000).toFixed(1)}k${suffix}`;
     }
     return `${prefix}${value}${suffix}`;
   };
 
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {stats.map((stat, index) => {
@@ -216,16 +248,78 @@ function QuickStats() {
 }
 
 // Componente de atividades recentes aprimorado
+
+// Componente de atividades recentes aprimorado
 function RecentActivity() {
-  const activities = [
-    { action: "Novo processo cadastrado", case: "Ação de Cobrança - Silva vs. Santos", time: "2 horas atrás", type: "case", icon: Briefcase, color: "bg-blue-500" },
-    { action: "Petição enviada", case: "Inventário - Família Costa", time: "4 horas atrás", type: "petition", icon: FileText, color: "bg-purple-500" },
-    { action: "Cliente adicionado", case: "Maria Fernandes", time: "1 dia atrás", type: "client", icon: Users, color: "bg-emerald-500" },
-    { action: "Audiência agendada", case: "Divórcio Consensual", time: "2 dias atrás", type: "calendar", icon: Calendar, color: "bg-amber-500" },
-  ];
+  const { data: casesData } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
+  const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
+  const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
+
+  const activities = [];
+
+  // Adicionar Casos recentes
+  if (casesData?.cases) {
+    casesData.cases.forEach(c => {
+      if (c.created_at) {
+        activities.push({
+          action: "Processo cadastrado",
+          case: c.title || `Processo ${c.case_number || 'Sem número'}`,
+          date: new Date(c.created_at),
+          type: "case",
+          icon: Briefcase,
+          color: "bg-blue-500"
+        });
+      }
+    });
+  }
+
+  // Adicionar Entidades recentes
+  if (entitiesData) {
+    entitiesData.forEach(e => {
+      if (e.created_at) {
+        activities.push({
+          action: e.type === 'Cliente' ? "Cliente adicionado" : "Parte adicionada",
+          case: e.name,
+          date: new Date(e.created_at),
+          type: "client",
+          icon: Users,
+          color: "bg-emerald-500"
+        });
+      }
+    });
+  }
+
+  // Adicionar Tarefas recentes
+  if (tasksData) {
+    tasksData.forEach(t => {
+      if (t.created_at) {
+        activities.push({
+          action: "Nova tarefa",
+          case: t.title,
+          date: new Date(t.created_at),
+          type: "calendar",
+          icon: CheckSquare,
+          color: "bg-indigo-500"
+        });
+      }
+    });
+  }
+
+  // Ordenar por data (mais recentes primeiro) e pegar os 5 primeiros
+  activities.sort((a, b) => b.date - a.date);
+  const recentActivities = activities.slice(0, 5).map(act => {
+    // Formatação de tempo simplificada
+    const diffHours = Math.floor((new Date() - act.date) / (1000 * 60 * 60));
+    let timeStr = "";
+    if (diffHours < 1) timeStr = "Agora mesmo";
+    else if (diffHours < 24) timeStr = `${diffHours} hora${diffHours > 1 ? 's' : ''} atrás`;
+    else timeStr = `${Math.floor(diffHours/24)} dia${Math.floor(diffHours/24) > 1 ? 's' : ''} atrás`;
+    
+    return { ...act, time: timeStr };
+  });
 
   return (
-    <Card className="bg-white border-0 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group">
+    <Card className="bg-white border-0 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group h-full">
       {/* Animated gradient border */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
       
@@ -243,7 +337,7 @@ function RecentActivity() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 relative z-10">
-        {activities.map((activity, index) => (
+        {recentActivities.length > 0 ? recentActivities.map((activity, index) => (
           <div 
             key={index} 
             className="flex items-start gap-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 group/item cursor-pointer"
@@ -254,7 +348,7 @@ function RecentActivity() {
               <div className={`p-2 rounded-xl ${activity.color} shadow-lg group-hover/item:scale-110 transition-transform duration-300`}>
                 <activity.icon className="w-4 h-4 text-white" />
               </div>
-              {index < activities.length - 1 && (
+              {index < recentActivities.length - 1 && (
                 <div className="absolute top-10 left-1/2 w-0.5 h-16 bg-gradient-to-b from-slate-200 to-transparent -translate-x-1/2"></div>
               )}
             </div>
@@ -274,7 +368,12 @@ function RecentActivity() {
             {/* Hover action */}
             <ChevronRight className="w-4 h-4 text-slate-400 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform group-hover/item:translate-x-1" />
           </div>
-        ))}
+        )) : (
+          <div className="p-8 text-center text-slate-500 flex flex-col items-center">
+             <Activity className="w-8 h-8 mb-2 opacity-20" />
+             <p>Nenhuma atividade recente encontrada.</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
