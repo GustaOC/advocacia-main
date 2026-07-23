@@ -148,7 +148,7 @@ function QuickStats() {
 
   // Animação de contagem dos números
   useEffect(() => {
-    const timers = [];
+    const timers: ReturnType<typeof setInterval>[] = [];
     
     stats.forEach((stat) => {
       if (stat.value === 0) {
@@ -178,7 +178,7 @@ function QuickStats() {
     };
   }, [activeCasesCount, newClientsCount, currentMonthRevenue, pendingTasksCount]); // Re-run animation if data changes
 
-  const formatValue = (value, prefix, suffix) => {
+  const formatValue = (value: number, prefix: string, suffix: string) => {
     if (prefix === "R$ ") {
       return `${prefix}${(value / 1000).toFixed(1)}k${suffix}`;
     }
