@@ -1370,7 +1370,7 @@ export function FinancialModule() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setMessageModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
-            <Button onClick={() => { toast({ title: "Mensagem Enviada!", description: `Lembrete enviado para ${selectedRecipient?.name}` }); setMessageModalOpen(false); }} className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-lg rounded-xl">
+            <Button onClick={() => { toast({ title: "Mensagem Enviada!", description: `Lembrete enviado para ${selectedRecipient?.name}` }); setMessageModalOpen(false); }} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-xl">
               <Send className="mr-2 h-4 w-4" /> Enviar Mensagem
             </Button>
           </DialogFooter>
@@ -1418,7 +1418,7 @@ export function FinancialModule() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsExpenseModalOpen(false)}>Cancelar</Button>
-            <Button onClick={() => createExpenseMutation.mutate(newExpense)} disabled={createExpenseMutation.isPending || !newExpense.description || !newExpense.value} className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white">
+            <Button onClick={() => createExpenseMutation.mutate(newExpense)} disabled={createExpenseMutation.isPending || !newExpense.description || !newExpense.value} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-xl">
               {createExpenseMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2"/> : <CheckCircle className="h-4 w-4 mr-2"/>} Salvar Despesa
             </Button>
           </DialogFooter>
@@ -1462,7 +1462,7 @@ export function FinancialModule() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsExpenseEditModalOpen(false)}>Cancelar</Button>
-                <Button onClick={() => updateExpenseMutation.mutate(expenseToEdit)} disabled={updateExpenseMutation.isPending || !expenseToEdit.description || !expenseToEdit.value} className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white">
+                <Button onClick={() => updateExpenseMutation.mutate(expenseToEdit)} disabled={updateExpenseMutation.isPending || !expenseToEdit.description || !expenseToEdit.value} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-xl">
                   {updateExpenseMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2"/> : <CheckCircle className="h-4 w-4 mr-2"/>} Salvar Alterações
                 </Button>
               </DialogFooter>
