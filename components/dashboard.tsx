@@ -253,7 +253,7 @@ function RecentActivity() {
   const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
   const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
 
-  const activities = [];
+  const activities: any[] = [];
 
   // Adicionar Casos recentes
   if (casesData?.cases) {
