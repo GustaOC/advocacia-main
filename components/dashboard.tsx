@@ -304,10 +304,10 @@ function RecentActivity() {
   }
 
   // Ordenar por data (mais recentes primeiro) e pegar os 5 primeiros
-  activities.sort((a, b) => b.date - a.date);
+  activities.sort((a, b) => b.date.getTime() - a.date.getTime());
   const recentActivities = activities.slice(0, 5).map(act => {
     // Formatação de tempo simplificada
-    const diffHours = Math.floor((new Date() - act.date) / (1000 * 60 * 60));
+    const diffHours = Math.floor((new Date().getTime() - act.date.getTime()) / (1000 * 60 * 60));
     let timeStr = "";
     if (diffHours < 1) timeStr = "Agora mesmo";
     else if (diffHours < 24) timeStr = `${diffHours} hora${diffHours > 1 ? 's' : ''} atrás`;
