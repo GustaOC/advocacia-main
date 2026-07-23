@@ -195,7 +195,7 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
         case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
         case 'error': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-        default: return <FileText className="h-4 w-4 text-blue-500" />;
+        default: return <FileText className="h-4 w-4 text-brand" />;
     }
   };
   
@@ -221,7 +221,7 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
               variant="ghost" 
               size="sm" 
               onClick={markAllAsRead} 
-              className="h-7 px-2 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+              className="h-7 px-2 text-xs text-brand hover:text-blue-800 hover:bg-blue-50"
             >
               <CheckCheck className="h-3 w-3 mr-1" />
               Marcar todas como lidas
@@ -256,7 +256,7 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
                         </p>
                     </div>
                     {!notification.is_read && (
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0" />
+                      <div className="w-2 h-2 bg-brand rounded-full mt-1.5 flex-shrink-0" />
                     )}
                 </div>
               </DropdownMenuItem>

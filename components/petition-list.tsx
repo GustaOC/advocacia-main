@@ -165,7 +165,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
       },
       corrections_needed: { 
         label: "Correções", 
-        className: "bg-orange-100 text-orange-800 border-orange-200",
+        className: "bg-brand-beige text-brand-beige border-brand-beige",
         icon: AlertTriangle
       },
       rejected: { 
@@ -219,7 +219,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
     if (days < 0) {
       return <Badge className="bg-red-100 text-red-800 border-red-200">Vencido ({Math.abs(days)}d)</Badge>
     } else if (days <= 2) {
-      return <Badge className="bg-orange-100 text-orange-800 border-orange-200">{days} dias</Badge>
+      return <Badge className="bg-brand-beige text-brand-beige border-brand-beige">{days} dias</Badge>
     } else if (days <= 5) {
       return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">{days} dias</Badge>
     } else {
@@ -245,7 +245,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
       <Card className="border-0 shadow-lg">
         <CardContent className="flex items-center justify-center py-12">
           <div className="text-center space-y-4">
-            <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto" />
+            <Loader2 className="h-12 w-12 animate-spin text-brand mx-auto" />
             <p className="text-slate-600">Carregando petições...</p>
           </div>
         </CardContent>
@@ -259,7 +259,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
         <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100">
           <CardContent className="p-4 text-center">
-            <FileText className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+            <FileText className="h-6 w-6 text-brand mx-auto mb-2" />
             <p className="text-2xl font-bold text-blue-900">{stats.total}</p>
             <p className="text-xs text-blue-700">Total</p>
           </CardContent>
@@ -275,7 +275,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
 
         <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100">
           <CardContent className="p-4 text-center">
-            <Eye className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+            <Eye className="h-6 w-6 text-brand mx-auto mb-2" />
             <p className="text-2xl font-bold text-blue-900">{stats.inReview}</p>
             <p className="text-xs text-blue-700">Em Revisão</p>
           </CardContent>
@@ -291,9 +291,9 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
 
         <Card className="border-0 shadow-md bg-gradient-to-br from-orange-50 to-orange-100">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-6 w-6 text-orange-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-orange-900">{stats.needsCorrection}</p>
-            <p className="text-xs text-orange-700">Correções</p>
+            <AlertTriangle className="h-6 w-6 text-brand-beige mx-auto mb-2" />
+            <p className="text-2xl font-bold text-brand-beige">{stats.needsCorrection}</p>
+            <p className="text-xs text-brand-beige">Correções</p>
           </CardContent>
         </Card>
 
@@ -307,9 +307,9 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
 
         <Card className="border-0 shadow-md bg-gradient-to-br from-purple-50 to-purple-100">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-6 w-6 text-purple-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-purple-900">{stats.urgent}</p>
-            <p className="text-xs text-purple-700">Urgentes</p>
+            <AlertTriangle className="h-6 w-6 text-brand-olive mx-auto mb-2" />
+            <p className="text-2xl font-bold text-brand-olive">{stats.urgent}</p>
+            <p className="text-xs text-brand-olive">Urgentes</p>
           </CardContent>
         </Card>
       </div>
@@ -320,7 +320,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
           <CardTitle className="text-slate-900 flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="p-2 bg-blue-100 rounded-lg">
-                <FileText className="h-5 w-5 text-blue-600" />
+                <FileText className="h-5 w-5 text-brand" />
               </div>
               <div>
                 <span className="text-xl font-bold">Lista de Petições</span>
@@ -432,7 +432,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                       <TableCell>
                         <div className="flex items-center space-x-2">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                            <User className="h-4 w-4 text-blue-600" />
+                            <User className="h-4 w-4 text-brand" />
                           </div>
                           <div>
                             <p className="font-medium text-slate-900 text-sm">{petition.created_by_employee.name}</p>
@@ -473,7 +473,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => onReviewPetition(petition)}
-                          className="text-blue-600 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                          className="text-brand border-blue-200 hover:bg-blue-50 hover:border-blue-300"
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Revisar
@@ -498,7 +498,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                   <span>Pendentes: {stats.pending}</span>
                 </span>
                 <span className="flex items-center space-x-1">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-brand rounded-full"></div>
                   <span>Em Revisão: {stats.inReview}</span>
                 </span>
                 <span className="flex items-center space-x-1">

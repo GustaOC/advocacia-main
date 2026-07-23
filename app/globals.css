@@ -4,54 +4,54 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 215 16% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 215 16% 12%;
+    --background: 0 0% 98%; /* Ligeiramente mais branco para melhor contraste geral, ou 0 0% 93% para o cinza claro puro */
+    --foreground: 0 0% 0%; /* Preto */
+    --card: 0 0% 100%; /* Branco para os cards ressaltarem */
+    --card-foreground: 0 0% 0%;
     --popover: 0 0% 100%;
-    --popover-foreground: 215 16% 12%;
-    --primary: 210 78% 10%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 208 66% 28%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 220 9% 45%;
-    --muted-foreground: 220 9% 46%;
-    --accent: 45 93% 58%;
-    --accent-foreground: 210 78% 10%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 128 5% 25%; /* Oliva Escura */
+    --primary-foreground: 45 18% 87%; /* Bege */
+    --secondary: 90 11% 58%; /* Verde Sálvia */
+    --secondary-foreground: 0 0% 0%; /* Preto */
+    --muted: 45 18% 87%; /* Bege */
+    --muted-foreground: 128 5% 25%; /* Oliva Escura */
+    --accent: 80 5% 65%; /* Cinza Oliva */
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 210 78% 10%;
+    --border: 45 18% 87%; /* Bege como borda suave */
+    --input: 45 18% 87%;
+    --ring: 128 5% 25%;
     --radius: 0.75rem;
     --radius-lg: 1rem;
     
     /* Cores personalizadas para advocacia */
-    --brand: 210 78% 10%;
-    --brand-700: 210 78% 8%;
-    --brand-foreground: 0 0% 100%;
+    --brand: 128 5% 25%;
+    --brand-700: 128 5% 20%;
+    --brand-foreground: 45 18% 87%;
   }
 
   .dark {
-    --background: 215 16% 12%;
-    --foreground: 0 0% 98%;
-    --card: 215 16% 15%;
-    --card-foreground: 0 0% 98%;
-    --popover: 215 16% 15%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 210 78% 15%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 208 66% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 220 9% 25%;
-    --muted-foreground: 220 6% 60%;
-    --accent: 45 93% 58%;
-    --accent-foreground: 210 78% 10%;
+    --background: 128 5% 15%; /* Fundo super escuro baseado no oliva */
+    --foreground: 45 18% 87%; /* Texto bege */
+    --card: 128 5% 20%; /* Oliva escura 2 */
+    --card-foreground: 45 18% 87%;
+    --popover: 128 5% 20%;
+    --popover-foreground: 45 18% 87%;
+    --primary: 45 18% 87%; /* Bege como primária no modo escuro */
+    --primary-foreground: 128 5% 25%;
+    --secondary: 90 11% 58%; /* Sálvia */
+    --secondary-foreground: 0 0% 0%;
+    --muted: 128 5% 25%; /* Oliva */
+    --muted-foreground: 80 5% 65%; /* Cinza Oliva */
+    --accent: 80 5% 65%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214.3 31.8% 20%;
-    --input: 214.3 31.8% 20%;
-    --ring: 210 78% 15%;
+    --border: 128 5% 25%;
+    --input: 128 5% 25%;
+    --ring: 45 18% 87%;
   }
 }
 

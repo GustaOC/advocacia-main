@@ -17,7 +17,7 @@ const badgeVariants = cva(
         outline: 'text-foreground',
         // ✅ CORREÇÃO: Adicionada a variante "success" para feedbacks visuais positivos.
         success:
-          'border-transparent bg-green-500 text-white hover:bg-green-500/80',
+          'border-transparent bg-brand-sage text-white hover:bg-brand-sage/80',
       },
     },
     defaultVariants: {

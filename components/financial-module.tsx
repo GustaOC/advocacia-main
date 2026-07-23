@@ -92,10 +92,10 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
         label: "Valor Total em Acordos",
         value: formatCurrency(totalValue),
         icon: DollarSign,
-        color: "text-blue-600",
+        color: "text-brand",
         bg: "from-blue-50 to-blue-100",
         trend: "+5.2%",
-        gradient: "from-blue-500 to-indigo-600"
+        gradient: "from-brand to-brand-700"
       },
       {
         label: "Acordos Ativos",
@@ -104,16 +104,16 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
         color: "text-green-600",
         bg: "from-green-50 to-green-100",
         trend: `${activeAgreements} de ${agreements.length}`,
-        gradient: "from-emerald-500 to-teal-600"
+        gradient: "from-brand-sage to-brand-sage/90"
       },
       {
         label: "Total de Parcelas",
         value: String(totalInstallments),
         icon: Calculator,
-        color: "text-purple-600",
+        color: "text-brand-olive",
         bg: "from-purple-50 to-purple-100",
         trend: `${agreements.length} acordos`,
-        gradient: "from-purple-500 to-pink-600"
+        gradient: "from-brand-olive to-brand-olive/90"
       },
       {
         label: "Parcelas em Atraso",
@@ -122,7 +122,7 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
         color: "text-red-600",
         bg: "from-red-50 to-red-100",
         trend: overdueAgreements > 0 ? "Atenção!" : "Em dia",
-        gradient: "from-red-500 to-rose-600"
+        gradient: "from-brand-olive/80 to-brand-olive"
       },
     ];
   }, [agreements]);
@@ -140,7 +140,7 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
                 <div className="space-y-2">
                   <p className="text-sm text-slate-600 font-medium flex items-center gap-2">
                     {stat.label}
-                    <Sparkles className="w-3 h-3 text-amber-500 animate-pulse" />
+                    <Sparkles className="w-3 h-3 text-brand-sage animate-pulse" />
                   </p>
                   <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
                   <div className="flex items-center space-x-1">
@@ -149,11 +149,11 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
                     ) : stat.trend.includes('-') ? (
                       <ArrowDown className="w-4 h-4 text-red-500" />
                     ) : (
-                      <Target className="w-4 h-4 text-blue-500" />
+                      <Target className="w-4 h-4 text-brand" />
                     )}
                     <span className={`text-sm font-medium ${
                       stat.trend.includes('+') ? 'text-green-600' :
-                        stat.trend.includes('Atenção') ? 'text-red-600' : 'text-blue-600'
+                        stat.trend.includes('Atenção') ? 'text-red-600' : 'text-brand'
                       }`}>
                       {stat.trend}
                     </span>
@@ -195,9 +195,9 @@ function ReceivedPaymentsTab() {
     const methodStr = (method || 'outros').toLowerCase();
     const config = {
       pix: { label: 'PIX', className: 'bg-emerald-100 text-emerald-800' },
-      boleto: { label: 'Boleto', className: 'bg-orange-100 text-orange-800' },
+      boleto: { label: 'Boleto', className: 'bg-brand-beige text-brand-beige' },
       transferencia: { label: 'Transf.', className: 'bg-blue-100 text-blue-800' },
-      cartao_credito: { label: 'Crédito', className: 'bg-purple-100 text-purple-800' },
+      cartao_credito: { label: 'Crédito', className: 'bg-brand-olive text-brand-olive' },
       dinheiro: { label: 'Dinheiro', className: 'bg-green-100 text-green-800' },
       default: { label: methodStr, className: 'bg-slate-100 text-slate-800' }
     };
@@ -248,7 +248,7 @@ function ReceivedPaymentsTab() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                 <TableHead className="text-slate-700 font-bold">Data Pag.</TableHead>
                 <TableHead className="text-slate-700 font-bold">Cliente</TableHead>
                 <TableHead className="text-slate-700 font-bold">Processo</TableHead>
@@ -392,9 +392,9 @@ function MonthlyInstallmentsTab() {
 
   const getStatusBadge = (status: MonthlyInstallment['status'], dueDate: string) => {
     const variants = {
-      'PAGA': { label: 'Paga', className: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg', icon: CheckCircle },
+      'PAGA': { label: 'Paga', className: 'bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white shadow-lg', icon: CheckCircle },
       'PENDENTE': { label: 'Pendente', className: 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-lg', icon: Clock },
-      'ATRASADA': { label: 'Atrasada', className: 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg', icon: AlertCircle },
+      'ATRASADA': { label: 'Atrasada', className: 'bg-gradient-to-r from-brand-olive/80 to-brand-olive text-white shadow-lg', icon: AlertCircle },
     };
     const key = normalizeStatus(status, dueDate);
     const { label, className, icon: Icon } = variants[key];
@@ -414,14 +414,14 @@ function MonthlyInstallmentsTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600 font-medium">Total a Receber no Mês</p>
-                <p className="text-2xl font-bold text-orange-600">{formatCurrency(totalToReceive)}</p>
+                <p className="text-2xl font-bold text-brand-beige">{formatCurrency(totalToReceive)}</p>
               </div>
-              <DollarSign className="h-8 w-8 text-orange-600" />
+              <DollarSign className="h-8 w-8 text-brand-beige" />
             </div>
           </CardContent>
         </Card>
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-sage to-brand-sage/90 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
@@ -433,14 +433,14 @@ function MonthlyInstallmentsTab() {
           </CardContent>
         </Card>
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand to-brand-700 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600 font-medium">Balanço do Mês</p>
-                <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalReceived - totalToReceive)}</p>
+                <p className="text-2xl font-bold text-brand">{formatCurrency(totalReceived - totalToReceive)}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-600" />
+              <TrendingUp className="h-8 w-8 text-brand" />
             </div>
           </CardContent>
         </Card>
@@ -481,7 +481,7 @@ function MonthlyInstallmentsTab() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                 <TableHead className="text-slate-700 font-bold">Vencimento</TableHead>
                 <TableHead className="text-slate-700 font-bold">Partes</TableHead>
                 <TableHead className="text-slate-700 font-bold">Processo</TableHead>
@@ -523,7 +523,7 @@ function MonthlyInstallmentsTab() {
                       <TableCell className="font-mono">{formatDate(inst.due_date)}</TableCell>
                       <TableCell className="font-medium">
                         <div className="flex flex-col">
-                          <span className="text-sm text-slate-900 group-hover:text-purple-700 transition-colors" title={`Cliente: ${clientName}`}>{clientName}</span>
+                          <span className="text-sm text-slate-900 group-hover:text-brand-olive transition-colors" title={`Cliente: ${clientName}`}>{clientName}</span>
                           <span className="text-xs text-slate-500" title={`Executado: ${executedName}`}>vs {executedName}</span>
                         </div>
                       </TableCell>
@@ -536,7 +536,7 @@ function MonthlyInstallmentsTab() {
                             size="sm"
                             onClick={() => payInstallmentMutation.mutate(inst.id)}
                             disabled={payInstallmentMutation.isPending}
-                            className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg rounded-xl"
+                            className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-green-600 hover:to-emerald-700 shadow-lg rounded-xl"
                           >
                             {payInstallmentMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Banknote className="h-4 w-4 mr-2" />}
                             Dar Baixa
@@ -559,10 +559,10 @@ function MonthlyInstallmentsTab() {
 function renderAgreementTypeIcon(type: string | null | undefined) {
   const typeStr = type || 'N/A';
   const iconMap = {
-    'Judicial': { icon: Scale, color: 'text-blue-600', label: 'Judicial' },
+    'Judicial': { icon: Scale, color: 'text-brand', label: 'Judicial' },
     'Extrajudicial': { icon: FileSignature, color: 'text-green-600', label: 'Extrajudicial' },
-    'Em Audiência': { icon: Handshake, color: 'text-purple-600', label: 'Em Audiência' },
-    'Pela Loja': { icon: Store, color: 'text-orange-600', label: 'Pela Loja' }
+    'Em Audiência': { icon: Handshake, color: 'text-brand-olive', label: 'Em Audiência' },
+    'Pela Loja': { icon: Store, color: 'text-brand-beige', label: 'Pela Loja' }
   } as const;
   const config = (iconMap as any)[typeStr] || { icon: FileText, color: 'text-gray-600', label: typeStr };
   const Icon = config.icon as any;
@@ -583,13 +583,13 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      'ATIVO': { label: 'Ativo', className: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg' },
-      'CONCLUIDO': { label: 'Concluído', className: 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg' },
-      'INADIMPLENTE': { label: 'Em Atraso', className: 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-lg' },
-      'CANCELADO': { label: 'Cancelado', className: 'bg-gradient-to-r from-slate-500 to-slate-600 text-white shadow-lg' },
+      'ATIVO': { label: 'Ativo', className: 'bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white shadow-lg' },
+      'CONCLUIDO': { label: 'Concluído', className: 'bg-gradient-to-r from-brand to-brand-700 text-white shadow-lg' },
+      'INADIMPLENTE': { label: 'Em Atraso', className: 'bg-gradient-to-r from-brand-olive/80 to-brand-olive text-white shadow-lg' },
+      'CANCELADO': { label: 'Cancelado', className: 'bg-gradient-to-r from-brand-black to-brand-black/90 text-white shadow-lg' },
       'PAUSADO': { label: 'Pausado', className: 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-lg' }
     } as const;
-    const cfg = (variants as any)[status] || { label: status, className: 'bg-gradient-to-r from-slate-500 to-slate-600 text-white shadow-lg' };
+    const cfg = (variants as any)[status] || { label: status, className: 'bg-gradient-to-r from-brand-black to-brand-black/90 text-white shadow-lg' };
     return <Badge className={`${cfg.className} border-0 px-3 py-1 font-semibold`}>{cfg.label}</Badge>;
   };
 
@@ -599,9 +599,9 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
         <div className="p-6 hover:bg-slate-50/50 transition-colors" onClick={onToggle}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              {isExpanded ? <ChevronDown className="h-5 w-5 text-slate-500 group-hover:text-purple-600 transition-colors" /> : <ChevronRight className="h-5 w-5 text-slate-500 group-hover:text-purple-600 transition-colors" />}
+              {isExpanded ? <ChevronDown className="h-5 w-5 text-slate-500 group-hover:text-brand-olive transition-colors" /> : <ChevronRight className="h-5 w-5 text-slate-500 group-hover:text-brand-olive transition-colors" />}
               <div>
-                <h4 className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors">{agreement.entities?.name || 'Cliente não informado'}</h4>
+                <h4 className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">{agreement.entities?.name || 'Cliente não informado'}</h4>
                 <p className="text-sm text-slate-500">{agreement.cases?.case_number || 'Sem número'}</p>
               </div>
             </div>
@@ -660,7 +660,7 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
             <div className="flex justify-end space-x-2 border-t pt-3 mt-3">
               <Button size="sm" variant="outline" className="border-2 border-slate-200 rounded-xl"><Eye className="h-4 w-4 mr-1" />Visualizar</Button>
               <Button size="sm" variant="outline" className="border-2 border-slate-200 rounded-xl"><Edit className="h-4 w-4 mr-1" />Editar</Button>
-              <Button size="sm" onClick={() => onSendMessage(agreement)} className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-lg rounded-xl">
+              <Button size="sm" onClick={() => onSendMessage(agreement)} className="bg-gradient-to-r from-brand to-brand-700 hover:from-brand-700 hover:to-brand shadow-lg rounded-xl">
                 <Send className="h-4 w-4 mr-1" />Enviar Cobrança
               </Button>
             </div>
@@ -709,7 +709,7 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
             <div className="flex flex-col sm:flex-row gap-3 flex-1">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-                <Input placeholder="Buscar por cliente, processo ou executado..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-purple-400 rounded-xl" />
+                <Input placeholder="Buscar por cliente, processo ou executado..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
@@ -822,14 +822,14 @@ function AlvarasTab() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand to-brand-700 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600 font-medium">Total em Alvarás</p>
-                <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalValue)}</p>
+                <p className="text-2xl font-bold text-brand">{formatCurrency(totalValue)}</p>
               </div>
-              <Receipt className="h-8 w-8 text-blue-600" />
+              <Receipt className="h-8 w-8 text-brand" />
             </div>
           </CardContent>
         </Card>
@@ -839,14 +839,14 @@ function AlvarasTab() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600 font-medium">Pendentes de Recebimento</p>
-                <p className="text-2xl font-bold text-orange-600">{formatCurrency(pendingValue)}</p>
+                <p className="text-2xl font-bold text-brand-beige">{formatCurrency(pendingValue)}</p>
               </div>
-              <Clock className="h-8 w-8 text-orange-600" />
+              <Clock className="h-8 w-8 text-brand-beige" />
             </div>
           </CardContent>
         </Card>
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-sage to-brand-sage/90 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
@@ -864,7 +864,7 @@ function AlvarasTab() {
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-              <Input placeholder="Buscar por processo, credor ou vara..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-purple-400 rounded-xl" />
+              <Input placeholder="Buscar por processo, credor ou vara..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
@@ -898,8 +898,8 @@ function AlvarasTab() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <div className="flex items-center space-x-3">
-                      <h4 className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors">Processo {alvara.case_number}</h4>
-                      <Badge variant={alvara.received ? "default" : "secondary"} className={alvara.received ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
+                      <h4 className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">Processo {alvara.case_number}</h4>
+                      <Badge variant={alvara.received ? "default" : "secondary"} className={alvara.received ? "bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
                         {alvara.received ? "Recebido" : "Pendente"}
                       </Badge>
                     </div>
@@ -917,7 +917,7 @@ function AlvarasTab() {
                         size="sm"
                         onClick={() => markAsReceivedMutation.mutate(alvara.id)}
                         disabled={markAsReceivedMutation.isPending}
-                        className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg rounded-xl"
+                        className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-green-600 hover:to-emerald-700 shadow-lg rounded-xl"
                       >
                         {markAsReceivedMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4 mr-1" />}
                         Marcar como Recebido
@@ -972,7 +972,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-black to-brand-black/90 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
@@ -984,7 +984,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
           </CardContent>
         </Card>
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-sage to-brand-sage/90 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
@@ -1001,21 +1001,21 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600 font-medium">Despesas Pendentes</p>
-                <p className="text-2xl font-bold text-orange-600">{formatCurrency(pendingExpenses)}</p>
+                <p className="text-2xl font-bold text-brand-beige">{formatCurrency(pendingExpenses)}</p>
               </div>
-              <Clock className="h-8 w-8 text-orange-600" />
+              <Clock className="h-8 w-8 text-brand-beige" />
             </div>
           </CardContent>
         </Card>
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-100 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-brand to-brand-700 opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600 font-medium">Total de Itens</p>
-                <p className="text-2xl font-bold text-blue-600">{filteredExpenses.length}</p>
+                <p className="text-2xl font-bold text-brand">{filteredExpenses.length}</p>
               </div>
-              <FileText className="h-8 w-8 text-blue-600" />
+              <FileText className="h-8 w-8 text-brand" />
             </div>
           </CardContent>
         </Card>
@@ -1047,7 +1047,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={onAddExpense} className="bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl h-12 w-full lg:w-auto">
+            <Button onClick={onAddExpense} className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl h-12 w-full lg:w-auto">
               <Plus className="mr-2 h-4 w-4" /> Nova Despesa
             </Button>
           </div>
@@ -1055,7 +1055,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-              <Input placeholder="Buscar despesas..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-purple-400 rounded-xl" />
+              <Input placeholder="Buscar despesas..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-[150px] sm:w-[180px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Categoria" /></SelectTrigger>
@@ -1094,8 +1094,8 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
                 <div className="flex items-center justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                      <h4 className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors">{expense.description}</h4>
-                      <Badge variant={expense.status === 'paid' ? "default" : "secondary"} className={expense.status === 'paid' ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
+                      <h4 className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">{expense.description}</h4>
+                      <Badge variant={expense.status === 'paid' ? "default" : "secondary"} className={expense.status === 'paid' ? "bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
                         {expense.status === 'paid' ? "Pago" : "Pendente"}
                       </Badge>
                       <Badge variant="outline" className="border-slate-300 text-slate-700">{expense.category}</Badge>
@@ -1284,7 +1284,7 @@ export function FinancialModule() {
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-red-700 mb-2">Erro ao carregar dados financeiros</h3>
           <p className="text-red-600 mb-4">{error.message}</p>
-          <Button onClick={() => refetch()} className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 shadow-lg rounded-xl">
+          <Button onClick={() => refetch()} className="bg-gradient-to-r from-brand-olive/80 to-brand-olive hover:from-red-600 hover:to-rose-700 shadow-lg rounded-xl">
             <RefreshCw className="mr-2 h-4 w-4" /> Tentar Novamente
           </Button>
         </CardContent>
@@ -1294,7 +1294,7 @@ export function FinancialModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
           <p className="text-slate-600 font-medium">Carregando dados financeiros...</p>
@@ -1370,7 +1370,7 @@ export function FinancialModule() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setMessageModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
-            <Button onClick={() => { toast({ title: "Mensagem Enviada!", description: `Lembrete enviado para ${selectedRecipient?.name}` }); setMessageModalOpen(false); }} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-xl">
+            <Button onClick={() => { toast({ title: "Mensagem Enviada!", description: `Lembrete enviado para ${selectedRecipient?.name}` }); setMessageModalOpen(false); }} className="bg-brand hover:bg-brand-700 text-white shadow-lg rounded-xl">
               <Send className="mr-2 h-4 w-4" /> Enviar Mensagem
             </Button>
           </DialogFooter>
@@ -1418,7 +1418,7 @@ export function FinancialModule() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsExpenseModalOpen(false)}>Cancelar</Button>
-            <Button onClick={() => createExpenseMutation.mutate(newExpense)} disabled={createExpenseMutation.isPending || !newExpense.description || !newExpense.value} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-xl">
+            <Button onClick={() => createExpenseMutation.mutate(newExpense)} disabled={createExpenseMutation.isPending || !newExpense.description || !newExpense.value} className="bg-brand hover:bg-brand-700 text-white shadow-lg rounded-xl">
               {createExpenseMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2"/> : <CheckCircle className="h-4 w-4 mr-2"/>} Salvar Despesa
             </Button>
           </DialogFooter>
@@ -1462,7 +1462,7 @@ export function FinancialModule() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsExpenseEditModalOpen(false)}>Cancelar</Button>
-                <Button onClick={() => updateExpenseMutation.mutate(expenseToEdit)} disabled={updateExpenseMutation.isPending || !expenseToEdit.description || !expenseToEdit.value} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg rounded-xl">
+                <Button onClick={() => updateExpenseMutation.mutate(expenseToEdit)} disabled={updateExpenseMutation.isPending || !expenseToEdit.description || !expenseToEdit.value} className="bg-brand hover:bg-brand-700 text-white shadow-lg rounded-xl">
                   {updateExpenseMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2"/> : <CheckCircle className="h-4 w-4 mr-2"/>} Salvar Alterações
                 </Button>
               </DialogFooter>

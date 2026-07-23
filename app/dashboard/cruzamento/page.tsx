@@ -23,10 +23,10 @@ type ApiResponse = {
 
 function CruzamentoStats({ resultados, total }: { resultados: ResultadoCruzamento[], total: number }) {
   const stats = [
-    { label: "Correspondências Encontradas", value: resultados.length.toString(), icon: CheckCircle, color: "text-blue-600", bg: "from-blue-50 to-blue-100", trend: "100%" },
+    { label: "Correspondências Encontradas", value: resultados.length.toString(), icon: CheckCircle, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "100%" },
     { label: "Valor Total", value: total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: Sigma, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+15%" },
-    { label: "Média por Cliente", value: (resultados.length > 0 ? total / resultados.length : 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: TrendingUp, color: "text-purple-600", bg: "from-purple-50 to-purple-100", trend: "+8%" },
-    { label: "Status", value: "Concluído", icon: FileSpreadsheet, color: "text-orange-600", bg: "from-orange-50 to-orange-100", trend: "OK" },
+    { label: "Média por Cliente", value: (resultados.length > 0 ? total / resultados.length : 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: TrendingUp, color: "text-brand-olive", bg: "from-purple-50 to-purple-100", trend: "+8%" },
+    { label: "Status", value: "Concluído", icon: FileSpreadsheet, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "OK" },
   ];
 
   return (
@@ -117,16 +117,16 @@ export default function CruzamentoPage() {
         <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
         <div className="relative z-10">
           <h2 className="text-4xl font-bold mb-3">Cruzamento de Listas</h2>
-          <p className="text-cyan-100 text-xl">Compare a lista de pagamentos com a de clientes judicializados para encontrar correspondências.</p>
+          <p className="text-brand-light text-xl">Compare a lista de pagamentos com a de clientes judicializados para encontrar correspondências.</p>
         </div>
       </div>
 
       {resultados.length > 0 && <CruzamentoStats resultados={resultados} total={total} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-        <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
           <CardTitle className="flex items-center gap-2 text-2xl font-bold text-slate-900">
-            <Upload className="h-6 w-6 text-cyan-600"/>
+            <Upload className="h-6 w-6 text-brand-light"/>
             Upload de Arquivos
           </CardTitle>
           <CardDescription className="text-slate-600">
@@ -171,7 +171,7 @@ export default function CruzamentoPage() {
           <Button 
             onClick={handleCompare} 
             disabled={isLoading || !arquivoPagamentos || !arquivoJudicializados}
-            className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 shadow-lg rounded-xl h-12 px-8"
+            className="bg-gradient-to-r from-brand-sage/80 to-brand-sage hover:from-cyan-700 hover:to-teal-700 shadow-lg rounded-xl h-12 px-8"
           >
             {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <GitCompareArrows className="mr-2 h-5 w-5" />}
             {isLoading ? 'Analisando...' : 'Comparar Arquivos'}
@@ -188,7 +188,7 @@ export default function CruzamentoPage() {
 
       {resultados.length > 0 && (
         <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+          <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
             <CardTitle className="text-2xl font-bold text-slate-900">Resultados Encontrados</CardTitle>
             <CardDescription className="text-slate-600">
               Os seguintes clientes foram encontrados em ambas as listas, com seus respectivos valores e datas da planilha de pagamentos.
@@ -197,7 +197,7 @@ export default function CruzamentoPage() {
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+                <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                   <TableHead className="text-slate-700 font-bold">Data do Pagamento</TableHead>
                   <TableHead className="text-slate-700 font-bold">Nome do Cliente</TableHead>
                   <TableHead className="text-right text-slate-700 font-bold">Valor Pago (R$)</TableHead>
@@ -207,13 +207,13 @@ export default function CruzamentoPage() {
                 {resultados.map((item, index) => (
                   <TableRow key={index} className="group hover:bg-gradient-to-r hover:from-cyan-50/50 hover:to-transparent transition-all duration-200">
                     <TableCell className="font-mono text-sm">{item.data || 'Não informada'}</TableCell>
-                    <TableCell className="font-medium group-hover:text-cyan-700 transition-colors">{item.nome}</TableCell>
+                    <TableCell className="font-medium group-hover:text-brand-light transition-colors">{item.nome}</TableCell>
                     <TableCell className="text-right font-mono font-semibold text-green-700">{item.valor.toFixed(2).replace('.', ',')}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
               <TableFooter>
-                <TableRow className="bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 transition-all">
+                <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-200 hover:to-slate-300 transition-all">
                   <TableCell colSpan={2} className="font-bold text-lg text-slate-800">
                     <div className="flex items-center gap-2">
                       <Sigma className="h-5 w-5"/>

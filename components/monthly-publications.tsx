@@ -22,7 +22,7 @@ import {
 // Componente de loading moderno
 function ModuleLoader() {
   return (
-    <div className="min-h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-8 flex items-center justify-center">
+    <div className="min-h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl p-8 flex items-center justify-center">
       <div className="text-center space-y-4">
         <div className="relative">
           <div className="w-12 h-12 border-4 border-slate-200 border-t-slate-600 rounded-full animate-spin mx-auto"></div>
@@ -184,7 +184,7 @@ export function MonthlyPublications() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button className="bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+              <Button className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-700 hover:to-slate-800 text-white shadow-lg hover:shadow-xl transition-all duration-200">
                 <Download className="h-4 w-4 mr-2" />
                 Exportar Relatório
               </Button>
@@ -199,7 +199,7 @@ export function MonthlyPublications() {
             value={currentData.totalPublications}
             subtitle="+15% vs mês anterior"
             icon={Calendar}
-            color="text-blue-600"
+            color="text-brand"
             bgColor="bg-gradient-to-br from-blue-500 to-blue-600"
           />
           <ModernStatsCard
@@ -207,7 +207,7 @@ export function MonthlyPublications() {
             value={currentData.completed}
             subtitle={`${calculateProductivity(currentData.completed, currentData.totalPublications)}% do total`}
             icon={CheckCircle}
-            color="text-emerald-600"
+            color="text-brand-sage"
             bgColor="bg-gradient-to-br from-emerald-500 to-emerald-600"
           />
           <ModernStatsCard
@@ -278,7 +278,7 @@ export function MonthlyPublications() {
                         <div className="flex items-center space-x-2">
                           <div className="w-20 bg-slate-200 rounded-full h-2">
                             <div
-                              className="bg-gradient-to-r from-slate-600 to-slate-700 h-2 rounded-full transition-all duration-300"
+                              className="bg-gradient-to-r from-brand-black to-brand-black/90 h-2 rounded-full transition-all duration-300"
                               style={{
                                 width: `${calculateProductivity(person.completed, person.total)}%`,
                               }}
@@ -325,7 +325,7 @@ export function MonthlyPublications() {
                     <TableRow key={index} className={index % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
                       <TableCell className="font-medium text-slate-900">{formatDate(day.date)}</TableCell>
                       <TableCell className="text-slate-600">{day.publications}</TableCell>
-                      <TableCell className="text-emerald-600 font-medium">{day.completed}</TableCell>
+                      <TableCell className="text-brand-sage font-medium">{day.completed}</TableCell>
                       <TableCell className="text-yellow-600 font-medium">{day.pending}</TableCell>
                       <TableCell className="text-red-600 font-medium">{day.overdue}</TableCell>
                       <TableCell>

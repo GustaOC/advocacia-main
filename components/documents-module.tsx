@@ -239,7 +239,7 @@ export function DocumentsModule({ caseId }: DocumentsModuleProps) {
                   className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border"
                 >
                   <div className="flex items-center space-x-3">
-                    <FileText className="h-6 w-6 text-blue-600" />
+                    <FileText className="h-6 w-6 text-brand" />
                     <div>
                       <p className="font-semibold text-slate-800">{doc.file_name}</p>
                       <p className="text-sm text-slate-600">{doc.description || "Sem descrição"}</p>

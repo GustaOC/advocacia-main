@@ -22,10 +22,10 @@ const fetchEmployees = async () => {
 
 function EmployeeStats({ employees }: { employees: any[] }) {
   const stats = [
-    { label: "Total de Membros", value: employees.length.toString(), icon: Users, color: "text-blue-600", bg: "from-blue-50 to-blue-100", trend: "+5%" },
-    { label: "Administradores", value: employees.filter(e => e.role === 'admin' || e.roles?.name?.toLowerCase().includes('admin')).length.toString(), icon: Shield, color: "text-purple-600", bg: "from-purple-50 to-purple-100", trend: "+2%" },
+    { label: "Total de Membros", value: employees.length.toString(), icon: Users, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+5%" },
+    { label: "Administradores", value: employees.filter(e => e.role === 'admin' || e.roles?.name?.toLowerCase().includes('admin')).length.toString(), icon: Shield, color: "text-brand-olive", bg: "from-purple-50 to-purple-100", trend: "+2%" },
     { label: "Advogados", value: employees.filter(e => e.role === 'member' || e.roles?.name?.toLowerCase().includes('advogado')).length.toString(), icon: Award, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+8%" },
-    { label: "Equipe Ativa", value: employees.length.toString(), icon: TrendingUp, color: "text-orange-600", bg: "from-orange-50 to-orange-100", trend: "100%" },
+    { label: "Equipe Ativa", value: employees.length.toString(), icon: TrendingUp, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "100%" },
   ];
 
   return (
@@ -145,7 +145,7 @@ export function EmployeeManagement() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
           <p className="text-slate-600 font-medium">Carregando equipe...</p>
@@ -170,7 +170,7 @@ export function EmployeeManagement() {
           {currentUser?.role === 'admin' && (
             <Button 
               onClick={handleGenerateInvite} 
-              className="bg-blue-600 text-white hover:bg-blue-700 font-bold px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border-0"
+              className="bg-brand text-white hover:bg-brand-700 font-bold px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border-0"
               disabled={isGeneratingInvite}
             >
               {isGeneratingInvite ? <Loader2 className="w-5 h-5 animate-spin" /> : <Shield className="w-5 h-5" />}
@@ -183,13 +183,13 @@ export function EmployeeManagement() {
       {employees && <EmployeeStats employees={employees} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
           <CardTitle className="text-2xl font-bold text-slate-900">Membros da Equipe</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                 <TableHead className="text-slate-700 font-bold">Membro</TableHead>
                 <TableHead className="text-slate-700 font-bold">Email</TableHead>
                 <TableHead className="text-slate-700 font-bold">Cargo</TableHead>
@@ -205,7 +205,7 @@ export function EmployeeManagement() {
                         <div className="relative group-hover:scale-110 transition-transform">
                           <Avatar className="ring-2 ring-slate-200 group-hover:ring-slate-400 transition-all">
                             <AvatarImage src={employee.avatar_url || ''} />
-                            <AvatarFallback className="bg-gradient-to-br from-slate-400 to-slate-500 text-white font-bold">
+                            <AvatarFallback className="bg-gradient-to-br from-brand-black to-brand-black/90 text-white font-bold">
                               {(employee.name || employee.full_name || 'U').charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
@@ -215,7 +215,7 @@ export function EmployeeManagement() {
                     </TableCell>
                     <TableCell className="text-slate-600">{employee.email}</TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 border border-slate-300">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-brand-black to-brand-black/90 text-slate-700 border border-slate-300">
                         {employee.role === 'admin' ? 'Administrador' : employee.role === 'member' ? 'Advogado / Membro' : employee.role || employee.roles?.name || 'Não definido'}
                       </span>
                     </TableCell>
@@ -267,7 +267,7 @@ export function EmployeeManagement() {
                 </SelectContent>
               </Select>
               {currentUser?.id === selectedEmployee?.id && (
-                <p className="text-xs text-amber-600 mt-1">
+                <p className="text-xs text-brand-sage mt-1">
                   Você não pode alterar o seu próprio nível de acesso.
                 </p>
               )}
@@ -304,7 +304,7 @@ export function EmployeeManagement() {
             <Button 
               onClick={handleSave} 
               disabled={updatePermissionsMutation.isPending}
-              className="bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl text-white"
+              className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl text-white"
             >
               {updatePermissionsMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
               Salvar Alterações

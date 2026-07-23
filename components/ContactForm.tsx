@@ -65,7 +65,7 @@ export default function ContactForm() {
           <p className="text-sm font-medium">Para atendimento mais rápido:</p>
           <Button 
             onClick={handleWhatsApp}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className="bg-brand-sage hover:bg-brand-sage/90 text-white"
           >
             <MessageCircle className="mr-2 h-4 w-4" />
             Conversar no WhatsApp
@@ -97,7 +97,7 @@ export default function ContactForm() {
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
               required 
-              className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 "
+              className="border-slate-300 focus:border-brand focus:ring-brand "
             />
           </div>
           <div className="space-y-2">
@@ -109,7 +109,7 @@ export default function ContactForm() {
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
               required 
-              className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 "
+              className="border-slate-300 focus:border-brand focus:ring-brand "
             />
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function ContactForm() {
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
             required 
-            className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+            className="border-slate-300 focus:border-brand focus:ring-brand"
           />
         </div>
 
@@ -131,7 +131,7 @@ export default function ContactForm() {
           <div className="space-y-2">
             <Label className="text-slate-700 font-medium">Área Jurídica</Label>
             <Select value={formData.subject} onValueChange={(value) => handleChange('subject', value)}>
-              <SelectTrigger className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500">
+              <SelectTrigger className="border-slate-300 focus:border-brand focus:ring-brand">
                 <SelectValue placeholder="Selecione a área" className="text-slate-500"/>
               </SelectTrigger>
               <SelectContent>
@@ -149,7 +149,7 @@ export default function ContactForm() {
           <div className="space-y-2">
             <Label className="text-slate-700 font-medium">Urgência</Label>
             <Select value={formData.urgency} onValueChange={(value) => handleChange('urgency', value)}>
-              <SelectTrigger className="border-slate-300 focus:border-indigo-500 focus:ring-indigo-500">
+              <SelectTrigger className="border-slate-300 focus:border-brand focus:ring-brand">
                 <SelectValue placeholder="Nível de urgência" className="text-slate-500" />
               </SelectTrigger>
               <SelectContent>
@@ -169,11 +169,11 @@ export default function ContactForm() {
             value={formData.message}
             onChange={(e) => handleChange('message', e.target.value)}
             required 
-            className="min-h-[120px] border-slate-300 focus:border-indigo-500 focus:ring-indigo-500" 
+            className="min-h-[120px] border-slate-300 focus:border-brand focus:ring-brand" 
           />
         </div>
 
-        <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-lg">
+        <div className="bg-brand border border-brand p-4 rounded-lg">
           <p className="text-sm text-center" style={{color: '#334155'}}>
             Ao enviar este formulário, você concorda com nossos 
             <span style={{color: '#1e293b'}} className="font-medium"> termos de privacidade</span>. 

@@ -216,11 +216,11 @@ export function InstallmentPaymentModal({
   const getPaymentMethodIcon = (method: string) => {
     switch(method) {
       case 'pix': return <CreditCard className="h-4 w-4 text-green-600" />;
-      case 'bank_transfer': return <Building className="h-4 w-4 text-blue-600" />;
-      case 'check': return <Receipt className="h-4 w-4 text-orange-600" />;
+      case 'bank_transfer': return <Building className="h-4 w-4 text-brand" />;
+      case 'check': return <Receipt className="h-4 w-4 text-brand-beige" />;
       case 'cash': return <Banknote className="h-4 w-4 text-green-600" />;
-      case 'credit_card': return <CreditCard className="h-4 w-4 text-purple-600" />;
-      case 'debit_card': return <CreditCard className="h-4 w-4 text-blue-600" />;
+      case 'credit_card': return <CreditCard className="h-4 w-4 text-brand-olive" />;
+      case 'debit_card': return <CreditCard className="h-4 w-4 text-brand" />;
       default: return <DollarSign className="h-4 w-4 text-gray-600" />;
     }
   };
@@ -272,7 +272,7 @@ export function InstallmentPaymentModal({
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center justify-between text-lg">
                 <div className="flex items-center">
-                  <Target className="mr-2 h-5 w-5 text-blue-600" />
+                  <Target className="mr-2 h-5 w-5 text-brand" />
                   Informações da Parcela
                 </div>
                 {getStatusBadge(installment.status)}
@@ -281,7 +281,7 @@ export function InstallmentPaymentModal({
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <p className="text-sm text-blue-600 font-medium">Valor Original</p>
+                  <p className="text-sm text-brand font-medium">Valor Original</p>
                   <p className="text-xl font-bold text-blue-800">
                     {formatCurrency(installment.amount)}
                   </p>
@@ -300,9 +300,9 @@ export function InstallmentPaymentModal({
                         {daysOverdue}
                       </p>
                     </div>
-                    <div className="text-center p-4 bg-orange-50 rounded-lg">
-                      <p className="text-sm text-orange-600 font-medium">Total com Juros</p>
-                      <p className="text-xl font-bold text-orange-800">
+                    <div className="text-center p-4 bg-brand-beige rounded-lg">
+                      <p className="text-sm text-brand-beige font-medium">Total com Juros</p>
+                      <p className="text-xl font-bold text-brand-beige">
                         {formatCurrency(calculatedFees.totalAmount)}
                       </p>
                     </div>
@@ -325,10 +325,10 @@ export function InstallmentPaymentModal({
           </Card>
 
           {isOverdue && (
-            <Card className="border-orange-200">
+            <Card className="border-brand-beige">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center text-lg">
-                  <Calculator className="mr-2 h-5 w-5 text-orange-600" />
+                  <Calculator className="mr-2 h-5 w-5 text-brand-beige" />
                   Cálculo de Taxas e Juros
                 </CardTitle>
               </CardHeader>
@@ -342,9 +342,9 @@ export function InstallmentPaymentModal({
                     <span className="text-sm text-red-600">Multa por atraso ({agreementData.late_payment_fee}%):</span>
                     <span className="font-semibold text-red-700">{formatCurrency(calculatedFees.lateFee)}</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-orange-50 rounded">
-                    <span className="text-sm text-orange-600">Juros de mora ({daysOverdue} dias × {agreementData.late_payment_daily_interest}%):</span>
-                    <span className="font-semibold text-orange-700">{formatCurrency(calculatedFees.interest)}</span>
+                  <div className="flex justify-between items-center p-3 bg-brand-beige rounded">
+                    <span className="text-sm text-brand-beige">Juros de mora ({daysOverdue} dias × {agreementData.late_payment_daily_interest}%):</span>
+                    <span className="font-semibold text-brand-beige">{formatCurrency(calculatedFees.interest)}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between items-center p-3 bg-blue-50 rounded border border-blue-200">
@@ -359,7 +359,7 @@ export function InstallmentPaymentModal({
           <Card className="border-slate-200">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-lg">
-                <CreditCard className="mr-2 h-5 w-5 text-purple-600" />
+                <CreditCard className="mr-2 h-5 w-5 text-brand-olive" />
                 Dados do Pagamento
               </CardTitle>
             </CardHeader>
@@ -381,7 +381,7 @@ export function InstallmentPaymentModal({
 
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-blue-600" />
+                    <Calendar className="h-4 w-4 text-brand" />
                     Data do Pagamento *
                   </Label>
                   <Input 
@@ -412,13 +412,13 @@ export function InstallmentPaymentModal({
                       </SelectItem>
                       <SelectItem value="bank_transfer">
                         <div className="flex items-center gap-2">
-                          <Building className="h-4 w-4 text-blue-600" />
+                          <Building className="h-4 w-4 text-brand" />
                           Transferência Bancária
                         </div>
                       </SelectItem>
                       <SelectItem value="check">
                         <div className="flex items-center gap-2">
-                          <Receipt className="h-4 w-4 text-orange-600" />
+                          <Receipt className="h-4 w-4 text-brand-beige" />
                           Cheque
                         </div>
                       </SelectItem>
@@ -430,13 +430,13 @@ export function InstallmentPaymentModal({
                       </SelectItem>
                       <SelectItem value="credit_card">
                         <div className="flex items-center gap-2">
-                          <CreditCard className="h-4 w-4 text-purple-600" />
+                          <CreditCard className="h-4 w-4 text-brand-olive" />
                           Cartão de Crédito
                         </div>
                       </SelectItem>
                       <SelectItem value="debit_card">
                         <div className="flex items-center gap-2">
-                          <CreditCard className="h-4 w-4 text-blue-600" />
+                          <CreditCard className="h-4 w-4 text-brand" />
                           Cartão de Débito
                         </div>
                       </SelectItem>
@@ -474,7 +474,7 @@ export function InstallmentPaymentModal({
 
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <Percent className="h-4 w-4 text-orange-600" />
+                    <Percent className="h-4 w-4 text-brand-beige" />
                     Juros Pagos
                   </Label>
                   <Input 
@@ -534,8 +534,8 @@ export function InstallmentPaymentModal({
                 )}
                 {paymentData.interest_paid > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-orange-600">Juros:</span>
-                    <span className="font-medium text-orange-700">{formatCurrency(paymentData.interest_paid)}</span>
+                    <span className="text-brand-beige">Juros:</span>
+                    <span className="font-medium text-brand-beige">{formatCurrency(paymentData.interest_paid)}</span>
                   </div>
                 )}
                 {paymentData.discount_applied > 0 && (
@@ -587,7 +587,7 @@ export function InstallmentPaymentModal({
               <Button 
                 onClick={handleSubmit} 
                 disabled={recordPaymentMutation.isPending}
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-brand-sage hover:bg-brand-sage/90"
               >
                 {recordPaymentMutation.isPending ? (
                   <>

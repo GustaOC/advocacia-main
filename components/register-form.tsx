@@ -78,7 +78,7 @@ export default function RegisterForm() {
   return (
     <form onSubmit={handleRegister} className="space-y-6 p-8 bg-white rounded-xl shadow-2xl border border-slate-200">
       <div className="text-center space-y-2">
-        <UserPlus className="mx-auto h-12 w-12 text-blue-600" />
+        <UserPlus className="mx-auto h-12 w-12 text-brand" />
         <h2 className="text-3xl font-bold text-slate-900">Criar Nova Conta</h2>
         <p className="text-slate-600">Preencha seus dados para acessar a área administrativa.</p>
       </div>
@@ -97,14 +97,14 @@ export default function RegisterForm() {
         <div><Label htmlFor="confirmPassword">Confirmar Senha</Label><Input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required disabled={isLoading} /></div>
       </div>
 
-      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors" disabled={isLoading}>
+      <Button type="submit" className="w-full bg-brand hover:bg-brand-700 text-white font-semibold py-2 rounded-lg transition-colors" disabled={isLoading}>
         {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
         {isLoading ? 'Cadastrando...' : 'Cadastrar'}
       </Button>
 
       <p className="text-center text-sm text-slate-600">
         Já tem uma conta?{' '}
-        <Link href="/login" className="text-blue-600 hover:underline">
+        <Link href="/login" className="text-brand hover:underline">
           Faça login aqui
         </Link>
       </p>

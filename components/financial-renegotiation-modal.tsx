@@ -260,7 +260,7 @@ export function FinancialRenegotiationModal({
       <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle className="flex items-center text-xl">
-            <RefreshCw className="mr-2 h-6 w-6 text-orange-600" />
+            <RefreshCw className="mr-2 h-6 w-6 text-brand-beige" />
             Renegociar Acordo Financeiro #{agreement.id}
           </DialogTitle>
           <p className="text-sm text-slate-600">
@@ -281,14 +281,14 @@ export function FinancialRenegotiationModal({
           <Card className="border-slate-200">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-lg">
-                <History className="mr-2 h-5 w-5 text-blue-600" />
+                <History className="mr-2 h-5 w-5 text-brand" />
                 Acordo Atual
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="text-center p-3 bg-blue-50 rounded-lg">
-                  <p className="text-xs text-blue-600 font-medium">Valor Total</p>
+                  <p className="text-xs text-brand font-medium">Valor Total</p>
                   <p className="text-lg font-bold text-blue-800">
                     {formatCurrencyNumber(totalAmount)}
                   </p>
@@ -299,15 +299,15 @@ export function FinancialRenegotiationModal({
                     {formatCurrencyNumber(Number(agreement.installment_value ?? 0))}
                   </p>
                 </div>
-                <div className="text-center p-3 bg-purple-50 rounded-lg">
-                  <p className="text-xs text-purple-600 font-medium">Parcelas</p>
-                  <p className="text-lg font-bold text-purple-800">
+                <div className="text-center p-3 bg-brand-olive rounded-lg">
+                  <p className="text-xs text-brand-olive font-medium">Parcelas</p>
+                  <p className="text-lg font-bold text-brand-olive">
                     {agreement.number_of_installments}x
                   </p>
                 </div>
-                <div className="text-center p-3 bg-orange-50 rounded-lg">
-                  <p className="text-xs text-orange-600 font-medium">Renegociações</p>
-                  <p className="text-lg font-bold text-orange-800">
+                <div className="text-center p-3 bg-brand-beige rounded-lg">
+                  <p className="text-xs text-brand-beige font-medium">Renegociações</p>
+                  <p className="text-lg font-bold text-brand-beige">
                     {agreement.renegotiation_count}
                   </p>
                 </div>
@@ -345,7 +345,7 @@ export function FinancialRenegotiationModal({
 
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-purple-600" />
+                    <Target className="h-4 w-4 text-brand-olive" />
                     Novo Número de Parcelas
                   </Label>
                   <Input
@@ -368,7 +368,7 @@ export function FinancialRenegotiationModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <PiggyBank className="h-4 w-4 text-blue-600" />
+                    <PiggyBank className="h-4 w-4 text-brand" />
                     Nova Entrada (Opcional)
                   </Label>
                   <Input
@@ -430,7 +430,7 @@ export function FinancialRenegotiationModal({
 
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-orange-600" />
+                    <TrendingUp className="h-4 w-4 text-brand-beige" />
                     Taxas Adicionais
                   </Label>
                   <Input
@@ -454,7 +454,7 @@ export function FinancialRenegotiationModal({
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center justify-between text-lg">
                 <div className="flex items-center">
-                  <Calculator className="mr-2 h-5 w-5 text-indigo-600" />
+                  <Calculator className="mr-2 h-5 w-5 text-brand" />
                   Comparação de Valores
                 </div>
                 <Button
@@ -509,7 +509,7 @@ export function FinancialRenegotiationModal({
                     </h4>
                     <div className="space-y-2">
                       <div className="flex justify-between p-3 bg-blue-50 rounded">
-                        <span className="text-sm text-blue-600">
+                        <span className="text-sm text-brand">
                           Valor Total:
                         </span>
                         <span className="font-semibold text-blue-800">
@@ -517,7 +517,7 @@ export function FinancialRenegotiationModal({
                         </span>
                       </div>
                       <div className="flex justify-between p-3 bg-blue-50 rounded">
-                        <span className="text-sm text-blue-600">
+                        <span className="text-sm text-brand">
                           Por Parcela:
                         </span>
                         <span className="font-semibold text-blue-800">
@@ -527,7 +527,7 @@ export function FinancialRenegotiationModal({
                         </span>
                       </div>
                       <div className="flex justify-between p-3 bg-blue-50 rounded">
-                        <span className="text-sm text-blue-600">Parcelas:</span>
+                        <span className="text-sm text-brand">Parcelas:</span>
                         <span className="font-semibold text-blue-800">
                           {formData.new_installments ??
                             agreement.number_of_installments}
@@ -616,7 +616,7 @@ export function FinancialRenegotiationModal({
 
                     <div className="p-4 bg-blue-50 rounded-lg text-center border border-blue-200">
                       <div className="flex items-center justify-center gap-1 mb-1">
-                        <CheckCircle className="h-4 w-4 text-blue-600" />
+                        <CheckCircle className="h-4 w-4 text-brand" />
                         <span className="text-xs font-medium">Economia</span>
                       </div>
                       <p className="text-lg font-bold text-blue-700">
@@ -677,7 +677,7 @@ export function FinancialRenegotiationModal({
                   renegotiateMutation.isPending ||
                   !formData.renegotiation_reason.trim()
                 }
-                className="bg-orange-600 hover:bg-orange-700"
+                className="bg-brand-beige hover:bg-brand-beige"
               >
                 {renegotiateMutation.isPending ? (
                   <>

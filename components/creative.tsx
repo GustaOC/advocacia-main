@@ -39,10 +39,10 @@ export function Creative() {
   const [activeTab, setActiveTab] = useState("home")
 
   const recentApps = [
-    { name: "Photoshop", icon: "🎨", status: "Updated", color: "bg-blue-500" },
-    { name: "Illustrator", icon: "✨", status: "New", color: "bg-orange-500" },
-    { name: "After Effects", icon: "🎬", status: "Updated", color: "bg-purple-500" },
-    { name: "Premiere Pro", icon: "🎥", status: "Active", color: "bg-indigo-500" },
+    { name: "Photoshop", icon: "🎨", status: "Updated", color: "bg-brand" },
+    { name: "Illustrator", icon: "✨", status: "New", color: "bg-brand-beige" },
+    { name: "After Effects", icon: "🎬", status: "Updated", color: "bg-brand-olive" },
+    { name: "Premiere Pro", icon: "🎥", status: "Active", color: "bg-brand" },
   ]
 
   const recentFiles = [
@@ -156,7 +156,7 @@ export function Creative() {
             {/* Recent Apps */}
             <section>
               <h3 className="text-2xl font-semibold mb-6 flex items-center space-x-2">
-                <Zap className="h-6 w-6 text-purple-600" />
+                <Zap className="h-6 w-6 text-brand-olive" />
                 <span>Recent Apps</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -188,7 +188,7 @@ export function Creative() {
             {/* Recent Files */}
             <section>
               <h3 className="text-2xl font-semibold mb-6 flex items-center space-x-2">
-                <Folder className="h-6 w-6 text-blue-600" />
+                <Folder className="h-6 w-6 text-brand" />
                 <span>Recent Files</span>
               </h3>
               <Card className="bg-white/60 backdrop-blur-md border-0">
@@ -226,7 +226,7 @@ export function Creative() {
             {/* Active Projects */}
             <section>
               <h3 className="text-2xl font-semibold mb-6 flex items-center space-x-2">
-                <Briefcase className="h-6 w-6 text-indigo-600" />
+                <Briefcase className="h-6 w-6 text-brand" />
                 <span>Active Projects</span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -427,7 +427,7 @@ export function Creative() {
                   <CardContent className="p-4">
                     <div className="space-y-3">
                       <div className="aspect-square bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-                        <Palette className="h-12 w-12 text-purple-600" />
+                        <Palette className="h-12 w-12 text-brand-olive" />
                       </div>
                       <div>
                         <h4 className="font-medium truncate">{file.name}</h4>
@@ -615,7 +615,7 @@ export function Creative() {
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-                        <Play className="h-12 w-12 text-purple-600" />
+                        <Play className="h-12 w-12 text-brand-olive" />
                       </div>
                       <div className="space-y-2">
                         <h4 className="font-semibold text-lg">{course.title}</h4>
@@ -649,7 +649,7 @@ export function Creative() {
                 <Card className="bg-white/60 backdrop-blur-md border-0">
                   <CardContent className="p-6 text-center">
                     <div className="space-y-2">
-                      <div className="text-3xl font-bold text-purple-600">12</div>
+                      <div className="text-3xl font-bold text-brand-olive">12</div>
                       <p className="text-gray-600">Courses Completed</p>
                     </div>
                   </CardContent>
@@ -657,7 +657,7 @@ export function Creative() {
                 <Card className="bg-white/60 backdrop-blur-md border-0">
                   <CardContent className="p-6 text-center">
                     <div className="space-y-2">
-                      <div className="text-3xl font-bold text-blue-600">48h</div>
+                      <div className="text-3xl font-bold text-brand">48h</div>
                       <p className="text-gray-600">Learning Time</p>
                     </div>
                   </CardContent>

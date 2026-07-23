@@ -49,18 +49,18 @@ interface ModernLayoutProps {
 }
 
 const menuItems = [
-    { value: "overview", label: "Dashboard", icon: BarChart2, description: "Visão geral do escritório", color: "from-blue-500 to-indigo-600" },
-    { value: "entities", label: "Clientes", icon: Users, description: "Gerenciar clientes e partes", color: "from-emerald-500 to-teal-600" },
-    { value: "cases", label: "Processos", icon: Briefcase, description: "Acompanhar processos jurídicos", color: "from-purple-500 to-pink-600" },
-    { value: "cruzamento", label: "Cruzamento de Listas", icon: FileSearch, description: "Comparar pagamentos e judicializados", color: "from-cyan-500 to-teal-600" }, // <-- CORREÇÃO: Adicionada vírgula
-    { value: "petitions", label: "Petições", icon: FileText, description: "Documentos e petições", color: "from-amber-500 to-orange-600" },
-    { value: "templates", label: "Modelos", icon: FileCode, description: "Templates de documentos", color: "from-cyan-500 to-blue-600" },
-    { value: "financial", label: "Financeiro", icon: DollarSign, description: "Controle financeiro", color: "from-green-500 to-emerald-600" },
-    { value: "calendar", label: "Agenda", icon: Calendar, description: "Compromissos e prazos", color: "from-red-500 to-rose-600" },
-    { value: "tasks", label: "Tarefas", icon: CheckSquare, description: "Tarefas e lembretes", color: "from-indigo-500 to-purple-600" },
+    { value: "overview", label: "Dashboard", icon: BarChart2, description: "Visão geral do escritório", color: "from-brand to-brand-700" },
+    { value: "entities", label: "Clientes", icon: Users, description: "Gerenciar clientes e partes", color: "from-brand-sage to-brand-sage/90" },
+    { value: "cases", label: "Processos", icon: Briefcase, description: "Acompanhar processos jurídicos", color: "from-brand-olive to-brand-olive/90" },
+    { value: "cruzamento", label: "Cruzamento de Listas", icon: FileSearch, description: "Comparar pagamentos e judicializados", color: "from-brand-sage/80 to-brand-sage" }, // <-- CORREÇÃO: Adicionada vírgula
+    { value: "petitions", label: "Petições", icon: FileText, description: "Documentos e petições", color: "from-brand-beige to-brand-beige/90 text-brand-black" },
+    { value: "templates", label: "Modelos", icon: FileCode, description: "Templates de documentos", color: "from-brand-light to-brand-light/90 text-brand-black" },
+    { value: "financial", label: "Financeiro", icon: DollarSign, description: "Controle financeiro", color: "from-brand-sage to-brand-sage/90" },
+    { value: "calendar", label: "Agenda", icon: Calendar, description: "Compromissos e prazos", color: "from-brand-olive/80 to-brand-olive" },
+    { value: "tasks", label: "Tarefas", icon: CheckSquare, description: "Tarefas e lembretes", color: "from-brand to-brand-700" },
     // { value: "google-workspace", label: "Google Workspace", icon: Chrome, description: "Integração com serviços Google", color: "from-blue-500 to-red-500" }, // REMOVIDO: Google Workspace Hub
-    { value: "gmail-inbox", label: "Gmail Inbox", icon: Mail, description: "Sua caixa de entrada do Gmail", color: "from-red-500 to-orange-500" }, // Novo item de menu
-    { value: "employees", label: "Equipe", icon: Users, description: "Gerenciar colaboradores", color: "from-slate-500 to-slate-700" },
+    { value: "gmail-inbox", label: "Gmail Inbox", icon: Mail, description: "Sua caixa de entrada do Gmail", color: "from-brand-beige to-brand-beige/90 text-brand-black" }, // Novo item de menu
+    { value: "employees", label: "Equipe", icon: Users, description: "Gerenciar colaboradores", color: "from-brand-black to-brand-black/90" },
 ]
 
 // Componente de estatísticas com animações aprimoradas
@@ -105,8 +105,8 @@ function QuickStats() {
       suffix: "", 
       icon: Briefcase, 
       trend: 12, 
-      color: "from-blue-500 to-indigo-600", 
-      bgColor: "from-blue-50 to-indigo-50" 
+      color: "from-brand to-brand-700", 
+      bgColor: "from-brand to-brand-700" 
     },
     { 
       label: "Novos Clientes", 
@@ -117,8 +117,8 @@ function QuickStats() {
       suffix: "", 
       icon: Users, 
       trend: 25, 
-      color: "from-emerald-500 to-teal-600", 
-      bgColor: "from-emerald-50 to-teal-50" 
+      color: "from-brand-sage to-brand-sage/90", 
+      bgColor: "from-brand-sage to-brand-sage/90" 
     },
     { 
       label: "Faturamento Mensal", 
@@ -129,8 +129,8 @@ function QuickStats() {
       suffix: "", 
       icon: DollarSign, 
       trend: 8, 
-      color: "from-purple-500 to-pink-600", 
-      bgColor: "from-purple-50 to-pink-50" 
+      color: "from-brand-olive to-brand-olive/90", 
+      bgColor: "from-brand-olive to-brand-olive/90" 
     },
     { 
       label: "Tarefas Pendentes", 
@@ -141,8 +141,8 @@ function QuickStats() {
       suffix: "", 
       icon: AlertCircle, 
       trend: -5, 
-      color: "from-amber-500 to-orange-600", 
-      bgColor: "from-amber-50 to-orange-50" 
+      color: "from-brand-beige to-brand-beige/90 text-brand-black", 
+      bgColor: "from-brand-beige to-brand-beige/90 text-brand-black" 
     },
   ];
 
@@ -208,7 +208,7 @@ function QuickStats() {
                 <div className="space-y-3">
                   <p className="text-sm text-slate-600 font-medium flex items-center gap-2">
                     {stat.label}
-                    <Sparkles className="w-3 h-3 text-amber-500 animate-pulse" />
+                    <Sparkles className="w-3 h-3 text-brand-sage animate-pulse" />
                   </p>
                   <p className="text-3xl font-bold text-slate-900 tabular-nums">
                     {formatValue(currentValue, stat.prefix, stat.suffix)}
@@ -267,7 +267,7 @@ function RecentActivity() {
           date: new Date(c.created_at),
           type: "case",
           icon: Briefcase,
-          color: "bg-blue-500"
+          color: "bg-brand"
         });
       }
     });
@@ -283,7 +283,7 @@ function RecentActivity() {
           date: new Date(e.created_at),
           type: "client",
           icon: Users,
-          color: "bg-emerald-500"
+          color: "bg-brand-sage"
         });
       }
     });
@@ -299,7 +299,7 @@ function RecentActivity() {
           date: new Date(t.created_at),
           type: "calendar",
           icon: CheckSquare,
-          color: "bg-indigo-500"
+          color: "bg-brand"
         });
       }
     });
@@ -326,7 +326,7 @@ function RecentActivity() {
       <CardHeader className="pb-4 relative z-10">
         <CardTitle className="text-xl font-bold text-slate-900 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
+            <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl">
               <Activity className="w-4 h-4 text-white" />
             </div>
             Atividades Recentes
@@ -354,7 +354,7 @@ function RecentActivity() {
             </div>
             
             <div className="flex-1 space-y-1">
-              <p className="font-semibold text-slate-900 text-sm group-hover/item:text-blue-600 transition-colors">
+              <p className="font-semibold text-slate-900 text-sm group-hover/item:text-brand transition-colors">
                 {activity.action}
               </p>
               <p className="text-sm text-slate-600">{activity.case}</p>
@@ -424,7 +424,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-xl">
+                                <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl shadow-xl">
                                     <Scale className="w-6 h-6 text-white" />
                                 </div>
                                 <div>
@@ -433,7 +433,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                 </div>
                             </div>
                         ) : (
-                            <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-xl">
+                            <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl shadow-xl">
                                 <Scale className="w-6 h-6 text-white" />
                             </div>
                         )}
@@ -538,13 +538,13 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                         <div className="flex justify-between items-center">
                             <div className="space-y-2">
                                 <div className="flex items-center gap-3">
-                                    <h1 className="font-bold text-3xl bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                                    <h1 className="font-bold text-3xl bg-gradient-to-r from-brand-black to-brand-black/90 bg-clip-text text-transparent">
                                         {activeItem?.label || 'Dashboard'}
                                     </h1>
                                 </div>
                                 <p className="text-slate-600 flex items-center gap-2">
                                     {activeItem?.description || 'Sistema de Gestão Jurídica'}
-                                    <Award className="w-4 h-4 text-amber-500" />
+                                    <Award className="w-4 h-4 text-brand-sage" />
                                 </p>
                             </div>
                             
@@ -561,7 +561,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                         <button className="flex items-center space-x-3 p-2 rounded-xl hover:bg-slate-100/80 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
                                             <div className="relative">
                                                 <Avatar className="ring-2 ring-slate-300 w-10 h-10">
-                                                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold">
+                                                    <AvatarFallback className="bg-gradient-to-br from-brand to-brand-700 text-white font-bold">
                                                    {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                                                   </AvatarFallback>
                                                 </Avatar>
@@ -578,7 +578,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                         <div className="px-3 py-3 border-b border-slate-100">
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="w-12 h-12">
-                                                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold">
+                                                   <AvatarFallback className="bg-gradient-to-br from-brand to-brand-700 text-white font-bold">
                                                     {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                                                   </AvatarFallback>
                                                 </Avatar>

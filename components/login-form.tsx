@@ -167,7 +167,7 @@ export default function LoginForm() {
           <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-slate-500">Ou</span></div>
         </div>
 
-        <Button type="button" className="w-full h-12 rounded-xl font-medium bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2" onClick={handleGoogleLogin} disabled={loading}>
+        <Button type="button" className="w-full h-12 rounded-xl font-medium bg-brand hover:bg-brand-700 text-white flex items-center justify-center gap-2" onClick={handleGoogleLogin} disabled={loading}>
           {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Image src="/google-icon.svg" alt="Google" width={20} height={20} />} Entrar com Google
         </Button>
 

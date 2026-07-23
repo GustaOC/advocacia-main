@@ -32,6 +32,15 @@ const config = {
         'caption': ['0.875rem', { lineHeight: '1.5' }],
       },
       colors: {
+        brand: {
+          DEFAULT: "#3C443D", // Oliva Escura
+          sage: "#95A08A", // Verde Sálvia
+          olive: "#A8ABA2", // Cinza Oliva
+          beige: "#E3E0D7", // Bege
+          light: "#EDEDED", // Cinza Claro
+          black: "#000000", // Preto
+        },
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

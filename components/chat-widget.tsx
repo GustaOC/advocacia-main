@@ -375,7 +375,7 @@ export function ChatWidget() {
         download={fileName}
         className={`flex items-center gap-2 mt-1 px-3 py-2 rounded-lg transition-colors ${
           isMe
-            ? 'bg-blue-700/40 hover:bg-blue-700/60 text-blue-100'
+            ? 'bg-brand-700/40 hover:bg-brand-700/60 text-blue-100'
             : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
         }`}
         style={{ maxWidth: '220px' }}
@@ -402,7 +402,7 @@ export function ChatWidget() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="relative bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition-all"
+          className="relative bg-brand hover:bg-brand-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition-all"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
@@ -419,16 +419,16 @@ export function ChatWidget() {
       {isOpen && (
         <div className="bg-white border rounded-lg shadow-2xl w-80 h-[28rem] flex flex-col overflow-hidden">
           {/* Header do Chat */}
-          <div className="bg-blue-600 text-white p-3 flex justify-between items-center">
+          <div className="bg-brand text-white p-3 flex justify-between items-center">
             <div className="flex items-center gap-2">
               {activeChat && (
-                <button onClick={() => { setActiveChat(null); clearSelectedFile(); }} className="hover:bg-blue-700 p-1 rounded">
+                <button onClick={() => { setActiveChat(null); clearSelectedFile(); }} className="hover:bg-brand-700 p-1 rounded">
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                 </button>
               )}
               <h3 className="font-semibold">{activeChat ? activeChat.name : 'Chat da Equipe'}</h3>
             </div>
-            <button onClick={() => setIsOpen(false)} className="hover:bg-blue-700 p-1 rounded">
+            <button onClick={() => setIsOpen(false)} className="hover:bg-brand-700 p-1 rounded">
                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
@@ -463,7 +463,7 @@ export function ChatWidget() {
                   const isMe = msg.sender_id === currentUser.id;
                   return (
                     <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                      <div className={`px-4 py-2 max-w-[85%] rounded-2xl ${isMe ? 'bg-blue-600 text-white rounded-tr-sm' : 'bg-white border text-gray-800 rounded-tl-sm'}`}>
+                      <div className={`px-4 py-2 max-w-[85%] rounded-2xl ${isMe ? 'bg-brand text-white rounded-tr-sm' : 'bg-white border text-gray-800 rounded-tl-sm'}`}>
                         {/* Texto da mensagem (se houver e não for apenas o nome do arquivo) */}
                         {msg.content && msg.content !== msg.file_name && (
                           <p className="text-sm">{msg.content}</p>
@@ -515,7 +515,7 @@ export function ChatWidget() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="text-gray-400 hover:text-blue-600 transition-colors flex-shrink-0 p-1"
+                  className="text-gray-400 hover:text-brand transition-colors flex-shrink-0 p-1"
                   title="Enviar arquivo"
                   disabled={uploading}
                 >
@@ -542,7 +542,7 @@ export function ChatWidget() {
                 <button
                   type="submit"
                   disabled={(!newMessage.trim() && !selectedFile) || uploading}
-                  className="bg-blue-600 text-white p-2 rounded-full disabled:opacity-50 hover:bg-blue-700 flex-shrink-0 relative"
+                  className="bg-brand text-white p-2 rounded-full disabled:opacity-50 hover:bg-brand-700 flex-shrink-0 relative"
                 >
                   {uploading ? (
                     <svg className="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

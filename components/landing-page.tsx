@@ -46,7 +46,7 @@ export function LandingPage() {
             <Link href="#sobre" className="font-medium hover:text-slate-900 transition-colors">Sobre</Link>
             <Link href="#contato" className="font-medium hover:text-slate-900 transition-colors">Contato</Link>
             <Link href="/login" passHref>
-              <Button className="flex items-center gap-2 bg-gradient-to-r from-slate-800 to-slate-900 text-white px-6 py-3 rounded-xl hover:opacity-90 transition-opacity">
+              <Button className="flex items-center gap-2 bg-gradient-to-r from-brand-black to-brand-black/90 text-white px-6 py-3 rounded-xl hover:opacity-90 transition-opacity">
                 <User className="h-4 w-4" />
                 Área Interna
               </Button>

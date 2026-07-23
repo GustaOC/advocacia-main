@@ -44,8 +44,8 @@ interface CasesModuleProps {
 
 function CasesStats({ cases }: { cases: ExtendedCase[] }) {
   const stats = [
-    { label: "Total de Casos", value: cases.length.toString(), icon: Briefcase, color: "text-blue-600", bg: "from-blue-50 to-blue-100", trend: "+5%" },
-    { label: "Em Andamento", value: cases.filter(c => c.status === 'Em andamento').length.toString(), icon: Clock, color: "text-orange-600", bg: "from-orange-50 to-orange-100", trend: "+2%" },
+    { label: "Total de Casos", value: cases.length.toString(), icon: Briefcase, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+5%" },
+    { label: "Em Andamento", value: cases.filter(c => c.status === 'Em andamento').length.toString(), icon: Clock, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "+2%" },
     { label: "Acordos", value: cases.filter(c => c.status === 'Acordo').length.toString(), icon: Star, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+12%" },
     { label: "Alta Prioridade", value: cases.filter(c => c.priority === 'Alta').length.toString(), icon: AlertTriangle, color: "text-red-600", bg: "from-red-50 to-red-100", trend: "-3%" },
   ];
@@ -520,7 +520,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl">
+            <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
                 <div className="text-center space-y-4">
                     <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
                     <p className="text-slate-600 font-medium">Carregando casos...</p>
@@ -537,7 +537,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="relative z-10">
                     <h2 className="text-4xl font-bold mb-3">Gestão de Casos e Processos</h2>
-                    <p className="text-purple-100 text-xl">Administre todos os casos do escritório de forma centralizada e eficiente.</p>
+                    <p className="text-brand-olive text-xl">Administre todos os casos do escritório de forma centralizada e eficiente.</p>
                 </div>
             </div>
 
@@ -549,7 +549,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                         <div className="flex flex-col sm:flex-row gap-4 flex-1">
                             <div className="relative flex-1 max-w-md">
                                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-                                <Input placeholder="Buscar por título, número ou parte..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-purple-400 rounded-xl" />
+                                <Input placeholder="Buscar por título, número ou parte..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
                             </div>
                             <Select value={filterStatus} onValueChange={setFilterStatus}>
                                 <SelectTrigger className="w-[200px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
@@ -567,7 +567,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 <Button variant={viewMode === 'list' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('list')} className={`rounded-lg ${viewMode === 'list' ? '' : 'text-slate-700 hover:text-slate-900'}`}><List className="h-4 w-4" /></Button>
                                 <Button variant={viewMode === 'kanban' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('kanban')} className={`rounded-lg ${viewMode === 'kanban' ? '' : 'text-slate-700 hover:text-slate-900'}`}><LayoutGrid className="h-4 w-4" /></Button>
                             </div>
-                            <Button variant="outline" className="border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 rounded-xl" onClick={() => setIsImportModalOpen(true)}><Upload className="mr-2 h-4 w-4" /> Importar</Button>
+                            <Button variant="outline" className="border-2 border-slate-200 hover:border-brand-olive hover:bg-brand-olive rounded-xl" onClick={() => setIsImportModalOpen(true)}><Upload className="mr-2 h-4 w-4" /> Importar</Button>
                             <Button onClick={openCreateModal} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl"><Plus className="mr-2 h-4 w-4" /> Novo Caso</Button>
                         </div>
                     </div>
@@ -579,7 +579,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                     <CardContent className="p-0">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+                                <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                                     <TableHead className="text-slate-700 font-bold">Processo / Título</TableHead>
                                     <TableHead className="text-slate-700 font-bold">Prioridade</TableHead>
                                     <TableHead className="text-slate-700 font-bold">Status</TableHead>
@@ -590,12 +590,12 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                             <TableBody>
                                 {filteredCases.map(caseItem => (
                                     <TableRow key={caseItem.id} className="group hover:bg-gradient-to-r hover:from-purple-50/50 hover:to-transparent transition-all duration-200">
-                                        <TableCell><div className="space-y-1"><div className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors">{caseItem.title}</div><div className="text-sm text-slate-500 font-mono">{caseItem.case_number || "-"}</div></div></TableCell>
+                                        <TableCell><div className="space-y-1"><div className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">{caseItem.title}</div><div className="text-sm text-slate-500 font-mono">{caseItem.case_number || "-"}</div></div></TableCell>
                                         <TableCell>{getPriorityBadge(caseItem.priority)}</TableCell>
                                         <TableCell><div className="flex flex-col items-start space-y-1">{getStatusBadge(caseItem.status)}{caseItem.status_reason && (<span className="text-xs text-slate-500 mt-1">{caseItem.status_reason}</span>)}</div></TableCell>
                                         <TableCell><div className="text-sm text-slate-600">{caseItem.case_parties.map(p => p.entities.name).join(', ')}</div></TableCell>
                                         <TableCell className="text-right"><div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Button variant="ghost" size="icon" onClick={() => openViewModal(caseItem)} className="hover:bg-purple-100 hover:text-purple-700 rounded-lg"><Eye className="h-4 w-4" /></Button>
+                                            <Button variant="ghost" size="icon" onClick={() => openViewModal(caseItem)} className="hover:bg-brand-olive hover:text-brand-olive rounded-lg"><Eye className="h-4 w-4" /></Button>
                                             <Button variant="ghost" size="icon" onClick={() => openEditModal(caseItem)} className="hover:bg-blue-100 hover:text-blue-700 rounded-lg"><Edit className="h-4 w-4" /></Button>
                                             <Button variant="ghost" size="icon" onClick={() => handleDeleteCase(caseItem.id)} className="hover:bg-red-100 hover:text-red-700 rounded-lg"><Trash2 className="h-4 w-4" /></Button>
                                         </div></TableCell>
@@ -611,7 +611,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {(['Em andamento', 'Acordo', 'Extinto', 'Pago'] as const).map(status => (
                         <div key={status} className="space-y-4" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, status)}>
-                            <div className="bg-gradient-to-r from-slate-100 to-slate-200 rounded-xl p-4 sticky top-0 z-10"><div className="flex items-center justify-between"><h3 className="font-bold text-slate-800 text-lg">{status}</h3><Badge variant="secondary" className="bg-white text-slate-700 font-semibold">{filteredCases.filter(c => c.status === status).length}</Badge></div></div>
+                            <div className="bg-gradient-to-r from-brand-black to-brand-black/90 rounded-xl p-4 sticky top-0 z-10"><div className="flex items-center justify-between"><h3 className="font-bold text-slate-800 text-lg">{status}</h3><Badge variant="secondary" className="bg-white text-slate-700 font-semibold">{filteredCases.filter(c => c.status === status).length}</Badge></div></div>
                             <div className="space-y-4 min-h-[400px]">
                                 {filteredCases.filter(c => c.status === status).map(caseItem => (
                                     <div key={caseItem.id} draggable onDragStart={(e) => handleDragStart(e, caseItem)}>
@@ -623,7 +623,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                                 <div className="flex justify-between items-center">
                                                     {getPriorityBadge(caseItem.priority)}
                                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-purple-100 hover:text-purple-700" onClick={() => openViewModal(caseItem)}><Eye className="h-4 w-4" /></Button>
+                                                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-brand-olive hover:text-brand-olive" onClick={() => openViewModal(caseItem)}><Eye className="h-4 w-4" /></Button>
                                                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:bg-red-100" onClick={() => handleDeleteCase(caseItem.id)}><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
                                                 </div>
@@ -686,7 +686,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                             <div><Label className="text-slate-700 font-semibold">Descrição</Label><p className="text-sm bg-slate-50 p-3 rounded-md">{selectedCaseForView.description || 'Nenhuma descrição fornecida.'}</p></div>
 
                             <div className="border-t pt-4 mt-4">
-                                <h4 className="font-semibold flex items-center mb-4"><FileText className="mr-2 h-4 w-4 text-blue-600"/> Documentos Anexados</h4>
+                                <h4 className="font-semibold flex items-center mb-4"><FileText className="mr-2 h-4 w-4 text-brand"/> Documentos Anexados</h4>
                                 <DocumentsModule caseId={Number(selectedCaseForView.id)} isViewOnly={true} />
                             </div>
                         </div>
@@ -700,7 +700,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[650px] bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle className="flex items-center text-2xl font-bold"><Briefcase className="mr-2 h-5 w-5 text-purple-600" />{isEditMode ? 'Editar Caso' : 'Criar Novo Caso'}</DialogTitle>
+                        <DialogTitle className="flex items-center text-2xl font-bold"><Briefcase className="mr-2 h-5 w-5 text-brand-olive" />{isEditMode ? 'Editar Caso' : 'Criar Novo Caso'}</DialogTitle>
                         <DialogDescription className="text-slate-600">{isEditMode ? 'Altere as informações do caso.' : 'Preencha as informações do novo caso/processo judicial'}</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-6 py-4 pr-4">
@@ -762,7 +762,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 {/* INÍCIO DA SEÇÃO DO ALVARÁ */}
                                 <div className="border-t pt-4 mt-4 space-y-4">
                                     <h5 className="font-semibold flex items-center text-slate-800">
-                                        <FileSignature className="mr-2 h-4 w-4 text-blue-600" />
+                                        <FileSignature className="mr-2 h-4 w-4 text-brand" />
                                         Informações do Alvará
                                     </h5>
                                     <div className="flex items-center space-x-2 pt-2">
@@ -822,7 +822,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <DialogContent className="max-w-md bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
                     <DialogHeader>
                         <DialogTitle className="flex items-center space-x-2">
-                            <Upload className="h-5 w-5 text-purple-600" />
+                            <Upload className="h-5 w-5 text-brand-olive" />
                             <span>Importar Processos</span>
                         </DialogTitle>
                         <DialogDescription className="text-slate-600">

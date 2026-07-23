@@ -55,7 +55,7 @@ export function DocumentUpload({ onFilesSelected }: DocumentUploadProps) {
           {files.map((file, index) => (
             <li key={index} className="flex items-center justify-between p-2 bg-slate-50 rounded border text-sm">
               <div className="flex items-center gap-2">
-                {file.type === "application/pdf" ? <FileText className="h-4 w-4 text-red-500" /> : <File className="h-4 w-4 text-blue-500" />}
+                {file.type === "application/pdf" ? <FileText className="h-4 w-4 text-red-500" /> : <File className="h-4 w-4 text-brand" />}
                 <span className="truncate max-w-[250px]">{file.name}</span>
               </div>
               <Button variant="ghost" size="icon" onClick={() => removeFile(index)} className="h-6 w-6">

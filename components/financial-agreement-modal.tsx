@@ -307,7 +307,7 @@ export function FinancialAgreementModal({ isOpen, onClose, caseData }: Financial
           <Button 
             onClick={handleSave} 
             disabled={createAgreementMutation.isPending}
-            className="bg-green-600 hover:bg-green-700 text-white shadow-lg rounded-xl"
+            className="bg-brand-sage hover:bg-brand-sage/90 text-white shadow-lg rounded-xl"
           >
             {createAgreementMutation.isPending
               ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />

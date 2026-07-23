@@ -321,7 +321,7 @@ const messages = data || [];
                     )}
                     
                     <div className="flex justify-between items-center text-xs mt-2 ml-8">
-                      <span className="text-blue-600 font-medium">{message.from}</span>
+                      <span className="text-brand font-medium">{message.from}</span>
                       <span className="text-slate-400">{new Date(parseInt(message.internalDate)).toLocaleString('pt-BR')}</span>
                     </div>
                   </div>
@@ -442,7 +442,7 @@ const messages = data || [];
                 });
               }}
               disabled={sendMutation.isPending}
-              className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-lg rounded-xl"
+              className="bg-gradient-to-r from-brand-beige to-brand-beige/90 text-brand-black hover:from-red-700 hover:to-orange-700 text-white shadow-lg rounded-xl"
             >
               {sendMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
               Enviar Resposta
@@ -531,7 +531,7 @@ const messages = data || [];
                 });
               }}
               disabled={sendMutation.isPending}
-              className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-lg rounded-xl"
+              className="bg-gradient-to-r from-brand-beige to-brand-beige/90 text-brand-black hover:from-red-700 hover:to-orange-700 text-white shadow-lg rounded-xl"
             >
               {sendMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
               Enviar E-mail

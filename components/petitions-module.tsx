@@ -14,8 +14,8 @@ const fetchPetitions = async () => {
 
 function PetitionsStats({ petitions }: { petitions: any[] }) {
   const stats = [
-    { label: "Total de Petições", value: petitions.length.toString(), icon: FileText, color: "text-blue-600", bg: "from-blue-50 to-blue-100", trend: "+8%" },
-    { label: "Em Andamento", value: petitions.filter(p => p.status?.toLowerCase() === 'em andamento').length.toString(), icon: Clock, color: "text-orange-600", bg: "from-orange-50 to-orange-100", trend: "+5%" },
+    { label: "Total de Petições", value: petitions.length.toString(), icon: FileText, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+8%" },
+    { label: "Em Andamento", value: petitions.filter(p => p.status?.toLowerCase() === 'em andamento').length.toString(), icon: Clock, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "+5%" },
     { label: "Concluídas", value: petitions.filter(p => p.status?.toLowerCase() === 'concluída').length.toString(), icon: CheckCircle, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+12%" },
     { label: "Pendentes", value: petitions.filter(p => p.status?.toLowerCase() === 'pendente').length.toString(), icon: AlertCircle, color: "text-red-600", bg: "from-red-50 to-red-100", trend: "+3%" },
   ];
@@ -58,7 +58,7 @@ export function PetitionsModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
           <p className="text-slate-600 font-medium">Carregando petições...</p>
@@ -77,20 +77,20 @@ export function PetitionsModule() {
         <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
         <div className="relative z-10">
           <h2 className="text-4xl font-bold mb-3">Gerenciamento de Petições</h2>
-          <p className="text-amber-100 text-xl">Organize e acompanhe todas as petições do escritório.</p>
+          <p className="text-brand-sage text-xl">Organize e acompanhe todas as petições do escritório.</p>
         </div>
       </div>
 
       {petitions && petitions.length > 0 && <PetitionsStats petitions={petitions} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
           <CardTitle className="text-2xl font-bold text-slate-900">Lista de Petições</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                 <TableHead className="text-slate-700 font-bold">Caso Associado</TableHead>
                 <TableHead className="text-slate-700 font-bold">Autor</TableHead>
                 <TableHead className="text-slate-700 font-bold">Status</TableHead>
@@ -103,10 +103,10 @@ export function PetitionsModule() {
                   <TableRow key={petition.id} className="group hover:bg-gradient-to-r hover:from-amber-50/50 hover:to-transparent transition-all duration-200">
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 group-hover:scale-110 transition-transform">
-                          <FileText className="h-4 w-4 text-amber-600" />
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-brand-beige to-brand-beige/90 text-brand-black group-hover:scale-110 transition-transform">
+                          <FileText className="h-4 w-4 text-brand-sage" />
                         </div>
-                        <span className="font-medium group-hover:text-amber-700 transition-colors">{petition.cases?.title || 'N/A'}</span>
+                        <span className="font-medium group-hover:text-brand-sage transition-colors">{petition.cases?.title || 'N/A'}</span>
                       </div>
                     </TableCell>
                     <TableCell className="text-slate-600">{petition.employees?.name || 'N/A'}</TableCell>

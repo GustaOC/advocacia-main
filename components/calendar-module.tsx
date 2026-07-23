@@ -32,8 +32,8 @@ interface CalendarEvent {
 
 function CalendarStats({ events }: { events: CalendarEvent[] }) {
   const stats = [
-    { label: "Total de Eventos", value: events.length.toString(), icon: CalendarIcon, color: "text-blue-600", bg: "from-blue-50 to-blue-100", trend: "+5%" },
-    { label: "Audiências", value: events.filter(e => e.type === 'hearing').length.toString(), icon: AlertCircle, color: "text-orange-600", bg: "from-orange-50 to-orange-100", trend: "+8%" },
+    { label: "Total de Eventos", value: events.length.toString(), icon: CalendarIcon, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+5%" },
+    { label: "Audiências", value: events.filter(e => e.type === 'hearing').length.toString(), icon: AlertCircle, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "+8%" },
     { label: "Reuniões", value: events.filter(e => e.type === 'meeting').length.toString(), icon: CheckCircle, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+12%" },
     { label: "Prazos", value: events.filter(e => e.type === 'deadline').length.toString(), icon: Clock, color: "text-red-600", bg: "from-red-50 to-red-100", trend: "+3%" },
   ];
@@ -243,7 +243,7 @@ export function CalendarModule() {
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
         <CardContent className="p-6">
           {isLoading ? (
-            <div className="h-[600px] flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl">
+            <div className="h-[600px] flex items-center justify-center bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
               <div className="text-center space-y-4">
                 <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto"/>
                 <p className="text-slate-600 font-medium">Carregando agenda...</p>

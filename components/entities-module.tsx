@@ -62,10 +62,10 @@ function EntitiesStats({ clients, listType }: { clients: Client[], listType: str
   }).length;
   
   const stats = [
-    { label: "Total de Clientes", value: totalClientes.toString(), icon: Users, color: "text-blue-600", bg: "from-blue-50 to-blue-100", trend: "+12%" },
+    { label: "Total de Clientes", value: totalClientes.toString(), icon: Users, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+12%" },
     { label: "Total de Executados", value: totalExecutados.toString(), icon: Building2, color: "text-red-600", bg: "from-red-50 to-red-100", trend: "+8%" },
     { label: "Cadastros Ativos", value: clients.length.toString(), icon: User, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+15%" },
-    { label: "Novos este Mês", value: "23", icon: TrendingUp, color: "text-purple-600", bg: "from-purple-50 to-purple-100", trend: "+25%" },
+    { label: "Novos este Mês", value: "23", icon: TrendingUp, color: "text-brand-olive", bg: "from-purple-50 to-purple-100", trend: "+25%" },
   ];
 
   return (
@@ -267,7 +267,7 @@ export default function EntitiesModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
           <p className="text-slate-600 font-medium">Carregando cadastros...</p>
@@ -341,7 +341,7 @@ export default function EntitiesModule() {
                 <Button onClick={() => setImportModal({isOpen: true, type: 'Executado'})} variant="outline" className="border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-xl">
                   <FileUp className="mr-2 h-4 w-4" /> Importar Executados
                 </Button>
-                <Button onClick={() => handleOpenModal()} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
+                <Button onClick={() => handleOpenModal()} className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
                   <Plus className="mr-2 h-4 w-4" /> Novo
                 </Button>
               </div>
@@ -354,7 +354,7 @@ export default function EntitiesModule() {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-200">
+                  <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
                     <TableHead className="text-slate-700 font-bold">Nome</TableHead>
                     <TableHead className="text-slate-700 font-bold">Documento</TableHead>
                     <TableHead className="text-slate-700 font-bold">Tipo</TableHead>
@@ -368,18 +368,18 @@ export default function EntitiesModule() {
                     <TableRow key={client.id} className="group hover:bg-gradient-to-r hover:from-emerald-50/50 hover:to-transparent transition-all duration-200">
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-gradient-to-br from-emerald-100 to-teal-100 group-hover:scale-110 transition-transform">
-                            <User className="h-4 w-4 text-emerald-600" />
+                          <div className="p-2 rounded-lg bg-gradient-to-br from-brand-sage to-brand-sage/90 group-hover:scale-110 transition-transform">
+                            <User className="h-4 w-4 text-brand-sage" />
                           </div>
                           <span className="group-hover:text-emerald-700 transition-colors">{client.name}</span>
                           {client.has_extrajudicial_agreement && (
-                            <Badge variant="outline" className="ml-2 text-amber-600 border-amber-300 bg-amber-50">Acordo extrajudicial vigente</Badge>
+                            <Badge variant="outline" className="ml-2 text-brand-sage border-brand-beige bg-brand-beige">Acordo extrajudicial vigente</Badge>
                           )}
                         </div>
                       </TableCell>
                       <TableCell className="font-mono text-sm">{maskCPFCNPJ(client.document)}</TableCell>
                       <TableCell>
-                        <Badge className={`${client.type === "Executado" ? "bg-gradient-to-r from-red-500 to-red-600" : "bg-gradient-to-r from-emerald-500 to-teal-600"} text-white border-0 shadow-lg`}>
+                        <Badge className={`${client.type === "Executado" ? "bg-gradient-to-r from-red-500 to-red-600" : "bg-gradient-to-r from-brand-sage to-brand-sage/90"} text-white border-0 shadow-lg`}>
                           {client.type}
                         </Badge>
                       </TableCell>
@@ -443,7 +443,7 @@ export default function EntitiesModule() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => { setImportModal((m)=>({...m, isOpen:false})); setFile(null); }} className="border-2 border-slate-200 rounded-xl" disabled={isImporting}>Cancelar</Button>
-            <Button onClick={handleImport} disabled={isImporting} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
+            <Button onClick={handleImport} disabled={isImporting} className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
               {isImporting ? <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Upload className="mr-2 h-4 w-4" />}
               {isImporting ? "Importando..." : "Importar"}
             </Button>
@@ -558,7 +558,7 @@ export default function EntitiesModule() {
 
           <DialogFooter className="mt-6">
             <Button variant="outline" onClick={handleCloseModal} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
-            <Button onClick={handleSave} disabled={saveMutation.isPending} className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
+            <Button onClick={handleSave} disabled={saveMutation.isPending} className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
               {saveMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               {isEditMode ? "Salvar Alterações" : "Criar Cadastro"}
             </Button>

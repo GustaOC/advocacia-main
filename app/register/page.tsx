@@ -58,7 +58,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md border-t-4 border-indigo-600">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md border-t-4 border-brand">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900">Criar uma Conta</h2>
           <p className="mt-2 text-sm text-gray-600">
@@ -68,7 +68,7 @@ export default function RegisterPage() {
 
         {inviteValid === null ? (
           <div className="flex flex-col items-center justify-center py-6">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600 mb-2" />
+            <Loader2 className="w-8 h-8 animate-spin text-brand mb-2" />
             <p className="text-sm text-slate-500">Validando convite...</p>
           </div>
         ) : inviteValid === false ? (
@@ -98,7 +98,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-gray-500 pt-4 border-t border-gray-100">
           Já possui uma conta ativa?{' '}
-          <a href="/login" className="text-indigo-600 hover:underline font-medium">
+          <a href="/login" className="text-brand hover:underline font-medium">
             Faça login
           </a>
         </p>

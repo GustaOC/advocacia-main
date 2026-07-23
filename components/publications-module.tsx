@@ -47,7 +47,7 @@ function ModernStatsCard({ title, value, change, changeType, icon: Icon, bgColor
             <p className="text-3xl font-bold text-slate-900">{value}</p>
             <div className="flex items-center space-x-1">
               <ChangeIcon className={`h-4 w-4 ${changeType === 'increase' ? 'text-emerald-500' : 'text-red-500'}`} />
-              <span className={`text-sm font-medium ${changeType === 'increase' ? 'text-emerald-600' : 'text-red-600'}`}>
+              <span className={`text-sm font-medium ${changeType === 'increase' ? 'text-brand-sage' : 'text-red-600'}`}>
                 {change}
               </span>
               <span className="text-sm text-slate-500">vs semana anterior</span>
@@ -128,7 +128,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                 publication.daysUntilDeadline <= 3
                   ? 'bg-red-50 border border-red-200'
                   : publication.daysUntilDeadline <= 7
-                  ? 'bg-orange-50 border border-orange-200'
+                  ? 'bg-brand-beige border border-brand-beige'
                   : 'bg-blue-50 border border-blue-200'
               }`}
             >
@@ -137,8 +137,8 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                   publication.daysUntilDeadline <= 3
                     ? 'text-red-600'
                     : publication.daysUntilDeadline <= 7
-                    ? 'text-orange-600'
-                    : 'text-blue-600'
+                    ? 'text-brand-beige'
+                    : 'text-brand'
                 }`}
               />
               <span
@@ -146,7 +146,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                   publication.daysUntilDeadline <= 3
                     ? 'text-red-800'
                     : publication.daysUntilDeadline <= 7
-                    ? 'text-orange-800'
+                    ? 'text-brand-beige'
                     : 'text-blue-800'
                 }`}
               >
@@ -167,7 +167,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onView(publication)}
-                className="h-8 w-8 p-0 text-slate-600 hover:text-blue-600 hover:bg-blue-50"
+                className="h-8 w-8 p-0 text-slate-600 hover:text-brand hover:bg-blue-50"
               >
                 <Eye className="h-4 w-4" />
               </Button>
@@ -175,7 +175,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onEdit(publication)}
-                className="h-8 w-8 p-0 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
+                className="h-8 w-8 p-0 text-slate-600 hover:text-brand-sage hover:bg-emerald-50"
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -425,7 +425,7 @@ export function PublicationsModule() {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <h4 className="font-medium text-blue-900 mb-2">Formato esperado:</h4>
                       <p className="text-sm text-blue-800">Data, Processo, Cliente, Tipo, Prazo, Descrição</p>
-                      <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-800">
+                      <Button variant="link" className="p-0 h-auto text-brand hover:text-blue-800">
                         Baixar modelo de exemplo
                       </Button>
                     </div>
@@ -658,7 +658,7 @@ export function PublicationsModule() {
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center justify-between">
                   <span className="flex items-center space-x-3">
-                    <div className="p-2 bg-blue-500 rounded-lg">
+                    <div className="p-2 bg-brand rounded-lg">
                       <TrendingUp className="h-5 w-5 text-white" />
                     </div>
                     <span className="text-blue-800">Em Andamento</span>
@@ -764,7 +764,7 @@ export function PublicationsModule() {
                               publication.daysUntilDeadline! <= 1
                                 ? 'bg-red-100 text-red-600'
                                 : publication.daysUntilDeadline! <= 3
-                                ? 'bg-orange-100 text-orange-600'
+                                ? 'bg-brand-beige text-brand-beige'
                                 : 'bg-yellow-100 text-yellow-600'
                             }`}
                           >
@@ -786,7 +786,7 @@ export function PublicationsModule() {
                               publication.daysUntilDeadline! <= 1
                                 ? 'bg-red-100 text-red-800 border-red-200'
                                 : publication.daysUntilDeadline! <= 3
-                                ? 'bg-orange-100 text-orange-800 border-orange-200'
+                                ? 'bg-brand-beige text-brand-beige border-brand-beige'
                                 : 'bg-yellow-100 text-yellow-800 border-yellow-200'
                             }`}
                           >
@@ -800,7 +800,7 @@ export function PublicationsModule() {
                             <Button 
                               size="sm" 
                               onClick={() => handleViewPublication(publication)}
-                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                              className="bg-brand hover:bg-brand-700 text-white"
                             >
                               <Eye className="h-4 w-4 mr-1" />
                               Ver
@@ -808,7 +808,7 @@ export function PublicationsModule() {
                             <Button 
                               size="sm" 
                               onClick={() => handleEditPublication(publication)}
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                              className="bg-brand-sage hover:bg-emerald-700 text-white"
                             >
                               <Edit className="h-4 w-4 mr-1" />
                               Editar

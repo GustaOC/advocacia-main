@@ -253,7 +253,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
-            <FileBarChart className="h-8 w-8 text-blue-600" />
+            <FileBarChart className="h-8 w-8 text-brand" />
             Relatórios Financeiros
           </h1>
           <p className="text-slate-600 mt-1">Análise detalhada da performance financeira do escritório</p>
@@ -274,7 +274,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5 text-purple-600" />
+            <Filter className="h-5 w-5 text-brand-olive" />
             Filtros do Relatório
           </CardTitle>
         </CardHeader>
@@ -367,16 +367,16 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Target className="h-5 w-5 text-blue-600" />
+            <Target className="h-5 w-5 text-brand" />
             Resumo Executivo
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-600 font-medium">Total de Acordos</p>
+              <p className="text-sm text-brand font-medium">Total de Acordos</p>
               <p className="text-2xl font-bold text-blue-800">{data.summary.total_agreements}</p>
-              <p className="text-xs text-blue-600 mt-1">no período</p>
+              <p className="text-xs text-brand mt-1">no período</p>
             </div>
             <div className="text-center p-4 bg-green-50 rounded-lg">
               <p className="text-sm text-green-600 font-medium">Valor Total</p>
@@ -384,19 +384,19 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <p className="text-xs text-green-600 mt-1">em acordos</p>
             </div>
             <div className="text-center p-4 bg-emerald-50 rounded-lg">
-              <p className="text-sm text-emerald-600 font-medium">Valor Recebido</p>
+              <p className="text-sm text-brand-sage font-medium">Valor Recebido</p>
               <p className="text-2xl font-bold text-emerald-800">{formatCurrency(data.summary.paid_amount)}</p>
-              <p className="text-xs text-emerald-600 mt-1">{formatPercentage((data.summary.paid_amount / data.summary.total_value) * 100)}</p>
+              <p className="text-xs text-brand-sage mt-1">{formatPercentage((data.summary.paid_amount / data.summary.total_value) * 100)}</p>
             </div>
             <div className="text-center p-4 bg-red-50 rounded-lg">
               <p className="text-sm text-red-600 font-medium">Em Atraso</p>
               <p className="text-2xl font-bold text-red-800">{formatCurrency(data.summary.overdue_amount)}</p>
               <p className="text-xs text-red-600 mt-1">{formatPercentage((data.summary.overdue_amount / data.summary.total_value) * 100)}</p>
             </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <p className="text-sm text-purple-600 font-medium">Taxa de Sucesso</p>
-              <p className="text-2xl font-bold text-purple-800">{formatPercentage(data.summary.completion_rate)}</p>
-              <p className="text-xs text-purple-600 mt-1">dos acordos</p>
+            <div className="text-center p-4 bg-brand-olive rounded-lg">
+              <p className="text-sm text-brand-olive font-medium">Taxa de Sucesso</p>
+              <p className="text-2xl font-bold text-brand-olive">{formatPercentage(data.summary.completion_rate)}</p>
+              <p className="text-xs text-brand-olive mt-1">dos acordos</p>
             </div>
           </div>
         </CardContent>
@@ -419,7 +419,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <PieChart className="h-5 w-5 text-blue-600" />
+                  <PieChart className="h-5 w-5 text-brand" />
                   Distribuição por Status
                 </CardTitle>
               </CardHeader>
@@ -520,7 +520,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <LineChart className="h-5 w-5 text-blue-600" />
+                <LineChart className="h-5 w-5 text-brand" />
                 Evolução Mensal dos Pagamentos
               </CardTitle>
             </CardHeader>
@@ -606,7 +606,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Variação Sazonal</span>
-                    <span className="font-semibold text-orange-600">±23%</span>
+                    <span className="font-semibold text-brand-beige">±23%</span>
                   </div>
                 </div>
               </CardContent>
@@ -620,11 +620,11 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Próximo Mês</span>
-                    <span className="font-semibold text-blue-600">{formatCurrency(195000)}</span>
+                    <span className="font-semibold text-brand">{formatCurrency(195000)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Trimestre</span>
-                    <span className="font-semibold text-purple-600">{formatCurrency(580000)}</span>
+                    <span className="font-semibold text-brand-olive">{formatCurrency(580000)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-slate-600">Confiança</span>
@@ -685,7 +685,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-blue-600" />
+                  <Users className="h-5 w-5 text-brand" />
                   Performance dos Clientes
                 </CardTitle>
               </CardHeader>
@@ -708,7 +708,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                           <td className="p-4">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <span className="text-blue-600 font-semibold text-xs">
+                                <span className="text-brand font-semibold text-xs">
                                   {client.client_name.split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
                                 </span>
                               </div>
@@ -729,7 +729,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                             </div>
                           </td>
                           <td className="p-4">
-                            <span className={`font-semibold ${client.avg_delay > 10 ? 'text-red-600' : client.avg_delay > 5 ? 'text-orange-600' : 'text-green-600'}`}>
+                            <span className={`font-semibold ${client.avg_delay > 10 ? 'text-red-600' : client.avg_delay > 5 ? 'text-brand-beige' : 'text-green-600'}`}>
                               {client.avg_delay.toFixed(1)} dias
                             </span>
                           </td>
@@ -772,15 +772,15 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               </CardContent>
             </Card>
 
-            <Card className="border-orange-200">
-              <CardHeader className="bg-orange-50">
-                <CardTitle className="text-lg text-orange-800">Atraso Médio</CardTitle>
+            <Card className="border-brand-beige">
+              <CardHeader className="bg-brand-beige">
+                <CardTitle className="text-lg text-brand-beige">Atraso Médio</CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                <div className="text-3xl font-bold text-orange-600">
+                <div className="text-3xl font-bold text-brand-beige">
                   {data.overdue_analysis.average_days_overdue}
                 </div>
-                <p className="text-sm text-orange-700 mt-1">dias em atraso</p>
+                <p className="text-sm text-brand-beige mt-1">dias em atraso</p>
               </CardContent>
             </Card>
 
@@ -796,15 +796,15 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               </CardContent>
             </Card>
 
-            <Card className="border-purple-200">
-              <CardHeader className="bg-purple-50">
-                <CardTitle className="text-lg text-purple-800">Alto Risco</CardTitle>
+            <Card className="border-brand-olive">
+              <CardHeader className="bg-brand-olive">
+                <CardTitle className="text-lg text-brand-olive">Alto Risco</CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                <div className="text-3xl font-bold text-purple-600">
+                <div className="text-3xl font-bold text-brand-olive">
                   {data.overdue_analysis.high_risk_count}
                 </div>
-                <p className="text-sm text-purple-700 mt-1">clientes críticos</p>
+                <p className="text-sm text-brand-olive mt-1">clientes críticos</p>
               </CardContent>
             </Card>
           </div>
