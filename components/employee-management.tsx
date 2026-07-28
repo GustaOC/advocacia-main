@@ -33,21 +33,19 @@ function EmployeeStats({ employees }: { employees: any[] }) {
       {stats.map((stat, index) => {
         const StatIcon = stat.icon;
         return (
-          <Card key={index} className="group hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white relative overflow-hidden">
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bg} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white to-transparent rounded-full transform translate-x-8 -translate-y-8"></div>
-            <CardContent className="p-6 relative z-10">
+          <Card key={index} className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+            <CardContent className="p-6">
               <div className="flex items-start justify-between">
-                <div className="space-y-2">
-                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
-                  <div className="flex items-center space-x-1">
-                    <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
+                <div className="space-y-1">
+                  <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">{stat.label}</p>
+                  <p className="text-3xl font-serif text-brand-black">{stat.value}</p>
+                  <div className="flex items-center space-x-1 pt-1">
+                    <TrendingUp className="w-4 h-4 text-brand-sage" />
+                    <span className="text-sm text-brand-sage font-medium">{stat.trend}</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.bg} group-hover:scale-110 transition-transform duration-300`}>
-                  <StatIcon className={`w-6 h-6 ${stat.color}`} />
+                <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                  <StatIcon className="w-5 h-5 text-brand" />
                 </div>
               </div>
             </CardContent>
@@ -158,26 +156,21 @@ export function EmployeeManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="relative bg-brand rounded-3xl p-8 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-10"></div>
-        <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-4xl font-bold mb-3">Gerenciamento de Equipe</h2>
-            <p className="text-gray-200 text-xl">Visualize e gerencie os membros da sua equipe jurídica.</p>
-          </div>
-          {currentUser?.role === 'admin' && (
-            <Button 
-              onClick={handleGenerateInvite} 
-              className="bg-brand text-white hover:bg-brand-700 font-bold px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 border-0"
-              disabled={isGeneratingInvite}
-            >
-              {isGeneratingInvite ? <Loader2 className="w-5 h-5 animate-spin" /> : <Shield className="w-5 h-5" />}
-              {isGeneratingInvite ? "Gerando..." : "Gerar Link de Convite"}
-            </Button>
-          )}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="bg-white border-l-4 border-brand p-8 shadow-sm flex-1 rounded-sm">
+          <h2 className="text-3xl font-serif text-brand-black tracking-tight">Gestão da Equipe</h2>
+          <p className="text-brand-gray mt-2 font-medium">Controle de acessos, advogados e colaboradores do escritório.</p>
         </div>
+        {currentUser?.role === 'admin' && (
+          <Button 
+            onClick={handleGenerateInvite} 
+            className="bg-brand text-white hover:bg-brand-dark px-6 py-6 rounded-none shadow-sm flex items-center gap-2 border-0 h-auto"
+            disabled={isGeneratingInvite}
+          >
+            {isGeneratingInvite ? <Loader2 className="w-5 h-5 animate-spin" /> : <Shield className="w-5 h-5" />}
+            {isGeneratingInvite ? "Gerando..." : "Gerar Link de Convite"}
+          </Button>
+        )}
       </div>
 
       {employees && <EmployeeStats employees={employees} />}

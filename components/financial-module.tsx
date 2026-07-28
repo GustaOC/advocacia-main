@@ -132,35 +132,25 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
       {stats.map((stat, index) => {
         const StatIcon = stat.icon as any;
         return (
-          <Card key={index} className="group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-0 bg-white relative overflow-hidden">
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bg} opacity-10 group-hover:opacity-20 transition-opacity`} />
-            <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-            <CardContent className="p-6 relative z-10">
+          <Card key={index} className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+            <CardContent className="p-6">
               <div className="flex items-start justify-between">
-                <div className="space-y-2">
-                  <p className="text-sm text-brand-gray font-medium flex items-center gap-2">
-                    {stat.label}
-                    <Sparkles className="w-3 h-3 text-brand-sage animate-pulse" />
-                  </p>
-                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
-                  <div className="flex items-center space-x-1">
+                <div className="space-y-1">
+                  <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">{stat.label}</p>
+                  <p className="text-3xl font-serif text-brand-black">{stat.value}</p>
+                  <div className="flex items-center space-x-1 pt-1">
                     {stat.trend.includes('+') ? (
-                      <ArrowUp className="w-4 h-4 text-green-500" />
+                      <TrendingUp className="w-4 h-4 text-brand-sage" />
                     ) : stat.trend.includes('-') ? (
-                      <ArrowDown className="w-4 h-4 text-red-500" />
+                      <ArrowDown className="w-4 h-4 text-brand-sage" />
                     ) : (
-                      <Target className="w-4 h-4 text-brand" />
+                      <Target className="w-4 h-4 text-brand-sage" />
                     )}
-                    <span className={`text-sm font-medium ${
-                      stat.trend.includes('+') ? 'text-green-600' :
-                        stat.trend.includes('Atenção') ? 'text-red-600' : 'text-brand'
-                      }`}>
-                      {stat.trend}
-                    </span>
+                    <span className="text-sm text-brand-sage font-medium">{stat.trend}</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-2xl bg-gradient-to-br ${stat.gradient} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                  <StatIcon className="w-6 h-6 text-white" />
+                <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                  <StatIcon className="w-5 h-5 text-brand" />
                 </div>
               </div>
             </CardContent>
@@ -1305,21 +1295,14 @@ export function FinancialModule() {
 
   return (
     <div className="space-y-8">
-      {/* Header Premium */}
-      <div className="relative bg-brand rounded-3xl p-8 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-10"></div>
-        <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="relative z-10">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-3">Módulo Financeiro</h2>
-              <p className="text-brand-gray text-xl">Controle total sobre acordos, alvarás, e despesas</p>
-            </div>
-            <Button onClick={() => refetch()} className="bg-white text-brand-black hover:bg-brand-beige/50 shadow-lg rounded-xl">
+      {/* Header Clássico */}
+      <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm">
+        <h2 className="text-3xl font-serif text-brand-black tracking-tight">Gestão Financeira e Acordos</h2>
+        <p className="text-brand-gray mt-2 font-medium">Controle total sobre honorários, parcelamentos e fluxo de caixa.</p>
+        <div className="mt-6">
+            <Button onClick={() => refetch()} variant="outline" className="border-brand text-brand hover:bg-brand-50">
               <RefreshCw className="mr-2 h-4 w-4" /> Atualizar Dados
             </Button>
-          </div>
         </div>
       </div>
 

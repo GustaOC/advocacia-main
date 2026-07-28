@@ -66,22 +66,19 @@ function TasksStats({ tasks }: { tasks: Task[] }) {
         const StatIcon = stat.icon;
         
         return (
-          <Card key={index} className="group hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-0 relative overflow-hidden">
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bg} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white to-transparent rounded-full transform translate-x-8 -translate-y-8"></div>
-            
-            <CardContent className="p-6 relative z-10">
-              <div className="flex items-center justify-between">
-                <div className="space-y-2">
-                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
-                  <div className="flex items-center space-x-1">
-                    <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
+          <Card key={index} className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">{stat.label}</p>
+                  <p className="text-3xl font-serif text-brand-black">{stat.value}</p>
+                  <div className="flex items-center space-x-1 pt-1">
+                    <TrendingUp className="w-4 h-4 text-brand-sage" />
+                    <span className="text-sm text-brand-sage font-medium">{stat.trend}</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.bg} group-hover:scale-110 transition-transform duration-300`}>
-                  <StatIcon className={`w-6 h-6 ${stat.color}`} />
+                <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                  <StatIcon className="w-5 h-5 text-brand" />
                 </div>
               </div>
             </CardContent>
@@ -320,38 +317,32 @@ export function TasksModule() {
 
   return (
     <div className="space-y-8">
-      {/* Header Moderno */}
-      <div className="relative bg-brand rounded-3xl p-8 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%223%22%20cy%3D%223%22%20r%3D%223%22%2F%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
-        
-        <div className="relative z-10 flex justify-between items-center">
-          <div>
-            <h2 className="text-4xl font-bold mb-3">Gestão de Tarefas</h2>
-            <p className="text-brand-gray text-xl">Organize e acompanhe as atividades da sua equipe com eficiência.</p>
-          </div>
-          
-          <div className="flex gap-3">
-            {user?.role === 'admin' && (
-              <Button 
-                onClick={() => setAllTasksModalOpen(true)}
-                variant="outline"
-                className="bg-transparent border-brand-gray text-white hover:bg-brand-gray hover:text-white"
-                size="lg"
-              >
-                Ver Todas as Tarefas
-              </Button>
-            )}
-            {can && can('tasks_create') && (
-              <Button 
-                onClick={() => setModalOpen(true)} 
-                className="bg-white text-brand-gray hover:bg-brand-gray shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                size="lg"
-              >
-                <Plus className="mr-2 h-5 w-5" /> 
-                Nova Tarefa
-              </Button>
-            )}
-          </div>
+      <div className="flex justify-between items-end mb-8">
+        <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm">
+          <h2 className="text-3xl font-serif text-brand-black tracking-tight">Gestão de Tarefas</h2>
+          <p className="text-brand-gray mt-2 font-medium">Controle de delegações, andamentos e produtividade da equipe.</p>
+        </div>
+        <div className="flex gap-3">
+          {user?.role === 'admin' && (
+            <Button 
+              onClick={() => setAllTasksModalOpen(true)}
+              variant="outline"
+              className="border-brand text-brand hover:bg-brand-50"
+              size="lg"
+            >
+              Ver Todas as Tarefas
+            </Button>
+          )}
+          {can && can('tasks_create') && (
+            <Button 
+              onClick={() => setModalOpen(true)} 
+              className="bg-brand text-white hover:bg-brand-dark shadow-sm rounded-none"
+              size="lg"
+            >
+              <Plus className="mr-2 h-5 w-5" /> 
+              Nova Tarefa
+            </Button>
+          )}
         </div>
       </div>
 
