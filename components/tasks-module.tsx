@@ -30,31 +30,31 @@ function TasksStats({ tasks }: { tasks: Task[] }) {
       value: tasks.length.toString(), 
       icon: CheckCircle, 
       color: "text-brand",
-      bg: "from-blue-50 to-blue-100",
+      bg: "from-brand-light/50 to-brand-light/20",
       trend: "+5%"
     },
     { 
       label: "Em Andamento", 
       value: tasks.filter(t => t.status === 'Em Andamento').length.toString(), 
       icon: Clock, 
-      color: "text-brand-beige",
-      bg: "from-orange-50 to-orange-100",
+      color: "text-brand-sage",
+      bg: "from-brand-sage/30 to-brand-sage/10",
       trend: "+12%"
     },
     { 
       label: "Concluídas", 
       value: tasks.filter(t => t.status === 'Concluída').length.toString(), 
       icon: CheckCircle, 
-      color: "text-green-600",
-      bg: "from-green-50 to-green-100",
+      color: "text-brand",
+      bg: "from-brand-beige/50 to-brand-beige/20",
       trend: "+8%"
     },
     { 
       label: "Alta Prioridade", 
       value: tasks.filter(t => t.priority === 'Alta').length.toString(), 
       icon: AlertTriangle, 
-      color: "text-red-600",
-      bg: "from-red-50 to-red-100",
+      color: "text-brand",
+      bg: "from-brand-gray/30 to-brand-gray/10",
       trend: "-3%"
     },
   ];
@@ -321,7 +321,7 @@ export function TasksModule() {
   return (
     <div className="space-y-8">
       {/* Header Moderno */}
-      <div className="relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900 rounded-3xl p-8 text-white overflow-hidden">
+      <div className="relative bg-brand rounded-3xl p-8 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%223%22%20cy%3D%223%22%20r%3D%223%22%2F%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2213%22%20r%3D%221%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-20"></div>
         
         <div className="relative z-10 flex justify-between items-center">

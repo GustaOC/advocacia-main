@@ -14,10 +14,10 @@ const fetchPetitions = async () => {
 
 function PetitionsStats({ petitions }: { petitions: any[] }) {
   const stats = [
-    { label: "Total de Petições", value: petitions.length.toString(), icon: FileText, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+8%" },
-    { label: "Em Andamento", value: petitions.filter(p => p.status?.toLowerCase() === 'em andamento').length.toString(), icon: Clock, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "+5%" },
-    { label: "Concluídas", value: petitions.filter(p => p.status?.toLowerCase() === 'concluída').length.toString(), icon: CheckCircle, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+12%" },
-    { label: "Pendentes", value: petitions.filter(p => p.status?.toLowerCase() === 'pendente').length.toString(), icon: AlertCircle, color: "text-red-600", bg: "from-red-50 to-red-100", trend: "+3%" },
+    { label: "Total de Petições", value: petitions.length.toString(), icon: FileText, color: "text-brand", bg: "from-brand-light/50 to-brand-light/20", trend: "+8%" },
+    { label: "Em Andamento", value: petitions.filter(p => p.status?.toLowerCase() === 'em andamento').length.toString(), icon: Clock, color: "text-brand-sage", bg: "from-brand-sage/30 to-brand-sage/10", trend: "+5%" },
+    { label: "Concluídas", value: petitions.filter(p => p.status?.toLowerCase() === 'concluída').length.toString(), icon: CheckCircle, color: "text-brand", bg: "from-brand-beige/50 to-brand-beige/20", trend: "+12%" },
+    { label: "Pendentes", value: petitions.filter(p => p.status?.toLowerCase() === 'pendente').length.toString(), icon: AlertCircle, color: "text-brand", bg: "from-brand-gray/30 to-brand-gray/10", trend: "+3%" },
   ];
 
   return (
@@ -71,7 +71,7 @@ export function PetitionsModule() {
 
   return (
     <div className="space-y-6">
-      <div className="relative bg-gradient-to-br from-amber-900 via-orange-800 to-amber-900 rounded-3xl p-8 text-white overflow-hidden">
+      <div className="relative bg-brand rounded-3xl p-8 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-10"></div>
         <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
