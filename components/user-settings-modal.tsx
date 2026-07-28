@@ -114,7 +114,7 @@ const roleInfo = ROLE_LABELS[roleKey]
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-1">
               <User className="h-4 w-4 text-brand-sage" />
-              <span className="font-medium text-slate-700 text-sm">Informações Pessoais</span>
+              <span className="font-medium text-brand text-sm">Informações Pessoais</span>
             </div>
 
             <div className="space-y-1">

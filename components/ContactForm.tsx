@@ -89,7 +89,7 @@ export default function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-slate-700 font-medium">Nome Completo *</Label>
+            <Label htmlFor="name" className="text-brand font-medium">Nome Completo *</Label>
             <Input 
               id="name" 
               type="text" 
@@ -101,7 +101,7 @@ export default function ContactForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-slate-700 font-medium">Telefone/WhatsApp *</Label>
+            <Label htmlFor="phone" className="text-brand font-medium">Telefone/WhatsApp *</Label>
             <Input 
               id="phone" 
               type="tel" 
@@ -115,7 +115,7 @@ export default function ContactForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-slate-700 font-medium">E-mail *</Label>
+          <Label htmlFor="email" className="text-brand font-medium">E-mail *</Label>
           <Input 
             id="email" 
             type="email" 
@@ -129,7 +129,7 @@ export default function ContactForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label className="text-slate-700 font-medium">Área Jurídica</Label>
+            <Label className="text-brand font-medium">Área Jurídica</Label>
             <Select value={formData.subject} onValueChange={(value) => handleChange('subject', value)}>
               <SelectTrigger className="border-brand-gray focus:border-brand focus:ring-brand">
                 <SelectValue placeholder="Selecione a área" className="text-brand-sage"/>
@@ -147,7 +147,7 @@ export default function ContactForm() {
           </div>
           
           <div className="space-y-2">
-            <Label className="text-slate-700 font-medium">Urgência</Label>
+            <Label className="text-brand font-medium">Urgência</Label>
             <Select value={formData.urgency} onValueChange={(value) => handleChange('urgency', value)}>
               <SelectTrigger className="border-brand-gray focus:border-brand focus:ring-brand">
                 <SelectValue placeholder="Nível de urgência" className="text-brand-sage" />
@@ -162,7 +162,7 @@ export default function ContactForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="message" className="text-slate-700 font-medium">Descreva Seu Caso *</Label>
+          <Label htmlFor="message" className="text-brand font-medium">Descreva Seu Caso *</Label>
           <Textarea 
             id="message" 
             placeholder="Conte-nos sobre sua situação jurídica. Quanto mais detalhes, melhor poderemos ajudá-lo..." 

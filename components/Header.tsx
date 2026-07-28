@@ -70,7 +70,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   className={`font-medium transition-colors hover:text-accent relative group ${
-                    isScrolled ? 'text-gray-800' : 'text-slate-700'
+                    isScrolled ? 'text-gray-800' : 'text-brand'
                   }`}
                 >
                   {item.label}
@@ -86,8 +86,8 @@ export default function Header() {
                 size="sm"
                 onClick={handleCall}
                 className={`${
-                  isScrolled ? 'text-slate-700 hover:text-accent hover:bg-accent/10'
-                    : 'text-slate-700 hover:text-accent hover:bg-white/10'
+                  isScrolled ? 'text-brand hover:text-accent hover:bg-accent/10'
+                    : 'text-brand hover:text-accent hover:bg-white/10'
                 } transition-colors`}
               >
                 <Phone className="h-4 w-4 mr-2" />
@@ -112,7 +112,7 @@ export default function Header() {
             <Button
               variant="ghost"
               className={`lg:hidden p-2 ${
-                isScrolled ? 'text-slate-700' : 'text-white'
+                isScrolled ? 'text-brand' : 'text-white'
               }`}
               onClick={toggleMenu}
               aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu de navegação"}
@@ -166,7 +166,7 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block text-lg font-medium text-slate-700 hover:text-accent transition-colors py-2"
+                    className="block text-lg font-medium text-brand hover:text-accent transition-colors py-2"
                     onClick={toggleMenu}
                   >
                     {item.label}

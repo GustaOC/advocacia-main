@@ -114,7 +114,7 @@ export default function LoginForm() {
 
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-slate-700">Email</Label>
+            <Label htmlFor="email" className="text-brand">Email</Label>
             <Input
               id="email"
               type="email"
@@ -128,7 +128,7 @@ export default function LoginForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-slate-700">Senha</Label>
+            <Label htmlFor="password" className="text-brand">Senha</Label>
             <div className="relative">
               <Input
                 id="password"

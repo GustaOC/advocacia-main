@@ -481,11 +481,11 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                   <table className="w-full">
                     <thead className="bg-brand-light/50 border-b">
                       <tr>
-                        <th className="text-left p-4 font-semibold text-slate-700">Tipo de Acordo</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Quantidade</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Valor Total</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Valor Médio</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Participação</th>
+                        <th className="text-left p-4 font-semibold text-brand">Tipo de Acordo</th>
+                        <th className="text-left p-4 font-semibold text-brand">Quantidade</th>
+                        <th className="text-left p-4 font-semibold text-brand">Valor Total</th>
+                        <th className="text-left p-4 font-semibold text-brand">Valor Médio</th>
+                        <th className="text-left p-4 font-semibold text-brand">Participação</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -694,12 +694,12 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                   <table className="w-full">
                     <thead className="bg-brand-light/50 border-b">
                       <tr>
-                        <th className="text-left p-4 font-semibold text-slate-700">Cliente</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Acordos</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Valor Total</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Taxa de Pagamento</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Atraso Médio</th>
-                        <th className="text-left p-4 font-semibold text-slate-700">Classificação</th>
+                        <th className="text-left p-4 font-semibold text-brand">Cliente</th>
+                        <th className="text-left p-4 font-semibold text-brand">Acordos</th>
+                        <th className="text-left p-4 font-semibold text-brand">Valor Total</th>
+                        <th className="text-left p-4 font-semibold text-brand">Taxa de Pagamento</th>
+                        <th className="text-left p-4 font-semibold text-brand">Atraso Médio</th>
+                        <th className="text-left p-4 font-semibold text-brand">Classificação</th>
                       </tr>
                     </thead>
                     <tbody>

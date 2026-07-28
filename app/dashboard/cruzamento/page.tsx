@@ -136,7 +136,7 @@ export default function CruzamentoPage() {
         <CardContent className="space-y-6 p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="pagamentos" className="text-slate-700 font-semibold">Arquivo de Pagamentos</Label>
+              <Label htmlFor="pagamentos" className="text-brand font-semibold">Arquivo de Pagamentos</Label>
               <Input
                 id="pagamentos"
                 type="file"
@@ -152,7 +152,7 @@ export default function CruzamentoPage() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="judicializados" className="text-slate-700 font-semibold">Arquivo de Judicializados</Label>
+              <Label htmlFor="judicializados" className="text-brand font-semibold">Arquivo de Judicializados</Label>
               <Input
                 id="judicializados"
                 type="file"
@@ -198,9 +198,9 @@ export default function CruzamentoPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-brand-black hover:bg-brand-darkolive">
-                  <TableHead className="text-slate-700 font-bold">Data do Pagamento</TableHead>
-                  <TableHead className="text-slate-700 font-bold">Nome do Cliente</TableHead>
-                  <TableHead className="text-right text-slate-700 font-bold">Valor Pago (R$)</TableHead>
+                  <TableHead className="text-brand-beige font-bold">Data do Pagamento</TableHead>
+                  <TableHead className="text-brand-beige font-bold">Nome do Cliente</TableHead>
+                  <TableHead className="text-right text-brand-beige font-bold">Valor Pago (R$)</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

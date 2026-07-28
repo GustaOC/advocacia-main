@@ -211,7 +211,7 @@ function ReceivedPaymentsTab() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex items-center gap-3">
-              <Label className="text-slate-700 font-semibold">Mês:</Label>
+              <Label className="text-brand font-semibold">Mês:</Label>
               <Select value={String(selectedDate.month)} onValueChange={(v) => handleDateChange('month', v)}>
                 <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
                 <SelectContent>
@@ -222,7 +222,7 @@ function ReceivedPaymentsTab() {
                   ))}
                 </SelectContent>
               </Select>
-              <Label className="text-slate-700 font-semibold">Ano:</Label>
+              <Label className="text-brand font-semibold">Ano:</Label>
               <Select value={String(selectedDate.year)} onValueChange={(v) => handleDateChange('year', v)}>
                 <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
                 <SelectContent>
@@ -249,12 +249,12 @@ function ReceivedPaymentsTab() {
           <Table>
             <TableHeader>
               <TableRow className="bg-brand-black hover:bg-brand-darkolive">
-                <TableHead className="text-slate-700 font-bold">Data Pag.</TableHead>
-                <TableHead className="text-slate-700 font-bold">Cliente</TableHead>
-                <TableHead className="text-slate-700 font-bold">Processo</TableHead>
-                <TableHead className="text-slate-700 font-bold">Parcela</TableHead>
-                <TableHead className="text-slate-700 font-bold">Método</TableHead>
-                <TableHead className="text-right text-slate-700 font-bold">Valor Recebido</TableHead>
+                <TableHead className="text-brand-beige font-bold">Data Pag.</TableHead>
+                <TableHead className="text-brand-beige font-bold">Cliente</TableHead>
+                <TableHead className="text-brand-beige font-bold">Processo</TableHead>
+                <TableHead className="text-brand-beige font-bold">Parcela</TableHead>
+                <TableHead className="text-brand-beige font-bold">Método</TableHead>
+                <TableHead className="text-right text-brand-beige font-bold">Valor Recebido</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -450,7 +450,7 @@ function MonthlyInstallmentsTab() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex items-center gap-3">
-              <Label className="text-slate-700 font-semibold">Mês:</Label>
+              <Label className="text-brand font-semibold">Mês:</Label>
               <Select value={String(selectedDate.month)} onValueChange={(v) => handleDateChange('month', v)}>
                 <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
                 <SelectContent>
@@ -461,7 +461,7 @@ function MonthlyInstallmentsTab() {
                   ))}
                 </SelectContent>
               </Select>
-              <Label className="text-slate-700 font-semibold">Ano:</Label>
+              <Label className="text-brand font-semibold">Ano:</Label>
               <Select value={String(selectedDate.year)} onValueChange={(v) => handleDateChange('year', v)}>
                 <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
                 <SelectContent>
@@ -482,12 +482,12 @@ function MonthlyInstallmentsTab() {
           <Table>
             <TableHeader>
               <TableRow className="bg-brand-black hover:bg-brand-darkolive">
-                <TableHead className="text-slate-700 font-bold">Vencimento</TableHead>
-                <TableHead className="text-slate-700 font-bold">Partes</TableHead>
-                <TableHead className="text-slate-700 font-bold">Processo</TableHead>
-                <TableHead className="text-slate-700 font-bold">Valor</TableHead>
-                <TableHead className="text-slate-700 font-bold">Status</TableHead>
-                <TableHead className="text-right text-slate-700 font-bold">Ações</TableHead>
+                <TableHead className="text-brand-beige font-bold">Vencimento</TableHead>
+                <TableHead className="text-brand-beige font-bold">Partes</TableHead>
+                <TableHead className="text-brand-beige font-bold">Processo</TableHead>
+                <TableHead className="text-brand-beige font-bold">Valor</TableHead>
+                <TableHead className="text-brand-beige font-bold">Status</TableHead>
+                <TableHead className="text-right text-brand-beige font-bold">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -619,7 +619,7 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
           <div className="px-6 pb-6 border-t bg-brand-light/50/50">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
               <div className="space-y-3">
-                <h5 className="font-semibold text-slate-700 flex items-center"><FileText className="h-4 w-4 mr-2" />Informações do Acordo</h5>
+                <h5 className="font-semibold text-brand flex items-center"><FileText className="h-4 w-4 mr-2" />Informações do Acordo</h5>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-brand-gray">Tipo:</span><div>{renderAgreementTypeIcon(agreement.agreement_type)}</div></div>
                   <div className="flex justify-between"><span className="text-brand-gray">Valor de Entrada:</span><span className="font-medium">{formatCurrency(agreement.down_payment || 0)}</span></div>
@@ -628,7 +628,7 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
                 </div>
               </div>
               <div className="space-y-3">
-                <h5 className="font-semibold text-slate-700 flex items-center"><Calendar className="h-4 w-4 mr-2" />Cronograma</h5>
+                <h5 className="font-semibold text-brand flex items-center"><Calendar className="h-4 w-4 mr-2" />Cronograma</h5>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between"><span className="text-brand-gray">Valor da Parcela:</span><span className="font-bold text-green-600">{formatCurrency(installmentValue)}</span></div>
                   <div className="flex justify-between"><span className="text-brand-gray">Próximo Vencimento:</span><span className="font-medium">{formatDate(nextDueDate)}</span></div>
@@ -637,7 +637,7 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
                 </div>
               </div>
               <div className="space-y-3">
-                <h5 className="font-semibold text-slate-700 flex items-center"><Users className="h-4 w-4 mr-2" />Partes Envolvidas</h5>
+                <h5 className="font-semibold text-brand flex items-center"><Users className="h-4 w-4 mr-2" />Partes Envolvidas</h5>
                 <div className="space-y-2 text-sm">
                   <div>
                     <span className="text-brand-gray">Cliente:</span>
@@ -646,14 +646,14 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
                   </div>
                   <div>
                     <span className="text-brand-gray">Executado:</span>
-                    <p className="font-medium text-slate-700">{(agreement as any)?.executed_entities?.name || 'Não informado'}</p>
+                    <p className="font-medium text-brand">{(agreement as any)?.executed_entities?.name || 'Não informado'}</p>
                   </div>
                 </div>
               </div>
             </div>
             {agreement.notes && (
               <div className="border-t pt-3 mt-3">
-                <h6 className="font-semibold text-slate-700 mb-2">Observações:</h6>
+                <h6 className="font-semibold text-brand mb-2">Observações:</h6>
                 <p className="text-sm text-brand-gray bg-white p-3 rounded-lg border">{agreement.notes}</p>
               </div>
             )}
@@ -1025,7 +1025,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
         <CardContent className="p-6 space-y-4">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div className="flex items-center gap-3">
-              <Label className="text-slate-700 font-semibold whitespace-nowrap">Período:</Label>
+              <Label className="text-brand font-semibold whitespace-nowrap">Período:</Label>
               <Select value={String(selectedDate.month)} onValueChange={(v) => handleDateChange('month', v)}>
                 <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
                 <SelectContent>
@@ -1098,7 +1098,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
                       <Badge variant={expense.status === 'paid' ? "default" : "secondary"} className={expense.status === 'paid' ? "bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
                         {expense.status === 'paid' ? "Pago" : "Pendente"}
                       </Badge>
-                      <Badge variant="outline" className="border-brand-gray text-slate-700">{expense.category}</Badge>
+                      <Badge variant="outline" className="border-brand-gray text-brand">{expense.category}</Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-brand-gray">
                       <span><strong>Data:</strong> {formatDate(expense.date)}</span>
@@ -1329,9 +1329,9 @@ export function FinancialModule() {
         <TabsList className="grid grid-cols-5 w-full bg-brand-beige/50/50 p-1 rounded-2xl border-0">
             <TabsTrigger value="monthly_installments" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><Calendar className="h-4 w-4" /><span>Parcelas do Mês</span></TabsTrigger>
             <TabsTrigger value="received_payments" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><Banknote className="h-4 w-4" /><span>Recebidos do Mês</span></TabsTrigger>
-            <TabsTrigger value="acordos" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><FileText className="h-4 w-4" /><span>Acordos</span><Badge variant="secondary" className="ml-2 bg-brand-gray/30 text-slate-700">{safeAgreements.length}</Badge></TabsTrigger>
+            <TabsTrigger value="acordos" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><FileText className="h-4 w-4" /><span>Acordos</span><Badge variant="secondary" className="ml-2 bg-brand-gray/30 text-brand">{safeAgreements.length}</Badge></TabsTrigger>
             <TabsTrigger value="alvaras" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><Receipt className="h-4 w-4" /><span>Alvarás</span></TabsTrigger>
-            <TabsTrigger value="despesas" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><CreditCard className="h-4 w-4" /><span>Despesas</span><Badge variant="secondary" className="ml-2 bg-brand-gray/30 text-slate-700">{expenses.length}</Badge></TabsTrigger>
+            <TabsTrigger value="despesas" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><CreditCard className="h-4 w-4" /><span>Despesas</span><Badge variant="secondary" className="ml-2 bg-brand-gray/30 text-brand">{expenses.length}</Badge></TabsTrigger>
         </TabsList>
 
         <TabsContent value="monthly_installments"><MonthlyInstallmentsTab /></TabsContent>
@@ -1365,7 +1365,7 @@ export function FinancialModule() {
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <Label htmlFor="message" className="text-slate-700 font-semibold">Conteúdo da Mensagem</Label>
+            <Label htmlFor="message" className="text-brand font-semibold">Conteúdo da Mensagem</Label>
             <Textarea id="message" value={messageText} onChange={e => setMessageText(e.target.value)} className="min-h-[150px] mt-2 bg-white border-2 border-brand-gray rounded-xl" />
           </div>
           <DialogFooter>

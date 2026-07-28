@@ -248,10 +248,10 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
                 <div className="flex items-start space-x-3 w-full">
                     <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
                     <div className="flex-1">
-                        <p className={`text-sm ${!notification.is_read ? 'font-bold text-brand-black' : 'font-semibold text-slate-700'}`}>
+                        <p className={`text-sm ${!notification.is_read ? 'font-bold text-brand-black' : 'font-semibold text-brand'}`}>
                           {notification.title}
                         </p>
-                        <p className={`text-xs mt-1 ${!notification.is_read ? 'text-slate-700 font-medium' : 'text-brand-sage'}`}>
+                        <p className={`text-xs mt-1 ${!notification.is_read ? 'text-brand font-medium' : 'text-brand-sage'}`}>
                           {notification.message}
                         </p>
                     </div>

@@ -285,7 +285,7 @@ export function ProcessControl() {
       <Card className="border-0 shadow-lg">
         <CardContent className="p-4">
           <div className="flex items-center justify-center">
-            <div className="text-sm font-medium text-slate-700">
+            <div className="text-sm font-medium text-brand">
               Total: {totalCount} processos carregados
             </div>
           </div>
@@ -367,25 +367,25 @@ export function ProcessControl() {
                  <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-3">
                     <div className="bg-gray-100 p-4 rounded-xl">
-                        <Label className="font-semibold text-slate-700">Número do Processo</Label>
+                        <Label className="font-semibold text-brand">Número do Processo</Label>
                         <p className="font-mono text-lg font-medium text-brand-black">{selectedProcess.case_number || 'N/A'}</p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-xl">
-                        <Label className="font-semibold text-slate-700">Título</Label>
+                        <Label className="font-semibold text-brand">Título</Label>
                         <p className="text-brand-black">{selectedProcess.title}</p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-xl">
-                        <Label className="font-semibold text-slate-700">Vara/Tribunal</Label>
+                        <Label className="font-semibold text-brand">Vara/Tribunal</Label>
                         <p className="text-brand-black">{selectedProcess.court || 'N/A'}</p>
                     </div>
                     </div>
                     <div className="space-y-3">
                     <div className="bg-gray-100 p-4 rounded-xl">
-                        <Label className="font-semibold text-slate-700">Status</Label>
+                        <Label className="font-semibold text-brand">Status</Label>
                         <div className="mt-2">{getStatusBadge(selectedProcess.status)}</div>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-xl">
-                        <Label className="font-semibold text-slate-700">Partes Envolvidas</Label>
+                        <Label className="font-semibold text-brand">Partes Envolvidas</Label>
                         <div className="mt-2 flex flex-col gap-1">
                         {selectedProcess.case_parties.map(party => (
                             <Badge key={`${party.entities.id}-${party.role}`} variant="outline" className="text-xs">

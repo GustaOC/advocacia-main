@@ -288,11 +288,11 @@ export function CalendarModule() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
-              <Label className="text-slate-700 font-semibold">Título *</Label>
+              <Label className="text-brand font-semibold">Título *</Label>
               <Input value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" />
             </div>
             <div>
-              <Label className="text-slate-700 font-semibold">Tipo</Label>
+              <Label className="text-brand font-semibold">Tipo</Label>
               <Select value={newEvent.type} onValueChange={(v: any) => setNewEvent({ ...newEvent, type: v })}>
                 <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -304,7 +304,7 @@ export function CalendarModule() {
               </Select>
             </div>
             <div>
-              <Label className="text-slate-700 font-semibold">Descrição</Label>
+              <Label className="text-brand font-semibold">Descrição</Label>
               <Textarea value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" />
             </div>
           </div>
@@ -323,11 +323,11 @@ export function CalendarModule() {
           {selectedEvent && (
             <div className="space-y-4 py-4">
               <div>
-                <Label className="text-slate-700 font-semibold">Título</Label>
+                <Label className="text-brand font-semibold">Título</Label>
                 <p className="text-brand-black mt-1">{selectedEvent.title}</p>
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">Tipo</Label>
+                <Label className="text-brand font-semibold">Tipo</Label>
                 <Badge className={`mt-2 ${
                   selectedEvent.type === 'meeting' ? 'bg-gradient-to-r from-green-500 to-green-600' :
                   selectedEvent.type === 'hearing' ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
@@ -339,7 +339,7 @@ export function CalendarModule() {
               </div>
               {selectedEvent.description && (
                 <div>
-                  <Label className="text-slate-700 font-semibold">Descrição</Label>
+                  <Label className="text-brand font-semibold">Descrição</Label>
                   <p className="text-brand-black mt-1">{selectedEvent.description}</p>
                 </div>
               )}

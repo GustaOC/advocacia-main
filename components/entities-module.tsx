@@ -355,12 +355,12 @@ export default function EntitiesModule() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-brand-black hover:bg-brand-darkolive">
-                    <TableHead className="text-slate-700 font-bold">Nome</TableHead>
-                    <TableHead className="text-slate-700 font-bold">Documento</TableHead>
-                    <TableHead className="text-slate-700 font-bold">Tipo</TableHead>
-                    <TableHead className="text-slate-700 font-bold">Cidade</TableHead>
-                    <TableHead className="text-slate-700 font-bold">Telefone</TableHead>
-                    <TableHead className="text-right text-slate-700 font-bold">Ações</TableHead>
+                    <TableHead className="text-brand-beige font-bold">Nome</TableHead>
+                    <TableHead className="text-brand-beige font-bold">Documento</TableHead>
+                    <TableHead className="text-brand-beige font-bold">Tipo</TableHead>
+                    <TableHead className="text-brand-beige font-bold">Cidade</TableHead>
+                    <TableHead className="text-brand-beige font-bold">Telefone</TableHead>
+                    <TableHead className="text-right text-brand-beige font-bold">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -425,7 +425,7 @@ export default function EntitiesModule() {
 
           <div className="space-y-4">
             <div>
-              <Label className="text-slate-700 font-semibold">Tipo</Label>
+              <Label className="text-brand font-semibold">Tipo</Label>
               <Select value={importModal.type} onValueChange={(v) => setImportModal((m) => ({...m, type: v as 'Cliente' | 'Executado'}))}>
                 <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -436,7 +436,7 @@ export default function EntitiesModule() {
             </div>
 
             <div>
-              <Label className="text-slate-700 font-semibold">Arquivo (.xlsx)</Label>
+              <Label className="text-brand font-semibold">Arquivo (.xlsx)</Label>
               <Input type="file" accept=".xlsx,.xls" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="bg-white border-2 border-brand-gray rounded-xl" />
             </div>
           </div>
@@ -462,7 +462,7 @@ export default function EntitiesModule() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
             <div className="space-y-4">
               <div>
-                <Label className="text-slate-700 font-semibold">Tipo *</Label>
+                <Label className="text-brand font-semibold">Tipo *</Label>
                 <Select
                   value={(currentClient.type as any) || listType}
                   onValueChange={(v) => setCurrentClient((c) => ({ ...c, type: v }))}
@@ -475,34 +475,34 @@ export default function EntitiesModule() {
                 </Select>
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">Nome Completo *</Label>
+                <Label className="text-brand font-semibold">Nome Completo *</Label>
                 <Input value={currentClient.name || ""} onChange={(e) => handleInputChange('name', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">CPF/CNPJ *</Label>
+                <Label className="text-brand font-semibold">CPF/CNPJ *</Label>
                 <Input value={currentClient.document || ""} onChange={(e) => handleInputChange('document', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">RG</Label>
+                <Label className="text-brand font-semibold">RG</Label>
                 <Input value={currentClient.rg || ""} onChange={(e) => handleInputChange('rg', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
                <div>
-                <Label className="text-slate-700 font-semibold">Data de Nascimento</Label>
+                <Label className="text-brand font-semibold">Data de Nascimento</Label>
                 <Input type="date" value={currentClient.birth_date || ""} onChange={(e) => handleInputChange('birth_date', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
-                <Label className="text-slate-700 font-semibold">Email</Label>
+                <Label className="text-brand font-semibold">Email</Label>
                 <Input type="email" value={currentClient.email || ""} onChange={(e) => handleInputChange('email', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">Telefone Celular</Label>
+                <Label className="text-brand font-semibold">Telefone Celular</Label>
                 <Input value={currentClient.cellphone1 || ""} onChange={(e) => handleInputChange('cellphone1', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
                <div>
-                <Label className="text-slate-700 font-semibold">Estado Civil</Label>
+                <Label className="text-brand font-semibold">Estado Civil</Label>
                 <Select value={currentClient.marital_status || ""} onValueChange={(v) => handleInputChange('marital_status', v)}>
                     <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                     <SelectContent>
@@ -515,42 +515,42 @@ export default function EntitiesModule() {
                 </Select>
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">Profissão</Label>
+                <Label className="text-brand font-semibold">Profissão</Label>
                 <Input value={currentClient.profession || ""} onChange={(e) => handleInputChange('profession', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
-                <Label className="text-slate-700 font-semibold">Nacionalidade</Label>
+                <Label className="text-brand font-semibold">Nacionalidade</Label>
                 <Input value={currentClient.nationality || ""} onChange={(e) => handleInputChange('nationality', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
             </div>
 
             <div className="space-y-4">
                <div>
-                <Label className="text-slate-700 font-semibold">Endereço</Label>
+                <Label className="text-brand font-semibold">Endereço</Label>
                 <Input value={currentClient.address || ""} onChange={(e) => handleInputChange('address', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <Label className="text-slate-700 font-semibold">Nº</Label>
+                  <Label className="text-brand font-semibold">Nº</Label>
                   <Input value={currentClient.address_number || ""} onChange={(e) => handleInputChange('address_number', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
                  <div>
-                  <Label className="text-slate-700 font-semibold">Bairro</Label>
+                  <Label className="text-brand font-semibold">Bairro</Label>
                   <Input value={currentClient.neighborhood || ""} onChange={(e) => handleInputChange('neighborhood', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <Label className="text-slate-700 font-semibold">Cidade</Label>
+                  <Label className="text-brand font-semibold">Cidade</Label>
                   <Input value={currentClient.city || ""} onChange={(e) => handleInputChange('city', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
                 <div>
-                  <Label className="text-slate-700 font-semibold">Estado</Label>
+                  <Label className="text-brand font-semibold">Estado</Label>
                   <Input value={currentClient.state || ""} onChange={(e) => handleInputChange('state', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
               </div>
                <div className="md:col-span-2">
-                <Label className="text-slate-700 font-semibold">Observações</Label>
+                <Label className="text-brand font-semibold">Observações</Label>
                 <Input value={currentClient.observations || ""} onChange={(e) => handleInputChange('observations', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
             </div>

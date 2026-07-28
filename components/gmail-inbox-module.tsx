@@ -271,14 +271,14 @@ const messages = data || [];
     {/* Anexos */}
     {(emailBodies[message.id]?.attachments ?? []).length > 0 && (
       <div className="border rounded-lg p-3 bg-brand-light/50">
-        <p className="text-sm font-semibold text-slate-700 mb-2">Anexos:</p>
+        <p className="text-sm font-semibold text-brand mb-2">Anexos:</p>
         <div className="flex flex-wrap gap-2">
           {(emailBodies[message.id]?.attachments ?? []).map((att) => (
             <a
               key={att.id}
               href={`/api/gmail/messages/${message.id}/attachments/${att.id}`}
               download={att.filename}
-              className="flex items-center gap-2 px-3 py-2 bg-white border border-brand-gray rounded-lg text-sm text-slate-700 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-white border border-brand-gray rounded-lg text-sm text-brand hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors"
               onClick={async (e) => {
                 e.preventDefault();
                 const supabase = createClient();
@@ -306,14 +306,14 @@ const messages = data || [];
     )}
   </div>
 ) : (
-  <p className="text-sm text-slate-700 p-4 bg-brand-light/50 rounded-lg whitespace-pre-wrap">
+  <p className="text-sm text-brand p-4 bg-brand-light/50 rounded-lg whitespace-pre-wrap">
     {message.snippet}
   </p>
 )}
   </div>
                     ) : (
                       <p 
-                        className="text-sm text-slate-700 line-clamp-2 mb-2 cursor-pointer hover:text-brand-black ml-8" 
+                        className="text-sm text-brand line-clamp-2 mb-2 cursor-pointer hover:text-brand-black ml-8" 
                         onClick={() => toggleEmailExpand(message.id)}
                       >
                         {message.snippet}
@@ -386,13 +386,13 @@ const messages = data || [];
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="font-semibold text-slate-700">Assunto</Label>
+              <Label className="font-semibold text-brand">Assunto</Label>
               <div className="p-3 bg-brand-light/50 border-2 border-brand-gray rounded-xl text-sm text-brand-gray">
                 {selectedMessage?.subject?.startsWith('Re:') ? selectedMessage.subject : `Re: ${selectedMessage?.subject}`}
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="font-semibold text-slate-700">Mensagem</Label>
+              <Label className="font-semibold text-brand">Mensagem</Label>
               <Textarea
                 rows={8}
                 placeholder="Escreva sua resposta aqui..."
@@ -405,7 +405,7 @@ const messages = data || [];
             {/* INÍCIO BLOCO ANEXOS - RESPONDER */}
             <div className="space-y-2 border-t border-brand-light pt-3">
               <div className="flex items-center justify-between">
-                <Label className="font-semibold text-slate-700">Anexos</Label>
+                <Label className="font-semibold text-brand">Anexos</Label>
                 <label className="cursor-pointer text-sm text-red-600 hover:text-red-700 flex items-center gap-1 font-medium bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
                   <Paperclip className="h-4 w-4" />
                   Adicionar Arquivo
@@ -415,7 +415,7 @@ const messages = data || [];
               {replyFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {replyFiles.map((f, i) => (
-                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-brand-gray shadow-sm rounded-lg text-xs font-medium text-slate-700">
+                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-brand-gray shadow-sm rounded-lg text-xs font-medium text-brand">
                       <span className="truncate max-w-[150px]">{f.name}</span>
                       <X className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors ml-1" onClick={() => setReplyFiles(prev => prev.filter((_, idx) => idx !== i))} />
                     </span>
@@ -462,7 +462,7 @@ const messages = data || [];
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="font-semibold text-slate-700">Para</Label>
+              <Label className="font-semibold text-brand">Para</Label>
               <Input
                 type="email"
                 placeholder="email@destino.com"
@@ -472,7 +472,7 @@ const messages = data || [];
               />
             </div>
             <div className="space-y-2">
-              <Label className="font-semibold text-slate-700">Assunto</Label>
+              <Label className="font-semibold text-brand">Assunto</Label>
               <Input
                 type="text"
                 placeholder="Assunto da mensagem"
@@ -482,7 +482,7 @@ const messages = data || [];
               />
             </div>
             <div className="space-y-2">
-              <Label className="font-semibold text-slate-700">Mensagem</Label>
+              <Label className="font-semibold text-brand">Mensagem</Label>
               <Textarea
                 rows={8}
                 placeholder="Escreva sua mensagem aqui..."
@@ -495,7 +495,7 @@ const messages = data || [];
             {/* INÍCIO BLOCO ANEXOS - NOVA MENSAGEM */}
             <div className="space-y-2 border-t border-brand-light pt-3">
               <div className="flex items-center justify-between">
-                <Label className="font-semibold text-slate-700">Anexos</Label>
+                <Label className="font-semibold text-brand">Anexos</Label>
                 <label className="cursor-pointer text-sm text-red-600 hover:text-red-700 flex items-center gap-1 font-medium bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
                   <Paperclip className="h-4 w-4" />
                   Adicionar Arquivo
@@ -505,7 +505,7 @@ const messages = data || [];
               {composeFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {composeFiles.map((f, i) => (
-                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-brand-gray shadow-sm rounded-lg text-xs font-medium text-slate-700">
+                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-brand-gray shadow-sm rounded-lg text-xs font-medium text-brand">
                       <span className="truncate max-w-[150px]">{f.name}</span>
                       <X className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors ml-1" onClick={() => setComposeFiles(prev => prev.filter((_, idx) => idx !== i))} />
                     </span>

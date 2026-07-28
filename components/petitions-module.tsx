@@ -91,10 +91,10 @@ export function PetitionsModule() {
           <Table>
             <TableHeader>
               <TableRow className="bg-brand-black hover:bg-brand-darkolive">
-                <TableHead className="text-slate-700 font-bold">Caso Associado</TableHead>
-                <TableHead className="text-slate-700 font-bold">Autor</TableHead>
-                <TableHead className="text-slate-700 font-bold">Status</TableHead>
-                <TableHead className="text-slate-700 font-bold">Data de Criação</TableHead>
+                <TableHead className="text-brand-beige font-bold">Caso Associado</TableHead>
+                <TableHead className="text-brand-beige font-bold">Autor</TableHead>
+                <TableHead className="text-brand-beige font-bold">Status</TableHead>
+                <TableHead className="text-brand-beige font-bold">Data de Criação</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

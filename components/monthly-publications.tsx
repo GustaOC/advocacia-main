@@ -243,12 +243,12 @@ export function MonthlyPublications() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-brand-light/50">
-                    <TableHead className="font-semibold text-slate-700">Responsável</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Total</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Concluídas</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Pendentes</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Em Atraso</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Produtividade</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Responsável</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Total</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Concluídas</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Pendentes</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Em Atraso</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Produtividade</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -312,12 +312,12 @@ export function MonthlyPublications() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-brand-light/50">
-                    <TableHead className="font-semibold text-slate-700">Data</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Total</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Concluídas</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Pendentes</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Em Atraso</TableHead>
-                    <TableHead className="font-semibold text-slate-700">Status Visual</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Data</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Total</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Concluídas</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Pendentes</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Em Atraso</TableHead>
+                    <TableHead className="font-semibold text-brand-beige">Status Visual</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

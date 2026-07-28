@@ -129,7 +129,7 @@ const TaskCard = ({
       <CardContent className="p-4 relative z-10">
         <div className="space-y-4">
           <div className="space-y-2">
-            <h4 className="font-semibold text-brand-black line-clamp-2 group-hover:text-slate-700 transition-colors">
+            <h4 className="font-semibold text-brand-black line-clamp-2 group-hover:text-brand transition-colors">
               {task.title}
             </h4>
             {task.description && (
@@ -302,7 +302,7 @@ export function TasksModule() {
   }, [visibleTasks]);
 
   const columns = [
-    { id: 'Pendente', title: 'Pendente', color: 'from-brand-black to-brand-black/90' },
+    { id: 'Pendente', title: 'Pendente', color: 'from-brand-black to-brand-black/90 text-white' },
     { id: 'Em Andamento', title: 'Em Andamento', color: 'from-blue-100 to-blue-200' },
     { id: 'Concluída', title: 'Concluída', color: 'from-green-100 to-green-200' },
   ];
@@ -366,8 +366,8 @@ export function TasksModule() {
             <Card className={`bg-gradient-to-r ${column.color} border-0 shadow-lg`}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-brand text-lg">{column.title}</h3>
-                  <Badge variant="secondary" className="bg-white/80 text-slate-700 font-semibold shadow-sm">
+                  <h3 className={`font-bold text-lg ${column.color.includes("brand-black") ? "text-white" : "text-brand"}`}>{column.title}</h3>
+                  <Badge variant="secondary" className="bg-white/80 text-brand font-semibold shadow-sm">
                     {todayTasks.filter(task => task.status === column.id).length}
                   </Badge>
                 </div>
@@ -408,7 +408,7 @@ export function TasksModule() {
           </DialogHeader>
           <div className="grid gap-6 py-4">
             <div className="space-y-2">
-              <Label className="text-slate-700 font-semibold">Título da Tarefa *</Label>
+              <Label className="text-brand font-semibold">Título da Tarefa *</Label>
               <Input 
                 value={newTask.title} 
                 onChange={e => setNewTask({...newTask, title: e.target.value})}
@@ -418,7 +418,7 @@ export function TasksModule() {
             </div>
             
             <div className="space-y-2">
-              <Label className="text-slate-700 font-semibold">Descrição</Label>
+              <Label className="text-brand font-semibold">Descrição</Label>
               <Input 
                 value={newTask.description} 
                 onChange={e => setNewTask({...newTask, description: e.target.value})}
@@ -429,7 +429,7 @@ export function TasksModule() {
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-700 font-semibold">Responsável</Label>
+                <Label className="text-brand font-semibold">Responsável</Label>
                 <Select value={newTask.assigneeId} onValueChange={id => setNewTask({...newTask, assigneeId: id})}>
                   <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                     <SelectValue placeholder="Atribuir a um membro..." />
@@ -446,7 +446,7 @@ export function TasksModule() {
               </div>
               
               <div className="space-y-2">
-                <Label className="text-slate-700 font-semibold">Prioridade</Label>
+                <Label className="text-brand font-semibold">Prioridade</Label>
                 <Select value={newTask.priority} onValueChange={(value: Task['priority']) => setNewTask({...newTask, priority: value})}>
                   <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                     <SelectValue />
@@ -461,7 +461,7 @@ export function TasksModule() {
             </div>
             
             <div className="space-y-2">
-              <Label className="text-slate-700 font-semibold">Data de Vencimento</Label>
+              <Label className="text-brand font-semibold">Data de Vencimento</Label>
               <Input 
                 type="date" 
                 value={newTask.dueDate} 
@@ -491,7 +491,7 @@ export function TasksModule() {
           {editingTask && (
             <div className="grid gap-6 py-4">
               <div className="space-y-2">
-                <Label className="text-slate-700 font-semibold">Título da Tarefa *</Label>
+                <Label className="text-brand font-semibold">Título da Tarefa *</Label>
                 <Input 
                   value={editingTask.title} 
                   onChange={e => setEditingTask({...editingTask, title: e.target.value})}
@@ -500,7 +500,7 @@ export function TasksModule() {
               </div>
               
               <div className="space-y-2">
-                <Label className="text-slate-700 font-semibold">Descrição</Label>
+                <Label className="text-brand font-semibold">Descrição</Label>
                 <Input 
                   value={editingTask.description || ''} 
                   onChange={e => setEditingTask({...editingTask, description: e.target.value})}
@@ -510,7 +510,7 @@ export function TasksModule() {
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-slate-700 font-semibold">Responsável</Label>
+                  <Label className="text-brand font-semibold">Responsável</Label>
                   <Select value={editingTask.assigned_to || ''} onValueChange={id => setEditingTask({...editingTask, assigned_to: id})}>
                     <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                       <SelectValue placeholder="Atribuir a um membro..." />
@@ -525,7 +525,7 @@ export function TasksModule() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label className="text-slate-700 font-semibold">Status</Label>
+                  <Label className="text-brand font-semibold">Status</Label>
                   <Select value={editingTask.status} onValueChange={(value: any) => setEditingTask({...editingTask, status: value})}>
                     <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                       <SelectValue />

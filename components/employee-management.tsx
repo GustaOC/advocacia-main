@@ -193,7 +193,7 @@ export function EmployeeManagement() {
                 <TableHead className="text-brand-beige font-bold">Membro</TableHead>
                 <TableHead className="text-brand-beige font-bold">Email</TableHead>
                 <TableHead className="text-brand-beige font-bold">Cargo</TableHead>
-                <TableHead className="text-right text-slate-700 font-bold">Ações</TableHead>
+                <TableHead className="text-right text-brand-beige font-bold">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -210,7 +210,7 @@ export function EmployeeManagement() {
                             </AvatarFallback>
                           </Avatar>
                         </div>
-                        <span className="font-medium group-hover:text-slate-700 transition-colors">{employee.name || employee.full_name}</span>
+                        <span className="font-medium group-hover:text-brand transition-colors">{employee.name || employee.full_name}</span>
                       </div>
                     </TableCell>
                     <TableCell className="text-brand-gray">{employee.email}</TableCell>

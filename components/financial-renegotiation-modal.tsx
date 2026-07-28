@@ -571,7 +571,7 @@ export function FinancialRenegotiationModal({
                             ? 'text-red-700'
                             : calculations.totalDifference < 0
                             ? 'text-green-700'
-                            : 'text-slate-700'
+                            : 'text-brand'
                         }`}
                       >
                         {calculations.totalDifference >= 0 ? '+' : ''}
@@ -604,7 +604,7 @@ export function FinancialRenegotiationModal({
                             ? 'text-red-700'
                             : calculations.installmentDifference < 0
                             ? 'text-green-700'
-                            : 'text-slate-700'
+                            : 'text-brand'
                         }`}
                       >
                         {calculations.installmentDifference >= 0 ? '+' : ''}
