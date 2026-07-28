@@ -418,7 +418,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                 <div className="relative flex-shrink-0 p-6 border-b border-brand-gray/20 bg-brand-light/20">
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1 -ml-1">
                                 <div className="p-1">
                                 <BrandLogo className="w-16 h-16 text-brand" />
                                 </div>
