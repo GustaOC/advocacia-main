@@ -111,9 +111,8 @@ export function CalendarModule() {
         };
       });
 
-      // Filtra as tarefas para mostrar apenas as do usuário atual, a não ser que seja admin
+      // Filtra as tarefas e eventos para mostrar estritamente as do usuário atual
       const visibleEvents = mappedEvents.filter(event => {
-        if (user?.role === 'admin' || (can && can('tasks_view_all'))) return true;
         return event.userId === user?.id;
       });
 
