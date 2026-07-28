@@ -97,8 +97,12 @@ function QuickStats() {
   const newClientsCount = entitiesData?.filter((e: any) => e.type === 'Cliente' && e.created_at && e.created_at >= currentMonthStart)?.length || (entitiesData?.filter((e: any) => e.type === 'Cliente')?.length || 0);
   
   const currentMonthRevenue = paymentsData?.reduce((acc: number, curr: any) => acc + Number(curr.amount_paid), 0) || 0;
+  const { user } = useAuth();
   
-  const pendingTasksCount = tasksData?.filter((t: any) => t.status === 'Pendente' || t.status === 'Em Andamento').length || 0;
+  const pendingTasksCount = tasksData?.filter((t: any) => 
+    (t.status === 'Pendente' || t.status === 'Em Andamento') && 
+    t.assigned_to === user?.id
+  ).length || 0;
 
   // Estado individual para cada valor animado
   const [processosAtivos, setProcessosAtivos] = useState(0);
@@ -254,6 +258,7 @@ function RecentActivity() {
     return [];
   };
 
+  const { user } = useAuth();
   const { data: casesData } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
   const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
   const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
@@ -292,10 +297,10 @@ function RecentActivity() {
     });
   }
 
-  // Adicionar Tarefas recentes
+  // Adicionar Tarefas recentes (Apenas as do usuário)
   if (tasksData) {
     tasksData.forEach(t => {
-      if (t.created_at) {
+      if (t.created_at && t.assigned_to === user?.id) {
         activities.push({
           action: "Nova tarefa",
           case: t.title,

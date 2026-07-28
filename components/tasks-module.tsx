@@ -283,9 +283,8 @@ export function TasksModule() {
   };
 
   const visibleTasks = useMemo(() => {
-    if (user?.role === 'admin' || (can && can('tasks_view_all'))) return tasks;
     return tasks.filter(task => task.assigned_to === user?.id);
-  }, [tasks, user, can]);
+  }, [tasks, user]);
 
   // Tarefas do dia atual
   const todayTasks = useMemo(() => {
