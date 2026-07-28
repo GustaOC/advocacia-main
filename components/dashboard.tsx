@@ -23,6 +23,7 @@ import { CasesModule } from "@/components/cases-module"
 import { FinancialModule } from "@/components/financial-module"
 import { PetitionsModule } from "@/components/petitions-module"
 import { EmployeeManagement } from "@/components/employee-management"
+import { BrandLogo } from "@/components/brand-logo"
 import { CalendarModule } from "@/components/calendar-module"
 import { TasksModule } from "@/components/tasks-module"
 import { ReportsModule } from "@/components/reports-module"
@@ -418,8 +419,8 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-brand rounded-md shadow-sm">
-                                    <Scale className="w-6 h-6 text-brand-beige" />
+                                <div className="p-1">
+                                    <BrandLogo className="w-10 h-10 text-brand-sage" />
                                 </div>
                                 <div>
                                     <h2 className="font-serif font-bold text-brand text-lg leading-none">Cássio Miguel</h2>
@@ -427,8 +428,8 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                 </div>
                             </div>
                         ) : (
-                            <div className="p-2 bg-brand rounded-md shadow-sm">
-                                <Scale className="w-6 h-6 text-brand-beige" />
+                            <div className="p-1">
+                                <BrandLogo className="w-10 h-10 text-brand-sage" />
                             </div>
                         )}
                     </div>
