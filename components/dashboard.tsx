@@ -67,6 +67,16 @@ const menuItems = [
 
 // Componente de estatísticas com animações aprimoradas
 function QuickStats() {
+  
+  const getArrayData = (data: any): any[] => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (data.data && Array.isArray(data.data)) return data.data;
+    if (data.cases && Array.isArray(data.cases)) return data.cases;
+    if (data.entities && Array.isArray(data.entities)) return data.entities;
+    return [];
+  };
+
   const { data: casesData } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
   const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
   const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
@@ -79,15 +89,15 @@ function QuickStats() {
     queryFn: () => apiClient.getReceivedByMonth(currentYear, currentMonth) 
   });
 
-  const activeCasesCount = casesData?.cases?.filter(c => c.status !== 'Extinto').length || 0;
+  const activeCasesCount = getArrayData(casesData).filter((c: any) => c.status !== 'Extinto').length || 0;
   
   // Clientes criados neste mês vs mês passado (simplificado)
   const currentMonthStart = new Date(currentYear, currentMonth - 1, 1).toISOString();
-  const newClientsCount = entitiesData?.filter(e => e.type === 'Cliente' && e.created_at && e.created_at >= currentMonthStart)?.length || (entitiesData?.filter(e => e.type === 'Cliente')?.length || 0);
+  const newClientsCount = entitiesData?.filter((e: any) => e.type === 'Cliente' && e.created_at && e.created_at >= currentMonthStart)?.length || (entitiesData?.filter((e: any) => e.type === 'Cliente')?.length || 0);
   
-  const currentMonthRevenue = paymentsData?.reduce((acc, curr) => acc + Number(curr.amount_paid), 0) || 0;
+  const currentMonthRevenue = paymentsData?.reduce((acc: number, curr: any) => acc + Number(curr.amount_paid), 0) || 0;
   
-  const pendingTasksCount = tasksData?.filter(t => t.status === 'Pendente' || t.status === 'Em Andamento').length || 0;
+  const pendingTasksCount = tasksData?.filter((t: any) => t.status === 'Pendente' || t.status === 'Em Andamento').length || 0;
 
   // Estado individual para cada valor animado
   const [processosAtivos, setProcessosAtivos] = useState(0);
@@ -235,6 +245,16 @@ function QuickStats() {
 
 // Componente de atividades recentes aprimorado
 function RecentActivity() {
+  
+  const getArrayData = (data: any): any[] => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (data.data && Array.isArray(data.data)) return data.data;
+    if (data.cases && Array.isArray(data.cases)) return data.cases;
+    if (data.entities && Array.isArray(data.entities)) return data.entities;
+    return [];
+  };
+
   const { data: casesData } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
   const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
   const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
@@ -242,8 +262,8 @@ function RecentActivity() {
   const activities: any[] = [];
 
   // Adicionar Casos recentes
-  if (casesData?.cases) {
-    casesData.cases.forEach(c => {
+  if (getArrayData(casesData)) {
+    getArrayData(casesData).forEach((c: any) => {
       if (c.created_at) {
         activities.push({
           action: "Processo cadastrado",

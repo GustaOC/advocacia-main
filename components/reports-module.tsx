@@ -48,31 +48,41 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
   const [period, setPeriod] = useState<'month' | 'week' | 'year'>('month');
 
   // Buscando os dados reais da API
+  
+  const getArrayData = (data: any): any[] => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (data.data && Array.isArray(data.data)) return data.data;
+    if (data.cases && Array.isArray(data.cases)) return data.cases;
+    if (data.entities && Array.isArray(data.entities)) return data.entities;
+    return [];
+  };
+
   const { data: casesData, isLoading: loadingCases } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
   const { data: entitiesData, isLoading: loadingEntities } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
   const { data: tasksData, isLoading: loadingTasks } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
   const { data: agreementsData, isLoading: loadingAgreements } = useQuery({ queryKey: ['agreements'], queryFn: () => apiClient.getFinancialAgreementsPaginated(1, 1000) });
 
   // Cálculos baseados nos dados reais
-  const activeClientsCount = entitiesData?.filter(e => e.type === 'Cliente').length || 0;
+  const activeClientsCount = entitiesData?.filter((e: any) => e.type === 'Cliente').length || 0;
   
-  const inProgressCases = casesData?.cases?.filter(c => c.status === 'Em andamento').length || 0;
+  const inProgressCases = getArrayData(casesData).filter((c: any) => c.status === 'Em andamento').length || 0;
   
   // Receita baseada nos acordos financeiros
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   
   const revenueAmount = useMemo(() => {
-    if (!agreementsData?.data) return 0;
-    return agreementsData.data.reduce((acc, curr) => acc + (Number(curr.paid_amount) || 0), 0);
+    if (!getArrayData(agreementsData)) return 0;
+    return getArrayData(agreementsData).reduce((acc: number, curr: any) => acc + (Number(curr.paid_amount) || 0), 0);
   }, [agreementsData]);
 
-  const urgentDeadlines = tasksData?.filter(t => t.priority === 'Alta' && t.status !== 'Concluída').length || 0;
+  const urgentDeadlines = tasksData?.filter((t: any) => t.priority === 'Alta' && t.status !== 'Concluída').length || 0;
 
   // Calculando dados dos Gráficos dinamicamente (Baseado no ano atual)
   const casesChartData = useMemo(() => {
     const data = MONTHS.map(name => ({ name, value: 0 }));
-    casesData?.cases?.forEach(c => {
+    getArrayData(casesData).forEach((c: any) => {
       if (c.created_at) {
         const date = new Date(c.created_at);
         const item = data[date.getMonth()];
@@ -86,7 +96,7 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
 
   const financialChartData = useMemo(() => {
     const data = MONTHS.map(name => ({ name, value: 0 }));
-    agreementsData?.data?.forEach(a => {
+    getArrayData(agreementsData).forEach((a: any) => {
       if (a.created_at) {
         const date = new Date(a.created_at);
         const item = data[date.getMonth()];
