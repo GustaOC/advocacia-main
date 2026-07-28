@@ -63,21 +63,44 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
   const { data: tasksData, isLoading: loadingTasks } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
   const { data: agreementsData, isLoading: loadingAgreements } = useQuery({ queryKey: ['agreements'], queryFn: () => apiClient.getFinancialAgreementsPaginated(1, 1000) });
 
+  const isWithinPeriod = (dateString: string | undefined, p: 'week' | 'month' | 'year') => {
+    if (!dateString) return false;
+    const date = new Date(dateString);
+    const now = new Date();
+    
+    if (p === 'week') {
+      const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      return date >= weekAgo && date <= now;
+    } else if (p === 'month') {
+      return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+    } else if (p === 'year') {
+      return date.getFullYear() === now.getFullYear();
+    }
+    return true;
+  };
+
   // Cálculos baseados nos dados reais
-  const activeClientsCount = entitiesData?.filter((e: any) => e.type === 'Cliente').length || 0;
+  const activeClientsCount = useMemo(() => {
+    return entitiesData?.filter((e: any) => e.type === 'Cliente' && isWithinPeriod(e.created_at, period)).length || 0;
+  }, [entitiesData, period]);
   
-  const inProgressCases = getArrayData(casesData).filter((c: any) => c.status === 'Em andamento').length || 0;
+  const inProgressCases = useMemo(() => {
+    return getArrayData(casesData).filter((c: any) => c.status === 'Em andamento' && isWithinPeriod(c.created_at, period)).length || 0;
+  }, [casesData, period]);
   
   // Receita baseada nos acordos financeiros
   const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth();
   
   const revenueAmount = useMemo(() => {
     if (!getArrayData(agreementsData)) return 0;
-    return getArrayData(agreementsData).reduce((acc: number, curr: any) => acc + (Number(curr.paid_amount) || 0), 0);
-  }, [agreementsData]);
+    return getArrayData(agreementsData)
+      .filter((a: any) => isWithinPeriod(a.created_at, period))
+      .reduce((acc: number, curr: any) => acc + (Number(curr.paid_amount) || 0), 0);
+  }, [agreementsData, period]);
 
-  const urgentDeadlines = tasksData?.filter((t: any) => t.priority === 'Alta' && t.status !== 'Concluída').length || 0;
+  const urgentDeadlines = useMemo(() => {
+    return tasksData?.filter((t: any) => t.priority === 'Alta' && t.status !== 'Concluída' && isWithinPeriod(t.created_at, period)).length || 0;
+  }, [tasksData, period]);
 
   // Calculando dados dos Gráficos dinamicamente (Baseado no ano atual)
   const casesChartData = useMemo(() => {
