@@ -244,138 +244,7 @@ function QuickStats() {
   );
 }
 
-// Componente de atividades recentes aprimorado
 
-// Componente de atividades recentes aprimorado
-function RecentActivity() {
-  
-  const getArrayData = (data: any): any[] => {
-    if (!data) return [];
-    if (Array.isArray(data)) return data;
-    if (data.data && Array.isArray(data.data)) return data.data;
-    if (data.cases && Array.isArray(data.cases)) return data.cases;
-    if (data.entities && Array.isArray(data.entities)) return data.entities;
-    return [];
-  };
-
-  const { user } = useAuth();
-  const { data: casesData } = useQuery({ queryKey: ['cases'], queryFn: () => apiClient.getCases() });
-  const { data: entitiesData } = useQuery({ queryKey: ['entities'], queryFn: () => apiClient.getEntities() });
-  const { data: tasksData } = useQuery({ queryKey: ['tasks'], queryFn: () => apiClient.getTasks() });
-
-  const activities: any[] = [];
-
-  // Adicionar Casos recentes
-  if (getArrayData(casesData)) {
-    getArrayData(casesData).forEach((c: any) => {
-      if (c.created_at) {
-        activities.push({
-          action: "Processo cadastrado",
-          case: c.title || `Processo ${c.case_number || 'Sem número'}`,
-          date: new Date(c.created_at),
-          type: "case",
-          icon: Briefcase,
-          color: "bg-brand"
-        });
-      }
-    });
-  }
-
-  // Adicionar Entidades recentes
-  if (entitiesData) {
-    entitiesData.forEach(e => {
-      if (e.created_at) {
-        activities.push({
-          action: e.type === 'Cliente' ? "Cliente adicionado" : "Parte adicionada",
-          case: e.name,
-          date: new Date(e.created_at),
-          type: "client",
-          icon: Users,
-          color: "bg-brand-sage"
-        });
-      }
-    });
-  }
-
-  // Adicionar Tarefas recentes (Apenas as do usuário)
-  if (tasksData) {
-    tasksData.forEach(t => {
-      if (t.created_at && t.assigned_to === user?.id) {
-        activities.push({
-          action: "Nova tarefa",
-          case: t.title,
-          date: new Date(t.created_at),
-          type: "calendar",
-          icon: CheckSquare,
-          color: "bg-brand"
-        });
-      }
-    });
-  }
-
-  // Ordenar por data (mais recentes primeiro) e pegar os 5 primeiros
-  activities.sort((a, b) => b.date.getTime() - a.date.getTime());
-  const recentActivities = activities.slice(0, 5).map(act => {
-    // Formatação de tempo simplificada
-    const diffHours = Math.floor((new Date().getTime() - act.date.getTime()) / (1000 * 60 * 60));
-    let timeStr = "";
-    if (diffHours < 1) timeStr = "Agora mesmo";
-    else if (diffHours < 24) timeStr = `${diffHours} hora${diffHours > 1 ? 's' : ''} atrás`;
-    else timeStr = `${Math.floor(diffHours/24)} dia${Math.floor(diffHours/24) > 1 ? 's' : ''} atrás`;
-    
-    return { ...act, time: timeStr };
-  });
-
-  return (
-    <Card className="bg-white border border-brand-gray/20 shadow-sm rounded-sm h-full">
-      <CardHeader className="border-b border-brand-gray/10 pb-4">
-        <CardTitle className="text-xl font-serif text-brand-black flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
-              <Activity className="w-4 h-4 text-brand" />
-            </div>
-            Atividades Recentes
-          </div>
-          <Badge className="bg-brand-light text-brand text-xs px-2 py-1 rounded-sm">
-            Ao vivo
-          </Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-0 pt-4">
-        {recentActivities.length > 0 ? recentActivities.map((activity, index) => (
-          <div 
-            key={index} 
-            className="flex items-start gap-4 p-4 border-b border-brand-gray/10 last:border-0 hover:bg-brand-light/10 transition-colors duration-200 cursor-pointer"
-          >
-            <div className="relative">
-              <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
-                <activity.icon className="w-4 h-4 text-brand" />
-              </div>
-            </div>
-            
-            <div className="flex-1 space-y-1">
-              <p className="font-medium text-brand-black text-sm">
-                {activity.action}
-              </p>
-              <p className="text-sm text-brand-gray">{activity.case}</p>
-              <div className="flex items-center gap-2 text-xs text-brand-sage">
-                <Clock className="w-3 h-3" />
-                {activity.time}
-              </div>
-            </div>
-            
-            <ChevronRight className="w-4 h-4 text-brand-gray/50" />
-          </div>
-        )) : (
-          <div className="p-8 text-center text-brand-sage flex flex-col items-center">
-             <Activity className="w-8 h-8 mb-2 opacity-20" />
-             <p>Nenhuma atividade recente encontrada.</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
 
 // Badge component helper
 function Badge({ className, children }: { className: string; children: ReactNode }) {
@@ -579,15 +448,10 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                     {activeTab === 'overview' && (
                         <div className="space-y-8 animate-fadeIn">
                             <QuickStats />
-                            <div className="grid lg:grid-cols-3 gap-8">
-                                <div className="lg:col-span-2">
-                                    <ReportsModule onNavigate={(tab: string, filters: GlobalFilters = {}) => {
-                                        setActiveTab(tab);
-                                    }} />
-                                </div>
-                                <div className="space-y-6">
-                                    <RecentActivity />
-                                </div>
+                            <div className="w-full">
+                                <ReportsModule onNavigate={(tab: string, filters: GlobalFilters = {}) => {
+                                    setActiveTab(tab);
+                                }} />
                             </div>
                         </div>
                     )}
