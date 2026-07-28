@@ -40,7 +40,7 @@ export default function Header() {
       <header
         className={`fixed top-0 z-50 w-full transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-xl border-b border-slate-200/50 shadow-lg'
+            ? 'bg-white/95 backdrop-blur-xl border-b border-brand-gray/50 shadow-lg'
             : 'bg-transparent'
         }`}
       >
@@ -133,7 +133,7 @@ export default function Header() {
       >
         {/* Overlay */}
         <div
-          className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-brand-black/80 backdrop-blur-sm"
           onClick={toggleMenu}
         ></div>
         
@@ -145,7 +145,7 @@ export default function Header() {
         >
           <div className="flex flex-col h-full">
             {/* Header do Menu */}
-            <div className="flex items-center justify-between p-6 border-b border-slate-200">
+            <div className="flex items-center justify-between p-6 border-b border-brand-gray">
               <div className="relative w-36 h-10">
                 <Image
                   src="/logo2.png"
@@ -173,11 +173,11 @@ export default function Header() {
                   </Link>
                 ))}
                 
-                <hr className="border-slate-200" />
+                <hr className="border-brand-gray" />
                 
                 {/* Informações de Contato */}
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-slate-900">Contato Direto</h3>
+                  <h3 className="font-semibold text-brand-black">Contato Direto</h3>
                   
                   <button
                     onClick={() => {handleCall(); toggleMenu();}}
@@ -186,7 +186,7 @@ export default function Header() {
                     <Phone className="h-5 w-5 mr-3" />
                     <div>
                       <div className="font-medium">(67) 99644-9627</div>
-                      <div className="text-sm text-slate-500">Toque para ligar</div>
+                      <div className="text-sm text-brand-sage">Toque para ligar</div>
                     </div>
                   </button>
                   
@@ -197,7 +197,7 @@ export default function Header() {
                     <MessageCircle className="h-5 w-5 mr-3" />
                     <div>
                       <div className="font-medium">WhatsApp</div>
-                      <div className="text-sm text-slate-500">Atendimento 24h</div>
+                      <div className="text-sm text-brand-sage">Atendimento 24h</div>
                     </div>
                   </button>
                 </div>
@@ -205,7 +205,7 @@ export default function Header() {
             </nav>
             
             {/* Footer do Menu */}
-            <div className="p-6 border-t border-slate-200 space-y-3">
+            <div className="p-6 border-t border-brand-gray space-y-3">
               <Button
                 asChild
                 className="w-full font-semibold"
@@ -216,7 +216,7 @@ export default function Header() {
                 </Link>
               </Button>
               
-              <div className="text-center text-sm text-slate-500">
+              <div className="text-center text-sm text-brand-sage">
                 <div>Campo Grande, MS</div>
                 <div>Atendimento 24h via WhatsApp</div>
               </div>

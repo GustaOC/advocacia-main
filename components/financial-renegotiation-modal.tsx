@@ -263,7 +263,7 @@ export function FinancialRenegotiationModal({
             <RefreshCw className="mr-2 h-6 w-6 text-brand-beige" />
             Renegociar Acordo Financeiro #{agreement.id}
           </DialogTitle>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-gray">
             Cliente:{' '}
             <span className="font-semibold">
               {agreement.client_entities?.name ?? '—'}
@@ -278,7 +278,7 @@ export function FinancialRenegotiationModal({
 
         <div className="flex-1 overflow-y-auto space-y-6">
           {/* Acordo Atual */}
-          <Card className="border-slate-200">
+          <Card className="border-brand-gray">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-lg">
                 <History className="mr-2 h-5 w-5 text-brand" />
@@ -287,9 +287,9 @@ export function FinancialRenegotiationModal({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="text-center p-3 bg-blue-50 rounded-lg">
+                <div className="text-center p-3 bg-brand-light/50 rounded-lg">
                   <p className="text-xs text-brand font-medium">Valor Total</p>
-                  <p className="text-lg font-bold text-blue-800">
+                  <p className="text-lg font-bold text-brand">
                     {formatCurrencyNumber(totalAmount)}
                   </p>
                 </div>
@@ -299,9 +299,9 @@ export function FinancialRenegotiationModal({
                     {formatCurrencyNumber(Number(agreement.installment_value ?? 0))}
                   </p>
                 </div>
-                <div className="text-center p-3 bg-brand-olive rounded-lg">
-                  <p className="text-xs text-brand-olive font-medium">Parcelas</p>
-                  <p className="text-lg font-bold text-brand-olive">
+                <div className="text-center p-3 bg-brand-gray rounded-lg">
+                  <p className="text-xs text-brand-gray font-medium">Parcelas</p>
+                  <p className="text-lg font-bold text-brand-gray">
                     {agreement.number_of_installments}x
                   </p>
                 </div>
@@ -315,7 +315,7 @@ export function FinancialRenegotiationModal({
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200">
+          <Card className="border-brand-gray">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-lg">
                 <Calculator className="mr-2 h-5 w-5 text-green-600" />
@@ -338,14 +338,14 @@ export function FinancialRenegotiationModal({
                     }
                     className="h-11 text-lg font-semibold"
                   />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Deixe vazio para manter o valor atual
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <Target className="h-4 w-4 text-brand-olive" />
+                    <Target className="h-4 w-4 text-brand-gray" />
                     Novo Número de Parcelas
                   </Label>
                   <Input
@@ -359,7 +359,7 @@ export function FinancialRenegotiationModal({
                     }
                     className="h-11"
                   />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Deixe vazio para manter as parcelas atuais
                   </p>
                 </div>
@@ -380,7 +380,7 @@ export function FinancialRenegotiationModal({
                     }
                     className="h-11"
                   />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Valor adicional de entrada na renegociação
                   </p>
                 </div>
@@ -398,7 +398,7 @@ export function FinancialRenegotiationModal({
                     }
                     className="h-11"
                   />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Data da primeira parcela renegociada
                   </p>
                 </div>
@@ -423,7 +423,7 @@ export function FinancialRenegotiationModal({
                     }
                     className="h-11"
                   />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Percentual de desconto sobre o valor total
                   </p>
                 </div>
@@ -442,7 +442,7 @@ export function FinancialRenegotiationModal({
                     }
                     className="h-11"
                   />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Valor fixo de taxas ou custas adicionais
                   </p>
                 </div>
@@ -450,7 +450,7 @@ export function FinancialRenegotiationModal({
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200">
+          <Card className="border-brand-gray">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center justify-between text-lg">
                 <div className="flex items-center">
@@ -471,20 +471,20 @@ export function FinancialRenegotiationModal({
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Valores Atuais */}
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-slate-800 text-center">
+                    <h4 className="font-semibold text-brand text-center">
                       ATUAL
                     </h4>
                     <div className="space-y-2">
-                      <div className="flex justify-between p-3 bg-slate-50 rounded">
-                        <span className="text-sm text-slate-600">
+                      <div className="flex justify-between p-3 bg-brand-light/50 rounded">
+                        <span className="text-sm text-brand-gray">
                           Valor Total:
                         </span>
                         <span className="font-semibold">
                           {formatCurrencyNumber(totalAmount)}
                         </span>
                       </div>
-                      <div className="flex justify-between p-3 bg-slate-50 rounded">
-                        <span className="text-sm text-slate-600">
+                      <div className="flex justify-between p-3 bg-brand-light/50 rounded">
+                        <span className="text-sm text-brand-gray">
                           Por Parcela:
                         </span>
                         <span className="font-semibold">
@@ -493,8 +493,8 @@ export function FinancialRenegotiationModal({
                           )}
                         </span>
                       </div>
-                      <div className="flex justify-between p-3 bg-slate-50 rounded">
-                        <span className="text-sm text-slate-600">Parcelas:</span>
+                      <div className="flex justify-between p-3 bg-brand-light/50 rounded">
+                        <span className="text-sm text-brand-gray">Parcelas:</span>
                         <span className="font-semibold">
                           {agreement.number_of_installments}x
                         </span>
@@ -504,31 +504,31 @@ export function FinancialRenegotiationModal({
 
                   {/* Valores Novos */}
                   <div className="space-y-3">
-                    <h4 className="font-semibold text-slate-800 text-center">
+                    <h4 className="font-semibold text-brand text-center">
                       NOVO
                     </h4>
                     <div className="space-y-2">
-                      <div className="flex justify-between p-3 bg-blue-50 rounded">
+                      <div className="flex justify-between p-3 bg-brand-light/50 rounded">
                         <span className="text-sm text-brand">
                           Valor Total:
                         </span>
-                        <span className="font-semibold text-blue-800">
+                        <span className="font-semibold text-brand">
                           {formatCurrencyNumber(calculations.finalTotal)}
                         </span>
                       </div>
-                      <div className="flex justify-between p-3 bg-blue-50 rounded">
+                      <div className="flex justify-between p-3 bg-brand-light/50 rounded">
                         <span className="text-sm text-brand">
                           Por Parcela:
                         </span>
-                        <span className="font-semibold text-blue-800">
+                        <span className="font-semibold text-brand">
                           {formatCurrencyNumber(
                             calculations.newInstallmentValue
                           )}
                         </span>
                       </div>
-                      <div className="flex justify-between p-3 bg-blue-50 rounded">
+                      <div className="flex justify-between p-3 bg-brand-light/50 rounded">
                         <span className="text-sm text-brand">Parcelas:</span>
-                        <span className="font-semibold text-blue-800">
+                        <span className="font-semibold text-brand">
                           {formData.new_installments ??
                             agreement.number_of_installments}
                           x
@@ -542,7 +542,7 @@ export function FinancialRenegotiationModal({
 
                 {/* Diferenças */}
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-slate-800 text-center">
+                  <h4 className="font-semibold text-brand text-center">
                     DIFERENÇAS
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -552,7 +552,7 @@ export function FinancialRenegotiationModal({
                           ? 'bg-red-50 border border-red-200'
                           : calculations.totalDifference < 0
                           ? 'bg-green-50 border border-green-200'
-                          : 'bg-slate-50 border border-slate-200'
+                          : 'bg-brand-light/50 border border-brand-gray'
                       }`}
                     >
                       <div className="flex items-center justify-center gap-1 mb-1">
@@ -561,7 +561,7 @@ export function FinancialRenegotiationModal({
                         ) : calculations.totalDifference < 0 ? (
                           <TrendingDown className="h-4 w-4 text-green-600" />
                         ) : (
-                          <Target className="h-4 w-4 text-slate-600" />
+                          <Target className="h-4 w-4 text-brand-gray" />
                         )}
                         <span className="text-xs font-medium">Valor Total</span>
                       </div>
@@ -585,7 +585,7 @@ export function FinancialRenegotiationModal({
                           ? 'bg-red-50 border border-red-200'
                           : calculations.installmentDifference < 0
                           ? 'bg-green-50 border border-green-200'
-                          : 'bg-slate-50 border border-slate-200'
+                          : 'bg-brand-light/50 border border-brand-gray'
                       }`}
                     >
                       <div className="flex items-center justify-center gap-1 mb-1">
@@ -594,7 +594,7 @@ export function FinancialRenegotiationModal({
                         ) : calculations.installmentDifference < 0 ? (
                           <TrendingDown className="h-4 w-4 text-green-600" />
                         ) : (
-                          <Target className="h-4 w-4 text-slate-600" />
+                          <Target className="h-4 w-4 text-brand-gray" />
                         )}
                         <span className="text-xs font-medium">Por Parcela</span>
                       </div>
@@ -614,12 +614,12 @@ export function FinancialRenegotiationModal({
                       </p>
                     </div>
 
-                    <div className="p-4 bg-blue-50 rounded-lg text-center border border-blue-200">
+                    <div className="p-4 bg-brand-light/50 rounded-lg text-center border border-brand-light">
                       <div className="flex items-center justify-center gap-1 mb-1">
                         <CheckCircle className="h-4 w-4 text-brand" />
                         <span className="text-xs font-medium">Economia</span>
                       </div>
-                      <p className="text-lg font-bold text-blue-700">
+                      <p className="text-lg font-bold text-brand">
                         {formatCurrencyNumber(calculations.discountAmount)}
                       </p>
                     </div>
@@ -629,10 +629,10 @@ export function FinancialRenegotiationModal({
             )}
           </Card>
 
-          <Card className="border-slate-200">
+          <Card className="border-brand-gray">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-lg">
-                <FileText className="mr-2 h-5 w-5 text-slate-600" />
+                <FileText className="mr-2 h-5 w-5 text-brand-gray" />
                 Motivo da Renegociação *
               </CardTitle>
             </CardHeader>
@@ -647,10 +647,10 @@ export function FinancialRenegotiationModal({
                   className="min-h-24"
                 />
                 <div className="flex justify-between items-center">
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     Descreva detalhadamente o motivo da renegociação
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-brand-sage">
                     {formData.renegotiation_reason.length}/500
                   </p>
                 </div>
@@ -661,7 +661,7 @@ export function FinancialRenegotiationModal({
 
         <DialogFooter className="pt-6 border-t">
           <div className="flex justify-between items-center w-full">
-            <div className="text-sm text-slate-600">
+            <div className="text-sm text-brand-gray">
               <span className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
                 Renegociação #{(agreement.renegotiation_count ?? 0) + 1}

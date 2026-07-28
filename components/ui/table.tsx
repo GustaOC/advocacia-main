@@ -6,7 +6,7 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="relative w-full overflow-auto rounded-xl border border-slate-200/50 bg-white/80 backdrop-blur-sm">
+  <div className="relative w-full overflow-auto rounded-xl border border-brand-gray/50 bg-white/80 backdrop-blur-sm">
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
@@ -23,7 +23,7 @@ const TableHeader = React.forwardRef<
   <thead 
     ref={ref} 
     className={cn(
-      "bg-gradient-to-r from-brand-black to-brand-black/90 sticky top-0 border-b border-slate-200/50",
+      "bg-gradient-to-r from-brand-black to-brand-black/90 sticky top-0 border-b border-brand-gray/50",
       className
     )} 
     {...props} 
@@ -65,7 +65,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "border-b border-slate-100 transition-all duration-200 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent data-[state=selected]:bg-slate-100/50",
+      "border-b border-brand-light transition-all duration-200 hover:bg-gradient-to-r hover:from-slate-50/50 hover:to-transparent data-[state=selected]:bg-brand-beige/50/50",
       className
     )}
     {...props}
@@ -95,7 +95,7 @@ const TableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      "p-4 align-middle [&:has([role=checkbox])]:pr-0 px-6 py-4 text-slate-600",
+      "p-4 align-middle [&:has([role=checkbox])]:pr-0 px-6 py-4 text-brand-gray",
       className
     )}
     {...props}

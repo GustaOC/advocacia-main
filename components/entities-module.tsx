@@ -65,7 +65,7 @@ function EntitiesStats({ clients, listType }: { clients: Client[], listType: str
     { label: "Total de Clientes", value: totalClientes.toString(), icon: Users, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+12%" },
     { label: "Total de Executados", value: totalExecutados.toString(), icon: Building2, color: "text-red-600", bg: "from-red-50 to-red-100", trend: "+8%" },
     { label: "Cadastros Ativos", value: clients.length.toString(), icon: User, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+15%" },
-    { label: "Novos este Mês", value: "23", icon: TrendingUp, color: "text-brand-olive", bg: "from-purple-50 to-purple-100", trend: "+25%" },
+    { label: "Novos este Mês", value: "23", icon: TrendingUp, color: "text-brand-gray", bg: "from-purple-50 to-purple-100", trend: "+25%" },
   ];
 
   return (
@@ -79,8 +79,8 @@ function EntitiesStats({ clients, listType }: { clients: Client[], listType: str
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -269,8 +269,8 @@ export default function EntitiesModule() {
     return (
       <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
-          <p className="text-slate-600 font-medium">Carregando cadastros...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
+          <p className="text-brand-gray font-medium">Carregando cadastros...</p>
         </div>
       </div>
     );
@@ -295,7 +295,7 @@ export default function EntitiesModule() {
           <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
           <div className="relative z-10">
             <h2 className="text-4xl font-bold mb-3">Gestão de Clientes e Partes</h2>
-            <p className="text-emerald-100 text-xl">Acesse a pasta virtual de cada entidade para ver processos e documentos.</p>
+            <p className="text-brand-gray text-xl">Acesse a pasta virtual de cada entidade para ver processos e documentos.</p>
           </div>
         </div>
 
@@ -305,17 +305,17 @@ export default function EntitiesModule() {
           <CardContent className="p-6">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               <div className="relative w-full lg:max-w-md">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 h-5 w-5" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-gray h-5 w-5" />
                 <Input
                   placeholder="Buscar por nome ou documento..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-emerald-400 rounded-xl"
+                  className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl"
                 />
               </div>
               <div className="flex gap-2">
                 <Select value={listType} onValueChange={(v) => setListType(v as 'Cliente' | 'Executado')}>
-                  <SelectTrigger className="h-12 w-40 bg-white border-2 border-slate-200 rounded-xl">
+                  <SelectTrigger className="h-12 w-40 bg-white border-2 border-brand-gray rounded-xl">
                     <SelectValue placeholder="Tipo" />
                   </SelectTrigger>
                   <SelectContent>
@@ -324,7 +324,7 @@ export default function EntitiesModule() {
                   </SelectContent>
                 </Select>
                 <Select value={caseStatusFilter} onValueChange={(v) => setCaseStatusFilter(v as 'Todos' | 'Com Processos' | 'Sem Processos')}>
-                  <SelectTrigger className="h-12 w-48 bg-white border-2 border-slate-200 rounded-xl">
+                  <SelectTrigger className="h-12 w-48 bg-white border-2 border-brand-gray rounded-xl">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -335,10 +335,10 @@ export default function EntitiesModule() {
                 </Select>
               </div>
               <div className="flex gap-2 ml-auto">
-                <Button onClick={() => setImportModal({isOpen: true, type: 'Cliente'})} variant="outline" className="border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-xl">
+                <Button onClick={() => setImportModal({isOpen: true, type: 'Cliente'})} variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-light/50 rounded-xl">
                   <Upload className="mr-2 h-4 w-4" /> Importar Clientes
                 </Button>
-                <Button onClick={() => setImportModal({isOpen: true, type: 'Executado'})} variant="outline" className="border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 rounded-xl">
+                <Button onClick={() => setImportModal({isOpen: true, type: 'Executado'})} variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-light/50 rounded-xl">
                   <FileUp className="mr-2 h-4 w-4" /> Importar Executados
                 </Button>
                 <Button onClick={() => handleOpenModal()} className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
@@ -371,7 +371,7 @@ export default function EntitiesModule() {
                           <div className="p-2 rounded-lg bg-gradient-to-br from-brand-sage to-brand-sage/90 group-hover:scale-110 transition-transform">
                             <User className="h-4 w-4 text-brand-sage" />
                           </div>
-                          <span className="group-hover:text-emerald-700 transition-colors">{client.name}</span>
+                          <span className="group-hover:text-brand transition-colors">{client.name}</span>
                           {client.has_extrajudicial_agreement && (
                             <Badge variant="outline" className="ml-2 text-brand-sage border-brand-beige bg-brand-beige">Acordo extrajudicial vigente</Badge>
                           )}
@@ -383,14 +383,14 @@ export default function EntitiesModule() {
                           {client.type}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-slate-600">{client.city || "-"}</TableCell>
-                      <TableCell className="text-slate-600">{maskPhone(client.cellphone1 || client.phone || "") || "-"}</TableCell>
+                      <TableCell className="text-brand-gray">{client.city || "-"}</TableCell>
+                      <TableCell className="text-brand-gray">{maskPhone(client.cellphone1 || client.phone || "") || "-"}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button size="sm" variant="ghost" onClick={() => handleView(client)} className="hover:bg-emerald-100 hover:text-emerald-700 rounded-lg">
+                          <Button size="sm" variant="ghost" onClick={() => handleView(client)} className="hover:bg-brand-light hover:text-brand rounded-lg">
                             <FolderOpen className="h-4 w-4 mr-1" /> Abrir
                           </Button>
-                          <Button size="sm" variant="ghost" onClick={() => handleEdit(client)} className="hover:bg-blue-100 hover:text-blue-700 rounded-lg">
+                          <Button size="sm" variant="ghost" onClick={() => handleEdit(client)} className="hover:bg-brand-light hover:text-brand rounded-lg">
                             <Edit className="h-4 w-4 mr-1" /> Editar
                           </Button>
                           <Button size="sm" variant="ghost" onClick={() => handleDelete(client.id)} className="hover:bg-red-100 hover:text-red-700 rounded-lg">
@@ -407,9 +407,9 @@ export default function EntitiesModule() {
         ) : (
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
             <CardContent className="py-16 text-center">
-              <User className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-600 mb-2">Nenhum registro encontrado</h3>
-              <p className="text-slate-500">Nenhum {listType} encontrado com os filtros aplicados.</p>
+              <User className="h-16 w-16 text-brand-gray mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-brand-gray mb-2">Nenhum registro encontrado</h3>
+              <p className="text-brand-sage">Nenhum {listType} encontrado com os filtros aplicados.</p>
             </CardContent>
           </Card>
         )}
@@ -420,14 +420,14 @@ export default function EntitiesModule() {
         <DialogContent className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Importar {importModal.type === 'Executado' ? 'Executados' : 'Clientes'}</DialogTitle>
-            <DialogDescription className="text-slate-600">Envie uma planilha .xlsx com as colunas esperadas (ex.: Nome Completo, Cpf, Email...).</DialogDescription>
+            <DialogDescription className="text-brand-gray">Envie uma planilha .xlsx com as colunas esperadas (ex.: Nome Completo, Cpf, Email...).</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div>
               <Label className="text-slate-700 font-semibold">Tipo</Label>
               <Select value={importModal.type} onValueChange={(v) => setImportModal((m) => ({...m, type: v as 'Cliente' | 'Executado'}))}>
-                <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Cliente">Cliente</SelectItem>
                   <SelectItem value="Executado">Executado</SelectItem>
@@ -437,12 +437,12 @@ export default function EntitiesModule() {
 
             <div>
               <Label className="text-slate-700 font-semibold">Arquivo (.xlsx)</Label>
-              <Input type="file" accept=".xlsx,.xls" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="bg-white border-2 border-slate-200 rounded-xl" />
+              <Input type="file" accept=".xlsx,.xls" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="bg-white border-2 border-brand-gray rounded-xl" />
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setImportModal((m)=>({...m, isOpen:false})); setFile(null); }} className="border-2 border-slate-200 rounded-xl" disabled={isImporting}>Cancelar</Button>
+            <Button variant="outline" onClick={() => { setImportModal((m)=>({...m, isOpen:false})); setFile(null); }} className="border-2 border-brand-gray rounded-xl" disabled={isImporting}>Cancelar</Button>
             <Button onClick={handleImport} disabled={isImporting} className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
               {isImporting ? <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Upload className="mr-2 h-4 w-4" />}
               {isImporting ? "Importando..." : "Importar"}
@@ -456,7 +456,7 @@ export default function EntitiesModule() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">{isEditMode ? "Editar Cadastro" : "Novo Cadastro"}</DialogTitle>
-            <DialogDescription className="text-slate-600">Preencha os dados da entidade. Campos com * são obrigatórios.</DialogDescription>
+            <DialogDescription className="text-brand-gray">Preencha os dados da entidade. Campos com * são obrigatórios.</DialogDescription>
           </DialogHeader>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
@@ -467,7 +467,7 @@ export default function EntitiesModule() {
                   value={(currentClient.type as any) || listType}
                   onValueChange={(v) => setCurrentClient((c) => ({ ...c, type: v }))}
                 >
-                  <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione" /></SelectTrigger>
+                  <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Selecione" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Cliente">Cliente</SelectItem>
                     <SelectItem value="Executado">Executado</SelectItem>
@@ -476,35 +476,35 @@ export default function EntitiesModule() {
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">Nome Completo *</Label>
-                <Input value={currentClient.name || ""} onChange={(e) => handleInputChange('name', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.name || ""} onChange={(e) => handleInputChange('name', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">CPF/CNPJ *</Label>
-                <Input value={currentClient.document || ""} onChange={(e) => handleInputChange('document', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.document || ""} onChange={(e) => handleInputChange('document', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">RG</Label>
-                <Input value={currentClient.rg || ""} onChange={(e) => handleInputChange('rg', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.rg || ""} onChange={(e) => handleInputChange('rg', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
                <div>
                 <Label className="text-slate-700 font-semibold">Data de Nascimento</Label>
-                <Input type="date" value={currentClient.birth_date || ""} onChange={(e) => handleInputChange('birth_date', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input type="date" value={currentClient.birth_date || ""} onChange={(e) => handleInputChange('birth_date', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
             </div>
 
             <div className="space-y-4">
               <div>
                 <Label className="text-slate-700 font-semibold">Email</Label>
-                <Input type="email" value={currentClient.email || ""} onChange={(e) => handleInputChange('email', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input type="email" value={currentClient.email || ""} onChange={(e) => handleInputChange('email', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">Telefone Celular</Label>
-                <Input value={currentClient.cellphone1 || ""} onChange={(e) => handleInputChange('cellphone1', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.cellphone1 || ""} onChange={(e) => handleInputChange('cellphone1', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
                <div>
                 <Label className="text-slate-700 font-semibold">Estado Civil</Label>
                 <Select value={currentClient.marital_status || ""} onValueChange={(v) => handleInputChange('marital_status', v)}>
-                    <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                    <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger>
                     <SelectContent>
                         <SelectItem value="Solteiro(a)">Solteiro(a)</SelectItem>
                         <SelectItem value="Casado(a)">Casado(a)</SelectItem>
@@ -516,48 +516,48 @@ export default function EntitiesModule() {
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">Profissão</Label>
-                <Input value={currentClient.profession || ""} onChange={(e) => handleInputChange('profession', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.profession || ""} onChange={(e) => handleInputChange('profession', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">Nacionalidade</Label>
-                <Input value={currentClient.nationality || ""} onChange={(e) => handleInputChange('nationality', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.nationality || ""} onChange={(e) => handleInputChange('nationality', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
             </div>
 
             <div className="space-y-4">
                <div>
                 <Label className="text-slate-700 font-semibold">Endereço</Label>
-                <Input value={currentClient.address || ""} onChange={(e) => handleInputChange('address', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.address || ""} onChange={(e) => handleInputChange('address', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Label className="text-slate-700 font-semibold">Nº</Label>
-                  <Input value={currentClient.address_number || ""} onChange={(e) => handleInputChange('address_number', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                  <Input value={currentClient.address_number || ""} onChange={(e) => handleInputChange('address_number', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
                  <div>
                   <Label className="text-slate-700 font-semibold">Bairro</Label>
-                  <Input value={currentClient.neighborhood || ""} onChange={(e) => handleInputChange('neighborhood', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                  <Input value={currentClient.neighborhood || ""} onChange={(e) => handleInputChange('neighborhood', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Label className="text-slate-700 font-semibold">Cidade</Label>
-                  <Input value={currentClient.city || ""} onChange={(e) => handleInputChange('city', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                  <Input value={currentClient.city || ""} onChange={(e) => handleInputChange('city', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
                 <div>
                   <Label className="text-slate-700 font-semibold">Estado</Label>
-                  <Input value={currentClient.state || ""} onChange={(e) => handleInputChange('state', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                  <Input value={currentClient.state || ""} onChange={(e) => handleInputChange('state', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
                 </div>
               </div>
                <div className="md:col-span-2">
                 <Label className="text-slate-700 font-semibold">Observações</Label>
-                <Input value={currentClient.observations || ""} onChange={(e) => handleInputChange('observations', e.target.value)} className="bg-white border-2 border-slate-200 rounded-xl" />
+                <Input value={currentClient.observations || ""} onChange={(e) => handleInputChange('observations', e.target.value)} className="bg-white border-2 border-brand-gray rounded-xl" />
               </div>
             </div>
           </div>
 
           <DialogFooter className="mt-6">
-            <Button variant="outline" onClick={handleCloseModal} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={handleCloseModal} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
             <Button onClick={handleSave} disabled={saveMutation.isPending} className="bg-gradient-to-r from-brand-sage to-brand-sage/90 hover:from-emerald-700 hover:to-teal-700 shadow-lg rounded-xl">
               {saveMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               {isEditMode ? "Salvar Alterações" : "Criar Cadastro"}

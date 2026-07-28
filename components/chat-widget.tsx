@@ -375,7 +375,7 @@ export function ChatWidget() {
         download={fileName}
         className={`flex items-center gap-2 mt-1 px-3 py-2 rounded-lg transition-colors ${
           isMe
-            ? 'bg-brand-700/40 hover:bg-brand-700/60 text-blue-100'
+            ? 'bg-brand-700/40 hover:bg-brand-700/60 text-brand-gray'
             : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
         }`}
         style={{ maxWidth: '220px' }}
@@ -383,7 +383,7 @@ export function ChatWidget() {
         <span className="text-lg flex-shrink-0">{getFileIcon(fileType)}</span>
         <div className="flex-1 min-w-0">
           <p className="text-xs font-medium truncate">{fileName}</p>
-          <p className={`text-[10px] ${isMe ? 'text-blue-200' : 'text-gray-400'}`}>
+          <p className={`text-[10px] ${isMe ? 'text-brand-gray' : 'text-gray-400'}`}>
             Clique para baixar
           </p>
         </div>
@@ -483,7 +483,7 @@ export function ChatWidget() {
               {/* Preview do arquivo selecionado */}
               {selectedFile && (
                 <div className="px-3 pt-2 bg-white border-t">
-                  <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2 bg-brand-light/50 border border-brand-light rounded-lg px-3 py-2">
                     <span className="text-lg flex-shrink-0">{getFileIcon(selectedFile.type)}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium text-gray-800 truncate">{selectedFile.name}</p>

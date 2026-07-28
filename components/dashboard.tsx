@@ -51,12 +51,12 @@ interface ModernLayoutProps {
 const menuItems = [
     { value: "overview", label: "Dashboard", icon: BarChart2, description: "Visão geral do escritório", color: "from-brand to-brand-700" },
     { value: "entities", label: "Clientes", icon: Users, description: "Gerenciar clientes e partes", color: "from-brand-sage to-brand-sage/90" },
-    { value: "cases", label: "Processos", icon: Briefcase, description: "Acompanhar processos jurídicos", color: "from-brand-olive to-brand-olive/90" },
+    { value: "cases", label: "Processos", icon: Briefcase, description: "Acompanhar processos jurídicos", color: "from-brand-gray to-brand-gray/90" },
     { value: "cruzamento", label: "Cruzamento de Listas", icon: FileSearch, description: "Comparar pagamentos e judicializados", color: "from-brand-sage/80 to-brand-sage" }, // <-- CORREÇÃO: Adicionada vírgula
     { value: "petitions", label: "Petições", icon: FileText, description: "Documentos e petições", color: "from-brand-beige to-brand-beige/90 text-brand-black" },
     { value: "templates", label: "Modelos", icon: FileCode, description: "Templates de documentos", color: "from-brand-light to-brand-light/90 text-brand-black" },
     { value: "financial", label: "Financeiro", icon: DollarSign, description: "Controle financeiro", color: "from-brand-sage to-brand-sage/90" },
-    { value: "calendar", label: "Agenda", icon: Calendar, description: "Compromissos e prazos", color: "from-brand-olive/80 to-brand-olive" },
+    { value: "calendar", label: "Agenda", icon: Calendar, description: "Compromissos e prazos", color: "from-brand-gray/80 to-brand-gray" },
     { value: "tasks", label: "Tarefas", icon: CheckSquare, description: "Tarefas e lembretes", color: "from-brand to-brand-700" },
     // { value: "google-workspace", label: "Google Workspace", icon: Chrome, description: "Integração com serviços Google", color: "from-blue-500 to-red-500" }, // REMOVIDO: Google Workspace Hub
     { value: "gmail-inbox", label: "Gmail Inbox", icon: Mail, description: "Sua caixa de entrada do Gmail", color: "from-brand-beige to-brand-beige/90 text-brand-black" }, // Novo item de menu
@@ -129,8 +129,8 @@ function QuickStats() {
       suffix: "", 
       icon: DollarSign, 
       trend: 8, 
-      color: "from-brand-olive to-brand-olive/90", 
-      bgColor: "from-brand-olive to-brand-olive/90" 
+      color: "from-brand-gray to-brand-gray/90", 
+      bgColor: "from-brand-gray to-brand-gray/90" 
     },
     { 
       label: "Tarefas Pendentes", 
@@ -199,7 +199,7 @@ function QuickStats() {
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="space-y-3">
-                  <p className="text-sm text-brand-olive font-medium flex items-center gap-2">
+                  <p className="text-sm text-brand-gray font-medium flex items-center gap-2">
                     {stat.label}
                   </p>
                   <p className="text-3xl font-serif font-bold text-brand tabular-nums">
@@ -216,7 +216,7 @@ function QuickStats() {
                       )}
                       {Math.abs(stat.trend)}%
                     </div>
-                    <span className="text-xs text-brand-olive">vs mês anterior</span>
+                    <span className="text-xs text-brand-gray">vs mês anterior</span>
                   </div>
                 </div>
                 <div className={`p-2 rounded-md bg-brand-light text-brand group-hover:bg-brand group-hover:text-brand-beige transition-colors duration-200`}>
@@ -308,14 +308,14 @@ function RecentActivity() {
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
       
       <CardHeader className="pb-4 relative z-10">
-        <CardTitle className="text-xl font-bold text-slate-900 flex items-center justify-between">
+        <CardTitle className="text-xl font-bold text-brand-black flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl">
               <Activity className="w-4 h-4 text-white" />
             </div>
             Atividades Recentes
           </div>
-          <Badge className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full animate-pulse">
+          <Badge className="bg-brand-light text-brand text-xs px-2 py-1 rounded-full animate-pulse">
             Ao vivo
           </Badge>
         </CardTitle>
@@ -338,11 +338,11 @@ function RecentActivity() {
             </div>
             
             <div className="flex-1 space-y-1">
-              <p className="font-semibold text-slate-900 text-sm group-hover/item:text-brand transition-colors">
+              <p className="font-semibold text-brand-black text-sm group-hover/item:text-brand transition-colors">
                 {activity.action}
               </p>
-              <p className="text-sm text-slate-600">{activity.case}</p>
-              <div className="flex items-center gap-2 text-xs text-slate-500">
+              <p className="text-sm text-brand-gray">{activity.case}</p>
+              <div className="flex items-center gap-2 text-xs text-brand-sage">
                 <Clock className="w-3 h-3" />
                 {activity.time}
                 <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
@@ -350,10 +350,10 @@ function RecentActivity() {
             </div>
             
             {/* Hover action */}
-            <ChevronRight className="w-4 h-4 text-slate-400 opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform group-hover/item:translate-x-1" />
+            <ChevronRight className="w-4 h-4 text-brand-gray opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform group-hover/item:translate-x-1" />
           </div>
         )) : (
-          <div className="p-8 text-center text-slate-500 flex flex-col items-center">
+          <div className="p-8 text-center text-brand-sage flex flex-col items-center">
              <Activity className="w-8 h-8 mb-2 opacity-20" />
              <p>Nenhuma atividade recente encontrada.</p>
           </div>
@@ -375,26 +375,26 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
     const { user } = useAuth() // adicione essa linha
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-brand-light/50">
 
 
             {/* Sidebar Clássica e Formal */}
             <aside className={`fixed flex flex-col left-0 top-0 h-screen bg-white text-brand shadow-sm z-50 transition-all duration-300 ease-in-out ${
                 isCollapsed ? 'w-20' : 'w-72'
-            } ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 border-r border-brand-olive/30`}>
+            } ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 border-r border-brand-gray/30`}>
                 
                 {/* Toggle Button */}
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="hidden lg:flex absolute -right-4 top-7 bg-white text-brand hover:bg-brand-light rounded-full h-8 w-8 border border-brand-olive/30 z-10 transition-colors"
+                    className="hidden lg:flex absolute -right-4 top-7 bg-white text-brand hover:bg-brand-light rounded-full h-8 w-8 border border-brand-gray/30 z-10 transition-colors"
                 >
                     {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
                 </Button>
 
                 {/* Logo Header */}
-                <div className="relative flex-shrink-0 p-6 border-b border-brand-olive/20 bg-brand-light/20">
+                <div className="relative flex-shrink-0 p-6 border-b border-brand-gray/20 bg-brand-light/20">
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
                             <div className="flex items-center gap-3">
@@ -415,7 +415,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                 </div>
 
                 {/* Navigation */}
-                <nav className="relative flex-1 py-6 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-brand-olive/20 hover:scrollbar-thumb-brand-olive/40">
+                <nav className="relative flex-1 py-6 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-brand-gray/20 hover:scrollbar-thumb-brand-gray/40">
                     <div className="space-y-1">
                         {(() => {
                             const visibleItems = user?.role === "admin" 
@@ -455,7 +455,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                             <div className={`text-xs mt-0.5 transition-colors duration-200 ${
                                                 activeTab === item.value 
                                                     ? "text-brand-sage" 
-                                                    : "text-brand-olive group-hover:text-brand-sage"
+                                                    : "text-brand-gray group-hover:text-brand-sage"
                                             }`}>
                                                 {item.description}
                                             </div>
@@ -492,7 +492,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                 isCollapsed ? 'lg:ml-20' : 'lg:ml-72'
             } ml-0`}>
                 {/* Header Clássico */}
-                <header className="sticky top-0 z-30 bg-white border-b border-brand-olive/30 shadow-sm">
+                <header className="sticky top-0 z-30 bg-white border-b border-brand-gray/30 shadow-sm">
                     <div className={`relative px-8 py-6 transition-all duration-500 ${isCollapsed ? 'lg:pl-8' : 'lg:pl-8'} pl-16 lg:pl-8`}>
                         <div className="flex justify-between items-center">
                             <div className="space-y-2">
@@ -518,7 +518,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                     <DropdownMenuTrigger asChild>
                                         <button className="flex items-center space-x-3 p-2 rounded-md hover:bg-brand-light/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand/20">
                                             <div className="relative">
-                                                <Avatar className="ring-1 ring-brand-olive w-10 h-10">
+                                                <Avatar className="ring-1 ring-brand-gray w-10 h-10">
                                                     <AvatarFallback className="bg-brand-light text-brand font-bold">
                                                    {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                                                   </AvatarFallback>
@@ -529,11 +529,11 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                                 <div className="font-semibold text-sm text-brand">{user?.name || user?.email}</div>
                                                 <div className="text-xs text-brand-sage">Online agora</div>
                                             </div>
-                                            <ChevronRight className="w-4 h-4 text-slate-400 hidden md:block" />
+                                            <ChevronRight className="w-4 h-4 text-brand-gray hidden md:block" />
                                         </button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-72 p-2 backdrop-blur-xl bg-white/95">
-                                        <div className="px-3 py-3 border-b border-slate-100">
+                                        <div className="px-3 py-3 border-b border-brand-light">
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="w-12 h-12">
                                                    <AvatarFallback className="bg-brand-light text-brand font-bold">
@@ -541,8 +541,8 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                                   </AvatarFallback>
                                                 </Avatar>
                                                 <div>
-                                                    <div className="font-semibold text-slate-900">{user?.name || user?.email}</div>
-                                                    <div className="text-sm text-slate-600">{user?.email}</div>
+                                                    <div className="font-semibold text-brand-black">{user?.name || user?.email}</div>
+                                                    <div className="text-sm text-brand-gray">{user?.email}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -585,13 +585,13 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                     )}
                     {activeTab !== 'overview' && (
                         user?.role !== "admin" && !(user?.permissions || []).includes(activeTab) ? (
-                            <div className="flex flex-col items-center justify-center h-96 bg-white rounded-2xl shadow-xl border border-slate-200/50 p-8 backdrop-blur-sm animate-fadeIn">
+                            <div className="flex flex-col items-center justify-center h-96 bg-white rounded-2xl shadow-xl border border-brand-gray/50 p-8 backdrop-blur-sm animate-fadeIn">
                                 <Shield className="h-16 w-16 text-red-500 mb-4" />
-                                <h2 className="text-2xl font-bold text-slate-800">Acesso Negado</h2>
-                                <p className="text-slate-500 mt-2">Você não tem permissão para visualizar esta página.</p>
+                                <h2 className="text-2xl font-bold text-brand">Acesso Negado</h2>
+                                <p className="text-brand-sage mt-2">Você não tem permissão para visualizar esta página.</p>
                             </div>
                         ) : (
-                            <div className="bg-white rounded-2xl shadow-xl border border-slate-200/50 p-8 backdrop-blur-sm animate-fadeIn">
+                            <div className="bg-white rounded-2xl shadow-xl border border-brand-gray/50 p-8 backdrop-blur-sm animate-fadeIn">
                                 {children}
                             </div>
                         )

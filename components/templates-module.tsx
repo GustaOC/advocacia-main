@@ -102,7 +102,7 @@ export function TemplatesModule() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-sage" />
       </div>
     );
   }
@@ -112,7 +112,7 @@ export function TemplatesModule() {
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 text-white">
         <div>
           <h2 className="text-3xl font-bold mb-2">Modelos de Documentos</h2>
-          <p className="text-slate-300 text-lg">Crie e gerencie templates para automatizar a geração de documentos.</p>
+          <p className="text-brand-gray text-lg">Crie e gerencie templates para automatizar a geração de documentos.</p>
         </div>
       </div>
 
@@ -120,7 +120,7 @@ export function TemplatesModule() {
         <CardContent className="p-6 flex justify-between items-center">
           <Input placeholder="Buscar por título, categoria ou descrição..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="max-w-xs" />
           {can('templates_create') && (
-            <Button onClick={openModalForCreate} className="bg-slate-800 hover:bg-slate-900"><Plus className="mr-2 h-4 w-4" /> Novo Modelo</Button>
+            <Button onClick={openModalForCreate} className="bg-brand hover:bg-brand-black"><Plus className="mr-2 h-4 w-4" /> Novo Modelo</Button>
           )}
         </CardContent>
       </Card>
@@ -134,7 +134,7 @@ export function TemplatesModule() {
                 <TableRow key={template.id}>
                   <TableCell className="font-medium">{template.title}</TableCell>
                   <TableCell>{template.category || '-'}</TableCell>
-                  <TableCell className="text-sm text-slate-600">{template.description || '-'}</TableCell>
+                  <TableCell className="text-sm text-brand-gray">{template.description || '-'}</TableCell>
                   <TableCell className="text-right">
                     {can('templates_edit') && <Button variant="ghost" size="icon" onClick={() => openModalForEdit(template)}><Edit className="h-4 w-4" /></Button>}
                     {can('templates_delete') && <Button variant="ghost" size="icon" onClick={() => handleDelete(template.id)}><Trash2 className="h-4 w-4 text-red-500" /></Button>}

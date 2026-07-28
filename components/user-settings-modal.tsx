@@ -86,22 +86,22 @@ const roleInfo = ROLE_LABELS[roleKey]
 
         <div className="space-y-6">
           {/* Avatar + nome + cargo */}
-          <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+          <div className="flex items-center gap-4 p-4 rounded-xl bg-brand-light/50 border border-brand-light">
             <Avatar className="h-16 w-16 text-lg font-semibold">
               <AvatarFallback className="bg-[#2C3E50] text-white">
                 {getInitials(name)}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1">
-              <p className="font-semibold text-slate-800 text-base leading-tight">
+              <p className="font-semibold text-brand text-base leading-tight">
                 {name || "—"}
               </p>
-              <p className="text-sm text-slate-500">{email || "—"}</p>
+              <p className="text-sm text-brand-sage">{email || "—"}</p>
               <div className="flex items-center gap-2 mt-1">
                 {user?.role === "admin" ? (
                   <ShieldCheck className="h-4 w-4 text-red-500" />
                 ) : (
-                  <Users className="h-4 w-4 text-slate-400" />
+                  <Users className="h-4 w-4 text-brand-gray" />
                 )}
                 <Badge variant={roleInfo?.variant as any} className="text-xs px-2 py-0.5">
                   {roleInfo?.label || user?.role}
@@ -113,7 +113,7 @@ const roleInfo = ROLE_LABELS[roleKey]
           {/* Campos editáveis */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-1">
-              <User className="h-4 w-4 text-slate-500" />
+              <User className="h-4 w-4 text-brand-sage" />
               <span className="font-medium text-slate-700 text-sm">Informações Pessoais</span>
             </div>
 

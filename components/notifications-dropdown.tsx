@@ -221,7 +221,7 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
               variant="ghost" 
               size="sm" 
               onClick={markAllAsRead} 
-              className="h-7 px-2 text-xs text-brand hover:text-blue-800 hover:bg-blue-50"
+              className="h-7 px-2 text-xs text-brand hover:text-brand hover:bg-brand-light/50"
             >
               <CheckCheck className="h-3 w-3 mr-1" />
               Marcar todas como lidas
@@ -231,10 +231,10 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         <DropdownMenuSeparator />
         <div className="max-h-96 overflow-y-auto">
           {loading ? (
-            <div className="flex items-center justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-slate-400" /></div>
+            <div className="flex items-center justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-brand-gray" /></div>
           ) : notifications.length === 0 ? (
-            <div className="p-8 text-center text-slate-500">
-                <Bell className="h-10 w-10 mx-auto mb-4 text-slate-300" />
+            <div className="p-8 text-center text-brand-sage">
+                <Bell className="h-10 w-10 mx-auto mb-4 text-brand-gray" />
                 <p className="font-medium">Nenhuma notificação</p>
                 <p className="text-sm">Você está em dia!</p>
             </div>
@@ -242,16 +242,16 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
             notifications.map((notification) => (
               <DropdownMenuItem 
                 key={notification.id} 
-                className={`p-4 cursor-pointer border-b last:border-b-0 transition-colors ${!notification.is_read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-slate-50'}`}
+                className={`p-4 cursor-pointer border-b last:border-b-0 transition-colors ${!notification.is_read ? 'bg-brand-light/50/50 hover:bg-brand-light/50' : 'hover:bg-brand-light/50'}`}
                 onSelect={(e) => handleNotificationClick(e, notification)}
               >
                 <div className="flex items-start space-x-3 w-full">
                     <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
                     <div className="flex-1">
-                        <p className={`text-sm ${!notification.is_read ? 'font-bold text-slate-900' : 'font-semibold text-slate-700'}`}>
+                        <p className={`text-sm ${!notification.is_read ? 'font-bold text-brand-black' : 'font-semibold text-slate-700'}`}>
                           {notification.title}
                         </p>
-                        <p className={`text-xs mt-1 ${!notification.is_read ? 'text-slate-700 font-medium' : 'text-slate-500'}`}>
+                        <p className={`text-xs mt-1 ${!notification.is_read ? 'text-slate-700 font-medium' : 'text-brand-sage'}`}>
                           {notification.message}
                         </p>
                     </div>

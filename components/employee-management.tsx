@@ -23,7 +23,7 @@ const fetchEmployees = async () => {
 function EmployeeStats({ employees }: { employees: any[] }) {
   const stats = [
     { label: "Total de Membros", value: employees.length.toString(), icon: Users, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "+5%" },
-    { label: "Administradores", value: employees.filter(e => e.role === 'admin' || e.roles?.name?.toLowerCase().includes('admin')).length.toString(), icon: Shield, color: "text-brand-olive", bg: "from-purple-50 to-purple-100", trend: "+2%" },
+    { label: "Administradores", value: employees.filter(e => e.role === 'admin' || e.roles?.name?.toLowerCase().includes('admin')).length.toString(), icon: Shield, color: "text-brand-gray", bg: "from-purple-50 to-purple-100", trend: "+2%" },
     { label: "Advogados", value: employees.filter(e => e.role === 'member' || e.roles?.name?.toLowerCase().includes('advogado')).length.toString(), icon: Award, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+8%" },
     { label: "Equipe Ativa", value: employees.length.toString(), icon: TrendingUp, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "100%" },
   ];
@@ -39,8 +39,8 @@ function EmployeeStats({ employees }: { employees: any[] }) {
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -147,8 +147,8 @@ export function EmployeeManagement() {
     return (
       <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
-          <p className="text-slate-600 font-medium">Carregando equipe...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
+          <p className="text-brand-gray font-medium">Carregando equipe...</p>
         </div>
       </div>
     );
@@ -183,8 +183,8 @@ export function EmployeeManagement() {
       {employees && <EmployeeStats employees={employees} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
-          <CardTitle className="text-2xl font-bold text-slate-900">Membros da Equipe</CardTitle>
+        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+          <CardTitle className="text-2xl font-bold text-brand-black">Membros da Equipe</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -203,7 +203,7 @@ export function EmployeeManagement() {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="relative group-hover:scale-110 transition-transform">
-                          <Avatar className="ring-2 ring-slate-200 group-hover:ring-slate-400 transition-all">
+                          <Avatar className="ring-2 ring-brand-light group-hover:ring-slate-400 transition-all">
                             <AvatarImage src={employee.avatar_url || ''} />
                             <AvatarFallback className="bg-gradient-to-br from-brand-black to-brand-black/90 text-white font-bold">
                               {(employee.name || employee.full_name || 'U').charAt(0).toUpperCase()}
@@ -213,15 +213,15 @@ export function EmployeeManagement() {
                         <span className="font-medium group-hover:text-slate-700 transition-colors">{employee.name || employee.full_name}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-slate-600">{employee.email}</TableCell>
+                    <TableCell className="text-brand-gray">{employee.email}</TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-brand-black to-brand-black/90 text-slate-700 border border-slate-300">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-brand-black to-brand-black/90 text-slate-700 border border-brand-gray">
                         {employee.role === 'admin' ? 'Administrador' : employee.role === 'member' ? 'Advogado / Membro' : employee.role || employee.roles?.name || 'Não definido'}
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
                       <Button variant="ghost" size="icon" onClick={() => openEditModal(employee)}>
-                        <Settings className="h-4 w-4 text-slate-500" />
+                        <Settings className="h-4 w-4 text-brand-sage" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -229,9 +229,9 @@ export function EmployeeManagement() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={3} className="text-center py-16">
-                    <Users className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-slate-600 mb-2">Nenhum membro encontrado</h3>
-                    <p className="text-slate-500">Não há membros da equipe cadastrados no momento.</p>
+                    <Users className="h-16 w-16 text-brand-gray mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-brand-gray mb-2">Nenhum membro encontrado</h3>
+                    <p className="text-brand-sage">Não há membros da equipe cadastrados no momento.</p>
                   </TableCell>
                 </TableRow>
               )}
@@ -257,7 +257,7 @@ export function EmployeeManagement() {
                 onValueChange={setRole}
                 disabled={currentUser?.id === selectedEmployee?.id}
               >
-                <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl">
+                <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl">
                   <SelectValue placeholder="Selecione o cargo" />
                 </SelectTrigger>
                 <SelectContent>
@@ -275,7 +275,7 @@ export function EmployeeManagement() {
             
             <div className="space-y-3">
               <Label>Páginas Permitidas</Label>
-              <div className="grid grid-cols-2 gap-3 border rounded-lg p-4 bg-slate-50">
+              <div className="grid grid-cols-2 gap-3 border rounded-lg p-4 bg-brand-light/50">
                 {AVAILABLE_PAGES.map(page => (
                   <div key={page.key} className="flex items-center space-x-2">
                     <Checkbox 
@@ -294,13 +294,13 @@ export function EmployeeManagement() {
                 ))}
               </div>
               {role === 'admin' && (
-                <p className="text-xs text-slate-500">Administradores têm acesso a todas as páginas por padrão.</p>
+                <p className="text-xs text-brand-sage">Administradores têm acesso a todas as páginas por padrão.</p>
               )}
             </div>
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
             <Button 
               onClick={handleSave} 
               disabled={updatePermissionsMutation.isPending}

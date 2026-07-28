@@ -110,10 +110,10 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
         label: "Total de Parcelas",
         value: String(totalInstallments),
         icon: Calculator,
-        color: "text-brand-olive",
+        color: "text-brand-gray",
         bg: "from-purple-50 to-purple-100",
         trend: `${agreements.length} acordos`,
-        gradient: "from-brand-olive to-brand-olive/90"
+        gradient: "from-brand-gray to-brand-gray/90"
       },
       {
         label: "Parcelas em Atraso",
@@ -122,7 +122,7 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
         color: "text-red-600",
         bg: "from-red-50 to-red-100",
         trend: overdueAgreements > 0 ? "Atenção!" : "Em dia",
-        gradient: "from-brand-olive/80 to-brand-olive"
+        gradient: "from-brand-gray/80 to-brand-gray"
       },
     ];
   }, [agreements]);
@@ -138,11 +138,11 @@ function FinancialStats({ agreements }: { agreements: FinancialAgreement[] }) {
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium flex items-center gap-2">
+                  <p className="text-sm text-brand-gray font-medium flex items-center gap-2">
                     {stat.label}
                     <Sparkles className="w-3 h-3 text-brand-sage animate-pulse" />
                   </p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     {stat.trend.includes('+') ? (
                       <ArrowUp className="w-4 h-4 text-green-500" />
@@ -194,12 +194,12 @@ function ReceivedPaymentsTab() {
   const getPaymentMethodBadge = (method: string | null | undefined) => {
     const methodStr = (method || 'outros').toLowerCase();
     const config = {
-      pix: { label: 'PIX', className: 'bg-emerald-100 text-emerald-800' },
+      pix: { label: 'PIX', className: 'bg-brand-light text-brand' },
       boleto: { label: 'Boleto', className: 'bg-brand-beige text-brand-beige' },
-      transferencia: { label: 'Transf.', className: 'bg-blue-100 text-blue-800' },
-      cartao_credito: { label: 'Crédito', className: 'bg-brand-olive text-brand-olive' },
+      transferencia: { label: 'Transf.', className: 'bg-brand-light text-brand' },
+      cartao_credito: { label: 'Crédito', className: 'bg-brand-gray text-brand-gray' },
       dinheiro: { label: 'Dinheiro', className: 'bg-green-100 text-green-800' },
-      default: { label: methodStr, className: 'bg-slate-100 text-slate-800' }
+      default: { label: methodStr, className: 'bg-brand-beige/50 text-brand' }
     };
     const { label, className } = (config as any)[methodStr] || config.default;
     return <Badge className={`${className} border-0`}>{label}</Badge>;
@@ -213,7 +213,7 @@ function ReceivedPaymentsTab() {
             <div className="flex items-center gap-3">
               <Label className="text-slate-700 font-semibold">Mês:</Label>
               <Select value={String(selectedDate.month)} onValueChange={(v) => handleDateChange('month', v)}>
-                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
+                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 12 }, (_, i) => (
                     <SelectItem key={i + 1} value={String(i + 1)}>
@@ -224,7 +224,7 @@ function ReceivedPaymentsTab() {
               </Select>
               <Label className="text-slate-700 font-semibold">Ano:</Label>
               <Select value={String(selectedDate.year)} onValueChange={(v) => handleDateChange('year', v)}>
-                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
+                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 5 }, (_, i) => (
                     <SelectItem key={i} value={String(new Date().getFullYear() - i)}>
@@ -236,7 +236,7 @@ function ReceivedPaymentsTab() {
             </div>
             <div className="flex-1 flex items-center justify-end">
                 <div className="text-right">
-                    <p className="text-sm text-slate-600 font-medium">Total Recebido no Mês</p>
+                    <p className="text-sm text-brand-gray font-medium">Total Recebido no Mês</p>
                     <p className="text-2xl font-bold text-green-600">{formatCurrency(totalReceived)}</p>
                 </div>
             </div>
@@ -261,7 +261,7 @@ function ReceivedPaymentsTab() {
               {isLoading || isPending ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
-                    <div className="flex items-center justify-center gap-2 text-slate-600">
+                    <div className="flex items-center justify-center gap-2 text-brand-gray">
                       <Loader2 className="h-6 w-6 animate-spin" /> Carregando recebimentos...
                     </div>
                   </TableCell>
@@ -276,7 +276,7 @@ function ReceivedPaymentsTab() {
                 </TableRow>
               ) : payments.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                  <TableCell colSpan={6} className="text-center py-8 text-brand-sage">
                     Nenhum pagamento recebido no período selecionado.
                   </TableCell>
                 </TableRow>
@@ -284,7 +284,7 @@ function ReceivedPaymentsTab() {
                 payments.map((payment) => (
                   <TableRow key={payment.id} className="group hover:bg-gradient-to-r hover:from-green-50/50 hover:to-transparent transition-all duration-200">
                     <TableCell className="font-mono">{formatDate(payment.payment_date)}</TableCell>
-                    <TableCell className="font-medium text-slate-900 group-hover:text-green-700 transition-colors">{payment.client_name}</TableCell>
+                    <TableCell className="font-medium text-brand-black group-hover:text-green-700 transition-colors">{payment.client_name}</TableCell>
                     <TableCell>{payment.case_number || 'N/A'}</TableCell>
                     <TableCell className="text-center">{payment.installment_number}</TableCell>
                     <TableCell>{getPaymentMethodBadge(payment.payment_method)}</TableCell>
@@ -394,7 +394,7 @@ function MonthlyInstallmentsTab() {
     const variants = {
       'PAGA': { label: 'Paga', className: 'bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white shadow-lg', icon: CheckCircle },
       'PENDENTE': { label: 'Pendente', className: 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-lg', icon: Clock },
-      'ATRASADA': { label: 'Atrasada', className: 'bg-gradient-to-r from-brand-olive/80 to-brand-olive text-white shadow-lg', icon: AlertCircle },
+      'ATRASADA': { label: 'Atrasada', className: 'bg-gradient-to-r from-brand-gray/80 to-brand-gray text-white shadow-lg', icon: AlertCircle },
     };
     const key = normalizeStatus(status, dueDate);
     const { label, className, icon: Icon } = variants[key];
@@ -413,7 +413,7 @@ function MonthlyInstallmentsTab() {
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Total a Receber no Mês</p>
+                <p className="text-sm text-brand-gray font-medium">Total a Receber no Mês</p>
                 <p className="text-2xl font-bold text-brand-beige">{formatCurrency(totalToReceive)}</p>
               </div>
               <DollarSign className="h-8 w-8 text-brand-beige" />
@@ -425,7 +425,7 @@ function MonthlyInstallmentsTab() {
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Total Recebido no Mês</p>
+                <p className="text-sm text-brand-gray font-medium">Total Recebido no Mês</p>
                 <p className="text-2xl font-bold text-green-600">{formatCurrency(totalReceived)}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -437,7 +437,7 @@ function MonthlyInstallmentsTab() {
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Balanço do Mês</p>
+                <p className="text-sm text-brand-gray font-medium">Balanço do Mês</p>
                 <p className="text-2xl font-bold text-brand">{formatCurrency(totalReceived - totalToReceive)}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-brand" />
@@ -452,7 +452,7 @@ function MonthlyInstallmentsTab() {
             <div className="flex items-center gap-3">
               <Label className="text-slate-700 font-semibold">Mês:</Label>
               <Select value={String(selectedDate.month)} onValueChange={(v) => handleDateChange('month', v)}>
-                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
+                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 12 }, (_, i) => (
                     <SelectItem key={i + 1} value={String(i + 1)}>
@@ -463,7 +463,7 @@ function MonthlyInstallmentsTab() {
               </Select>
               <Label className="text-slate-700 font-semibold">Ano:</Label>
               <Select value={String(selectedDate.year)} onValueChange={(v) => handleDateChange('year', v)}>
-                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
+                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 5 }, (_, i) => (
                     <SelectItem key={i} value={String(new Date().getFullYear() - i)}>
@@ -494,7 +494,7 @@ function MonthlyInstallmentsTab() {
               {isLoading || isPending ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
-                    <div className="flex items-center justify-center gap-2 text-slate-600">
+                    <div className="flex items-center justify-center gap-2 text-brand-gray">
                       <Loader2 className="h-6 w-6 animate-spin" /> Carregando parcelas...
                     </div>
                   </TableCell>
@@ -509,7 +509,7 @@ function MonthlyInstallmentsTab() {
                 </TableRow>
               ) : installments.filter(inst => normalizeStatus(inst.status, inst.due_date) !== 'PAGA').length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-slate-500">
+                  <TableCell colSpan={6} className="text-center py-8 text-brand-sage">
                     Nenhuma parcela pendente ou atrasada encontrada para o período selecionado
                   </TableCell>
                 </TableRow>
@@ -523,8 +523,8 @@ function MonthlyInstallmentsTab() {
                       <TableCell className="font-mono">{formatDate(inst.due_date)}</TableCell>
                       <TableCell className="font-medium">
                         <div className="flex flex-col">
-                          <span className="text-sm text-slate-900 group-hover:text-brand-olive transition-colors" title={`Cliente: ${clientName}`}>{clientName}</span>
-                          <span className="text-xs text-slate-500" title={`Executado: ${executedName}`}>vs {executedName}</span>
+                          <span className="text-sm text-brand-black group-hover:text-brand-gray transition-colors" title={`Cliente: ${clientName}`}>{clientName}</span>
+                          <span className="text-xs text-brand-sage" title={`Executado: ${executedName}`}>vs {executedName}</span>
                         </div>
                       </TableCell>
                       <TableCell>{caseNumber}</TableCell>
@@ -561,7 +561,7 @@ function renderAgreementTypeIcon(type: string | null | undefined) {
   const iconMap = {
     'Judicial': { icon: Scale, color: 'text-brand', label: 'Judicial' },
     'Extrajudicial': { icon: FileSignature, color: 'text-green-600', label: 'Extrajudicial' },
-    'Em Audiência': { icon: Handshake, color: 'text-brand-olive', label: 'Em Audiência' },
+    'Em Audiência': { icon: Handshake, color: 'text-brand-gray', label: 'Em Audiência' },
     'Pela Loja': { icon: Store, color: 'text-brand-beige', label: 'Pela Loja' }
   } as const;
   const config = (iconMap as any)[typeStr] || { icon: FileText, color: 'text-gray-600', label: typeStr };
@@ -585,7 +585,7 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
     const variants = {
       'ATIVO': { label: 'Ativo', className: 'bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white shadow-lg' },
       'CONCLUIDO': { label: 'Concluído', className: 'bg-gradient-to-r from-brand to-brand-700 text-white shadow-lg' },
-      'INADIMPLENTE': { label: 'Em Atraso', className: 'bg-gradient-to-r from-brand-olive/80 to-brand-olive text-white shadow-lg' },
+      'INADIMPLENTE': { label: 'Em Atraso', className: 'bg-gradient-to-r from-brand-gray/80 to-brand-gray text-white shadow-lg' },
       'CANCELADO': { label: 'Cancelado', className: 'bg-gradient-to-r from-brand-black to-brand-black/90 text-white shadow-lg' },
       'PAUSADO': { label: 'Pausado', className: 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-lg' }
     } as const;
@@ -596,19 +596,19 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
   return (
     <Card className={`mb-4 border-l-4 border-l-blue-500 hover:shadow-2xl transition-all duration-300 border-0 shadow-lg group cursor-pointer ${isExpanded ? 'bg-gradient-to-br from-white to-slate-50' : 'bg-white'}`}>
       <CardContent className="p-0">
-        <div className="p-6 hover:bg-slate-50/50 transition-colors" onClick={onToggle}>
+        <div className="p-6 hover:bg-brand-light/50/50 transition-colors" onClick={onToggle}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              {isExpanded ? <ChevronDown className="h-5 w-5 text-slate-500 group-hover:text-brand-olive transition-colors" /> : <ChevronRight className="h-5 w-5 text-slate-500 group-hover:text-brand-olive transition-colors" />}
+              {isExpanded ? <ChevronDown className="h-5 w-5 text-brand-sage group-hover:text-brand-gray transition-colors" /> : <ChevronRight className="h-5 w-5 text-brand-sage group-hover:text-brand-gray transition-colors" />}
               <div>
-                <h4 className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">{agreement.entities?.name || 'Cliente não informado'}</h4>
-                <p className="text-sm text-slate-500">{agreement.cases?.case_number || 'Sem número'}</p>
+                <h4 className="font-semibold text-brand-black group-hover:text-brand-gray transition-colors">{agreement.entities?.name || 'Cliente não informado'}</h4>
+                <p className="text-sm text-brand-sage">{agreement.cases?.case_number || 'Sem número'}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <div className="text-right">
                 <p className="font-bold text-lg text-green-600">{formatCurrency(agreement.total_amount)}</p>
-                <p className="text-sm text-slate-500">{agreement.number_of_installments || 0}x de {formatCurrency(installmentValue)}</p>
+                <p className="text-sm text-brand-sage">{agreement.number_of_installments || 0}x de {formatCurrency(installmentValue)}</p>
               </div>
               {getStatusBadge(agreement.status)}
             </div>
@@ -616,36 +616,36 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
         </div>
 
         {isExpanded && (
-          <div className="px-6 pb-6 border-t bg-slate-50/50">
+          <div className="px-6 pb-6 border-t bg-brand-light/50/50">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-4">
               <div className="space-y-3">
                 <h5 className="font-semibold text-slate-700 flex items-center"><FileText className="h-4 w-4 mr-2" />Informações do Acordo</h5>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-slate-600">Tipo:</span><div>{renderAgreementTypeIcon(agreement.agreement_type)}</div></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Valor de Entrada:</span><span className="font-medium">{formatCurrency(agreement.down_payment || 0)}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Valor Restante:</span><span className="font-medium">{formatCurrency((agreement.total_amount || 0) - (agreement.down_payment || 0))}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Nº de Parcelas:</span><span className="font-medium">{agreement.number_of_installments || 'N/A'}</span></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Tipo:</span><div>{renderAgreementTypeIcon(agreement.agreement_type)}</div></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Valor de Entrada:</span><span className="font-medium">{formatCurrency(agreement.down_payment || 0)}</span></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Valor Restante:</span><span className="font-medium">{formatCurrency((agreement.total_amount || 0) - (agreement.down_payment || 0))}</span></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Nº de Parcelas:</span><span className="font-medium">{agreement.number_of_installments || 'N/A'}</span></div>
                 </div>
               </div>
               <div className="space-y-3">
                 <h5 className="font-semibold text-slate-700 flex items-center"><Calendar className="h-4 w-4 mr-2" />Cronograma</h5>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-slate-600">Valor da Parcela:</span><span className="font-bold text-green-600">{formatCurrency(installmentValue)}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Próximo Vencimento:</span><span className="font-medium">{formatDate(nextDueDate)}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Dias até Vencimento:</span><Badge variant={daysUntilDue <= 7 ? "destructive" : daysUntilDue <= 15 ? "outline" : "secondary"}>{daysUntilDue} dias</Badge></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Possui Alvará:</span><Badge variant={agreement.has_alvara ? "default" : "outline"}>{agreement.has_alvara ? "Sim" : "Não"}</Badge></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Valor da Parcela:</span><span className="font-bold text-green-600">{formatCurrency(installmentValue)}</span></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Próximo Vencimento:</span><span className="font-medium">{formatDate(nextDueDate)}</span></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Dias até Vencimento:</span><Badge variant={daysUntilDue <= 7 ? "destructive" : daysUntilDue <= 15 ? "outline" : "secondary"}>{daysUntilDue} dias</Badge></div>
+                  <div className="flex justify-between"><span className="text-brand-gray">Possui Alvará:</span><Badge variant={agreement.has_alvara ? "default" : "outline"}>{agreement.has_alvara ? "Sim" : "Não"}</Badge></div>
                 </div>
               </div>
               <div className="space-y-3">
                 <h5 className="font-semibold text-slate-700 flex items-center"><Users className="h-4 w-4 mr-2" />Partes Envolvidas</h5>
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="text-slate-600">Cliente:</span>
+                    <span className="text-brand-gray">Cliente:</span>
                     <p className="font-medium">{agreement.entities?.name || 'N/A'}</p>
-                    {agreement.entities?.document && <p className="text-xs text-slate-500">{agreement.entities.document}</p>}
+                    {agreement.entities?.document && <p className="text-xs text-brand-sage">{agreement.entities.document}</p>}
                   </div>
                   <div>
-                    <span className="text-slate-600">Executado:</span>
+                    <span className="text-brand-gray">Executado:</span>
                     <p className="font-medium text-slate-700">{(agreement as any)?.executed_entities?.name || 'Não informado'}</p>
                   </div>
                 </div>
@@ -654,12 +654,12 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
             {agreement.notes && (
               <div className="border-t pt-3 mt-3">
                 <h6 className="font-semibold text-slate-700 mb-2">Observações:</h6>
-                <p className="text-sm text-slate-600 bg-white p-3 rounded-lg border">{agreement.notes}</p>
+                <p className="text-sm text-brand-gray bg-white p-3 rounded-lg border">{agreement.notes}</p>
               </div>
             )}
             <div className="flex justify-end space-x-2 border-t pt-3 mt-3">
-              <Button size="sm" variant="outline" className="border-2 border-slate-200 rounded-xl"><Eye className="h-4 w-4 mr-1" />Visualizar</Button>
-              <Button size="sm" variant="outline" className="border-2 border-slate-200 rounded-xl"><Edit className="h-4 w-4 mr-1" />Editar</Button>
+              <Button size="sm" variant="outline" className="border-2 border-brand-gray rounded-xl"><Eye className="h-4 w-4 mr-1" />Visualizar</Button>
+              <Button size="sm" variant="outline" className="border-2 border-brand-gray rounded-xl"><Edit className="h-4 w-4 mr-1" />Editar</Button>
               <Button size="sm" onClick={() => onSendMessage(agreement)} className="bg-gradient-to-r from-brand to-brand-700 hover:from-brand-700 hover:to-brand shadow-lg rounded-xl">
                 <Send className="h-4 w-4 mr-1" />Enviar Cobrança
               </Button>
@@ -708,11 +708,11 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div className="flex flex-col sm:flex-row gap-3 flex-1">
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-                <Input placeholder="Buscar por cliente, processo ou executado..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
+                <Input placeholder="Buscar por cliente, processo ou executado..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
               </div>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos Status</SelectItem>
                   <SelectItem value="ATIVO">Ativo</SelectItem>
@@ -723,7 +723,7 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
                 </SelectContent>
               </Select>
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Tipo" /></SelectTrigger>
+                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Tipo" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos Tipos</SelectItem>
                   <SelectItem value="Judicial">Judicial</SelectItem>
@@ -734,8 +734,8 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
               </Select>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setExpandedAgreements(new Set())} className="border-2 border-slate-200 rounded-xl">Recolher Todos</Button>
-              <Button variant="outline" onClick={() => setExpandedAgreements(new Set(filteredAgreements.map(a => String(a.id))))} className="border-2 border-slate-200 rounded-xl">Expandir Todos</Button>
+              <Button variant="outline" onClick={() => setExpandedAgreements(new Set())} className="border-2 border-brand-gray rounded-xl">Recolher Todos</Button>
+              <Button variant="outline" onClick={() => setExpandedAgreements(new Set(filteredAgreements.map(a => String(a.id))))} className="border-2 border-brand-gray rounded-xl">Expandir Todos</Button>
               <Button onClick={onNewAgreement} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg rounded-xl border-0"><Plus className="mr-2 h-4 w-4" /> Novo Acordo</Button>
             </div>
           </div>
@@ -745,8 +745,8 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-600">Mostrando {filteredAgreements.length} de {agreements.length} acordos</span>
-            <span className="text-sm font-semibold text-slate-900">Valor Total: {formatCurrency(filteredAgreements.reduce((sum, a) => sum + (a.total_amount || 0), 0))}</span>
+            <span className="text-sm text-brand-gray">Mostrando {filteredAgreements.length} de {agreements.length} acordos</span>
+            <span className="text-sm font-semibold text-brand-black">Valor Total: {formatCurrency(filteredAgreements.reduce((sum, a) => sum + (a.total_amount || 0), 0))}</span>
           </div>
         </CardContent>
       </Card>
@@ -755,9 +755,9 @@ function AgreementsTab({ agreements, onSendMessage, onNewAgreement }: {
         {filteredAgreements.length === 0 ? (
           <Card className="border-0 shadow-xl">
             <CardContent className="text-center py-12">
-              <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-600 mb-2">Nenhum acordo encontrado</h3>
-              <p className="text-slate-500">Tente ajustar os filtros de busca.</p>
+              <FileText className="h-16 w-16 text-brand-gray mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-brand-gray mb-2">Nenhum acordo encontrado</h3>
+              <p className="text-brand-sage">Tente ajustar os filtros de busca.</p>
             </CardContent>
           </Card>
         ) : (
@@ -826,7 +826,7 @@ function AlvarasTab() {
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Total em Alvarás</p>
+                <p className="text-sm text-brand-gray font-medium">Total em Alvarás</p>
                 <p className="text-2xl font-bold text-brand">{formatCurrency(totalValue)}</p>
               </div>
               <Receipt className="h-8 w-8 text-brand" />
@@ -838,7 +838,7 @@ function AlvarasTab() {
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Pendentes de Recebimento</p>
+                <p className="text-sm text-brand-gray font-medium">Pendentes de Recebimento</p>
                 <p className="text-2xl font-bold text-brand-beige">{formatCurrency(pendingValue)}</p>
               </div>
               <Clock className="h-8 w-8 text-brand-beige" />
@@ -850,7 +850,7 @@ function AlvarasTab() {
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Taxa de Recebimento</p>
+                <p className="text-sm text-brand-gray font-medium">Taxa de Recebimento</p>
                 <p className="text-2xl font-bold text-green-600">{alvaras.length > 0 ? ((alvaras.filter(a => a.received).length / alvaras.length) * 100).toFixed(1) : 0}%</p>
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
@@ -863,11 +863,11 @@ function AlvarasTab() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-              <Input placeholder="Buscar por processo, credor ou vara..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
+              <Input placeholder="Buscar por processo, credor ou vara..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="received">Recebidos</SelectItem>
@@ -880,15 +880,15 @@ function AlvarasTab() {
 
       <div className="space-y-4">
         {isLoading ? (
-          <div className="text-center py-8"><Loader2 className="h-8 w-8 mx-auto animate-spin text-slate-500" /></div>
+          <div className="text-center py-8"><Loader2 className="h-8 w-8 mx-auto animate-spin text-brand-sage" /></div>
         ) : isError ? (
           <div className="text-center py-8 text-red-600">Erro ao carregar alvarás: {String(error?.message)}</div>
         ) : filteredAlvaras.length === 0 ? (
           <Card className="border-0 shadow-xl">
              <CardContent className="text-center py-12">
-               <Receipt className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-               <h3 className="text-lg font-semibold text-slate-600 mb-2">Nenhum alvará encontrado</h3>
-               <p className="text-slate-500">Nenhum alvará corresponde aos filtros atuais.</p>
+               <Receipt className="h-16 w-16 text-brand-gray mx-auto mb-4" />
+               <h3 className="text-lg font-semibold text-brand-gray mb-2">Nenhum alvará encontrado</h3>
+               <p className="text-brand-sage">Nenhum alvará corresponde aos filtros atuais.</p>
              </CardContent>
            </Card>
         ) : (
@@ -898,14 +898,14 @@ function AlvarasTab() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
                     <div className="flex items-center space-x-3">
-                      <h4 className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">Processo {alvara.case_number}</h4>
+                      <h4 className="font-semibold text-brand-black group-hover:text-brand-gray transition-colors">Processo {alvara.case_number}</h4>
                       <Badge variant={alvara.received ? "default" : "secondary"} className={alvara.received ? "bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
                         {alvara.received ? "Recebido" : "Pendente"}
                       </Badge>
                     </div>
-                    <p className="text-sm text-slate-600"><strong>Credor:</strong> {alvara.creditor_name || 'Não informado'}</p>
-                    <p className="text-sm text-slate-600"><strong>Vara:</strong> {alvara.court || 'Não informado'}</p>
-                    <div className="flex items-center space-x-4 text-sm text-slate-600">
+                    <p className="text-sm text-brand-gray"><strong>Credor:</strong> {alvara.creditor_name || 'Não informado'}</p>
+                    <p className="text-sm text-brand-gray"><strong>Vara:</strong> {alvara.court || 'Não informado'}</p>
+                    <div className="flex items-center space-x-4 text-sm text-brand-gray">
                       <span><strong>Expedição:</strong> {formatDate(alvara.issue_date)}</span>
                       {alvara.received_date && (<span><strong>Recebimento:</strong> {formatDate(alvara.received_date)}</span>)}
                     </div>
@@ -976,10 +976,10 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Total de Despesas</p>
-                <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalExpenses)}</p>
+                <p className="text-sm text-brand-gray font-medium">Total de Despesas</p>
+                <p className="text-2xl font-bold text-brand-black">{formatCurrency(totalExpenses)}</p>
               </div>
-              <CreditCard className="h-8 w-8 text-slate-600" />
+              <CreditCard className="h-8 w-8 text-brand-gray" />
             </div>
           </CardContent>
         </Card>
@@ -988,7 +988,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Despesas Pagas</p>
+                <p className="text-sm text-brand-gray font-medium">Despesas Pagas</p>
                 <p className="text-2xl font-bold text-green-600">{formatCurrency(paidExpenses)}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
@@ -1000,7 +1000,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Despesas Pendentes</p>
+                <p className="text-sm text-brand-gray font-medium">Despesas Pendentes</p>
                 <p className="text-2xl font-bold text-brand-beige">{formatCurrency(pendingExpenses)}</p>
               </div>
               <Clock className="h-8 w-8 text-brand-beige" />
@@ -1012,7 +1012,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 font-medium">Total de Itens</p>
+                <p className="text-sm text-brand-gray font-medium">Total de Itens</p>
                 <p className="text-2xl font-bold text-brand">{filteredExpenses.length}</p>
               </div>
               <FileText className="h-8 w-8 text-brand" />
@@ -1027,7 +1027,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
             <div className="flex items-center gap-3">
               <Label className="text-slate-700 font-semibold whitespace-nowrap">Período:</Label>
               <Select value={String(selectedDate.month)} onValueChange={(v) => handleDateChange('month', v)}>
-                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
+                <SelectTrigger className="w-[150px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Mês" /></SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 12 }, (_, i) => (
                     <SelectItem key={i + 1} value={String(i + 1)}>
@@ -1037,7 +1037,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
                 </SelectContent>
               </Select>
               <Select value={String(selectedDate.year)} onValueChange={(v) => handleDateChange('year', v)}>
-                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
+                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Ano" /></SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 5 }, (_, i) => (
                     <SelectItem key={i} value={String(new Date().getFullYear() - i)}>
@@ -1054,11 +1054,11 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
 
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-              <Input placeholder="Buscar despesas..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
+              <Input placeholder="Buscar despesas..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-[150px] sm:w-[180px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Categoria" /></SelectTrigger>
+              <SelectTrigger className="w-[150px] sm:w-[180px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Categoria" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas Categorias</SelectItem>
                 <SelectItem value="Fixo">Fixo</SelectItem>
@@ -1067,7 +1067,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[150px] sm:w-[180px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectTrigger className="w-[150px] sm:w-[180px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos Status</SelectItem>
                 <SelectItem value="paid">Pago</SelectItem>
@@ -1082,9 +1082,9 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
         {filteredExpenses.length === 0 ? (
           <Card className="border-0 shadow-xl">
             <CardContent className="text-center py-12">
-              <CreditCard className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-slate-600 mb-2">Nenhuma despesa encontrada</h3>
-              <p className="text-slate-500">Adicione uma nova despesa para começar a controlar os custos.</p>
+              <CreditCard className="h-16 w-16 text-brand-gray mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-brand-gray mb-2">Nenhuma despesa encontrada</h3>
+              <p className="text-brand-sage">Adicione uma nova despesa para começar a controlar os custos.</p>
             </CardContent>
           </Card>
         ) : (
@@ -1094,26 +1094,26 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
                 <div className="flex items-center justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                      <h4 className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">{expense.description}</h4>
+                      <h4 className="font-semibold text-brand-black group-hover:text-brand-gray transition-colors">{expense.description}</h4>
                       <Badge variant={expense.status === 'paid' ? "default" : "secondary"} className={expense.status === 'paid' ? "bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white" : "bg-gradient-to-r from-orange-500 to-amber-600 text-white"}>
                         {expense.status === 'paid' ? "Pago" : "Pendente"}
                       </Badge>
-                      <Badge variant="outline" className="border-slate-300 text-slate-700">{expense.category}</Badge>
+                      <Badge variant="outline" className="border-brand-gray text-slate-700">{expense.category}</Badge>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-slate-600">
+                    <div className="flex items-center gap-4 text-sm text-brand-gray">
                       <span><strong>Data:</strong> {formatDate(expense.date)}</span>
                       {expense.due_date && (<span><strong>Vencimento:</strong> {formatDate(expense.due_date)}</span>)}
                       {expense.payment_method && (<span><strong>Forma de Pagamento:</strong> {expense.payment_method}</span>)}
                     </div>
-                    {expense.notes && (<p className="text-sm text-slate-600"><strong>Observações:</strong> {expense.notes}</p>)}
+                    {expense.notes && (<p className="text-sm text-brand-gray"><strong>Observações:</strong> {expense.notes}</p>)}
                   </div>
                   <div className="text-right space-y-2">
-                    <p className="text-2xl font-bold text-slate-900">{formatCurrency(expense.value)}</p>
+                    <p className="text-2xl font-bold text-brand-black">{formatCurrency(expense.value)}</p>
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => onToggleExpenseStatus(expense.id)} className="border-2 border-slate-200 rounded-xl">
+                      <Button size="sm" variant="outline" onClick={() => onToggleExpenseStatus(expense.id)} className="border-2 border-brand-gray rounded-xl">
                         {expense.status === 'paid' ? 'Marcar Pendente' : 'Marcar Pago'}
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => onEditExpense(expense)} className="border-2 border-slate-200 rounded-xl"><Edit className="h-4 w-4" /></Button>
+                      <Button size="sm" variant="outline" onClick={() => onEditExpense(expense)} className="border-2 border-brand-gray rounded-xl"><Edit className="h-4 w-4" /></Button>
                       <Button size="sm" variant="destructive" onClick={() => onDeleteExpense(expense.id)} className="border-2 border-red-200 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl"><Trash2 className="h-4 w-4" /></Button>
                     </div>
                   </div>
@@ -1284,7 +1284,7 @@ export function FinancialModule() {
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-red-700 mb-2">Erro ao carregar dados financeiros</h3>
           <p className="text-red-600 mb-4">{error.message}</p>
-          <Button onClick={() => refetch()} className="bg-gradient-to-r from-brand-olive/80 to-brand-olive hover:from-red-600 hover:to-rose-700 shadow-lg rounded-xl">
+          <Button onClick={() => refetch()} className="bg-gradient-to-r from-brand-gray/80 to-brand-gray hover:from-red-600 hover:to-rose-700 shadow-lg rounded-xl">
             <RefreshCw className="mr-2 h-4 w-4" /> Tentar Novamente
           </Button>
         </CardContent>
@@ -1296,8 +1296,8 @@ export function FinancialModule() {
     return (
       <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
-          <p className="text-slate-600 font-medium">Carregando dados financeiros...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
+          <p className="text-brand-gray font-medium">Carregando dados financeiros...</p>
         </div>
       </div>
     );
@@ -1314,9 +1314,9 @@ export function FinancialModule() {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-4xl font-bold mb-3">Módulo Financeiro</h2>
-              <p className="text-emerald-100 text-xl">Controle total sobre acordos, alvarás, e despesas</p>
+              <p className="text-brand-gray text-xl">Controle total sobre acordos, alvarás, e despesas</p>
             </div>
-            <Button onClick={() => refetch()} className="bg-white text-emerald-900 hover:bg-slate-100 shadow-lg rounded-xl">
+            <Button onClick={() => refetch()} className="bg-white text-brand-black hover:bg-brand-beige/50 shadow-lg rounded-xl">
               <RefreshCw className="mr-2 h-4 w-4" /> Atualizar Dados
             </Button>
           </div>
@@ -1326,12 +1326,12 @@ export function FinancialModule() {
       <FinancialStats agreements={safeAgreements} />
 
       <Tabs defaultValue="monthly_installments" className="space-y-6">
-        <TabsList className="grid grid-cols-5 w-full bg-slate-100/50 p-1 rounded-2xl border-0">
-            <TabsTrigger value="monthly_installments" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-emerald-700 py-3"><Calendar className="h-4 w-4" /><span>Parcelas do Mês</span></TabsTrigger>
-            <TabsTrigger value="received_payments" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-emerald-700 py-3"><Banknote className="h-4 w-4" /><span>Recebidos do Mês</span></TabsTrigger>
-            <TabsTrigger value="acordos" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-emerald-700 py-3"><FileText className="h-4 w-4" /><span>Acordos</span><Badge variant="secondary" className="ml-2 bg-slate-200 text-slate-700">{safeAgreements.length}</Badge></TabsTrigger>
-            <TabsTrigger value="alvaras" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-emerald-700 py-3"><Receipt className="h-4 w-4" /><span>Alvarás</span></TabsTrigger>
-            <TabsTrigger value="despesas" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-emerald-700 py-3"><CreditCard className="h-4 w-4" /><span>Despesas</span><Badge variant="secondary" className="ml-2 bg-slate-200 text-slate-700">{expenses.length}</Badge></TabsTrigger>
+        <TabsList className="grid grid-cols-5 w-full bg-brand-beige/50/50 p-1 rounded-2xl border-0">
+            <TabsTrigger value="monthly_installments" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><Calendar className="h-4 w-4" /><span>Parcelas do Mês</span></TabsTrigger>
+            <TabsTrigger value="received_payments" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><Banknote className="h-4 w-4" /><span>Recebidos do Mês</span></TabsTrigger>
+            <TabsTrigger value="acordos" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><FileText className="h-4 w-4" /><span>Acordos</span><Badge variant="secondary" className="ml-2 bg-brand-gray/30 text-slate-700">{safeAgreements.length}</Badge></TabsTrigger>
+            <TabsTrigger value="alvaras" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><Receipt className="h-4 w-4" /><span>Alvarás</span></TabsTrigger>
+            <TabsTrigger value="despesas" className="flex items-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-lg data-[state=active]:text-brand py-3"><CreditCard className="h-4 w-4" /><span>Despesas</span><Badge variant="secondary" className="ml-2 bg-brand-gray/30 text-slate-700">{expenses.length}</Badge></TabsTrigger>
         </TabsList>
 
         <TabsContent value="monthly_installments"><MonthlyInstallmentsTab /></TabsContent>
@@ -1360,16 +1360,16 @@ export function FinancialModule() {
         <DialogContent className="sm:max-w-2xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center text-2xl font-bold"><Send className="mr-2 h-5 w-5" /> Enviar Lembrete para {selectedRecipient?.name}</DialogTitle>
-            <DialogDescription className="text-slate-600">
+            <DialogDescription className="text-brand-gray">
               {selectedRecipient?.type === 'acordo' ? 'Lembrete de parcela em atraso' : 'Lembrete de parcela em atraso'}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <Label htmlFor="message" className="text-slate-700 font-semibold">Conteúdo da Mensagem</Label>
-            <Textarea id="message" value={messageText} onChange={e => setMessageText(e.target.value)} className="min-h-[150px] mt-2 bg-white border-2 border-slate-200 rounded-xl" />
+            <Textarea id="message" value={messageText} onChange={e => setMessageText(e.target.value)} className="min-h-[150px] mt-2 bg-white border-2 border-brand-gray rounded-xl" />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setMessageModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={() => setMessageModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
             <Button onClick={() => { toast({ title: "Mensagem Enviada!", description: `Lembrete enviado para ${selectedRecipient?.name}` }); setMessageModalOpen(false); }} className="bg-brand hover:bg-brand-700 text-white shadow-lg rounded-xl">
               <Send className="mr-2 h-4 w-4" /> Enviar Mensagem
             </Button>

@@ -27,17 +27,17 @@ interface ReportsModuleProps {
 const KpiCard: React.FC<KpiCardProps> = ({ title, value, description, icon: Icon, onClick, colorClass }) => (
   <Card 
     onClick={onClick}
-    className="bg-white/80 backdrop-blur border border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+    className="bg-white/80 backdrop-blur border border-brand-gray shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
   >
     <CardHeader className="pb-2">
-      <CardTitle className="text-sm font-medium text-slate-600 flex items-center">
+      <CardTitle className="text-sm font-medium text-brand-gray flex items-center">
         <Icon className="h-4 w-4 mr-2" />
         {title}
       </CardTitle>
     </CardHeader>
     <CardContent>
       <div className={`text-2xl font-bold ${colorClass}`}>{value}</div>
-      <p className="text-xs text-slate-500 mt-1">{description}</p>
+      <p className="text-xs text-brand-sage mt-1">{description}</p>
     </CardContent>
   </Card>
 );
@@ -114,9 +114,9 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
     <div className="space-y-8">
       {/* Filtros de Período */}
       <div className="flex justify-end space-x-2">
-        <Button variant={period === 'week' ? 'default' : 'outline'} onClick={() => setPeriod('week')} className={period === 'week' ? 'bg-slate-800 text-white': ''}>Esta Semana</Button>
-        <Button variant={period === 'month' ? 'default' : 'outline'} onClick={() => setPeriod('month')} className={period === 'month' ? 'bg-slate-800 text-white' : ''}>Este Mês</Button>
-        <Button variant={period === 'year' ? 'default' : 'outline'} onClick={() => setPeriod('year')} className={period === 'year' ? 'bg-slate-800 text-white': ''}>Este Ano</Button>
+        <Button variant={period === 'week' ? 'default' : 'outline'} onClick={() => setPeriod('week')} className={period === 'week' ? 'bg-brand text-white': ''}>Esta Semana</Button>
+        <Button variant={period === 'month' ? 'default' : 'outline'} onClick={() => setPeriod('month')} className={period === 'month' ? 'bg-brand text-white' : ''}>Este Mês</Button>
+        <Button variant={period === 'year' ? 'default' : 'outline'} onClick={() => setPeriod('year')} className={period === 'year' ? 'bg-brand text-white': ''}>Este Ano</Button>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -125,7 +125,7 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
           value={loadingEntities ? '...' : kpiData.clients.value}
           description={kpiData.clients.description}
           icon={Users}
-          colorClass="text-slate-900"
+          colorClass="text-brand-black"
           onClick={() => onNavigate('entities')}
         />
         <KpiCard
@@ -133,7 +133,7 @@ export function ReportsModule({ onNavigate }: ReportsModuleProps) {
           value={loadingCases ? '...' : kpiData.activeCases.value}
           description={kpiData.activeCases.description}
           icon={Briefcase}
-          colorClass="text-slate-900"
+          colorClass="text-brand-black"
           onClick={() => onNavigate('cases', { cases: { status: 'Em andamento' } })}
         />
         <KpiCard

@@ -81,7 +81,7 @@ export default function ContactForm() {
         <h3 className="text-2xl font-bold mb-2" style={{color: '#1e293b'}}>
           Primeira Consulta Gratuita
         </h3>
-        <p className="text-slate-600">
+        <p className="text-brand-gray">
           Preencha o formulário ou entre em contato pelo WhatsApp
         </p>
       </div>
@@ -97,7 +97,7 @@ export default function ContactForm() {
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
               required 
-              className="border-slate-300 focus:border-brand focus:ring-brand "
+              className="border-brand-gray focus:border-brand focus:ring-brand "
             />
           </div>
           <div className="space-y-2">
@@ -109,7 +109,7 @@ export default function ContactForm() {
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
               required 
-              className="border-slate-300 focus:border-brand focus:ring-brand "
+              className="border-brand-gray focus:border-brand focus:ring-brand "
             />
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function ContactForm() {
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
             required 
-            className="border-slate-300 focus:border-brand focus:ring-brand"
+            className="border-brand-gray focus:border-brand focus:ring-brand"
           />
         </div>
 
@@ -131,8 +131,8 @@ export default function ContactForm() {
           <div className="space-y-2">
             <Label className="text-slate-700 font-medium">Área Jurídica</Label>
             <Select value={formData.subject} onValueChange={(value) => handleChange('subject', value)}>
-              <SelectTrigger className="border-slate-300 focus:border-brand focus:ring-brand">
-                <SelectValue placeholder="Selecione a área" className="text-slate-500"/>
+              <SelectTrigger className="border-brand-gray focus:border-brand focus:ring-brand">
+                <SelectValue placeholder="Selecione a área" className="text-brand-sage"/>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="direito-civil">Direito Civil</SelectItem>
@@ -149,8 +149,8 @@ export default function ContactForm() {
           <div className="space-y-2">
             <Label className="text-slate-700 font-medium">Urgência</Label>
             <Select value={formData.urgency} onValueChange={(value) => handleChange('urgency', value)}>
-              <SelectTrigger className="border-slate-300 focus:border-brand focus:ring-brand">
-                <SelectValue placeholder="Nível de urgência" className="text-slate-500" />
+              <SelectTrigger className="border-brand-gray focus:border-brand focus:ring-brand">
+                <SelectValue placeholder="Nível de urgência" className="text-brand-sage" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="alta">Alta - Preciso hoje</SelectItem>
@@ -169,7 +169,7 @@ export default function ContactForm() {
             value={formData.message}
             onChange={(e) => handleChange('message', e.target.value)}
             required 
-            className="min-h-[120px] border-slate-300 focus:border-brand focus:ring-brand" 
+            className="min-h-[120px] border-brand-gray focus:border-brand focus:ring-brand" 
           />
         </div>
 

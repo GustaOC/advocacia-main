@@ -31,8 +31,8 @@ function PetitionsStats({ petitions }: { petitions: any[] }) {
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -60,8 +60,8 @@ export function PetitionsModule() {
     return (
       <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
-          <p className="text-slate-600 font-medium">Carregando petições...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
+          <p className="text-brand-gray font-medium">Carregando petições...</p>
         </div>
       </div>
     );
@@ -84,8 +84,8 @@ export function PetitionsModule() {
       {petitions && petitions.length > 0 && <PetitionsStats petitions={petitions} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
-          <CardTitle className="text-2xl font-bold text-slate-900">Lista de Petições</CardTitle>
+        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+          <CardTitle className="text-2xl font-bold text-brand-black">Lista de Petições</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
@@ -109,7 +109,7 @@ export function PetitionsModule() {
                         <span className="font-medium group-hover:text-brand-sage transition-colors">{petition.cases?.title || 'N/A'}</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-slate-600">{petition.employees?.name || 'N/A'}</TableCell>
+                    <TableCell className="text-brand-gray">{petition.employees?.name || 'N/A'}</TableCell>
                     <TableCell>
                       <Badge className={`${
                         petition.status?.toLowerCase() === 'concluída' ? 'bg-gradient-to-r from-green-500 to-green-600' :
@@ -119,15 +119,15 @@ export function PetitionsModule() {
                         {petition.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-slate-600">{format(new Date(petition.created_at), 'dd/MM/yyyy HH:mm')}</TableCell>
+                    <TableCell className="text-brand-gray">{format(new Date(petition.created_at), 'dd/MM/yyyy HH:mm')}</TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center py-16">
-                    <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-slate-600 mb-2">Nenhuma petição encontrada</h3>
-                    <p className="text-slate-500">Não há petições cadastradas no momento.</p>
+                    <FileText className="h-16 w-16 text-brand-gray mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-brand-gray mb-2">Nenhuma petição encontrada</h3>
+                    <p className="text-brand-sage">Não há petições cadastradas no momento.</p>
                   </TableCell>
                 </TableRow>
               )}

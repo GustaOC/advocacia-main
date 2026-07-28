@@ -28,8 +28,8 @@ export function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-800">
-      <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-50 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-brand">
+      <header className="bg-white/80 backdrop-blur-xl border-b border-brand-gray/50 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="relative w-40 h-12">
             <Image 
@@ -41,10 +41,10 @@ export function LandingPage() {
             />
           </div>
           <nav className="hidden md:flex space-x-8 items-center">
-            <Link href="#inicio" className="font-medium hover:text-slate-900 transition-colors">Início</Link>
-            <Link href="#servicos" className="font-medium hover:text-slate-900 transition-colors">Serviços</Link>
-            <Link href="#sobre" className="font-medium hover:text-slate-900 transition-colors">Sobre</Link>
-            <Link href="#contato" className="font-medium hover:text-slate-900 transition-colors">Contato</Link>
+            <Link href="#inicio" className="font-medium hover:text-brand-black transition-colors">Início</Link>
+            <Link href="#servicos" className="font-medium hover:text-brand-black transition-colors">Serviços</Link>
+            <Link href="#sobre" className="font-medium hover:text-brand-black transition-colors">Sobre</Link>
+            <Link href="#contato" className="font-medium hover:text-brand-black transition-colors">Contato</Link>
             <Link href="/login" passHref>
               <Button className="flex items-center gap-2 bg-gradient-to-r from-brand-black to-brand-black/90 text-white px-6 py-3 rounded-xl hover:opacity-90 transition-opacity">
                 <User className="h-4 w-4" />
@@ -58,19 +58,19 @@ export function LandingPage() {
       <main>
         <section id="inicio" className="py-20 container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
-            <Badge className="bg-slate-100 text-slate-800 border-slate-200 px-4 py-2 rounded-xl">Advocacia Especializada</Badge>
-            <h1 className="text-5xl font-bold text-slate-900 leading-tight">
-              Defendendo seus <span className="text-slate-600">direitos</span> com excelência
+            <Badge className="bg-brand-beige/50 text-brand border-brand-gray px-4 py-2 rounded-xl">Advocacia Especializada</Badge>
+            <h1 className="text-5xl font-bold text-brand-black leading-tight">
+              Defendendo seus <span className="text-brand-gray">direitos</span> com excelência
             </h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <p className="text-xl text-brand-gray leading-relaxed">
               Soluções jurídicas personalizadas para pessoas e empresas em Campo Grande - MS.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button onClick={handleWhatsApp} size="lg" className="bg-slate-800 hover:bg-slate-900 text-white">
+              <Button onClick={handleWhatsApp} size="lg" className="bg-brand hover:bg-brand-black text-white">
                 <MessageCircle className="mr-2 h-5 w-5" />
                 Agendar Consulta
               </Button>
-              <Button size="lg" variant="outline" className="border-slate-800 text-slate-800 hover:bg-slate-800 hover:text-white">
+              <Button size="lg" variant="outline" className="border-brand text-brand hover:bg-brand hover:text-white">
                 Nossos Serviços
               </Button>
             </div>
@@ -86,8 +86,8 @@ export function LandingPage() {
 
       </main>
 
-      <footer className="bg-slate-800 text-white py-12">
-        <div className="container mx-auto px-6 text-center text-slate-300">
+      <footer className="bg-brand text-white py-12">
+        <div className="container mx-auto px-6 text-center text-brand-gray">
           <p>&copy; {new Date().getFullYear()} Cássio Miguel Advocacia. Todos os direitos reservados.</p>
         </div>
       </footer>

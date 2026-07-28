@@ -61,8 +61,8 @@ function CasesStats({ cases }: { cases: ExtendedCase[] }) {
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -510,10 +510,10 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
     
     const renderAgreementTypeIcon = (type: string | null | undefined) => {
         switch(type) {
-            case 'Judicial': return <Scale className="h-4 w-4 text-slate-500 mr-2" />;
-            case 'Extrajudicial': return <FileSignature className="h-4 w-4 text-slate-500 mr-2" />;
-            case 'Em Audiência': return <Handshake className="h-4 w-4 text-slate-500 mr-2" />;
-            case 'Pela Loja': return <Store className="h-4 w-4 text-slate-500 mr-2" />;
+            case 'Judicial': return <Scale className="h-4 w-4 text-brand-sage mr-2" />;
+            case 'Extrajudicial': return <FileSignature className="h-4 w-4 text-brand-sage mr-2" />;
+            case 'Em Audiência': return <Handshake className="h-4 w-4 text-brand-sage mr-2" />;
+            case 'Pela Loja': return <Store className="h-4 w-4 text-brand-sage mr-2" />;
             default: return null;
         }
     }
@@ -522,8 +522,8 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
         return (
             <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
                 <div className="text-center space-y-4">
-                    <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
-                    <p className="text-slate-600 font-medium">Carregando casos...</p>
+                    <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
+                    <p className="text-brand-gray font-medium">Carregando casos...</p>
                 </div>
             </div>
         );
@@ -537,7 +537,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="relative z-10">
                     <h2 className="text-4xl font-bold mb-3">Gestão de Casos e Processos</h2>
-                    <p className="text-brand-olive text-xl">Administre todos os casos do escritório de forma centralizada e eficiente.</p>
+                    <p className="text-brand-gray text-xl">Administre todos os casos do escritório de forma centralizada e eficiente.</p>
                 </div>
             </div>
 
@@ -548,11 +548,11 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                     <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center">
                         <div className="flex flex-col sm:flex-row gap-4 flex-1">
                             <div className="relative flex-1 max-w-md">
-                                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-                                <Input placeholder="Buscar por título, número ou parte..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-slate-200 focus:border-brand-olive rounded-xl" />
+                                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
+                                <Input placeholder="Buscar por título, número ou parte..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
                             </div>
                             <Select value={filterStatus} onValueChange={setFilterStatus}>
-                                <SelectTrigger className="w-[200px] h-12 bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+                                <SelectTrigger className="w-[200px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">Todos os Status</SelectItem>
                                     <SelectItem value="Em andamento">Em andamento</SelectItem>
@@ -563,11 +563,11 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                             </Select>
                         </div>
                         <div className="flex gap-3 items-center">
-                            <div className="flex items-center gap-2 bg-slate-200 rounded-xl p-1">
-                                <Button variant={viewMode === 'list' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('list')} className={`rounded-lg ${viewMode === 'list' ? '' : 'text-slate-700 hover:text-slate-900'}`}><List className="h-4 w-4" /></Button>
-                                <Button variant={viewMode === 'kanban' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('kanban')} className={`rounded-lg ${viewMode === 'kanban' ? '' : 'text-slate-700 hover:text-slate-900'}`}><LayoutGrid className="h-4 w-4" /></Button>
+                            <div className="flex items-center gap-2 bg-brand-gray/30 rounded-xl p-1">
+                                <Button variant={viewMode === 'list' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('list')} className={`rounded-lg ${viewMode === 'list' ? '' : 'text-slate-700 hover:text-brand-black'}`}><List className="h-4 w-4" /></Button>
+                                <Button variant={viewMode === 'kanban' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('kanban')} className={`rounded-lg ${viewMode === 'kanban' ? '' : 'text-slate-700 hover:text-brand-black'}`}><LayoutGrid className="h-4 w-4" /></Button>
                             </div>
-                            <Button variant="outline" className="border-2 border-slate-200 hover:border-brand-olive hover:bg-brand-olive rounded-xl" onClick={() => setIsImportModalOpen(true)}><Upload className="mr-2 h-4 w-4" /> Importar</Button>
+                            <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl" onClick={() => setIsImportModalOpen(true)}><Upload className="mr-2 h-4 w-4" /> Importar</Button>
                             <Button onClick={openCreateModal} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl"><Plus className="mr-2 h-4 w-4" /> Novo Caso</Button>
                         </div>
                     </div>
@@ -590,13 +590,13 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                             <TableBody>
                                 {filteredCases.map(caseItem => (
                                     <TableRow key={caseItem.id} className="group hover:bg-gradient-to-r hover:from-purple-50/50 hover:to-transparent transition-all duration-200">
-                                        <TableCell><div className="space-y-1"><div className="font-semibold text-slate-900 group-hover:text-brand-olive transition-colors">{caseItem.title}</div><div className="text-sm text-slate-500 font-mono">{caseItem.case_number || "-"}</div></div></TableCell>
+                                        <TableCell><div className="space-y-1"><div className="font-semibold text-brand-black group-hover:text-brand-gray transition-colors">{caseItem.title}</div><div className="text-sm text-brand-sage font-mono">{caseItem.case_number || "-"}</div></div></TableCell>
                                         <TableCell>{getPriorityBadge(caseItem.priority)}</TableCell>
-                                        <TableCell><div className="flex flex-col items-start space-y-1">{getStatusBadge(caseItem.status)}{caseItem.status_reason && (<span className="text-xs text-slate-500 mt-1">{caseItem.status_reason}</span>)}</div></TableCell>
-                                        <TableCell><div className="text-sm text-slate-600">{caseItem.case_parties.map(p => p.entities.name).join(', ')}</div></TableCell>
+                                        <TableCell><div className="flex flex-col items-start space-y-1">{getStatusBadge(caseItem.status)}{caseItem.status_reason && (<span className="text-xs text-brand-sage mt-1">{caseItem.status_reason}</span>)}</div></TableCell>
+                                        <TableCell><div className="text-sm text-brand-gray">{caseItem.case_parties.map(p => p.entities.name).join(', ')}</div></TableCell>
                                         <TableCell className="text-right"><div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Button variant="ghost" size="icon" onClick={() => openViewModal(caseItem)} className="hover:bg-brand-olive hover:text-brand-olive rounded-lg"><Eye className="h-4 w-4" /></Button>
-                                            <Button variant="ghost" size="icon" onClick={() => openEditModal(caseItem)} className="hover:bg-blue-100 hover:text-blue-700 rounded-lg"><Edit className="h-4 w-4" /></Button>
+                                            <Button variant="ghost" size="icon" onClick={() => openViewModal(caseItem)} className="hover:bg-brand-gray hover:text-brand-gray rounded-lg"><Eye className="h-4 w-4" /></Button>
+                                            <Button variant="ghost" size="icon" onClick={() => openEditModal(caseItem)} className="hover:bg-brand-light hover:text-brand rounded-lg"><Edit className="h-4 w-4" /></Button>
                                             <Button variant="ghost" size="icon" onClick={() => handleDeleteCase(caseItem.id)} className="hover:bg-red-100 hover:text-red-700 rounded-lg"><Trash2 className="h-4 w-4" /></Button>
                                         </div></TableCell>
                                     </TableRow>
@@ -611,19 +611,19 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {(['Em andamento', 'Acordo', 'Extinto', 'Pago'] as const).map(status => (
                         <div key={status} className="space-y-4" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, status)}>
-                            <div className="bg-gradient-to-r from-brand-black to-brand-black/90 rounded-xl p-4 sticky top-0 z-10"><div className="flex items-center justify-between"><h3 className="font-bold text-slate-800 text-lg">{status}</h3><Badge variant="secondary" className="bg-white text-slate-700 font-semibold">{filteredCases.filter(c => c.status === status).length}</Badge></div></div>
+                            <div className="bg-gradient-to-r from-brand-black to-brand-black/90 rounded-xl p-4 sticky top-0 z-10"><div className="flex items-center justify-between"><h3 className="font-bold text-brand text-lg">{status}</h3><Badge variant="secondary" className="bg-white text-slate-700 font-semibold">{filteredCases.filter(c => c.status === status).length}</Badge></div></div>
                             <div className="space-y-4 min-h-[400px]">
                                 {filteredCases.filter(c => c.status === status).map(caseItem => (
                                     <div key={caseItem.id} draggable onDragStart={(e) => handleDragStart(e, caseItem)}>
                                         <Card className="cursor-move group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-l-4 border-l-purple-500">
                                             <CardContent className="p-4"><div className="space-y-3">
-                                                <p className="font-semibold text-slate-900 line-clamp-2">{caseItem.title}</p>
-                                                <p className="text-sm text-slate-500 font-mono">{caseItem.case_number}</p>
-                                                <p className="text-xs text-slate-500 truncate">{caseItem.case_parties.map(p => p.entities.name).join(' vs ')}</p>
+                                                <p className="font-semibold text-brand-black line-clamp-2">{caseItem.title}</p>
+                                                <p className="text-sm text-brand-sage font-mono">{caseItem.case_number}</p>
+                                                <p className="text-xs text-brand-sage truncate">{caseItem.case_parties.map(p => p.entities.name).join(' vs ')}</p>
                                                 <div className="flex justify-between items-center">
                                                     {getPriorityBadge(caseItem.priority)}
                                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-brand-olive hover:text-brand-olive" onClick={() => openViewModal(caseItem)}><Eye className="h-4 w-4" /></Button>
+                                                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-brand-gray hover:text-brand-gray" onClick={() => openViewModal(caseItem)}><Eye className="h-4 w-4" /></Button>
                                                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:bg-red-100" onClick={() => handleDeleteCase(caseItem.id)}><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
                                                 </div>
@@ -641,7 +641,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <DialogContent className="sm:max-w-2xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
                     <DialogHeader>
                         <DialogTitle className="flex items-center text-2xl font-bold"><Briefcase className="mr-2 h-5 w-5" /> Detalhes do Caso</DialogTitle>
-                        <DialogDescription className="text-slate-600">{selectedCaseForView?.title}</DialogDescription>
+                        <DialogDescription className="text-brand-gray">{selectedCaseForView?.title}</DialogDescription>
                     </DialogHeader>
                     {selectedCaseForView && (
                         <div className="space-y-4 py-4 max-h-[70vh] overflow-y-auto">
@@ -683,7 +683,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                     </div>
                                 </div>
                             )}
-                            <div><Label className="text-slate-700 font-semibold">Descrição</Label><p className="text-sm bg-slate-50 p-3 rounded-md">{selectedCaseForView.description || 'Nenhuma descrição fornecida.'}</p></div>
+                            <div><Label className="text-slate-700 font-semibold">Descrição</Label><p className="text-sm bg-brand-light/50 p-3 rounded-md">{selectedCaseForView.description || 'Nenhuma descrição fornecida.'}</p></div>
 
                             <div className="border-t pt-4 mt-4">
                                 <h4 className="font-semibold flex items-center mb-4"><FileText className="mr-2 h-4 w-4 text-brand"/> Documentos Anexados</h4>
@@ -692,7 +692,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                         </div>
                     )}
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsViewModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Fechar</Button>
+                        <Button variant="outline" onClick={() => setIsViewModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Fechar</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -700,16 +700,16 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[650px] bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle className="flex items-center text-2xl font-bold"><Briefcase className="mr-2 h-5 w-5 text-brand-olive" />{isEditMode ? 'Editar Caso' : 'Criar Novo Caso'}</DialogTitle>
-                        <DialogDescription className="text-slate-600">{isEditMode ? 'Altere as informações do caso.' : 'Preencha as informações do novo caso/processo judicial'}</DialogDescription>
+                        <DialogTitle className="flex items-center text-2xl font-bold"><Briefcase className="mr-2 h-5 w-5 text-brand-gray" />{isEditMode ? 'Editar Caso' : 'Criar Novo Caso'}</DialogTitle>
+                        <DialogDescription className="text-brand-gray">{isEditMode ? 'Altere as informações do caso.' : 'Preencha as informações do novo caso/processo judicial'}</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-6 py-4 pr-4">
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2"><Label htmlFor="title" className="text-slate-700 font-semibold">Título do Caso *</Label><Input id="title" value={currentCase.title || ''} onChange={(e) => setCurrentCase({ ...currentCase, title: e.target.value })} placeholder="Ex: Ação de Cobrança - João Silva" className="bg-white border-2 border-slate-200 rounded-xl" /></div>
-                            <div className="space-y-2"><Label htmlFor="case_number" className="text-slate-700 font-semibold">Número do Processo</Label><Input id="case_number" value={currentCase.case_number || ''} onChange={(e) => setCurrentCase({ ...currentCase, case_number: e.target.value })} placeholder="0000000-00.0000.0.00.0000" className="font-mono bg-white border-2 border-slate-200 rounded-xl" /></div>
+                            <div className="space-y-2"><Label htmlFor="title" className="text-slate-700 font-semibold">Título do Caso *</Label><Input id="title" value={currentCase.title || ''} onChange={(e) => setCurrentCase({ ...currentCase, title: e.target.value })} placeholder="Ex: Ação de Cobrança - João Silva" className="bg-white border-2 border-brand-gray rounded-xl" /></div>
+                            <div className="space-y-2"><Label htmlFor="case_number" className="text-slate-700 font-semibold">Número do Processo</Label><Input id="case_number" value={currentCase.case_number || ''} onChange={(e) => setCurrentCase({ ...currentCase, case_number: e.target.value })} placeholder="0000000-00.0000.0.00.0000" className="font-mono bg-white border-2 border-brand-gray rounded-xl" /></div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2"><Label htmlFor="court" className="text-slate-700 font-semibold">Vara/Tribunal</Label><Input id="court" value={currentCase.court || ''} onChange={(e) => setCurrentCase({ ...currentCase, court: e.target.value })} placeholder="Ex: 1ª Vara Cível de Campo Grande" className="bg-white border-2 border-slate-200 rounded-xl" /></div>
+                            <div className="space-y-2"><Label htmlFor="court" className="text-slate-700 font-semibold">Vara/Tribunal</Label><Input id="court" value={currentCase.court || ''} onChange={(e) => setCurrentCase({ ...currentCase, court: e.target.value })} placeholder="Ex: 1ª Vara Cível de Campo Grande" className="bg-white border-2 border-brand-gray rounded-xl" /></div>
                             <div className="space-y-2">
                                 <Label htmlFor="value" className="text-slate-700 font-semibold">Valor da Causa</Label>
                                 <Input 
@@ -723,7 +723,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                     }} 
                                     disabled={isEditMode} 
                                     placeholder="0,00" 
-                                    className="bg-white border-2 border-slate-200 rounded-xl" 
+                                    className="bg-white border-2 border-brand-gray rounded-xl" 
                                 />
                             </div>
                         </div>
@@ -731,37 +731,37 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                             <div className="space-y-2">
                                 <Label className="text-slate-700 font-semibold">Cliente *</Label>
                                 <Select value={String(currentCase.client_entity_id || '')} onValueChange={(value) => setCurrentCase({ ...currentCase, client_entity_id: value })}>
-                                    <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione o cliente" /></SelectTrigger>
+                                    <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Selecione o cliente" /></SelectTrigger>
                                     <SelectContent>{allEntities.filter(e => String(e.type || '').trim().toLowerCase().startsWith('cliente')).map(e => <SelectItem key={String(e.id)} value={String(e.id)}>{e.name}</SelectItem>)}</SelectContent>
                                 </Select>
                             </div>
                             <div className="space-y-2">
                                 <Label className="text-slate-700 font-semibold">Executado *</Label>
                                 <Select value={String(currentCase.executed_entity_id || '')} onValueChange={(value) => setCurrentCase({ ...currentCase, executed_entity_id: value })}>
-                                    <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione o executado" /></SelectTrigger>
+                                    <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Selecione o executado" /></SelectTrigger>
                                     <SelectContent>{allEntities.filter(e => String(e.type || '').trim().toLowerCase().startsWith('executado')).map(e => <SelectItem key={String(e.id)} value={String(e.id)}>{e.name}</SelectItem>)}</SelectContent>
                                 </Select>
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2"><Label htmlFor="priority" className="text-slate-700 font-semibold">Prioridade</Label><Select value={currentCase.priority} onValueChange={(value: 'Alta' | 'Média' | 'Baixa') => setCurrentCase({ ...currentCase, priority: value })}><SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Alta">Alta</SelectItem><SelectItem value="Média">Média</SelectItem><SelectItem value="Baixa">Baixa</SelectItem></SelectContent></Select></div>
-                            <div className="space-y-2"><Label htmlFor="status" className="text-slate-700 font-semibold">Status</Label><Select value={currentCase.status} onValueChange={(value: ExtendedCase['status']) => setCurrentCase({ ...currentCase, status: value })}><SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Em andamento">Em andamento</SelectItem><SelectItem value="Acordo">Acordo</SelectItem><SelectItem value="Extinto">Extinto</SelectItem><SelectItem value="Pago">Pago</SelectItem></SelectContent></Select></div>
+                            <div className="space-y-2"><Label htmlFor="priority" className="text-slate-700 font-semibold">Prioridade</Label><Select value={currentCase.priority} onValueChange={(value: 'Alta' | 'Média' | 'Baixa') => setCurrentCase({ ...currentCase, priority: value })}><SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Alta">Alta</SelectItem><SelectItem value="Média">Média</SelectItem><SelectItem value="Baixa">Baixa</SelectItem></SelectContent></Select></div>
+                            <div className="space-y-2"><Label htmlFor="status" className="text-slate-700 font-semibold">Status</Label><Select value={currentCase.status} onValueChange={(value: ExtendedCase['status']) => setCurrentCase({ ...currentCase, status: value })}><SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="Em andamento">Em andamento</SelectItem><SelectItem value="Acordo">Acordo</SelectItem><SelectItem value="Extinto">Extinto</SelectItem><SelectItem value="Pago">Pago</SelectItem></SelectContent></Select></div>
                         </div>
                         {currentCase.status === 'Acordo' && (
                             <div className="border-t border-dashed pt-6 mt-2 space-y-6">
-                                <h4 className="font-semibold text-lg flex items-center text-slate-800"><DollarSign className="mr-2 h-5 w-5 text-yellow-600"/> Detalhes do Acordo</h4>
+                                <h4 className="font-semibold text-lg flex items-center text-brand"><DollarSign className="mr-2 h-5 w-5 text-yellow-600"/> Detalhes do Acordo</h4>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Tipo de Acordo</Label><Select value={currentCase.agreement_type || ''} onValueChange={(value) => setCurrentCase({ ...currentCase, agreement_type: value as ExtendedCase['agreement_type'] })}><SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger><SelectContent><SelectItem value="Judicial">Judicial</SelectItem><SelectItem value="Extrajudicial">Extrajudicial</SelectItem><SelectItem value="Em Audiência">Em Audiência</SelectItem><SelectItem value="Pela Loja">Pela Loja</SelectItem></SelectContent></Select></div>
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor do Acordo</Label><Input type="text" placeholder="0,00" value={currentCase.agreement_value != null ? Number(currentCase.agreement_value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); const val = digits ? parseInt(digits, 10) / 100 : null; setCurrentCase({ ...currentCase, agreement_value: val }); }} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Tipo de Acordo</Label><Select value={currentCase.agreement_type || ''} onValueChange={(value) => setCurrentCase({ ...currentCase, agreement_type: value as ExtendedCase['agreement_type'] })}><SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger><SelectContent><SelectItem value="Judicial">Judicial</SelectItem><SelectItem value="Extrajudicial">Extrajudicial</SelectItem><SelectItem value="Em Audiência">Em Audiência</SelectItem><SelectItem value="Pela Loja">Pela Loja</SelectItem></SelectContent></Select></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor do Acordo</Label><Input type="text" placeholder="0,00" value={currentCase.agreement_value != null ? Number(currentCase.agreement_value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); const val = digits ? parseInt(digits, 10) / 100 : null; setCurrentCase({ ...currentCase, agreement_value: val }); }} className="bg-white border-2 border-brand-gray rounded-xl" /></div>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4">
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor de Entrada</Label><Input type="text" placeholder="0,00" value={currentCase.down_payment != null ? Number(currentCase.down_payment).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); const val = digits ? parseInt(digits, 10) / 100 : null; setCurrentCase({ ...currentCase, down_payment: val }); }} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Nº de Parcelas</Label><Input type="number" value={currentCase.installments ?? ''} onChange={(e) => setCurrentCase({ ...currentCase, installments: parseInt(e.target.value, 10) })} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
-                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Vencimento da 1ª Parcela</Label><Input type="date" value={currentCase.installment_due_date || ''} onChange={(e) => setCurrentCase({ ...currentCase, installment_due_date: e.target.value })} className="bg-white border-2 border-slate-200 rounded-xl" /></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Valor de Entrada</Label><Input type="text" placeholder="0,00" value={currentCase.down_payment != null ? Number(currentCase.down_payment).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''} onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); const val = digits ? parseInt(digits, 10) / 100 : null; setCurrentCase({ ...currentCase, down_payment: val }); }} className="bg-white border-2 border-brand-gray rounded-xl" /></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Nº de Parcelas</Label><Input type="number" value={currentCase.installments ?? ''} onChange={(e) => setCurrentCase({ ...currentCase, installments: parseInt(e.target.value, 10) })} className="bg-white border-2 border-brand-gray rounded-xl" /></div>
+                                    <div className="space-y-2"><Label className="text-slate-700 font-semibold">Vencimento da 1ª Parcela</Label><Input type="date" value={currentCase.installment_due_date || ''} onChange={(e) => setCurrentCase({ ...currentCase, installment_due_date: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" /></div>
                                 </div>
                                 {/* INÍCIO DA SEÇÃO DO ALVARÁ */}
                                 <div className="border-t pt-4 mt-4 space-y-4">
-                                    <h5 className="font-semibold flex items-center text-slate-800">
+                                    <h5 className="font-semibold flex items-center text-brand">
                                         <FileSignature className="mr-2 h-4 w-4 text-brand" />
                                         Informações do Alvará
                                     </h5>
@@ -793,7 +793,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                                 const val = digits ? parseInt(digits, 10) / 100 : null;
                                                 setCurrentCase({ ...currentCase, alvara_value: val });
                                             }}
-                                            className="bg-white border-2 border-slate-200 rounded-xl"
+                                            className="bg-white border-2 border-brand-gray rounded-xl"
                                         />
                                         </div>
                                     )}
@@ -801,7 +801,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 {/* FIM DA SEÇÃO DO ALVARÁ */}
                             </div>
                         )}
-                        <div className="space-y-2"><Label htmlFor="description" className="text-slate-700 font-semibold">Descrição</Label><Textarea id="description" value={currentCase.description || ''} onChange={(e) => setCurrentCase({ ...currentCase, description: e.target.value })} placeholder="Descrição detalhada do caso..." className="min-h-[100px] bg-white border-2 border-slate-200 rounded-xl" /></div>
+                        <div className="space-y-2"><Label htmlFor="description" className="text-slate-700 font-semibold">Descrição</Label><Textarea id="description" value={currentCase.description || ''} onChange={(e) => setCurrentCase({ ...currentCase, description: e.target.value })} placeholder="Descrição detalhada do caso..." className="min-h-[100px] bg-white border-2 border-brand-gray rounded-xl" /></div>
 
                         <div className="border-t pt-4 mt-2 space-y-2">
                             <Label className="text-slate-700 font-semibold">Anexar Documentos (PDF/Word)</Label>
@@ -809,7 +809,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+                        <Button variant="outline" onClick={() => setIsModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
                         <Button onClick={handleSaveCase} disabled={saveCaseMutation.isPending} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl">
                             {saveCaseMutation.isPending ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" /><span>Salvando...</span></>) : (<><Plus className="mr-2 h-4 w-4" /><span>{isEditMode ? 'Salvar Alterações' : 'Criar Caso'}</span></>)}
                         </Button>
@@ -822,10 +822,10 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <DialogContent className="max-w-md bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
                     <DialogHeader>
                         <DialogTitle className="flex items-center space-x-2">
-                            <Upload className="h-5 w-5 text-brand-olive" />
+                            <Upload className="h-5 w-5 text-brand-gray" />
                             <span>Importar Processos</span>
                         </DialogTitle>
-                        <DialogDescription className="text-slate-600">
+                        <DialogDescription className="text-brand-gray">
                             Importe múltiplos processos a partir de um arquivo Excel
                         </DialogDescription>
                     </DialogHeader>
@@ -838,11 +838,11 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 accept=".xlsx,.xls"
                                 onChange={(e) => setImportFile(e.target.files?.[0] || null)}
                                 disabled={isImporting}
-                                className="bg-white border-2 border-slate-200 rounded-xl"
+                                className="bg-white border-2 border-brand-gray rounded-xl"
                             />
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-2">
-                                <p className="text-sm text-blue-800 font-medium mb-1">Colunas necessárias:</p>
-                                <ul className="text-xs text-blue-700 space-y-1">
+                            <div className="bg-brand-light/50 border border-brand-light rounded-lg p-3 mt-2">
+                                <p className="text-sm text-brand font-medium mb-1">Colunas necessárias:</p>
+                                <ul className="text-xs text-brand space-y-1">
                                     <li>• Cliente</li>
                                     <li>• Executado</li>
                                     <li>• Numero Processo (opcional)</li>
@@ -860,7 +860,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                     setImportFile(null);
                                 }}
                                 disabled={isImporting}
-                                className="border-2 border-slate-200 rounded-xl"
+                                className="border-2 border-brand-gray rounded-xl"
                             >
                                 Cancelar
                             </Button>

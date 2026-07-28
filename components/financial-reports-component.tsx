@@ -252,11 +252,11 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
       {/* Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+          <h1 className="text-3xl font-bold text-brand-black flex items-center gap-3">
             <FileBarChart className="h-8 w-8 text-brand" />
             Relatórios Financeiros
           </h1>
-          <p className="text-slate-600 mt-1">Análise detalhada da performance financeira do escritório</p>
+          <p className="text-brand-gray mt-1">Análise detalhada da performance financeira do escritório</p>
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" onClick={() => refetch()}>
@@ -274,7 +274,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5 text-brand-olive" />
+            <Filter className="h-5 w-5 text-brand-gray" />
             Filtros do Relatório
           </CardTitle>
         </CardHeader>
@@ -323,7 +323,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
           <Separator />
 
           <div className="space-y-4">
-            <h4 className="font-semibold text-slate-800">Opções de Conteúdo</h4>
+            <h4 className="font-semibold text-brand">Opções de Conteúdo</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -373,9 +373,9 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
+            <div className="text-center p-4 bg-brand-light/50 rounded-lg">
               <p className="text-sm text-brand font-medium">Total de Acordos</p>
-              <p className="text-2xl font-bold text-blue-800">{data.summary.total_agreements}</p>
+              <p className="text-2xl font-bold text-brand">{data.summary.total_agreements}</p>
               <p className="text-xs text-brand mt-1">no período</p>
             </div>
             <div className="text-center p-4 bg-green-50 rounded-lg">
@@ -383,9 +383,9 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <p className="text-2xl font-bold text-green-800">{formatCurrency(data.summary.total_value)}</p>
               <p className="text-xs text-green-600 mt-1">em acordos</p>
             </div>
-            <div className="text-center p-4 bg-emerald-50 rounded-lg">
+            <div className="text-center p-4 bg-brand-light/50 rounded-lg">
               <p className="text-sm text-brand-sage font-medium">Valor Recebido</p>
-              <p className="text-2xl font-bold text-emerald-800">{formatCurrency(data.summary.paid_amount)}</p>
+              <p className="text-2xl font-bold text-brand">{formatCurrency(data.summary.paid_amount)}</p>
               <p className="text-xs text-brand-sage mt-1">{formatPercentage((data.summary.paid_amount / data.summary.total_value) * 100)}</p>
             </div>
             <div className="text-center p-4 bg-red-50 rounded-lg">
@@ -393,10 +393,10 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <p className="text-2xl font-bold text-red-800">{formatCurrency(data.summary.overdue_amount)}</p>
               <p className="text-xs text-red-600 mt-1">{formatPercentage((data.summary.overdue_amount / data.summary.total_value) * 100)}</p>
             </div>
-            <div className="text-center p-4 bg-brand-olive rounded-lg">
-              <p className="text-sm text-brand-olive font-medium">Taxa de Sucesso</p>
-              <p className="text-2xl font-bold text-brand-olive">{formatPercentage(data.summary.completion_rate)}</p>
-              <p className="text-xs text-brand-olive mt-1">dos acordos</p>
+            <div className="text-center p-4 bg-brand-gray rounded-lg">
+              <p className="text-sm text-brand-gray font-medium">Taxa de Sucesso</p>
+              <p className="text-2xl font-bold text-brand-gray">{formatPercentage(data.summary.completion_rate)}</p>
+              <p className="text-xs text-brand-gray mt-1">dos acordos</p>
             </div>
           </div>
         </CardContent>
@@ -472,14 +472,14 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-slate-600" />
+                  <FileText className="h-5 w-5 text-brand-gray" />
                   Detalhamento por Tipo de Acordo
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-slate-50 border-b">
+                    <thead className="bg-brand-light/50 border-b">
                       <tr>
                         <th className="text-left p-4 font-semibold text-slate-700">Tipo de Acordo</th>
                         <th className="text-left p-4 font-semibold text-slate-700">Quantidade</th>
@@ -490,11 +490,11 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                     </thead>
                     <tbody>
                       {data.agreement_types.map((type: AgreementType, index: number) => (
-                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-brand-light/50'}>
                           <td className="p-4">
                             <div className="flex items-center gap-2">
                               <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                              <span className="font-medium text-slate-900">{type.type}</span>
+                              <span className="font-medium text-brand-black">{type.type}</span>
                             </div>
                           </td>
                           <td className="p-4 font-semibold">{type.count}</td>
@@ -568,19 +568,19 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Valor Médio Mensal</span>
+                    <span className="text-sm text-brand-gray">Valor Médio Mensal</span>
                     <span className="font-semibold text-lg">
                       {formatCurrency(data.monthly_payments.reduce((sum: number, m: MonthlyPayment) => sum + m.total_paid, 0) / data.monthly_payments.length)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Melhor Mês</span>
+                    <span className="text-sm text-brand-gray">Melhor Mês</span>
                     <span className="font-semibold text-green-600">
                       {bestMonth ? formatMonth(bestMonth.month) : 'N/A'}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Tendência</span>
+                    <span className="text-sm text-brand-gray">Tendência</span>
                     <div className="flex items-center gap-1">
                       <TrendingUp className="h-4 w-4 text-green-500" />
                       <span className="font-semibold text-green-600">+15.2%</span>
@@ -597,15 +597,15 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Mês com Mais Acordos</span>
+                    <span className="text-sm text-brand-gray">Mês com Mais Acordos</span>
                     <span className="font-semibold">Setembro</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Período de Baixa</span>
+                    <span className="text-sm text-brand-gray">Período de Baixa</span>
                     <span className="font-semibold">Dezembro - Janeiro</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Variação Sazonal</span>
+                    <span className="text-sm text-brand-gray">Variação Sazonal</span>
                     <span className="font-semibold text-brand-beige">±23%</span>
                   </div>
                 </div>
@@ -619,15 +619,15 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Próximo Mês</span>
+                    <span className="text-sm text-brand-gray">Próximo Mês</span>
                     <span className="font-semibold text-brand">{formatCurrency(195000)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Trimestre</span>
-                    <span className="font-semibold text-brand-olive">{formatCurrency(580000)}</span>
+                    <span className="text-sm text-brand-gray">Trimestre</span>
+                    <span className="font-semibold text-brand-gray">{formatCurrency(580000)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-slate-600">Confiança</span>
+                    <span className="text-sm text-brand-gray">Confiança</span>
                     <Badge variant="outline" className="font-medium text-green-600">87%</Badge>
                   </div>
                 </div>
@@ -652,18 +652,18 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600">Valor Total</span>
+                      <span className="text-sm text-brand-gray">Valor Total</span>
                       <span className="font-semibold text-xl">{formatCurrency(status.total_value)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600">Participação</span>
+                      <span className="text-sm text-brand-gray">Participação</span>
                       <span className="font-semibold">{formatPercentage(status.percentage)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600">Valor Médio</span>
+                      <span className="text-sm text-brand-gray">Valor Médio</span>
                       <span className="font-semibold">{formatCurrency(status.total_value / status.count)}</span>
                     </div>
-                    <div className="w-full bg-slate-200 rounded-full h-2">
+                    <div className="w-full bg-brand-gray/30 rounded-full h-2">
                       <div
                         className="h-2 rounded-full transition-all"
                         style={{
@@ -692,7 +692,7 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               <CardContent className="p-0">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-slate-50 border-b">
+                    <thead className="bg-brand-light/50 border-b">
                       <tr>
                         <th className="text-left p-4 font-semibold text-slate-700">Cliente</th>
                         <th className="text-left p-4 font-semibold text-slate-700">Acordos</th>
@@ -704,22 +704,22 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
                     </thead>
                     <tbody>
                       {data.client_performance.map((client: ClientPerformance, index: number) => (
-                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                        <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-brand-light/50'}>
                           <td className="p-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <div className="w-8 h-8 bg-brand-light rounded-full flex items-center justify-center">
                                 <span className="text-brand font-semibold text-xs">
                                   {client.client_name.split(' ').map((n: string) => n[0]).join('').substring(0, 2)}
                                 </span>
                               </div>
-                              <span className="font-medium text-slate-900">{client.client_name}</span>
+                              <span className="font-medium text-brand-black">{client.client_name}</span>
                             </div>
                           </td>
                           <td className="p-4 font-semibold">{client.agreements_count}</td>
                           <td className="p-4 font-semibold text-green-600">{formatCurrency(client.total_value)}</td>
                           <td className="p-4">
                             <div className="flex items-center gap-2">
-                              <div className="flex-1 bg-slate-200 rounded-full h-2 w-16">
+                              <div className="flex-1 bg-brand-gray/30 rounded-full h-2 w-16">
                                 <div
                                   className="bg-green-500 h-2 rounded-full transition-all"
                                   style={{ width: `${client.payment_rate}%` }}
@@ -796,15 +796,15 @@ export function FinancialReportsComponent({ onNavigateToAgreement }: FinancialRe
               </CardContent>
             </Card>
 
-            <Card className="border-brand-olive">
-              <CardHeader className="bg-brand-olive">
-                <CardTitle className="text-lg text-brand-olive">Alto Risco</CardTitle>
+            <Card className="border-brand-gray">
+              <CardHeader className="bg-brand-gray">
+                <CardTitle className="text-lg text-brand-gray">Alto Risco</CardTitle>
               </CardHeader>
               <CardContent className="pt-4">
-                <div className="text-3xl font-bold text-brand-olive">
+                <div className="text-3xl font-bold text-brand-gray">
                   {data.overdue_analysis.high_risk_count}
                 </div>
-                <p className="text-sm text-brand-olive mt-1">clientes críticos</p>
+                <p className="text-sm text-brand-gray mt-1">clientes críticos</p>
               </CardContent>
             </Card>
           </div>

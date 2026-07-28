@@ -219,7 +219,7 @@ export function InstallmentPaymentModal({
       case 'bank_transfer': return <Building className="h-4 w-4 text-brand" />;
       case 'check': return <Receipt className="h-4 w-4 text-brand-beige" />;
       case 'cash': return <Banknote className="h-4 w-4 text-green-600" />;
-      case 'credit_card': return <CreditCard className="h-4 w-4 text-brand-olive" />;
+      case 'credit_card': return <CreditCard className="h-4 w-4 text-brand-gray" />;
       case 'debit_card': return <CreditCard className="h-4 w-4 text-brand" />;
       default: return <DollarSign className="h-4 w-4 text-gray-600" />;
     }
@@ -259,7 +259,7 @@ export function InstallmentPaymentModal({
             <Receipt className="mr-2 h-6 w-6 text-green-600" />
             Registrar Pagamento - Parcela #{installment.installment_number}
           </DialogTitle>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-brand-gray">
             Cliente: <span className="font-semibold">{agreementData.client_name}</span>
             {agreementData.case_number && (
               <span className="ml-2 font-mono">({agreementData.case_number})</span>
@@ -268,7 +268,7 @@ export function InstallmentPaymentModal({
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto space-y-6">
-          <Card className="border-slate-200">
+          <Card className="border-brand-gray">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center justify-between text-lg">
                 <div className="flex items-center">
@@ -280,9 +280,9 @@ export function InstallmentPaymentModal({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-center p-4 bg-brand-light/50 rounded-lg">
                   <p className="text-sm text-brand font-medium">Valor Original</p>
-                  <p className="text-xl font-bold text-blue-800">
+                  <p className="text-xl font-bold text-brand">
                     {formatCurrency(installment.amount)}
                   </p>
                 </div>
@@ -334,8 +334,8 @@ export function InstallmentPaymentModal({
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center p-3 bg-slate-50 rounded">
-                    <span className="text-sm text-slate-600">Valor da parcela:</span>
+                  <div className="flex justify-between items-center p-3 bg-brand-light/50 rounded">
+                    <span className="text-sm text-brand-gray">Valor da parcela:</span>
                     <span className="font-semibold">{formatCurrency(installment.amount)}</span>
                   </div>
                   <div className="flex justify-between items-center p-3 bg-red-50 rounded">
@@ -347,19 +347,19 @@ export function InstallmentPaymentModal({
                     <span className="font-semibold text-brand-beige">{formatCurrency(calculatedFees.interest)}</span>
                   </div>
                   <Separator />
-                  <div className="flex justify-between items-center p-3 bg-blue-50 rounded border border-blue-200">
-                    <span className="text-base font-medium text-blue-700">Total a pagar:</span>
-                    <span className="text-xl font-bold text-blue-800">{formatCurrency(calculatedFees.totalAmount)}</span>
+                  <div className="flex justify-between items-center p-3 bg-brand-light/50 rounded border border-brand-light">
+                    <span className="text-base font-medium text-brand">Total a pagar:</span>
+                    <span className="text-xl font-bold text-brand">{formatCurrency(calculatedFees.totalAmount)}</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
           )}
 
-          <Card className="border-slate-200">
+          <Card className="border-brand-gray">
             <CardHeader className="pb-4">
               <CardTitle className="flex items-center text-lg">
-                <CreditCard className="mr-2 h-5 w-5 text-brand-olive" />
+                <CreditCard className="mr-2 h-5 w-5 text-brand-gray" />
                 Dados do Pagamento
               </CardTitle>
             </CardHeader>
@@ -430,7 +430,7 @@ export function InstallmentPaymentModal({
                       </SelectItem>
                       <SelectItem value="credit_card">
                         <div className="flex items-center gap-2">
-                          <CreditCard className="h-4 w-4 text-brand-olive" />
+                          <CreditCard className="h-4 w-4 text-brand-gray" />
                           Cartão de Crédito
                         </div>
                       </SelectItem>
@@ -523,7 +523,7 @@ export function InstallmentPaymentModal({
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-600">Valor da parcela:</span>
+                  <span className="text-brand-gray">Valor da parcela:</span>
                   <span className="font-medium">{formatCurrency(installment.amount)}</span>
                 </div>
                 {paymentData.late_fee_paid > 0 && (
@@ -546,7 +546,7 @@ export function InstallmentPaymentModal({
                 )}
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
-                  <span className="text-slate-900">Total Pago:</span>
+                  <span className="text-brand-black">Total Pago:</span>
                   <span className="text-green-700">{formatCurrency(paymentData.amount_paid)}</span>
                 </div>
               </div>
@@ -574,7 +574,7 @@ export function InstallmentPaymentModal({
 
         <DialogFooter className="pt-6 border-t">
           <div className="flex justify-between items-center w-full">
-            <div className="text-sm text-slate-600">
+            <div className="text-sm text-brand-gray">
               <span className="flex items-center gap-1">
                 <Receipt className="h-4 w-4" />
                 Pagamento da parcela #{installment.installment_number}

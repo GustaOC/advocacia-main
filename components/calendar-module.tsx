@@ -49,8 +49,8 @@ function CalendarStats({ events }: { events: CalendarEvent[] }) {
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -245,8 +245,8 @@ export function CalendarModule() {
           {isLoading ? (
             <div className="h-[600px] flex items-center justify-center bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
               <div className="text-center space-y-4">
-                <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto"/>
-                <p className="text-slate-600 font-medium">Carregando agenda...</p>
+                <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto"/>
+                <p className="text-brand-gray font-medium">Carregando agenda...</p>
               </div>
             </div>
           ) : (
@@ -289,12 +289,12 @@ export function CalendarModule() {
           <div className="space-y-4 py-4">
             <div>
               <Label className="text-slate-700 font-semibold">Título *</Label>
-              <Input value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="bg-white border-2 border-slate-200 rounded-xl" />
+              <Input value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" />
             </div>
             <div>
               <Label className="text-slate-700 font-semibold">Tipo</Label>
               <Select value={newEvent.type} onValueChange={(v: any) => setNewEvent({ ...newEvent, type: v })}>
-                <SelectTrigger className="bg-white border-2 border-slate-200 rounded-xl"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="task">Tarefa</SelectItem>
                   <SelectItem value="meeting">Reunião</SelectItem>
@@ -305,11 +305,11 @@ export function CalendarModule() {
             </div>
             <div>
               <Label className="text-slate-700 font-semibold">Descrição</Label>
-              <Textarea value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="bg-white border-2 border-slate-200 rounded-xl" />
+              <Textarea value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={() => setModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
             <Button onClick={saveNewEvent} className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 shadow-lg rounded-xl">Salvar Evento</Button>
           </DialogFooter>
         </DialogContent>
@@ -324,7 +324,7 @@ export function CalendarModule() {
             <div className="space-y-4 py-4">
               <div>
                 <Label className="text-slate-700 font-semibold">Título</Label>
-                <p className="text-slate-900 mt-1">{selectedEvent.title}</p>
+                <p className="text-brand-black mt-1">{selectedEvent.title}</p>
               </div>
               <div>
                 <Label className="text-slate-700 font-semibold">Tipo</Label>
@@ -340,7 +340,7 @@ export function CalendarModule() {
               {selectedEvent.description && (
                 <div>
                   <Label className="text-slate-700 font-semibold">Descrição</Label>
-                  <p className="text-slate-900 mt-1">{selectedEvent.description}</p>
+                  <p className="text-brand-black mt-1">{selectedEvent.description}</p>
                 </div>
               )}
             </div>
@@ -349,7 +349,7 @@ export function CalendarModule() {
             <Button variant="ghost" onClick={deleteEvent} className="text-red-600 hover:text-red-700 hover:bg-red-50">
               <Trash2 className="w-4 h-4 mr-2" /> Excluir
             </Button>
-            <Button variant="outline" onClick={() => setDetailsModalOpen(false)} className="border-2 border-slate-200 rounded-xl">Fechar</Button>
+            <Button variant="outline" onClick={() => setDetailsModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

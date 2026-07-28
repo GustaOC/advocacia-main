@@ -69,7 +69,7 @@ export default function RegisterPage() {
         {inviteValid === null ? (
           <div className="flex flex-col items-center justify-center py-6">
             <Loader2 className="w-8 h-8 animate-spin text-brand mb-2" />
-            <p className="text-sm text-slate-500">Validando convite...</p>
+            <p className="text-sm text-brand-sage">Validando convite...</p>
           </div>
         ) : inviteValid === false ? (
           <div className="bg-red-50 p-6 rounded-xl border border-red-100 flex flex-col items-center text-center">
@@ -79,7 +79,7 @@ export default function RegisterPage() {
           </div>
         ) : (
           <>
-            <p className="text-center text-xs bg-emerald-50 text-emerald-700 p-2 rounded-lg font-medium">
+            <p className="text-center text-xs bg-brand-light/50 text-brand p-2 rounded-lg font-medium">
               ✅ Convite validado com sucesso. Você pode prosseguir.
             </p>
             <button

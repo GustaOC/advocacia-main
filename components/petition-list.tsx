@@ -155,7 +155,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
       },
       under_review: { 
         label: "Em Revisão", 
-        className: "bg-blue-100 text-blue-800 border-blue-200",
+        className: "bg-brand-light text-brand border-brand-light",
         icon: Eye
       },
       approved: { 
@@ -246,7 +246,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
         <CardContent className="flex items-center justify-center py-12">
           <div className="text-center space-y-4">
             <Loader2 className="h-12 w-12 animate-spin text-brand mx-auto" />
-            <p className="text-slate-600">Carregando petições...</p>
+            <p className="text-brand-gray">Carregando petições...</p>
           </div>
         </CardContent>
       </Card>
@@ -260,8 +260,8 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
         <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100">
           <CardContent className="p-4 text-center">
             <FileText className="h-6 w-6 text-brand mx-auto mb-2" />
-            <p className="text-2xl font-bold text-blue-900">{stats.total}</p>
-            <p className="text-xs text-blue-700">Total</p>
+            <p className="text-2xl font-bold text-brand-black">{stats.total}</p>
+            <p className="text-xs text-brand">Total</p>
           </CardContent>
         </Card>
         
@@ -276,8 +276,8 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
         <Card className="border-0 shadow-md bg-gradient-to-br from-blue-50 to-blue-100">
           <CardContent className="p-4 text-center">
             <Eye className="h-6 w-6 text-brand mx-auto mb-2" />
-            <p className="text-2xl font-bold text-blue-900">{stats.inReview}</p>
-            <p className="text-xs text-blue-700">Em Revisão</p>
+            <p className="text-2xl font-bold text-brand-black">{stats.inReview}</p>
+            <p className="text-xs text-brand">Em Revisão</p>
           </CardContent>
         </Card>
 
@@ -307,9 +307,9 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
 
         <Card className="border-0 shadow-md bg-gradient-to-br from-purple-50 to-purple-100">
           <CardContent className="p-4 text-center">
-            <AlertTriangle className="h-6 w-6 text-brand-olive mx-auto mb-2" />
-            <p className="text-2xl font-bold text-brand-olive">{stats.urgent}</p>
-            <p className="text-xs text-brand-olive">Urgentes</p>
+            <AlertTriangle className="h-6 w-6 text-brand-gray mx-auto mb-2" />
+            <p className="text-2xl font-bold text-brand-gray">{stats.urgent}</p>
+            <p className="text-xs text-brand-gray">Urgentes</p>
           </CardContent>
         </Card>
       </div>
@@ -317,14 +317,14 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
       {/* Main Content Card */}
       <Card className="border-0 shadow-lg">
         <CardHeader className="pb-4">
-          <CardTitle className="text-slate-900 flex items-center justify-between">
+          <CardTitle className="text-brand-black flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
+              <div className="p-2 bg-brand-light rounded-lg">
                 <FileText className="h-5 w-5 text-brand" />
               </div>
               <div>
                 <span className="text-xl font-bold">Lista de Petições</span>
-                <p className="text-sm text-slate-600 font-normal">
+                <p className="text-sm text-brand-gray font-normal">
                   Gerencie e acompanhe todas as petições em revisão
                 </p>
               </div>
@@ -340,7 +340,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
           <div className="flex flex-col lg:flex-row gap-4 mb-6">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-brand-gray" />
                 <Input
                   placeholder="Buscar por título, funcionário ou descrição..."
                   value={searchTerm}
@@ -381,10 +381,10 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
           </div>
 
           {/* Table */}
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
+          <div className="rounded-lg border border-brand-gray overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-slate-50">
+                <TableRow className="bg-brand-light/50">
                   <TableHead className="font-semibold">Petição</TableHead>
                   <TableHead className="font-semibold">Funcionário</TableHead>
                   <TableHead className="font-semibold">Status</TableHead>
@@ -399,12 +399,12 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-12">
                       <div className="space-y-4">
-                        <div className="mx-auto w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
-                          <FileText className="h-8 w-8 text-slate-400" />
+                        <div className="mx-auto w-16 h-16 bg-brand-beige/50 rounded-full flex items-center justify-center">
+                          <FileText className="h-8 w-8 text-brand-gray" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-slate-900 mb-2">Nenhuma petição encontrada</h3>
-                          <p className="text-slate-600">
+                          <h3 className="font-semibold text-brand-black mb-2">Nenhuma petição encontrada</h3>
+                          <p className="text-brand-gray">
                             {searchTerm || statusFilter !== "all" || priorityFilter !== "all" 
                               ? "Tente ajustar os filtros de busca"
                               : "Não há petições cadastradas ainda"
@@ -416,14 +416,14 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                   </TableRow>
                 ) : (
                   filteredPetitions.map((petition) => (
-                    <TableRow key={petition.id} className="hover:bg-slate-50 transition-colors">
+                    <TableRow key={petition.id} className="hover:bg-brand-light/50 transition-colors">
                       <TableCell>
                         <div className="space-y-1">
-                          <p className="font-semibold text-slate-900 leading-tight">{petition.title}</p>
+                          <p className="font-semibold text-brand-black leading-tight">{petition.title}</p>
                           {petition.description && (
-                            <p className="text-sm text-slate-600 line-clamp-2">{petition.description}</p>
+                            <p className="text-sm text-brand-gray line-clamp-2">{petition.description}</p>
                           )}
-                          <div className="flex items-center space-x-2 text-xs text-slate-500">
+                          <div className="flex items-center space-x-2 text-xs text-brand-sage">
                             <FileText className="h-3 w-3" />
                             <span>{petition.file_name}</span>
                           </div>
@@ -431,12 +431,12 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-brand-light rounded-full flex items-center justify-center">
                             <User className="h-4 w-4 text-brand" />
                           </div>
                           <div>
-                            <p className="font-medium text-slate-900 text-sm">{petition.created_by_employee.name}</p>
-                            <p className="text-xs text-slate-500">{petition.created_by_employee.email}</p>
+                            <p className="font-medium text-brand-black text-sm">{petition.created_by_employee.name}</p>
+                            <p className="text-xs text-brand-sage">{petition.created_by_employee.email}</p>
                           </div>
                         </div>
                       </TableCell>
@@ -449,7 +449,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                       <TableCell>
                         <div className="space-y-1">
                           <div className="flex items-center space-x-2">
-                            <Calendar className="h-4 w-4 text-slate-400" />
+                            <Calendar className="h-4 w-4 text-brand-gray" />
                             <span className="text-sm font-mono">
                               {new Date(petition.deadline).toLocaleDateString("pt-BR")}
                             </span>
@@ -458,10 +458,10 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className="text-sm text-slate-600 font-mono">
+                        <span className="text-sm text-brand-gray font-mono">
                           {new Date(petition.created_at).toLocaleDateString("pt-BR")}
                         </span>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-brand-sage">
                           {new Date(petition.created_at).toLocaleTimeString("pt-BR", {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -473,7 +473,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
                           variant="outline"
                           size="sm"
                           onClick={() => onReviewPetition(petition)}
-                          className="text-brand border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                          className="text-brand border-brand-light hover:bg-brand-light/50 hover:border-brand-light"
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Revisar
@@ -488,7 +488,7 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
 
           {/* Summary Footer */}
           {filteredPetitions.length > 0 && (
-            <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-600 bg-slate-50 p-4 rounded-lg">
+            <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-brand-gray bg-brand-light/50 p-4 rounded-lg">
               <span className="font-medium">
                 Mostrando {filteredPetitions.length} de {petitions.length} petições
               </span>

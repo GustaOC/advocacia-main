@@ -173,7 +173,7 @@ export function ProcessControl() {
 
   const getStatusBadge = (status: string) => {
     const statusClasses: { [key: string]: string } = {
-        active: "bg-blue-100 text-blue-800",
+        active: "bg-brand-light text-brand",
         completed: "bg-green-100 text-green-800",
         suspended: "bg-yellow-100 text-yellow-800",
         archived: "bg-gray-100 text-gray-800",
@@ -184,7 +184,7 @@ export function ProcessControl() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-sage" />
       </div>
     );
   }
@@ -193,13 +193,13 @@ export function ProcessControl() {
     <div className="space-y-6">
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 text-white">
         <h2 className="text-3xl font-bold mb-2">Controle de Processos</h2>
-        <p className="text-slate-300 text-lg">Gerencie todos os processos judiciais do escritório.</p>
+        <p className="text-brand-gray text-lg">Gerencie todos os processos judiciais do escritório.</p>
       </div>
 
       <Card className="border-0 shadow-lg">
         <CardContent className="p-6 flex justify-between items-center">
           <div className="relative flex-1 max-w-lg">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
             <Input
               placeholder="Buscar por título, número ou parte..."
               value={searchTerm}
@@ -215,7 +215,7 @@ export function ProcessControl() {
             >
               <Upload className="mr-2 h-4 w-4" /> Importar
             </Button>
-            <Button className="h-11 bg-slate-800 hover:bg-slate-900">
+            <Button className="h-11 bg-brand hover:bg-brand-black">
               <Plus className="mr-2 h-4 w-4" /> Novo Processo
             </Button>
           </div>
@@ -310,7 +310,7 @@ export function ProcessControl() {
                 onChange={(e) => setImportFile(e.target.files?.[0] || null)}
                 disabled={isImporting}
               />
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-brand-sage">
                 O arquivo deve conter as colunas: Cliente, Executado, Numero Processo, Observacao, Status, Prioridade
               </p>
             </div>
@@ -328,7 +328,7 @@ export function ProcessControl() {
               <Button
                 onClick={handleImport}
                 disabled={!importFile || isImporting}
-                className="bg-slate-800 hover:bg-slate-900"
+                className="bg-brand hover:bg-brand-black"
               >
                 {isImporting ? (
                   <>
@@ -368,15 +368,15 @@ export function ProcessControl() {
                     <div className="space-y-3">
                     <div className="bg-gray-100 p-4 rounded-xl">
                         <Label className="font-semibold text-slate-700">Número do Processo</Label>
-                        <p className="font-mono text-lg font-medium text-slate-900">{selectedProcess.case_number || 'N/A'}</p>
+                        <p className="font-mono text-lg font-medium text-brand-black">{selectedProcess.case_number || 'N/A'}</p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-xl">
                         <Label className="font-semibold text-slate-700">Título</Label>
-                        <p className="text-slate-900">{selectedProcess.title}</p>
+                        <p className="text-brand-black">{selectedProcess.title}</p>
                     </div>
                     <div className="bg-gray-100 p-4 rounded-xl">
                         <Label className="font-semibold text-slate-700">Vara/Tribunal</Label>
-                        <p className="text-slate-900">{selectedProcess.court || 'N/A'}</p>
+                        <p className="text-brand-black">{selectedProcess.court || 'N/A'}</p>
                     </div>
                     </div>
                     <div className="space-y-3">
@@ -398,7 +398,7 @@ export function ProcessControl() {
                 </div>
               </TabsContent>
               <TabsContent value="timeline" className="pt-4">
-                <p className="text-center text-slate-500">Timeline do processo será exibida aqui.</p>
+                <p className="text-center text-brand-sage">Timeline do processo será exibida aqui.</p>
               </TabsContent>
               <TabsContent value="documents" className="pt-4">
                 <DocumentsModule caseId={selectedProcess.id} />

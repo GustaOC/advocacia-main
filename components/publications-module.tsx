@@ -43,14 +43,14 @@ function ModernStatsCard({ title, value, change, changeType, icon: Icon, bgColor
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-600">{title}</p>
-            <p className="text-3xl font-bold text-slate-900">{value}</p>
+            <p className="text-sm font-medium text-brand-gray">{title}</p>
+            <p className="text-3xl font-bold text-brand-black">{value}</p>
             <div className="flex items-center space-x-1">
-              <ChangeIcon className={`h-4 w-4 ${changeType === 'increase' ? 'text-emerald-500' : 'text-red-500'}`} />
+              <ChangeIcon className={`h-4 w-4 ${changeType === 'increase' ? 'text-brand-sage' : 'text-red-500'}`} />
               <span className={`text-sm font-medium ${changeType === 'increase' ? 'text-brand-sage' : 'text-red-600'}`}>
                 {change}
               </span>
-              <span className="text-sm text-slate-500">vs semana anterior</span>
+              <span className="text-sm text-brand-sage">vs semana anterior</span>
             </div>
           </div>
           <div className={`p-4 rounded-2xl bg-gradient-to-br ${bgColor} group-hover:scale-110 transition-transform duration-300`}>
@@ -85,17 +85,17 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
       case "Alta": return "bg-red-100 text-red-800 border-red-200"
       case "Média": return "bg-yellow-100 text-yellow-800 border-yellow-200"
       case "Baixa": return "bg-green-100 text-green-800 border-green-200"
-      default: return "bg-slate-100 text-slate-800 border-slate-200"
+      default: return "bg-brand-beige/50 text-brand border-brand-gray"
     }
   }
 
   const getStatusColor = () => {
     switch (publication.status) {
       case "Pendente": return "bg-yellow-100 text-yellow-800"
-      case "Em andamento": return "bg-blue-100 text-blue-800"
+      case "Em andamento": return "bg-brand-light text-brand"
       case "Concluído": return "bg-green-100 text-green-800"
       case "Atrasado": return "bg-red-100 text-red-800"
-      default: return "bg-slate-100 text-slate-800"
+      default: return "bg-brand-beige/50 text-brand"
     }
   }
 
@@ -106,9 +106,9 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="space-y-2">
-              <h3 className="font-semibold text-slate-900 text-lg">{publication.type}</h3>
-              <p className="text-slate-600 font-medium">{publication.client}</p>
-              <p className="text-sm font-mono text-slate-500 bg-slate-50 px-2 py-1 rounded">{publication.process}</p>
+              <h3 className="font-semibold text-brand-black text-lg">{publication.type}</h3>
+              <p className="text-brand-gray font-medium">{publication.client}</p>
+              <p className="text-sm font-mono text-brand-sage bg-brand-light/50 px-2 py-1 rounded">{publication.process}</p>
             </div>
             <div className="flex flex-col items-end space-y-2">
               <Badge className={getPriorityColor()}>{publication.priority}</Badge>
@@ -118,7 +118,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
 
           {/* Description */}
           {publication.description && (
-            <p className="text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">{publication.description}</p>
+            <p className="text-sm text-brand-gray bg-brand-light/50 p-3 rounded-lg">{publication.description}</p>
           )}
 
           {/* Deadline */}
@@ -129,7 +129,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                   ? 'bg-red-50 border border-red-200'
                   : publication.daysUntilDeadline <= 7
                   ? 'bg-brand-beige border border-brand-beige'
-                  : 'bg-blue-50 border border-blue-200'
+                  : 'bg-brand-light/50 border border-brand-light'
               }`}
             >
               <Calendar
@@ -147,7 +147,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                     ? 'text-red-800'
                     : publication.daysUntilDeadline <= 7
                     ? 'text-brand-beige'
-                    : 'text-blue-800'
+                    : 'text-brand'
                 }`}
               >
                 Prazo: {new Date(publication.deadline).toLocaleDateString("pt-BR")} 
@@ -158,8 +158,8 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
           )}
 
           {/* Meta info */}
-          <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-            <span className="text-xs text-slate-500">
+          <div className="flex items-center justify-between pt-2 border-t border-brand-light">
+            <span className="text-xs text-brand-sage">
               Publicado em {new Date(publication.date).toLocaleDateString("pt-BR")}
             </span>
             <div className="flex space-x-1">
@@ -167,7 +167,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onView(publication)}
-                className="h-8 w-8 p-0 text-slate-600 hover:text-brand hover:bg-blue-50"
+                className="h-8 w-8 p-0 text-brand-gray hover:text-brand hover:bg-brand-light/50"
               >
                 <Eye className="h-4 w-4" />
               </Button>
@@ -175,7 +175,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onEdit(publication)}
-                className="h-8 w-8 p-0 text-slate-600 hover:text-brand-sage hover:bg-emerald-50"
+                className="h-8 w-8 p-0 text-brand-gray hover:text-brand-sage hover:bg-brand-light/50"
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -183,7 +183,7 @@ function ModernPublicationCard({ publication, onEdit, onDelete, onView }: {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => onDelete(publication)}
-                className="h-8 w-8 p-0 text-slate-600 hover:text-red-600 hover:bg-red-50"
+                className="h-8 w-8 p-0 text-brand-gray hover:text-red-600 hover:bg-red-50"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -403,7 +403,7 @@ export function PublicationsModule() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-2">Publicações Diárias</h2>
-              <p className="text-slate-300 text-lg">Gerencie publicações e prazos processuais com eficiência</p>
+              <p className="text-brand-gray text-lg">Gerencie publicações e prazos processuais com eficiência</p>
             </div>
             <div className="flex space-x-3">
               <Dialog>
@@ -413,7 +413,7 @@ export function PublicationsModule() {
                     Importar
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col bg-white text-slate-900 rounded-lg shadow-lg">
+                <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col bg-white text-brand-black rounded-lg shadow-lg">
                   <DialogHeader>
                     <DialogTitle>Importar Publicações</DialogTitle>
                   </DialogHeader>
@@ -422,10 +422,10 @@ export function PublicationsModule() {
                       <Label>Arquivo CSV/Excel</Label>
                       <Input type="file" accept=".csv,.xlsx,.xls" className="mt-2" />
                     </div>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <h4 className="font-medium text-blue-900 mb-2">Formato esperado:</h4>
-                      <p className="text-sm text-blue-800">Data, Processo, Cliente, Tipo, Prazo, Descrição</p>
-                      <Button variant="link" className="p-0 h-auto text-brand hover:text-blue-800">
+                    <div className="bg-brand-light/50 border border-brand-light rounded-lg p-4">
+                      <h4 className="font-medium text-brand-black mb-2">Formato esperado:</h4>
+                      <p className="text-sm text-brand">Data, Processo, Cliente, Tipo, Prazo, Descrição</p>
+                      <Button variant="link" className="p-0 h-auto text-brand hover:text-brand">
                         Baixar modelo de exemplo
                       </Button>
                     </div>
@@ -439,12 +439,12 @@ export function PublicationsModule() {
               
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-white text-slate-900 hover:bg-slate-100">
+                  <Button className="bg-white text-brand-black hover:bg-brand-beige/50">
                     <Plus className="h-4 w-4 mr-2" />
                     Nova Publicação
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col bg-white text-slate-900 rounded-lg shadow-lg">
+                <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col bg-white text-brand-black rounded-lg shadow-lg">
                   <DialogHeader>
                     <DialogTitle className="text-xl">Cadastrar Nova Publicação</DialogTitle>
                   </DialogHeader>
@@ -562,7 +562,7 @@ export function PublicationsModule() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
                   <Input
                     placeholder="Buscar por cliente, processo ou tipo..."
                     value={searchTerm}
@@ -661,9 +661,9 @@ export function PublicationsModule() {
                     <div className="p-2 bg-brand rounded-lg">
                       <TrendingUp className="h-5 w-5 text-white" />
                     </div>
-                    <span className="text-blue-800">Em Andamento</span>
+                    <span className="text-brand">Em Andamento</span>
                   </span>
-                  <Badge className="bg-blue-200 text-blue-800 border-blue-300">
+                  <Badge className="bg-brand-beige text-brand border-brand-light">
                     {getPublicationsByStatus("Em andamento").length}
                   </Badge>
                 </CardTitle>
@@ -740,8 +740,8 @@ export function PublicationsModule() {
                   <AlertTriangle className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Alertas de Prazo Urgente</h3>
-                  <p className="text-sm text-slate-600">Publicações que requerem atenção imediata</p>
+                  <h3 className="text-xl font-bold text-brand-black">Alertas de Prazo Urgente</h3>
+                  <p className="text-sm text-brand-gray">Publicações que requerem atenção imediata</p>
                 </div>
               </span>
               <Badge className="bg-red-100 text-red-800 text-lg px-3 py-1">
@@ -771,13 +771,13 @@ export function PublicationsModule() {
                             <AlertTriangle className="h-6 w-6" />
                           </div>
                           <div className="space-y-1">
-                            <h4 className="font-bold text-slate-900 text-lg">
+                            <h4 className="font-bold text-brand-black text-lg">
                               {publication.type} - {publication.client}
                             </h4>
-                            <p className="text-sm text-slate-600 font-mono bg-slate-100 px-2 py-1 rounded">
+                            <p className="text-sm text-brand-gray font-mono bg-brand-beige/50 px-2 py-1 rounded">
                               {publication.process}
                             </p>
-                            <p className="text-sm text-slate-600">{publication.description}</p>
+                            <p className="text-sm text-brand-gray">{publication.description}</p>
                           </div>
                         </div>
                         <div className="text-right space-y-2">
@@ -793,7 +793,7 @@ export function PublicationsModule() {
                             {Math.abs(publication.daysUntilDeadline!)} {Math.abs(publication.daysUntilDeadline!) === 1 ? 'dia' : 'dias'}
                             {publication.daysUntilDeadline! < 0 ? ' em atraso' : ' restantes'}
                           </Badge>
-                          <p className="text-sm text-slate-600">
+                          <p className="text-sm text-brand-gray">
                             Prazo: {publication.deadline && new Date(publication.deadline).toLocaleDateString("pt-BR")}
                           </p>
                           <div className="flex space-x-2 justify-end">
@@ -808,7 +808,7 @@ export function PublicationsModule() {
                             <Button 
                               size="sm" 
                               onClick={() => handleEditPublication(publication)}
-                              className="bg-brand-sage hover:bg-emerald-700 text-white"
+                              className="bg-brand-sage hover:bg-brand text-white"
                             >
                               <Edit className="h-4 w-4 mr-1" />
                               Editar
@@ -827,8 +827,8 @@ export function PublicationsModule() {
                       <CheckCircle className="h-12 w-12 text-green-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-slate-900 mb-2">Tudo em Ordem!</h3>
-                      <p className="text-slate-600 max-w-md mx-auto">
+                      <h3 className="text-xl font-semibold text-brand-black mb-2">Tudo em Ordem!</h3>
+                      <p className="text-brand-gray max-w-md mx-auto">
                         Não há prazos próximos do vencimento. Continue o excelente trabalho!
                       </p>
                     </div>

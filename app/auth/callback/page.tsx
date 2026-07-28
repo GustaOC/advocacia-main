@@ -56,7 +56,7 @@ export default function AuthCallback() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <p className="text-slate-600">Validando login...</p>
+      <p className="text-brand-gray">Validando login...</p>
     </div>
   )
 }

@@ -109,15 +109,15 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <p className="text-sm text-slate-500">Tipo</p>
+            <p className="text-sm text-brand-sage">Tipo</p>
             <p className="font-medium">{client.type || '-'}</p>
           </div>
           <div>
-            <p className="text-sm text-slate-500">Cidade</p>
+            <p className="text-sm text-brand-sage">Cidade</p>
             <p className="font-medium">{client.city || '-'}</p>
           </div>
           <div>
-            <p className="text-sm text-slate-500">Telefone Principal</p>
+            <p className="text-sm text-brand-sage">Telefone Principal</p>
             <p className="font-medium">{client.cellphone1 || client.phone || '-'}</p>
           </div>
         </CardContent>
@@ -133,7 +133,7 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
             </CardHeader>
             <CardContent>
               {isLoading ? (
-                <div className="flex items-center gap-2 text-slate-500">
+                <div className="flex items-center gap-2 text-brand-sage">
                   <Loader2 className="animate-spin h-4 w-4" /> Carregando...
                 </div>
               ) : isError ? (
@@ -142,7 +142,7 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
                   <AlertDescription>{(error as Error)?.message || 'Tente novamente.'}</AlertDescription>
                 </Alert>
               ) : clientCases.length === 0 ? (
-                <div className="text-slate-500 text-sm">Nenhum processo relacionado a este cliente.</div>
+                <div className="text-brand-sage text-sm">Nenhum processo relacionado a este cliente.</div>
               ) : (
                 <ul className="space-y-2">
                   {clientCases.map((c: any) => {
@@ -164,7 +164,7 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
                               <Users className="h-3 w-3" />
                               {client.name.split(' ')[0]} vs. {otherPartyName}
                             </span>
-                            <span className="text-xs text-slate-500">{c.title}</span>
+                            <span className="text-xs text-brand-sage">{c.title}</span>
                             <span className="text-xs font-mono">{c.case_number}</span>
                           </div>
                         </Button>
@@ -207,7 +207,7 @@ export function ClientDetailView({ client, onBack }: { client: Client, onBack: (
             </div>
           ) : (
             <Card className="border-0 shadow-lg h-full flex items-center justify-center">
-              <CardContent className="text-center text-slate-500">
+              <CardContent className="text-center text-brand-sage">
                 <FolderOpen className="h-12 w-12 mx-auto mb-4" />
                 <p className="font-medium">Selecione um processo ao lado</p>
                 <p className="text-sm">para ver os documentos e detalhes.</p>

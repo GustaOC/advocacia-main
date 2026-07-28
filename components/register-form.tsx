@@ -76,11 +76,11 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleRegister} className="space-y-6 p-8 bg-white rounded-xl shadow-2xl border border-slate-200">
+    <form onSubmit={handleRegister} className="space-y-6 p-8 bg-white rounded-xl shadow-2xl border border-brand-gray">
       <div className="text-center space-y-2">
         <UserPlus className="mx-auto h-12 w-12 text-brand" />
-        <h2 className="text-3xl font-bold text-slate-900">Criar Nova Conta</h2>
-        <p className="text-slate-600">Preencha seus dados para acessar a área administrativa.</p>
+        <h2 className="text-3xl font-bold text-brand-black">Criar Nova Conta</h2>
+        <p className="text-brand-gray">Preencha seus dados para acessar a área administrativa.</p>
       </div>
 
       {error && (
@@ -102,7 +102,7 @@ export default function RegisterForm() {
         {isLoading ? 'Cadastrando...' : 'Cadastrar'}
       </Button>
 
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-brand-gray">
         Já tem uma conta?{' '}
         <Link href="/login" className="text-brand hover:underline">
           Faça login aqui

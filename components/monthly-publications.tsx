@@ -25,10 +25,10 @@ function ModuleLoader() {
     <div className="min-h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl p-8 flex items-center justify-center">
       <div className="text-center space-y-4">
         <div className="relative">
-          <div className="w-12 h-12 border-4 border-slate-200 border-t-slate-600 rounded-full animate-spin mx-auto"></div>
-          <div className="w-8 h-8 border-4 border-slate-300 border-t-slate-500 rounded-full animate-spin absolute top-2 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
+          <div className="w-12 h-12 border-4 border-brand-gray border-t-slate-600 rounded-full animate-spin mx-auto"></div>
+          <div className="w-8 h-8 border-4 border-brand-gray border-t-slate-500 rounded-full animate-spin absolute top-2 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
         </div>
-        <p className="text-slate-600 font-medium">Carregando relatórios...</p>
+        <p className="text-brand-gray font-medium">Carregando relatórios...</p>
       </div>
     </div>
   )
@@ -56,11 +56,11 @@ function ModernStatsCard({
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-600">{title}</p>
+            <p className="text-sm font-medium text-brand-gray">{title}</p>
             <p className={`text-3xl font-bold ${color}`}>{value}</p>
             <div className="flex items-center space-x-1">
-              <ArrowUpRight className="h-4 w-4 text-emerald-500" />
-              <span className="text-sm font-medium text-slate-600">{subtitle}</span>
+              <ArrowUpRight className="h-4 w-4 text-brand-sage" />
+              <span className="text-sm font-medium text-brand-gray">{subtitle}</span>
             </div>
           </div>
           <div className={`p-4 rounded-2xl ${bgColor} group-hover:scale-110 transition-transform duration-300`}>
@@ -121,7 +121,7 @@ export function MonthlyPublications() {
     if (count === 0) return null
 
     const statusConfig = {
-      completed: { color: "bg-emerald-100 text-emerald-800 border-emerald-200", icon: CheckCircle },
+      completed: { color: "bg-brand-light text-brand border-brand-light", icon: CheckCircle },
       pending: { color: "bg-yellow-100 text-yellow-800 border-yellow-200", icon: Clock },
       overdue: { color: "bg-red-100 text-red-800 border-red-200", icon: AlertTriangle },
     }
@@ -156,10 +156,10 @@ export function MonthlyPublications() {
                 </div>
                 <span>Relatório Mensal de Publicações</span>
               </h2>
-              <p className="text-slate-300 text-lg">Acompanhe a produtividade e estatísticas mensais do escritório</p>
+              <p className="text-brand-gray text-lg">Acompanhe a produtividade e estatísticas mensais do escritório</p>
             </div>
             <div className="text-right">
-              <p className="text-slate-400 text-sm">Período selecionado</p>
+              <p className="text-brand-gray text-sm">Período selecionado</p>
               <p className="text-white font-semibold text-lg">Janeiro 2024</p>
             </div>
           </div>
@@ -231,18 +231,18 @@ export function MonthlyPublications() {
         {/* Productivity by Responsible */}
         <Card className="border-0 shadow-lg">
           <CardHeader className="pb-4">
-            <CardTitle className="text-slate-900 flex items-center space-x-2">
-              <div className="p-2 bg-slate-100 rounded-lg">
-                <User className="h-5 w-5 text-slate-600" />
+            <CardTitle className="text-brand-black flex items-center space-x-2">
+              <div className="p-2 bg-brand-beige/50 rounded-lg">
+                <User className="h-5 w-5 text-brand-gray" />
               </div>
               <span>Produtividade por Responsável</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="rounded-xl border border-slate-200 overflow-hidden">
+            <div className="rounded-xl border border-brand-gray overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50">
+                  <TableRow className="bg-brand-light/50">
                     <TableHead className="font-semibold text-slate-700">Responsável</TableHead>
                     <TableHead className="font-semibold text-slate-700">Total</TableHead>
                     <TableHead className="font-semibold text-slate-700">Concluídas</TableHead>
@@ -253,30 +253,30 @@ export function MonthlyPublications() {
                 </TableHeader>
                 <TableBody>
                   {currentData.responsibleStats.map((person, index) => (
-                    <TableRow key={index} className={index % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
-                      <TableCell className="font-medium text-slate-900">{person.name}</TableCell>
-                      <TableCell className="text-slate-600">{person.total}</TableCell>
+                    <TableRow key={index} className={index % 2 === 0 ? "bg-white" : "bg-brand-light/50/50"}>
+                      <TableCell className="font-medium text-brand-black">{person.name}</TableCell>
+                      <TableCell className="text-brand-gray">{person.total}</TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
-                          <span className="text-slate-900">{person.completed}</span>
+                          <span className="text-brand-black">{person.completed}</span>
                           {getStatusBadge("completed", person.completed)}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
-                          <span className="text-slate-900">{person.pending}</span>
+                          <span className="text-brand-black">{person.pending}</span>
                           {getStatusBadge("pending", person.pending)}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
-                          <span className="text-slate-900">{person.overdue}</span>
+                          <span className="text-brand-black">{person.overdue}</span>
                           {getStatusBadge("overdue", person.overdue)}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
-                          <div className="w-20 bg-slate-200 rounded-full h-2">
+                          <div className="w-20 bg-brand-gray/30 rounded-full h-2">
                             <div
                               className="bg-gradient-to-r from-brand-black to-brand-black/90 h-2 rounded-full transition-all duration-300"
                               style={{
@@ -284,7 +284,7 @@ export function MonthlyPublications() {
                               }}
                             ></div>
                           </div>
-                          <span className="text-sm font-medium text-slate-900">
+                          <span className="text-sm font-medium text-brand-black">
                             {calculateProductivity(person.completed, person.total)}%
                           </span>
                         </div>
@@ -300,18 +300,18 @@ export function MonthlyPublications() {
         {/* Daily Breakdown */}
         <Card className="border-0 shadow-lg">
           <CardHeader className="pb-4">
-            <CardTitle className="text-slate-900 flex items-center space-x-2">
-              <div className="p-2 bg-slate-100 rounded-lg">
-                <BarChart3 className="h-5 w-5 text-slate-600" />
+            <CardTitle className="text-brand-black flex items-center space-x-2">
+              <div className="p-2 bg-brand-beige/50 rounded-lg">
+                <BarChart3 className="h-5 w-5 text-brand-gray" />
               </div>
               <span>Detalhamento Diário</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="rounded-xl border border-slate-200 overflow-hidden">
+            <div className="rounded-xl border border-brand-gray overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50">
+                  <TableRow className="bg-brand-light/50">
                     <TableHead className="font-semibold text-slate-700">Data</TableHead>
                     <TableHead className="font-semibold text-slate-700">Total</TableHead>
                     <TableHead className="font-semibold text-slate-700">Concluídas</TableHead>
@@ -322,9 +322,9 @@ export function MonthlyPublications() {
                 </TableHeader>
                 <TableBody>
                   {currentData.dailyBreakdown.map((day, index) => (
-                    <TableRow key={index} className={index % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
-                      <TableCell className="font-medium text-slate-900">{formatDate(day.date)}</TableCell>
-                      <TableCell className="text-slate-600">{day.publications}</TableCell>
+                    <TableRow key={index} className={index % 2 === 0 ? "bg-white" : "bg-brand-light/50/50"}>
+                      <TableCell className="font-medium text-brand-black">{formatDate(day.date)}</TableCell>
+                      <TableCell className="text-brand-gray">{day.publications}</TableCell>
                       <TableCell className="text-brand-sage font-medium">{day.completed}</TableCell>
                       <TableCell className="text-yellow-600 font-medium">{day.pending}</TableCell>
                       <TableCell className="text-red-600 font-medium">{day.overdue}</TableCell>

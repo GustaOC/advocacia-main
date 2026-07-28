@@ -73,8 +73,8 @@ function TasksStats({ tasks }: { tasks: Task[] }) {
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -109,8 +109,8 @@ const TaskCard = ({
   };
 
   const statusConfig = {
-    'Pendente': { bg: 'bg-slate-50', border: 'border-slate-200' },
-    'Em Andamento': { bg: 'bg-blue-50', border: 'border-blue-200' },
+    'Pendente': { bg: 'bg-brand-light/50', border: 'border-brand-gray' },
+    'Em Andamento': { bg: 'bg-brand-light/50', border: 'border-brand-light' },
     'Concluída': { bg: 'bg-green-50', border: 'border-green-200' },
     'Cancelada': { bg: 'bg-red-50', border: 'border-red-200' }
   };
@@ -129,11 +129,11 @@ const TaskCard = ({
       <CardContent className="p-4 relative z-10">
         <div className="space-y-4">
           <div className="space-y-2">
-            <h4 className="font-semibold text-slate-900 line-clamp-2 group-hover:text-slate-700 transition-colors">
+            <h4 className="font-semibold text-brand-black line-clamp-2 group-hover:text-slate-700 transition-colors">
               {task.title}
             </h4>
             {task.description && (
-              <p className="text-sm text-slate-600 line-clamp-1">{task.description}</p>
+              <p className="text-sm text-brand-gray line-clamp-1">{task.description}</p>
             )}
           </div>
 
@@ -144,19 +144,19 @@ const TaskCard = ({
             </Badge>
             
             {task.due_date && (
-              <div className="flex items-center text-xs text-slate-500">
+              <div className="flex items-center text-xs text-brand-sage">
                 <Calendar className="h-3 w-3 mr-1" />
                 {new Date(task.due_date).toLocaleDateString('pt-BR')}
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-200/50">
+          <div className="flex items-center justify-between pt-2 border-t border-brand-gray/50">
             <div className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-full flex items-center justify-center text-white text-xs font-bold">
                 {task.assigned_user?.name?.charAt(0) || assignee?.name?.charAt(0) || '?'}
               </div>
-              <span className="text-xs text-slate-600">{task.assigned_user?.name || assignee?.name || 'N/A'}</span>
+              <span className="text-xs text-brand-gray">{task.assigned_user?.name || assignee?.name || 'N/A'}</span>
             </div>
             
             <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -164,7 +164,7 @@ const TaskCard = ({
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-brand-sage hover:text-emerald-700 hover:bg-emerald-50 h-8 px-2"
+                  className="text-brand-sage hover:text-brand hover:bg-brand-light/50 h-8 px-2"
                   onClick={(e) => { e.stopPropagation(); onComplete?.(task.id as string); }}
                 >
                   <CheckCircle className="h-4 w-4 mr-1" />
@@ -175,7 +175,7 @@ const TaskCard = ({
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-brand hover:text-blue-700 hover:bg-blue-50 h-8 px-2"
+                  className="text-brand hover:text-brand hover:bg-brand-light/50 h-8 px-2"
                   onClick={(e) => { e.stopPropagation(); onEdit?.(task); }}
                 >
                   Editar
@@ -311,8 +311,8 @@ export function TasksModule() {
     return (
       <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
         <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin text-slate-500 mx-auto" />
-          <p className="text-slate-600 font-medium">Carregando tarefas...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
+          <p className="text-brand-gray font-medium">Carregando tarefas...</p>
         </div>
       </div>
     );
@@ -327,7 +327,7 @@ export function TasksModule() {
         <div className="relative z-10 flex justify-between items-center">
           <div>
             <h2 className="text-4xl font-bold mb-3">Gestão de Tarefas</h2>
-            <p className="text-brand-olive text-xl">Organize e acompanhe as atividades da sua equipe com eficiência.</p>
+            <p className="text-brand-gray text-xl">Organize e acompanhe as atividades da sua equipe com eficiência.</p>
           </div>
           
           <div className="flex gap-3">
@@ -335,7 +335,7 @@ export function TasksModule() {
               <Button 
                 onClick={() => setAllTasksModalOpen(true)}
                 variant="outline"
-                className="bg-transparent border-brand-olive text-white hover:bg-brand-olive hover:text-white"
+                className="bg-transparent border-brand-gray text-white hover:bg-brand-gray hover:text-white"
                 size="lg"
               >
                 Ver Todas as Tarefas
@@ -344,7 +344,7 @@ export function TasksModule() {
             {can && can('tasks_create') && (
               <Button 
                 onClick={() => setModalOpen(true)} 
-                className="bg-white text-brand-olive hover:bg-brand-olive shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                className="bg-white text-brand-gray hover:bg-brand-gray shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                 size="lg"
               >
                 <Plus className="mr-2 h-5 w-5" /> 
@@ -366,7 +366,7 @@ export function TasksModule() {
             <Card className={`bg-gradient-to-r ${column.color} border-0 shadow-lg`}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-slate-800 text-lg">{column.title}</h3>
+                  <h3 className="font-bold text-brand text-lg">{column.title}</h3>
                   <Badge variant="secondary" className="bg-white/80 text-slate-700 font-semibold shadow-sm">
                     {todayTasks.filter(task => task.status === column.id).length}
                   </Badge>
@@ -390,7 +390,7 @@ export function TasksModule() {
                 ))}
               
               {todayTasks.filter(task => task.status === column.id).length === 0 && (
-                <div className="text-center py-12 text-slate-400">
+                <div className="text-center py-12 text-brand-gray">
                   <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-30" />
                   <p className="font-medium">Nenhuma tarefa</p>
                 </div>
@@ -404,7 +404,7 @@ export function TasksModule() {
       <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-slate-900">Criar Nova Tarefa</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-brand-black">Criar Nova Tarefa</DialogTitle>
           </DialogHeader>
           <div className="grid gap-6 py-4">
             <div className="space-y-2">
@@ -412,7 +412,7 @@ export function TasksModule() {
               <Input 
                 value={newTask.title} 
                 onChange={e => setNewTask({...newTask, title: e.target.value})}
-                className="bg-white border-2 border-slate-200 focus:border-brand-olive"
+                className="bg-white border-2 border-brand-gray focus:border-brand-gray"
                 placeholder="Digite o título da tarefa..."
               />
             </div>
@@ -422,7 +422,7 @@ export function TasksModule() {
               <Input 
                 value={newTask.description} 
                 onChange={e => setNewTask({...newTask, description: e.target.value})}
-                className="bg-white border-2 border-slate-200 focus:border-brand-olive"
+                className="bg-white border-2 border-brand-gray focus:border-brand-gray"
                 placeholder="Descrição opcional..."
               />
             </div>
@@ -431,7 +431,7 @@ export function TasksModule() {
               <div className="space-y-2">
                 <Label className="text-slate-700 font-semibold">Responsável</Label>
                 <Select value={newTask.assigneeId} onValueChange={id => setNewTask({...newTask, assigneeId: id})}>
-                  <SelectTrigger className="bg-white border-2 border-slate-200 focus:border-brand-olive">
+                  <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                     <SelectValue placeholder="Atribuir a um membro..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -448,7 +448,7 @@ export function TasksModule() {
               <div className="space-y-2">
                 <Label className="text-slate-700 font-semibold">Prioridade</Label>
                 <Select value={newTask.priority} onValueChange={(value: Task['priority']) => setNewTask({...newTask, priority: value})}>
-                  <SelectTrigger className="bg-white border-2 border-slate-200 focus:border-brand-olive">
+                  <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -466,12 +466,12 @@ export function TasksModule() {
                 type="date" 
                 value={newTask.dueDate} 
                 onChange={e => setNewTask({...newTask, dueDate: e.target.value})}
-                className="bg-white border-2 border-slate-200 focus:border-brand-olive"
+                className="bg-white border-2 border-brand-gray focus:border-brand-gray"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setModalOpen(false)} className="border-2 border-slate-200">
+            <Button variant="outline" onClick={() => setModalOpen(false)} className="border-2 border-brand-gray">
               Cancelar
             </Button>
             <Button onClick={handleCreateTask} disabled={createTaskMutation.isPending} className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg">
@@ -486,7 +486,7 @@ export function TasksModule() {
       <Dialog open={!!editingTask} onOpenChange={(open) => !open && setEditingTask(null)}>
         <DialogContent className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-slate-900">Editar Tarefa</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-brand-black">Editar Tarefa</DialogTitle>
           </DialogHeader>
           {editingTask && (
             <div className="grid gap-6 py-4">
@@ -495,7 +495,7 @@ export function TasksModule() {
                 <Input 
                   value={editingTask.title} 
                   onChange={e => setEditingTask({...editingTask, title: e.target.value})}
-                  className="bg-white border-2 border-slate-200 focus:border-brand-olive"
+                  className="bg-white border-2 border-brand-gray focus:border-brand-gray"
                 />
               </div>
               
@@ -504,7 +504,7 @@ export function TasksModule() {
                 <Input 
                   value={editingTask.description || ''} 
                   onChange={e => setEditingTask({...editingTask, description: e.target.value})}
-                  className="bg-white border-2 border-slate-200 focus:border-brand-olive"
+                  className="bg-white border-2 border-brand-gray focus:border-brand-gray"
                 />
               </div>
               
@@ -512,7 +512,7 @@ export function TasksModule() {
                 <div className="space-y-2">
                   <Label className="text-slate-700 font-semibold">Responsável</Label>
                   <Select value={editingTask.assigned_to || ''} onValueChange={id => setEditingTask({...editingTask, assigned_to: id})}>
-                    <SelectTrigger className="bg-white border-2 border-slate-200 focus:border-brand-olive">
+                    <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                       <SelectValue placeholder="Atribuir a um membro..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -527,7 +527,7 @@ export function TasksModule() {
                 <div className="space-y-2">
                   <Label className="text-slate-700 font-semibold">Status</Label>
                   <Select value={editingTask.status} onValueChange={(value: any) => setEditingTask({...editingTask, status: value})}>
-                    <SelectTrigger className="bg-white border-2 border-slate-200 focus:border-brand-olive">
+                    <SelectTrigger className="bg-white border-2 border-brand-gray focus:border-brand-gray">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -558,7 +558,7 @@ export function TasksModule() {
               <Button 
                 onClick={() => updateTaskMutation.mutate(editingTask!)} 
                 disabled={updateTaskMutation.isPending}
-                className="bg-brand-olive hover:bg-brand-olive"
+                className="bg-brand-gray hover:bg-brand-gray"
               >
                 {updateTaskMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Salvar
@@ -572,7 +572,7 @@ export function TasksModule() {
       <Dialog open={isAllTasksModalOpen} onOpenChange={setAllTasksModalOpen}>
         <DialogContent className="sm:max-w-4xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl max-h-[80vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-slate-900">Todas as Tarefas</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-brand-black">Todas as Tarefas</DialogTitle>
           </DialogHeader>
           
           <div className="flex gap-4 py-4 border-b">
@@ -606,10 +606,10 @@ export function TasksModule() {
                 if (filterAssigned !== 'all' && t.assigned_to !== filterAssigned) return false;
                 return true;
              }).map(task => (
-                <div key={task.id as string} className="p-4 border rounded-lg shadow-sm bg-slate-50 flex justify-between items-center">
+                <div key={task.id as string} className="p-4 border rounded-lg shadow-sm bg-brand-light/50 flex justify-between items-center">
                   <div>
-                    <h4 className="font-bold text-slate-800">{task.title}</h4>
-                    <p className="text-sm text-slate-600">{task.description}</p>
+                    <h4 className="font-bold text-brand">{task.title}</h4>
+                    <p className="text-sm text-brand-gray">{task.description}</p>
                     <div className="mt-2 flex gap-2">
                       <Badge variant="outline">{task.status}</Badge>
                       <Badge variant="outline">{new Date((task as any).created_at || '').toLocaleDateString('pt-BR')}</Badge>
@@ -617,7 +617,7 @@ export function TasksModule() {
                   </div>
                   <div className="flex gap-2">
                      {user?.role === 'admin' && (
-                        <Button variant="ghost" className="text-brand hover:bg-blue-50" onClick={() => { setAllTasksModalOpen(false); setEditingTask(task); }}>
+                        <Button variant="ghost" className="text-brand hover:bg-brand-light/50" onClick={() => { setAllTasksModalOpen(false); setEditingTask(task); }}>
                           Editar
                         </Button>
                      )}

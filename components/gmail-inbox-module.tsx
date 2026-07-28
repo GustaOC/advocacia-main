@@ -189,13 +189,13 @@ const messages = data || [];
             <Plus className="mr-2 h-4 w-4" /> Nova Mensagem
           </Button>
         </CardHeader>
-        <CardContent className="text-slate-600 flex items-center justify-center min-h-[200px]">
+        <CardContent className="text-brand-gray flex items-center justify-center min-h-[200px]">
           {isLoading ? (
             <Loader2 className="h-8 w-8 animate-spin text-red-500" />
           ) : isError ? (
             <div className="text-center space-y-2">
                <p className="text-red-500 font-medium">Erro ao carregar e-mails</p>
-               <p className="text-sm text-slate-500 italic">{error?.message}</p>
+               <p className="text-sm text-brand-sage italic">{error?.message}</p>
             </div>
             
           ) : messages && messages.length > 0 ? (
@@ -209,10 +209,10 @@ const messages = data || [];
                         className="flex-1 cursor-pointer flex items-center gap-2 group"
                         onClick={() => toggleEmailExpand(message.id)}
                       >
-                        <Button variant="ghost" size="sm" className="p-0 h-6 w-6 shrink-0 text-slate-400 group-hover:text-red-600 transition-colors">
+                        <Button variant="ghost" size="sm" className="p-0 h-6 w-6 shrink-0 text-brand-gray group-hover:text-red-600 transition-colors">
                           {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                         </Button>
-                        <p className="font-bold text-slate-900 group-hover:text-red-600 transition-colors">{message.subject}</p>
+                        <p className="font-bold text-brand-black group-hover:text-red-600 transition-colors">{message.subject}</p>
                       </div>
                       <Button
                         variant="outline"
@@ -259,7 +259,7 @@ const messages = data || [];
   
   return `<!DOCTYPE html><html><head>${baseStyle}</head><body>${body.replace(/\n/g, '<br/>')}</body></html>`;
 })()}
-  className="w-full h-[200px] bg-white rounded-lg border border-slate-200 transition-all duration-300"
+  className="w-full h-[200px] bg-white rounded-lg border border-brand-gray transition-all duration-300"
   title="Conteúdo do e-mail"
   onLoad={(e) => {
     const iframe = e.currentTarget;
@@ -270,7 +270,7 @@ const messages = data || [];
 
     {/* Anexos */}
     {(emailBodies[message.id]?.attachments ?? []).length > 0 && (
-      <div className="border rounded-lg p-3 bg-slate-50">
+      <div className="border rounded-lg p-3 bg-brand-light/50">
         <p className="text-sm font-semibold text-slate-700 mb-2">Anexos:</p>
         <div className="flex flex-wrap gap-2">
           {(emailBodies[message.id]?.attachments ?? []).map((att) => (
@@ -278,7 +278,7 @@ const messages = data || [];
               key={att.id}
               href={`/api/gmail/messages/${message.id}/attachments/${att.id}`}
               download={att.filename}
-              className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-white border border-brand-gray rounded-lg text-sm text-slate-700 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors"
               onClick={async (e) => {
                 e.preventDefault();
                 const supabase = createClient();
@@ -306,14 +306,14 @@ const messages = data || [];
     )}
   </div>
 ) : (
-  <p className="text-sm text-slate-700 p-4 bg-slate-50 rounded-lg whitespace-pre-wrap">
+  <p className="text-sm text-slate-700 p-4 bg-brand-light/50 rounded-lg whitespace-pre-wrap">
     {message.snippet}
   </p>
 )}
   </div>
                     ) : (
                       <p 
-                        className="text-sm text-slate-700 line-clamp-2 mb-2 cursor-pointer hover:text-slate-900 ml-8" 
+                        className="text-sm text-slate-700 line-clamp-2 mb-2 cursor-pointer hover:text-brand-black ml-8" 
                         onClick={() => toggleEmailExpand(message.id)}
                       >
                         {message.snippet}
@@ -322,7 +322,7 @@ const messages = data || [];
                     
                     <div className="flex justify-between items-center text-xs mt-2 ml-8">
                       <span className="text-brand font-medium">{message.from}</span>
-                      <span className="text-slate-400">{new Date(parseInt(message.internalDate)).toLocaleString('pt-BR')}</span>
+                      <span className="text-brand-gray">{new Date(parseInt(message.internalDate)).toLocaleString('pt-BR')}</span>
                     </div>
                   </div>
                 );
@@ -347,7 +347,7 @@ const messages = data || [];
                   ← Anterior
                 </Button>
 
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-brand-sage">
                   Página {pageTokens.length + 1}
                 </span>
 
@@ -380,14 +380,14 @@ const messages = data || [];
               <Reply className="h-6 w-6 text-red-600" />
               Responder E-mail
             </DialogTitle>
-            <DialogDescription className="text-slate-600">
+            <DialogDescription className="text-brand-gray">
               Para: <span className="font-semibold">{selectedMessage?.from}</span>
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label className="font-semibold text-slate-700">Assunto</Label>
-              <div className="p-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-sm text-slate-600">
+              <div className="p-3 bg-brand-light/50 border-2 border-brand-gray rounded-xl text-sm text-brand-gray">
                 {selectedMessage?.subject?.startsWith('Re:') ? selectedMessage.subject : `Re: ${selectedMessage?.subject}`}
               </div>
             </div>
@@ -398,12 +398,12 @@ const messages = data || [];
                 placeholder="Escreva sua resposta aqui..."
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
-                className="resize-none bg-white border-2 border-slate-200 rounded-xl focus:border-red-400"
+                className="resize-none bg-white border-2 border-brand-gray rounded-xl focus:border-red-400"
               />
             </div>
             
             {/* INÍCIO BLOCO ANEXOS - RESPONDER */}
-            <div className="space-y-2 border-t border-slate-100 pt-3">
+            <div className="space-y-2 border-t border-brand-light pt-3">
               <div className="flex items-center justify-between">
                 <Label className="font-semibold text-slate-700">Anexos</Label>
                 <label className="cursor-pointer text-sm text-red-600 hover:text-red-700 flex items-center gap-1 font-medium bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
@@ -415,7 +415,7 @@ const messages = data || [];
               {replyFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {replyFiles.map((f, i) => (
-                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 shadow-sm rounded-lg text-xs font-medium text-slate-700">
+                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-brand-gray shadow-sm rounded-lg text-xs font-medium text-slate-700">
                       <span className="truncate max-w-[150px]">{f.name}</span>
                       <X className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors ml-1" onClick={() => setReplyFiles(prev => prev.filter((_, idx) => idx !== i))} />
                     </span>
@@ -426,7 +426,7 @@ const messages = data || [];
             {/* FIM BLOCO ANEXOS */}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setReplyModalOpen(false); setReplyFiles([]); }} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={() => { setReplyModalOpen(false); setReplyFiles([]); }} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
             <Button
               onClick={() => {
                 if (!replyText.trim()) {
@@ -468,7 +468,7 @@ const messages = data || [];
                 placeholder="email@destino.com"
                 value={composeTo}
                 onChange={(e) => setComposeTo(e.target.value)}
-                className="bg-white border-2 border-slate-200 rounded-xl focus:border-red-400"
+                className="bg-white border-2 border-brand-gray rounded-xl focus:border-red-400"
               />
             </div>
             <div className="space-y-2">
@@ -478,7 +478,7 @@ const messages = data || [];
                 placeholder="Assunto da mensagem"
                 value={composeSubject}
                 onChange={(e) => setComposeSubject(e.target.value)}
-                className="bg-white border-2 border-slate-200 rounded-xl focus:border-red-400"
+                className="bg-white border-2 border-brand-gray rounded-xl focus:border-red-400"
               />
             </div>
             <div className="space-y-2">
@@ -488,12 +488,12 @@ const messages = data || [];
                 placeholder="Escreva sua mensagem aqui..."
                 value={composeText}
                 onChange={(e) => setComposeText(e.target.value)}
-                className="resize-none bg-white border-2 border-slate-200 rounded-xl focus:border-red-400"
+                className="resize-none bg-white border-2 border-brand-gray rounded-xl focus:border-red-400"
               />
             </div>
             
             {/* INÍCIO BLOCO ANEXOS - NOVA MENSAGEM */}
-            <div className="space-y-2 border-t border-slate-100 pt-3">
+            <div className="space-y-2 border-t border-brand-light pt-3">
               <div className="flex items-center justify-between">
                 <Label className="font-semibold text-slate-700">Anexos</Label>
                 <label className="cursor-pointer text-sm text-red-600 hover:text-red-700 flex items-center gap-1 font-medium bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
@@ -505,7 +505,7 @@ const messages = data || [];
               {composeFiles.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {composeFiles.map((f, i) => (
-                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-slate-200 shadow-sm rounded-lg text-xs font-medium text-slate-700">
+                    <span key={i} className="flex items-center gap-1 px-3 py-1.5 bg-white border border-brand-gray shadow-sm rounded-lg text-xs font-medium text-slate-700">
                       <span className="truncate max-w-[150px]">{f.name}</span>
                       <X className="h-3 w-3 cursor-pointer hover:text-red-500 transition-colors ml-1" onClick={() => setComposeFiles(prev => prev.filter((_, idx) => idx !== i))} />
                     </span>
@@ -516,7 +516,7 @@ const messages = data || [];
             {/* FIM BLOCO ANEXOS */}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setComposeModalOpen(false); setComposeFiles([]); }} className="border-2 border-slate-200 rounded-xl">Cancelar</Button>
+            <Button variant="outline" onClick={() => { setComposeModalOpen(false); setComposeFiles([]); }} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
             <Button
               onClick={() => {
                 if (!composeTo.trim() || !composeSubject.trim() || !composeText.trim()) {

@@ -126,7 +126,7 @@ export function FinancialNotificationsSystem() {
       </CardHeader>
       <CardContent>
         {isFormVisible && (
-          <Card className="mb-6 bg-slate-50 p-4">
+          <Card className="mb-6 bg-brand-light/50 p-4">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-1">
                 <Label htmlFor="name">Nome da Regra</Label>

@@ -118,7 +118,7 @@ export function AdvancedFinancialDashboard() {
         <StatCard isLoading={isLoading} title="Total em Acordos" value={formatCurrency(data?.total_value || 0)} icon={Handshake} description={`${data?.total_agreements || 0} acordos no total`} colorClass="text-brand" />
         <StatCard isLoading={isLoading} title="Total Recebido" value={formatCurrency(data?.paid_amount || 0)} icon={CheckCircle} description="Soma de todas as parcelas pagas" colorClass="text-green-500" />
         <StatCard isLoading={isLoading} title="Inadimplência" value={formatCurrency(data?.overdue_amount || 0)} icon={TrendingDown} description="Valor total em atraso" colorClass="text-red-500" />
-        <StatCard isLoading={isLoading} title="Taxa de Sucesso" value={`${data?.success_rate || 0}%`} icon={Percent} description="Dos acordos concluídos com êxito" colorClass="text-emerald-500" />
+        <StatCard isLoading={isLoading} title="Taxa de Sucesso" value={`${data?.success_rate || 0}%`} icon={Percent} description="Dos acordos concluídos com êxito" colorClass="text-brand-sage" />
       </div>
 
       <Card>

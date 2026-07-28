@@ -100,7 +100,7 @@ export default function LoginForm() {
             />
           </div>
         </div>
-        <CardDescription className="text-slate-600 text-base">
+        <CardDescription className="text-brand-gray text-base">
           Sistema de Gestão Jurídica
         </CardDescription>
       </CardHeader>
@@ -123,7 +123,7 @@ export default function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="h-12 border-slate-300 focus-visible:ring-slate-500 rounded-xl bg-white/60 backdrop-blur-sm"
+              className="h-12 border-brand-gray focus-visible:ring-slate-500 rounded-xl bg-white/60 backdrop-blur-sm"
             />
           </div>
 
@@ -138,13 +138,13 @@ export default function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-12 border-slate-300 focus-visible:ring-slate-500 rounded-xl bg-white/60 backdrop-blur-sm pr-12"
+                className="h-12 border-brand-gray focus-visible:ring-slate-500 rounded-xl bg-white/60 backdrop-blur-sm pr-12"
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-slate-500"
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-brand-sage"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
               >
@@ -155,7 +155,7 @@ export default function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full h-12 rounded-xl font-medium bg-slate-800 hover:bg-slate-900"
+            className="w-full h-12 rounded-xl font-medium bg-brand hover:bg-brand-black"
             disabled={loading}
           >
             {loading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Entrando...</>) : "Acessar Sistema"}
@@ -163,8 +163,8 @@ export default function LoginForm() {
         </form>
         
         <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-300" /></div>
-          <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-slate-500">Ou</span></div>
+          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-brand-gray" /></div>
+          <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-brand-sage">Ou</span></div>
         </div>
 
         <Button type="button" className="w-full h-12 rounded-xl font-medium bg-brand hover:bg-brand-700 text-white flex items-center justify-center gap-2" onClick={handleGoogleLogin} disabled={loading}>

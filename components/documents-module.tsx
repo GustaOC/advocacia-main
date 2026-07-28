@@ -227,8 +227,8 @@ export function DocumentsModule({ caseId }: DocumentsModuleProps) {
               <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
             </div>
           ) : documents.length === 0 ? (
-            <div className="text-center py-8 text-slate-500">
-              <FileText className="h-10 w-10 mx-auto mb-2 text-slate-400" />
+            <div className="text-center py-8 text-brand-sage">
+              <FileText className="h-10 w-10 mx-auto mb-2 text-brand-gray" />
               <p>Nenhum documento encontrado para este caso.</p>
             </div>
           ) : (
@@ -236,14 +236,14 @@ export function DocumentsModule({ caseId }: DocumentsModuleProps) {
               {documents.map((doc) => (
                 <li
                   key={String(doc.id)}
-                  className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border"
+                  className="flex items-center justify-between p-3 bg-brand-light/50 rounded-lg border"
                 >
                   <div className="flex items-center space-x-3">
                     <FileText className="h-6 w-6 text-brand" />
                     <div>
-                      <p className="font-semibold text-slate-800">{doc.file_name}</p>
-                      <p className="text-sm text-slate-600">{doc.description || "Sem descrição"}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="font-semibold text-brand">{doc.file_name}</p>
+                      <p className="text-sm text-brand-gray">{doc.description || "Sem descrição"}</p>
+                      <p className="text-xs text-brand-sage">
                         Enviado por {doc.employee?.name || "—"} em{" "}
                         {new Date(doc.created_at).toLocaleDateString("pt-BR")} —{" "}
                         {formatFileSize(doc.file_size)}
@@ -276,9 +276,9 @@ export function DocumentsModule({ caseId }: DocumentsModuleProps) {
       <Dialog open={!!previewUrl} onOpenChange={(open) => !open && setPreviewUrl(null)}>
         <DialogContent className="max-w-5xl w-[95vw] h-[90vh] flex flex-col p-4 bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="truncate text-slate-800 text-xl">{previewDoc?.file_name}</DialogTitle>
+            <DialogTitle className="truncate text-brand text-xl">{previewDoc?.file_name}</DialogTitle>
           </DialogHeader>
-          <div className="flex-1 w-full bg-slate-100/50 rounded-xl overflow-hidden border-2 border-slate-200">
+          <div className="flex-1 w-full bg-brand-beige/50/50 rounded-xl overflow-hidden border-2 border-brand-gray">
             {previewUrl && (
               <iframe src={previewUrl} className="w-full h-full" title="Preview do Documento" />
             )}

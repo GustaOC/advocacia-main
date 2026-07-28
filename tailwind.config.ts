@@ -34,11 +34,11 @@ const config = {
       },
       colors: {
         brand: {
-          DEFAULT: "#3C443D", // Oliva Escura
-          sage: "#95A08A", // Verde Sálvia
-          olive: "#A8ABA2", // Cinza Oliva
-          beige: "#E3E0D7", // Bege
-          light: "#EDEDED", // Cinza Claro
+          DEFAULT: "#3C4740", // Oliva Escura
+          sage: "#9AA08F", // Verde Sálvia
+          gray: "#B2B5AA", // Cinza
+          beige: "#C5C6BB", // Bege
+          light: "#D2D3CA", // Cinza Claro
           black: "#000000", // Preto
         },
 

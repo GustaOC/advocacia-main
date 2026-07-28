@@ -25,7 +25,7 @@ function CruzamentoStats({ resultados, total }: { resultados: ResultadoCruzament
   const stats = [
     { label: "Correspondências Encontradas", value: resultados.length.toString(), icon: CheckCircle, color: "text-brand", bg: "from-blue-50 to-blue-100", trend: "100%" },
     { label: "Valor Total", value: total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: Sigma, color: "text-green-600", bg: "from-green-50 to-green-100", trend: "+15%" },
-    { label: "Média por Cliente", value: (resultados.length > 0 ? total / resultados.length : 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: TrendingUp, color: "text-brand-olive", bg: "from-purple-50 to-purple-100", trend: "+8%" },
+    { label: "Média por Cliente", value: (resultados.length > 0 ? total / resultados.length : 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: TrendingUp, color: "text-brand-gray", bg: "from-purple-50 to-purple-100", trend: "+8%" },
     { label: "Status", value: "Concluído", icon: FileSpreadsheet, color: "text-brand-beige", bg: "from-orange-50 to-orange-100", trend: "OK" },
   ];
 
@@ -40,8 +40,8 @@ function CruzamentoStats({ resultados, total }: { resultados: ResultadoCruzament
             <CardContent className="p-6 relative z-10">
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <p className="text-sm text-slate-600 font-medium">{stat.label}</p>
-                  <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm text-brand-gray font-medium">{stat.label}</p>
+                  <p className="text-2xl font-bold text-brand-black">{stat.value}</p>
                   <div className="flex items-center space-x-1">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-600 font-medium">{stat.trend}</span>
@@ -124,12 +124,12 @@ export default function CruzamentoPage() {
       {resultados.length > 0 && <CruzamentoStats resultados={resultados} total={total} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
-          <CardTitle className="flex items-center gap-2 text-2xl font-bold text-slate-900">
+        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+          <CardTitle className="flex items-center gap-2 text-2xl font-bold text-brand-black">
             <Upload className="h-6 w-6 text-brand-light"/>
             Upload de Arquivos
           </CardTitle>
-          <CardDescription className="text-slate-600">
+          <CardDescription className="text-brand-gray">
             Use arquivos em formato .CSV ou .XLSX (Excel). O sistema buscará por nomes correspondentes em ambas as listas.
           </CardDescription>
         </CardHeader>
@@ -142,7 +142,7 @@ export default function CruzamentoPage() {
                 type="file"
                 accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                 onChange={(e) => setArquivoPagamentos(e.target.files?.[0] ?? null)}
-                className="bg-white border-2 border-slate-200 rounded-xl h-11"
+                className="bg-white border-2 border-brand-gray rounded-xl h-11"
               />
               {arquivoPagamentos && (
                 <p className="text-sm text-green-600 flex items-center gap-1">
@@ -158,7 +158,7 @@ export default function CruzamentoPage() {
                 type="file"
                 accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                 onChange={(e) => setArquivoJudicializados(e.target.files?.[0] ?? null)}
-                className="bg-white border-2 border-slate-200 rounded-xl h-11"
+                className="bg-white border-2 border-brand-gray rounded-xl h-11"
               />
               {arquivoJudicializados && (
                 <p className="text-sm text-green-600 flex items-center gap-1">
@@ -188,9 +188,9 @@ export default function CruzamentoPage() {
 
       {resultados.length > 0 && (
         <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-slate-200">
-            <CardTitle className="text-2xl font-bold text-slate-900">Resultados Encontrados</CardTitle>
-            <CardDescription className="text-slate-600">
+          <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+            <CardTitle className="text-2xl font-bold text-brand-black">Resultados Encontrados</CardTitle>
+            <CardDescription className="text-brand-gray">
               Os seguintes clientes foram encontrados em ambas as listas, com seus respectivos valores e datas da planilha de pagamentos.
             </CardDescription>
           </CardHeader>
@@ -214,7 +214,7 @@ export default function CruzamentoPage() {
               </TableBody>
               <TableFooter>
                 <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-200 hover:to-slate-300 transition-all">
-                  <TableCell colSpan={2} className="font-bold text-lg text-slate-800">
+                  <TableCell colSpan={2} className="font-bold text-lg text-brand">
                     <div className="flex items-center gap-2">
                       <Sigma className="h-5 w-5"/>
                       TOTAL GERAL
