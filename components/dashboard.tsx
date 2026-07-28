@@ -420,7 +420,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                         {!isCollapsed ? (
                             <div className="flex items-center gap-1 -ml-1">
                                 <div className="p-1">
-                                <BrandLogo className="w-16 h-16 text-brand" />
+                                <BrandLogo className="w-20 h-20 text-brand" />
                                 </div>
                                 <div>
                                     <h2 className="font-serif font-bold text-brand text-lg leading-none">Cássio Miguel</h2>
@@ -429,7 +429,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                             </div>
                         ) : (
                             <div className="p-1">
-                                <BrandLogo className="w-16 h-16 text-brand" />
+                                <BrandLogo className="w-20 h-20 text-brand" />
                             </div>
                         )}
                     </div>
