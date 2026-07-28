@@ -315,7 +315,7 @@ export default function PremiumLandingPage() {
       <section className="py-20 bg-[#f4f5f0] border-b border-[#e5e7e3]">
         <div className="container mx-auto px-6 lg:px-16">
           <motion.div 
-            className="mb-12"
+            className="mb-12 text-center"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -327,7 +327,7 @@ export default function PremiumLandingPage() {
           </motion.div>
 
           <motion.div 
-            className="grid lg:grid-cols-2 gap-8 max-w-5xl"
+            className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
