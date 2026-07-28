@@ -408,15 +408,15 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                 </Button>
 
                 {/* Logo Header */}
-                <div className="relative flex-shrink-0 p-6 border-b border-brand-gray/20 bg-brand-light/20">
+                <div className="relative flex-shrink-0 p-4 border-b border-brand-gray/20 bg-brand-light/20">
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
-                            <div className="flex flex-col items-center justify-center py-4">
-                                <BrandLogo className="w-32 h-32 text-brand" />
+                            <div className="flex flex-col items-center justify-center py-2">
+                                <BrandLogo className="w-20 h-20 text-brand" />
                             </div>
                         ) : (
                             <div className="p-1">
-                                <BrandLogo className="w-20 h-20 text-brand" />
+                                <BrandLogo className="w-12 h-12 text-brand" />
                             </div>
                         )}
                     </div>
