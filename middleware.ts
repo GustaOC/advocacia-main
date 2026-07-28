@@ -77,8 +77,8 @@ export async function middleware(req: NextRequest) {
 
     // Se a rota for pública
     if (isPublic(pathname)) {
-      // Se for uma página de auth (login, register) ou a raiz, e o usuário estiver logado, manda pro dashboard
-      if (user && !error && (pathname === '/login' || pathname === '/register' || pathname === '/')) {
+      // Se for uma página de auth (login, register) e o usuário estiver logado, manda pro dashboard
+      if (user && !error && (pathname === '/login' || pathname === '/register')) {
         return NextResponse.redirect(new URL('/dashboard', req.url));
       }
       return res;
