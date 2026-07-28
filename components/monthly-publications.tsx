@@ -22,7 +22,7 @@ import {
 // Componente de loading moderno
 function ModuleLoader() {
   return (
-    <div className="min-h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl p-8 flex items-center justify-center">
+    <div className="min-h-96 bg-brand-black rounded-2xl p-8 flex items-center justify-center">
       <div className="text-center space-y-4">
         <div className="relative">
           <div className="w-12 h-12 border-4 border-brand-gray border-t-slate-600 rounded-full animate-spin mx-auto"></div>
@@ -184,7 +184,7 @@ export function MonthlyPublications() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-700 hover:to-slate-800 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+              <Button className="bg-brand-black hover:from-slate-700 hover:to-slate-800 text-white shadow-lg hover:shadow-xl transition-all duration-200">
                 <Download className="h-4 w-4 mr-2" />
                 Exportar Relatório
               </Button>
@@ -278,7 +278,7 @@ export function MonthlyPublications() {
                         <div className="flex items-center space-x-2">
                           <div className="w-20 bg-brand-gray/30 rounded-full h-2">
                             <div
-                              className="bg-gradient-to-r from-brand-black to-brand-black/90 h-2 rounded-full transition-all duration-300"
+                              className="bg-brand-black h-2 rounded-full transition-all duration-300"
                               style={{
                                 width: `${calculateProductivity(person.completed, person.total)}%`,
                               }}

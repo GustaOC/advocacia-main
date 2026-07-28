@@ -23,7 +23,7 @@ const TableHeader = React.forwardRef<
   <thead 
     ref={ref} 
     className={cn(
-      "bg-gradient-to-r from-brand-black to-brand-black/90 sticky top-0 border-b border-brand-gray/50",
+      "bg-brand-black sticky top-0 border-b border-brand-gray/50",
       className
     )} 
     {...props} 

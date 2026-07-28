@@ -520,7 +520,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+            <div className="flex justify-center items-center h-96 bg-brand-black rounded-2xl">
                 <div className="text-center space-y-4">
                     <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
                     <p className="text-brand-gray font-medium">Carregando casos...</p>
@@ -579,7 +579,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                     <CardContent className="p-0">
                         <Table>
                             <TableHeader>
-                                <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
+                                <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                                     <TableHead className="text-slate-700 font-bold">Processo / Título</TableHead>
                                     <TableHead className="text-slate-700 font-bold">Prioridade</TableHead>
                                     <TableHead className="text-slate-700 font-bold">Status</TableHead>
@@ -611,7 +611,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {(['Em andamento', 'Acordo', 'Extinto', 'Pago'] as const).map(status => (
                         <div key={status} className="space-y-4" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, status)}>
-                            <div className="bg-gradient-to-r from-brand-black to-brand-black/90 rounded-xl p-4 sticky top-0 z-10"><div className="flex items-center justify-between"><h3 className="font-bold text-brand text-lg">{status}</h3><Badge variant="secondary" className="bg-white text-slate-700 font-semibold">{filteredCases.filter(c => c.status === status).length}</Badge></div></div>
+                            <div className="bg-brand-black rounded-xl p-4 sticky top-0 z-10"><div className="flex items-center justify-between"><h3 className="font-bold text-brand text-lg">{status}</h3><Badge variant="secondary" className="bg-white text-slate-700 font-semibold">{filteredCases.filter(c => c.status === status).length}</Badge></div></div>
                             <div className="space-y-4 min-h-[400px]">
                                 {filteredCases.filter(c => c.status === status).map(caseItem => (
                                     <div key={caseItem.id} draggable onDragStart={(e) => handleDragStart(e, caseItem)}>

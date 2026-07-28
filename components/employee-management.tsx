@@ -145,7 +145,7 @@ export function EmployeeManagement() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-brand-black rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
           <p className="text-brand-gray font-medium">Carregando equipe...</p>
@@ -183,16 +183,16 @@ export function EmployeeManagement() {
       {employees && <EmployeeStats employees={employees} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+        <CardHeader className="bg-brand-black border-b border-brand-gray">
           <CardTitle className="text-2xl font-bold text-brand-black">Membros da Equipe</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
-                <TableHead className="text-slate-700 font-bold">Membro</TableHead>
-                <TableHead className="text-slate-700 font-bold">Email</TableHead>
-                <TableHead className="text-slate-700 font-bold">Cargo</TableHead>
+              <TableRow className="bg-brand-black hover:bg-brand-darkolive">
+                <TableHead className="text-brand-beige font-bold">Membro</TableHead>
+                <TableHead className="text-brand-beige font-bold">Email</TableHead>
+                <TableHead className="text-brand-beige font-bold">Cargo</TableHead>
                 <TableHead className="text-right text-slate-700 font-bold">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -205,7 +205,7 @@ export function EmployeeManagement() {
                         <div className="relative group-hover:scale-110 transition-transform">
                           <Avatar className="ring-2 ring-brand-light group-hover:ring-slate-400 transition-all">
                             <AvatarImage src={employee.avatar_url || ''} />
-                            <AvatarFallback className="bg-gradient-to-br from-brand-black to-brand-black/90 text-white font-bold">
+                            <AvatarFallback className="bg-brand-black text-white font-bold">
                               {(employee.name || employee.full_name || 'U').charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
@@ -215,7 +215,7 @@ export function EmployeeManagement() {
                     </TableCell>
                     <TableCell className="text-brand-gray">{employee.email}</TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-brand-black to-brand-black/90 text-slate-700 border border-brand-gray">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-brand-black text-brand-beige border border-brand-gray">
                         {employee.role === 'admin' ? 'Administrador' : employee.role === 'member' ? 'Advogado / Membro' : employee.role || employee.roles?.name || 'Não definido'}
                       </span>
                     </TableCell>
@@ -304,7 +304,7 @@ export function EmployeeManagement() {
             <Button 
               onClick={handleSave} 
               disabled={updatePermissionsMutation.isPending}
-              className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl text-white"
+              className="bg-brand-black hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl text-white"
             >
               {updatePermissionsMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
               Salvar Alterações

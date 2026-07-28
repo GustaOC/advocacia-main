@@ -267,7 +267,7 @@ export default function EntitiesModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-brand-black rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
           <p className="text-brand-gray font-medium">Carregando cadastros...</p>
@@ -354,7 +354,7 @@ export default function EntitiesModule() {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
+                  <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                     <TableHead className="text-slate-700 font-bold">Nome</TableHead>
                     <TableHead className="text-slate-700 font-bold">Documento</TableHead>
                     <TableHead className="text-slate-700 font-bold">Tipo</TableHead>

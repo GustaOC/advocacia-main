@@ -58,7 +58,7 @@ export function PetitionsModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-brand-black rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
           <p className="text-brand-gray font-medium">Carregando petições...</p>
@@ -84,13 +84,13 @@ export function PetitionsModule() {
       {petitions && petitions.length > 0 && <PetitionsStats petitions={petitions} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+        <CardHeader className="bg-brand-black border-b border-brand-gray">
           <CardTitle className="text-2xl font-bold text-brand-black">Lista de Petições</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                 <TableHead className="text-slate-700 font-bold">Caso Associado</TableHead>
                 <TableHead className="text-slate-700 font-bold">Autor</TableHead>
                 <TableHead className="text-slate-700 font-bold">Status</TableHead>

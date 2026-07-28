@@ -124,7 +124,7 @@ export default function CruzamentoPage() {
       {resultados.length > 0 && <CruzamentoStats resultados={resultados} total={total} />}
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-        <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+        <CardHeader className="bg-brand-black border-b border-brand-gray">
           <CardTitle className="flex items-center gap-2 text-2xl font-bold text-brand-black">
             <Upload className="h-6 w-6 text-brand-light"/>
             Upload de Arquivos
@@ -188,7 +188,7 @@ export default function CruzamentoPage() {
 
       {resultados.length > 0 && (
         <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-brand-black to-brand-black/90 border-b border-brand-gray">
+          <CardHeader className="bg-brand-black border-b border-brand-gray">
             <CardTitle className="text-2xl font-bold text-brand-black">Resultados Encontrados</CardTitle>
             <CardDescription className="text-brand-gray">
               Os seguintes clientes foram encontrados em ambas as listas, com seus respectivos valores e datas da planilha de pagamentos.
@@ -197,7 +197,7 @@ export default function CruzamentoPage() {
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
+                <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                   <TableHead className="text-slate-700 font-bold">Data do Pagamento</TableHead>
                   <TableHead className="text-slate-700 font-bold">Nome do Cliente</TableHead>
                   <TableHead className="text-right text-slate-700 font-bold">Valor Pago (R$)</TableHead>
@@ -213,7 +213,7 @@ export default function CruzamentoPage() {
                 ))}
               </TableBody>
               <TableFooter>
-                <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-200 hover:to-slate-300 transition-all">
+                <TableRow className="bg-brand-black hover:from-slate-200 hover:to-slate-300 transition-all">
                   <TableCell colSpan={2} className="font-bold text-lg text-brand">
                     <div className="flex items-center gap-2">
                       <Sigma className="h-5 w-5"/>

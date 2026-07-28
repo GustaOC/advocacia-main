@@ -153,7 +153,7 @@ const TaskCard = ({
 
           <div className="flex items-center justify-between pt-2 border-t border-brand-gray/50">
             <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-full flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-6 h-6 bg-brand-black rounded-full flex items-center justify-center text-white text-xs font-bold">
                 {task.assigned_user?.name?.charAt(0) || assignee?.name?.charAt(0) || '?'}
               </div>
               <span className="text-xs text-brand-gray">{task.assigned_user?.name || assignee?.name || 'N/A'}</span>
@@ -309,7 +309,7 @@ export function TasksModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-brand-black rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
           <p className="text-brand-gray font-medium">Carregando tarefas...</p>

@@ -243,7 +243,7 @@ export function CalendarModule() {
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
         <CardContent className="p-6">
           {isLoading ? (
-            <div className="h-[600px] flex items-center justify-center bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+            <div className="h-[600px] flex items-center justify-center bg-brand-black rounded-2xl">
               <div className="text-center space-y-4">
                 <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto"/>
                 <p className="text-brand-gray font-medium">Carregando agenda...</p>

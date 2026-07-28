@@ -248,7 +248,7 @@ function ReceivedPaymentsTab() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                 <TableHead className="text-slate-700 font-bold">Data Pag.</TableHead>
                 <TableHead className="text-slate-700 font-bold">Cliente</TableHead>
                 <TableHead className="text-slate-700 font-bold">Processo</TableHead>
@@ -481,7 +481,7 @@ function MonthlyInstallmentsTab() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-100 hover:to-slate-200">
+              <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                 <TableHead className="text-slate-700 font-bold">Vencimento</TableHead>
                 <TableHead className="text-slate-700 font-bold">Partes</TableHead>
                 <TableHead className="text-slate-700 font-bold">Processo</TableHead>
@@ -586,10 +586,10 @@ function AgreementDetailsCard({ agreement, isExpanded, onToggle, onSendMessage }
       'ATIVO': { label: 'Ativo', className: 'bg-gradient-to-r from-brand-sage to-brand-sage/90 text-white shadow-lg' },
       'CONCLUIDO': { label: 'Concluído', className: 'bg-gradient-to-r from-brand to-brand-700 text-white shadow-lg' },
       'INADIMPLENTE': { label: 'Em Atraso', className: 'bg-gradient-to-r from-brand-gray/80 to-brand-gray text-white shadow-lg' },
-      'CANCELADO': { label: 'Cancelado', className: 'bg-gradient-to-r from-brand-black to-brand-black/90 text-white shadow-lg' },
+      'CANCELADO': { label: 'Cancelado', className: 'bg-brand-black text-white shadow-lg' },
       'PAUSADO': { label: 'Pausado', className: 'bg-gradient-to-r from-yellow-500 to-amber-600 text-white shadow-lg' }
     } as const;
-    const cfg = (variants as any)[status] || { label: status, className: 'bg-gradient-to-r from-brand-black to-brand-black/90 text-white shadow-lg' };
+    const cfg = (variants as any)[status] || { label: status, className: 'bg-brand-black text-white shadow-lg' };
     return <Badge className={`${cfg.className} border-0 px-3 py-1 font-semibold`}>{cfg.label}</Badge>;
   };
 
@@ -972,7 +972,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card className="border-0 shadow-xl group hover:shadow-2xl transition-all duration-500 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-black to-brand-black/90 opacity-10 group-hover:opacity-20 transition-opacity"></div>
+          <div className="absolute inset-0 bg-brand-black opacity-10 group-hover:opacity-20 transition-opacity"></div>
           <CardContent className="p-6 relative z-10">
             <div className="flex items-center justify-between">
               <div>
@@ -1047,7 +1047,7 @@ function ExpensesTab({ expenses, onAddExpense, onToggleExpenseStatus, onEditExpe
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={onAddExpense} className="bg-gradient-to-r from-brand-black to-brand-black/90 hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl h-12 w-full lg:w-auto">
+            <Button onClick={onAddExpense} className="bg-brand-black hover:from-slate-800 hover:to-slate-700 shadow-lg rounded-xl h-12 w-full lg:w-auto">
               <Plus className="mr-2 h-4 w-4" /> Nova Despesa
             </Button>
           </div>
@@ -1294,7 +1294,7 @@ export function FinancialModule() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-96 bg-gradient-to-br from-brand-black to-brand-black/90 rounded-2xl">
+      <div className="flex justify-center items-center h-96 bg-brand-black rounded-2xl">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto" />
           <p className="text-brand-gray font-medium">Carregando dados financeiros...</p>
