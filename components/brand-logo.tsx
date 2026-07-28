@@ -6,7 +6,7 @@ export function BrandLogo({ className }: { className?: string }) {
       viewBox="0 0 100 100" 
       fill="none" 
       stroke="currentColor" 
-      strokeWidth="2" 
+      strokeWidth="3.5" 
       strokeLinecap="round" 
       strokeLinejoin="round" 
       className={className}
