@@ -205,21 +205,19 @@ function QuickStats() {
         return (
           <Card 
             key={index} 
-            className="group hover:border-brand transition-colors duration-200 bg-white cursor-pointer"
+            className="border border-brand-gray/20 bg-white rounded-sm shadow-sm"
           >
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
-                <div className="space-y-3">
-                  <p className="text-sm text-brand-gray font-medium flex items-center gap-2">
+                <div className="space-y-1">
+                  <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">
                     {stat.label}
                   </p>
-                  <p className="text-3xl font-serif font-bold text-brand tabular-nums">
+                  <p className="text-3xl font-serif font-bold text-brand-black tabular-nums">
                     {formatValue(currentValue, stat.prefix, stat.suffix)}
                   </p>
-                  <div className="flex items-center gap-2">
-                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-sm text-xs font-semibold ${
-                      stat.trend > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                    }`}>
+                  <div className="flex items-center gap-2 pt-1">
+                    <div className="flex items-center gap-1 text-xs font-semibold text-brand-sage">
                       {stat.trend > 0 ? (
                         <ArrowUp className="w-3 h-3" />
                       ) : (
@@ -227,11 +225,11 @@ function QuickStats() {
                       )}
                       {Math.abs(stat.trend)}%
                     </div>
-                    <span className="text-xs text-brand-gray">vs mês anterior</span>
+                    <span className="text-xs text-brand-gray/80">vs mês anterior</span>
                   </div>
                 </div>
-                <div className={`p-2 rounded-md bg-brand-light text-brand group-hover:bg-brand group-hover:text-brand-beige transition-colors duration-200`}>
-                  <stat.icon className="w-5 h-5" />
+                <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                  <stat.icon className="w-5 h-5 text-brand" />
                 </div>
               </div>
             </CardContent>
@@ -324,54 +322,44 @@ function RecentActivity() {
   });
 
   return (
-    <Card className="bg-white border-0 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden group h-full">
-      {/* Animated gradient border */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
-      
-      <CardHeader className="pb-4 relative z-10">
-        <CardTitle className="text-xl font-bold text-brand-black flex items-center justify-between">
+    <Card className="bg-white border border-brand-gray/20 shadow-sm rounded-sm h-full">
+      <CardHeader className="border-b border-brand-gray/10 pb-4">
+        <CardTitle className="text-xl font-serif text-brand-black flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl">
-              <Activity className="w-4 h-4 text-white" />
+            <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+              <Activity className="w-4 h-4 text-brand" />
             </div>
             Atividades Recentes
           </div>
-          <Badge className="bg-brand-light text-brand text-xs px-2 py-1 rounded-full animate-pulse">
+          <Badge className="bg-brand-light text-brand text-xs px-2 py-1 rounded-sm">
             Ao vivo
           </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3 relative z-10">
+      <CardContent className="space-y-0 pt-4">
         {recentActivities.length > 0 ? recentActivities.map((activity, index) => (
           <div 
             key={index} 
-            className="flex items-start gap-4 p-4 rounded-xl hover:bg-gradient-to-r hover:from-slate-50 hover:to-slate-100 transition-all duration-300 group/item cursor-pointer"
-            style={{ animationDelay: `${index * 100}ms` }}
+            className="flex items-start gap-4 p-4 border-b border-brand-gray/10 last:border-0 hover:bg-brand-light/10 transition-colors duration-200 cursor-pointer"
           >
-            {/* Animated Timeline Line */}
             <div className="relative">
-              <div className={`p-2 rounded-xl ${activity.color} shadow-lg group-hover/item:scale-110 transition-transform duration-300`}>
-                <activity.icon className="w-4 h-4 text-white" />
+              <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                <activity.icon className="w-4 h-4 text-brand" />
               </div>
-              {index < recentActivities.length - 1 && (
-                <div className="absolute top-10 left-1/2 w-0.5 h-16 bg-gradient-to-b from-slate-200 to-transparent -translate-x-1/2"></div>
-              )}
             </div>
             
             <div className="flex-1 space-y-1">
-              <p className="font-semibold text-brand-black text-sm group-hover/item:text-brand transition-colors">
+              <p className="font-medium text-brand-black text-sm">
                 {activity.action}
               </p>
               <p className="text-sm text-brand-gray">{activity.case}</p>
               <div className="flex items-center gap-2 text-xs text-brand-sage">
                 <Clock className="w-3 h-3" />
                 {activity.time}
-                <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
               </div>
             </div>
             
-            {/* Hover action */}
-            <ChevronRight className="w-4 h-4 text-brand-gray opacity-0 group-hover/item:opacity-100 transition-all duration-300 transform group-hover/item:translate-x-1" />
+            <ChevronRight className="w-4 h-4 text-brand-gray/50" />
           </div>
         )) : (
           <div className="p-8 text-center text-brand-sage flex flex-col items-center">
