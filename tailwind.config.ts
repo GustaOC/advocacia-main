@@ -19,7 +19,8 @@ const config = {
     },
     extend: {
       fontFamily: {
-        'display': ['var(--font-display)', 'system-ui', 'sans-serif'],
+        'serif': ['var(--font-display)', 'serif'],
+        'sans': ['var(--font-body)', 'sans-serif'],
         'body': ['var(--font-body)', 'system-ui', 'sans-serif'],
         'mono': ['"JetBrains Mono"', 'monospace']
       },

@@ -1,6 +1,6 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next'
-import { Lato, Poppins } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 // TypeScript may complain about missing type declarations for CSS imports in some setups.
 // @ts-ignore
 import './globals.css'
@@ -8,16 +8,16 @@ import './globals.css'
 import { QueryProvider } from '@/components/query-provider'
 import { Toaster } from "@/components/ui/toaster"
 
-const lato = Lato({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-body',
   display: 'swap',
 });
 
-const poppins = Poppins({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['600', '700'],
+  weight: ['400', '600', '700'],
   variable: '--font-display',
   display: 'swap',
 });
@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={`${lato.variable} ${poppins.variable} scroll-smooth`}>
+    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
       <body className="bg-background text-foreground">
         <QueryProvider>
           <main>{children}</main>

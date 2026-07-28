@@ -194,25 +194,19 @@ function QuickStats() {
         return (
           <Card 
             key={index} 
-            className="group hover:shadow-2xl transition-all duration-500 border-0 bg-white relative overflow-hidden cursor-pointer transform hover:-translate-y-1"
+            className="group hover:border-brand transition-colors duration-200 bg-white cursor-pointer"
           >
-            {/* Gradient Background Pattern */}
-            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgColor} opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
-            <div className="absolute -right-8 -top-8 w-32 h-32 bg-gradient-to-br from-white/20 to-transparent rounded-full blur-2xl"></div>
-            <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-gradient-to-tr from-white/20 to-transparent rounded-full blur-2xl"></div>
-            
-            <CardContent className="p-6 relative z-10">
+            <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div className="space-y-3">
-                  <p className="text-sm text-slate-600 font-medium flex items-center gap-2">
+                  <p className="text-sm text-brand-olive font-medium flex items-center gap-2">
                     {stat.label}
-                    <Sparkles className="w-3 h-3 text-brand-sage animate-pulse" />
                   </p>
-                  <p className="text-3xl font-bold text-slate-900 tabular-nums">
+                  <p className="text-3xl font-serif font-bold text-brand tabular-nums">
                     {formatValue(currentValue, stat.prefix, stat.suffix)}
                   </p>
                   <div className="flex items-center gap-2">
-                    <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-sm text-xs font-semibold ${
                       stat.trend > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                     }`}>
                       {stat.trend > 0 ? (
@@ -222,20 +216,12 @@ function QuickStats() {
                       )}
                       {Math.abs(stat.trend)}%
                     </div>
-                    <span className="text-xs text-slate-500">vs mês anterior</span>
+                    <span className="text-xs text-brand-olive">vs mês anterior</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-2xl bg-gradient-to-br ${stat.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                  <stat.icon className="w-6 h-6 text-white" />
+                <div className={`p-2 rounded-md bg-brand-light text-brand group-hover:bg-brand group-hover:text-brand-beige transition-colors duration-200`}>
+                  <stat.icon className="w-5 h-5" />
                 </div>
-              </div>
-              
-              {/* Progress Bar */}
-              <div className="mt-4 h-1 bg-slate-100 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full bg-gradient-to-r ${stat.color} transition-all duration-1000`}
-                  style={{ width: `${Math.min(percentage, 100)}%` }}
-                />
               </div>
             </CardContent>
           </Card>
@@ -389,58 +375,48 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
     const { user } = useAuth() // adicione essa linha
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
-            {/* Animated Background Pattern */}
-            <div className="fixed inset-0 opacity-[0.03] pointer-events-none">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: `radial-gradient(circle at 20% 80%, blue 0%, transparent 50%),
-                                      radial-gradient(circle at 80% 20%, purple 0%, transparent 50%),
-                                      radial-gradient(circle at 40% 40%, pink 0%, transparent 50%)`,
-                }}></div>
-            </div>
+        <div className="min-h-screen bg-slate-50">
 
-            {/* Sidebar Premium com Glassmorphism */}
-            <aside className={`fixed flex flex-col left-0 top-0 h-screen backdrop-blur-xl bg-slate-900/95 text-white shadow-2xl z-50 transition-all duration-500 ease-in-out ${
+
+            {/* Sidebar Clássica e Formal */}
+            <aside className={`fixed flex flex-col left-0 top-0 h-screen bg-white text-brand shadow-sm z-50 transition-all duration-300 ease-in-out ${
                 isCollapsed ? 'w-20' : 'w-72'
-            } ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 border-r border-white/10`}>
+            } ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 border-r border-brand-olive/30`}>
                 
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-slate-800/50 via-transparent to-slate-900/50 pointer-events-none"></div>
-                
-                {/* Toggle Button Premium */}
+                {/* Toggle Button */}
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className="hidden lg:flex absolute -right-4 top-7 bg-slate-500 text-slate-900 hover:bg-slate-750 shadow-xl rounded-full h-8 w-8 border-2 border-slate-200 z-10 transition-all duration-300 hover:scale-110"
+                    className="hidden lg:flex absolute -right-4 top-7 bg-white text-brand hover:bg-brand-light rounded-full h-8 w-8 border border-brand-olive/30 z-10 transition-colors"
                 >
                     {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
                 </Button>
 
-                {/* Logo Header Premium */}
-                <div className="relative flex-shrink-0 p-6 border-b border-white/10 bg-gradient-to-r from-slate-800/50 to-slate-700/50 backdrop-blur-sm">
+                {/* Logo Header */}
+                <div className="relative flex-shrink-0 p-6 border-b border-brand-olive/20 bg-brand-light/20">
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl shadow-xl">
-                                    <Scale className="w-6 h-6 text-white" />
+                                <div className="p-2 bg-brand rounded-md shadow-sm">
+                                    <Scale className="w-6 h-6 text-brand-beige" />
                                 </div>
                                 <div>
-                                    <h2 className="font-bold text-white text-lg">Cássio Miguel</h2>
-                                    <p className="text-xs text-white">Advocacia Digital</p>
+                                    <h2 className="font-serif font-bold text-brand text-lg leading-none">Cássio Miguel</h2>
+                                    <p className="text-xs text-brand-sage font-medium mt-1 uppercase tracking-wider">Advocacia</p>
                                 </div>
                             </div>
                         ) : (
-                            <div className="p-2 bg-gradient-to-br from-brand to-brand-700 rounded-xl shadow-xl">
-                                <Scale className="w-6 h-6 text-white" />
+                            <div className="p-2 bg-brand rounded-md shadow-sm">
+                                <Scale className="w-6 h-6 text-brand-beige" />
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Navigation Premium */}
-                <nav className="relative flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-track-slate-800/50 scrollbar-thumb-slate-600/50 hover:scrollbar-thumb-slate-500/50">
-                    <div className="space-y-2">
+                {/* Navigation */}
+                <nav className="relative flex-1 py-6 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-brand-olive/20 hover:scrollbar-thumb-brand-olive/40">
+                    <div className="space-y-1">
                         {(() => {
                             const visibleItems = user?.role === "admin" 
                                 ? menuItems 
@@ -454,52 +430,38 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                     setActiveTab(item.value);
                                     setIsMobileMenuOpen(false);
                                 }}
-                                className={`w-full group relative overflow-hidden rounded-xl transition-all duration-500 ${
+                                className={`w-full group relative overflow-hidden transition-colors duration-200 flex items-center ${
                                     activeTab === item.value
-                                        ? "bg-white/10 backdrop-blur-sm shadow-xl"
-                                        : "hover:bg-white/5"
-                                } ${isCollapsed ? 'p-3' : 'p-4'}`}
+                                        ? "bg-brand-light/50 border-l-4 border-brand"
+                                        : "hover:bg-brand-light/30 border-l-4 border-transparent"
+                                } ${isCollapsed ? 'px-3 py-4 justify-center' : 'px-6 py-3'}`}
                                 title={isCollapsed ? item.label : undefined}
-                                style={{ animationDelay: `${index * 50}ms` }}
                             >
-                                {/* Active Gradient Background */}
-                                {activeTab === item.value && (
-                                    <div className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-20 blur-xl`}></div>
-                                )}
-                                
-                                <div className={`relative z-10 flex items-center ${isCollapsed ? 'justify-center' : 'gap-4'}`}>
-                                    <div className={`p-2.5 rounded-xl transition-all duration-500 ${
+                                <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-4'} w-full`}>
+                                    <div className={`p-2 rounded-md transition-colors duration-200 ${
                                         activeTab === item.value 
-                                            ? `bg-gradient-to-br ${item.color} shadow-lg` 
-                                            : "bg-white/25 group-hover:bg-white/40"
+                                            ? `bg-brand text-brand-beige shadow-sm` 
+                                            : "text-brand-sage group-hover:text-brand"
                                     }`}>
-                                        <item.icon className={`w-5 h-5 ${activeTab === item.value ? 'text-white' : 'text-slate-600'}`} />
+                                        <item.icon className="w-5 h-5" />
                                     </div>
                                     {!isCollapsed && (
                                         <div className="text-left flex-1">
-                                            <div className={`font-semibold text-sm transition-colors duration-300 ${
-                                                activeTab === item.value ? 'text-slate-800' : 'text-slate-800 group-hover:text-slate-700'
+                                            <div className={`font-semibold text-sm transition-colors duration-200 ${
+                                                activeTab === item.value ? 'text-brand' : 'text-brand/80 group-hover:text-brand'
                                             }`}>
                                                 {item.label}
                                             </div>
-                                            <div className={`text-xs mt-1 transition-colors duration-300 ${
+                                            <div className={`text-xs mt-0.5 transition-colors duration-200 ${
                                                 activeTab === item.value 
-                                                    ? "text-slate-800" 
-                                                    : "text-slate-500 group-hover:text-slate-400"
+                                                    ? "text-brand-sage" 
+                                                    : "text-brand-olive group-hover:text-brand-sage"
                                             }`}>
                                                 {item.description}
                                             </div>
                                         </div>
                                     )}
                                 </div>
-                                
-                                {/* Premium Active Indicator */}
-                                {activeTab === item.value && (
-                                    <>
-                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-purple-400 to-pink-400 rounded-r-full"></div>
-                                        <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-purple-400 to-pink-400 rounded-l-full"></div>
-                                    </>
-                                )}
                             </button>
                             ));
                         })()}
@@ -529,20 +491,18 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
             <main className={`min-h-screen flex flex-col transition-all duration-500 ${
                 isCollapsed ? 'lg:ml-20' : 'lg:ml-72'
             } ml-0`}>
-                {/* Premium Header with Glassmorphism */}
-                <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-2xl border-b border-slate-200/50 shadow-sm">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
+                {/* Header Clássico */}
+                <header className="sticky top-0 z-30 bg-white border-b border-brand-olive/30 shadow-sm">
                     <div className={`relative px-8 py-6 transition-all duration-500 ${isCollapsed ? 'lg:pl-8' : 'lg:pl-8'} pl-16 lg:pl-8`}>
                         <div className="flex justify-between items-center">
                             <div className="space-y-2">
                                 <div className="flex items-center gap-3">
-                                    <h1 className="font-bold text-3xl bg-gradient-to-r from-brand-black to-brand-black/90 bg-clip-text text-transparent">
+                                    <h1 className="font-serif font-bold text-3xl text-brand">
                                         {activeItem?.label || 'Dashboard'}
                                     </h1>
                                 </div>
-                                <p className="text-slate-600 flex items-center gap-2">
+                                <p className="text-brand-sage flex items-center gap-2 font-medium">
                                     {activeItem?.description || 'Sistema de Gestão Jurídica'}
-                                    <Award className="w-4 h-4 text-brand-sage" />
                                 </p>
                             </div>
                             
@@ -556,18 +516,18 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                 {/* Premium User Menu */}
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className="flex items-center space-x-3 p-2 rounded-xl hover:bg-slate-100/80 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                                        <button className="flex items-center space-x-3 p-2 rounded-md hover:bg-brand-light/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-brand/20">
                                             <div className="relative">
-                                                <Avatar className="ring-2 ring-slate-300 w-10 h-10">
-                                                    <AvatarFallback className="bg-gradient-to-br from-brand to-brand-700 text-white font-bold">
+                                                <Avatar className="ring-1 ring-brand-olive w-10 h-10">
+                                                    <AvatarFallback className="bg-brand-light text-brand font-bold">
                                                    {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                                                   </AvatarFallback>
                                                 </Avatar>
                                                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                                             </div>
                                             <div className="text-left hidden md:block">
-                                                <div className="font-semibold text-sm text-slate-900">{user?.name || user?.email}</div>
-                                                <div className="text-xs text-slate-600">Online agora</div>
+                                                <div className="font-semibold text-sm text-brand">{user?.name || user?.email}</div>
+                                                <div className="text-xs text-brand-sage">Online agora</div>
                                             </div>
                                             <ChevronRight className="w-4 h-4 text-slate-400 hidden md:block" />
                                         </button>
@@ -576,7 +536,7 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                         <div className="px-3 py-3 border-b border-slate-100">
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="w-12 h-12">
-                                                   <AvatarFallback className="bg-gradient-to-br from-brand to-brand-700 text-white font-bold">
+                                                   <AvatarFallback className="bg-brand-light text-brand font-bold">
                                                     {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                                                   </AvatarFallback>
                                                 </Avatar>
