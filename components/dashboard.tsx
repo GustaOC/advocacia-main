@@ -418,14 +418,8 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                 <div className="relative flex-shrink-0 p-6 border-b border-brand-gray/20 bg-brand-light/20">
                     <div className="flex items-center justify-center">
                         {!isCollapsed ? (
-                            <div className="flex items-center gap-1 -ml-1">
-                                <div className="p-1">
-                                <BrandLogo className="w-20 h-20 text-brand" />
-                                </div>
-                                <div>
-                                    <h2 className="font-serif font-bold text-brand text-lg leading-none">Cássio Miguel</h2>
-                                    <p className="text-xs text-brand-sage font-medium mt-1 uppercase tracking-wider">Advocacia</p>
-                                </div>
+                            <div className="flex flex-col items-center justify-center py-4">
+                                <BrandLogo className="w-32 h-32 text-brand" />
                             </div>
                         ) : (
                             <div className="p-1">
