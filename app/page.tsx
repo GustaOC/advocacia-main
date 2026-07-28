@@ -55,7 +55,7 @@ export default function PremiumLandingPage() {
               />
             </motion.div>
             
-            <motion.h1 variants={fadeInUp} className="font-serif text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight text-white">
+            <motion.h1 variants={fadeInUp} className="font-serif text-4xl lg:text-5xl xl:text-6xl leading-tight tracking-tight text-white">
               Engenharia Processual para Casos de Alta Complexidade
             </motion.h1>
             
@@ -104,7 +104,7 @@ export default function PremiumLandingPage() {
           variants={staggerContainer}
         >
           <motion.span variants={fadeInUp} className="text-sm font-bold tracking-widest uppercase text-[#1f2622] block mb-4">O MANIFESTO</motion.span>
-          <motion.h2 variants={fadeInUp} className="font-serif text-3xl lg:text-4xl font-bold leading-snug text-[#1f2622] mb-8">
+          <motion.h2 variants={fadeInUp} className="font-serif text-3xl lg:text-4xl leading-snug text-[#1f2622] mb-8">
             A diferença entre um processo comum e um desfecho favorável está nos detalhes da técnica.
           </motion.h2>
           <motion.div variants={fadeInUp} className="space-y-6 text-[#4a5f51] text-base leading-relaxed">
@@ -129,7 +129,7 @@ export default function PremiumLandingPage() {
             variants={fadeInUp}
           >
             <span className="text-sm font-bold tracking-widest uppercase text-[#1f2622] block mb-2">ÁREAS DE DOMÍNIO</span>
-            <h2 className="font-serif text-2xl lg:text-3xl font-bold text-[#1f2622] max-w-xl">Atuação Cirúrgica Cível e Administrativa</h2>
+            <h2 className="font-serif text-2xl lg:text-3xl text-[#1f2622] max-w-xl">Atuação Cirúrgica Cível e Administrativa</h2>
             <p className="mt-4 text-[#4a5f51] font-light max-w-2xl">Unimos a precisão do Direito Processual Civil à firmeza necessária na defesa de prerrogativas administrativas:</p>
           </motion.div>
 
@@ -145,7 +145,7 @@ export default function PremiumLandingPage() {
                 <Scale className="w-5 h-5 text-white" strokeWidth={2} />
               </div>
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#1f2622] mb-2">Cível</h3>
+                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Cível</h3>
                 <p className="text-[#4a5f51] text-sm leading-relaxed">
                   Defesa de direitos contratuais, disputas societárias de alta tensão e ações de responsabilidade civil de expressivo valor econômico.
                 </p>
@@ -157,7 +157,7 @@ export default function PremiumLandingPage() {
                 <ShieldCheck className="w-5 h-5 text-white" strokeWidth={2} />
               </div>
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#1f2622] mb-2">Blindagem de Carreira</h3>
+                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Blindagem de Carreira</h3>
                 <p className="text-[#4a5f51] text-sm leading-relaxed">
                   Atuação preventiva e contenciosa para conter sanções administrativas, blindar a reputação profissional e assegurar paridade de armas.
                 </p>
@@ -169,7 +169,7 @@ export default function PremiumLandingPage() {
                 <AlertTriangle className="w-5 h-5 text-white" strokeWidth={2} />
               </div>
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#1f2622] mb-2">Urgência</h3>
+                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Urgência</h3>
                 <p className="text-[#4a5f51] text-sm leading-relaxed">
                   Utilização ágil do Mandado de Segurança e de medidas liminares estratégicas para paralisar atos ilegais e abusos de autoridade.
                 </p>
@@ -181,7 +181,7 @@ export default function PremiumLandingPage() {
                 <ScrollText className="w-5 h-5 text-white" strokeWidth={2} />
               </div>
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#1f2622] mb-2">Recursos</h3>
+                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Recursos</h3>
                 <p className="text-[#4a5f51] text-sm leading-relaxed">
                   Domínio absoluto da técnica recursal para reverter decisões desfavoráveis com agilidade e rigor científico.
                 </p>
@@ -201,7 +201,7 @@ export default function PremiumLandingPage() {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
           >
-            <h2 className="font-serif text-2xl lg:text-3xl font-bold text-[#1f2622] mb-2">O Método de Defesa Blindada</h2>
+            <h2 className="font-serif text-2xl lg:text-3xl text-[#1f2622] mb-2">O Método de Defesa Blindada</h2>
             <p className="text-[#4a5f51]">Como garantimos a paridade de armas como um processo de engenharia de elite.</p>
           </motion.div>
 
@@ -294,7 +294,7 @@ export default function PremiumLandingPage() {
               variants={fadeInRight}
             >
               <span className="text-sm font-bold tracking-widest uppercase text-[#8b998a] block mb-4">O PERFIL</span>
-              <h2 className="font-serif text-3xl lg:text-4xl font-bold leading-tight mb-6">
+              <h2 className="font-serif text-3xl lg:text-4xl leading-tight mb-6">
                 Cássio Miguel: A Ciência da Defesa Processual
               </h2>
               <div className="space-y-4 text-sm font-light text-[#c3cdc5] leading-relaxed">
@@ -322,7 +322,7 @@ export default function PremiumLandingPage() {
             variants={fadeInUp}
           >
             <span className="text-sm font-bold tracking-widest uppercase text-[#1f2622] block mb-2">CONSULTORIA E INVESTIMENTO</span>
-            <h2 className="font-serif text-2xl lg:text-3xl font-bold text-[#1f2622]">Condições de Contratação e Atendimento Premium</h2>
+            <h2 className="font-serif text-2xl lg:text-3xl text-[#1f2622]">Condições de Contratação e Atendimento Premium</h2>
             <p className="text-[#4a5f51] text-sm mt-2">Atuação pautada pela transparência ética e dedicação exclusiva ao seu caso.</p>
           </motion.div>
 
@@ -335,7 +335,7 @@ export default function PremiumLandingPage() {
           >
             <motion.div variants={fadeInUp} className="flex flex-col lg:flex-row gap-4">
               <div className="bg-[#303b32] text-white p-6 rounded-md flex-1">
-                <h3 className="font-serif text-lg font-bold mb-2">1. Honorários de Pró-Labore</h3>
+                <h3 className="font-serif text-lg mb-2">1. Honorários de Pró-Labore</h3>
                 <p className="text-xs text-[#aeb8b2] mb-4">Estudo, Engenharia Inicial e Atuação Ordinária</p>
                 <p className="text-xs font-light text-[#c3cdc5] mb-6">
                   Garante a dedicação prioritária do escritório, análise minuciosa, elaboração de teses defensivas e acompanhamento dos atos ordinários.
@@ -353,7 +353,7 @@ export default function PremiumLandingPage() {
 
             <motion.div variants={fadeInUp} className="flex flex-col lg:flex-row gap-4">
               <div className="bg-[#303b32] text-white p-6 rounded-md flex-1">
-                <h3 className="font-serif text-lg font-bold mb-2">2. Honorários de Êxito</h3>
+                <h3 className="font-serif text-lg mb-2">2. Honorários de Êxito</h3>
                 <p className="text-xs text-[#aeb8b2] mb-4">Foco no Resultado</p>
                 <p className="text-xs font-light text-[#c3cdc5] mb-6">
                   Alinhamento de interesses: devidos estritamente no caso de desfecho vitorioso (arquivamento ou procedência total).
@@ -386,7 +386,7 @@ export default function PremiumLandingPage() {
           viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
         >
-          <motion.h2 variants={fadeInUp} className="font-serif text-2xl font-bold text-[#1f2622] mb-10 uppercase tracking-widest text-center">Perguntas Frequentes (FAQ)</motion.h2>
+          <motion.h2 variants={fadeInUp} className="font-serif text-2xl text-[#1f2622] mb-10 uppercase tracking-widest text-center">Perguntas Frequentes (FAQ)</motion.h2>
 
           <div className="space-y-8">
             <motion.div variants={fadeInUp}>
