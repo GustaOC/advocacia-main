@@ -1,6 +1,6 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next'
-import { Inter, Playfair_Display } from 'next/font/google'
+import { Inter, Marcellus } from 'next/font/google'
 // TypeScript may complain about missing type declarations for CSS imports in some setups.
 // @ts-ignore
 import './globals.css'
@@ -15,9 +15,9 @@ const inter = Inter({
   display: 'swap',
 });
 
-const playfair = Playfair_Display({
+const marcellus = Marcellus({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400'],
   variable: '--font-display',
   display: 'swap',
 });
@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
+    <html lang="pt-BR" className={`${inter.variable} ${marcellus.variable} scroll-smooth`}>
       <body className="bg-background text-foreground">
         <QueryProvider>
           <main>{children}</main>
