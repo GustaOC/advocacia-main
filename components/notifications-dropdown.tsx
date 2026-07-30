@@ -177,10 +177,10 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
     const msg = notification.message?.toLowerCase() || '';
     const type = notification.type?.toLowerCase() || '';
 
-    if (type === 'financeiro' || title.includes('financeiro') || msg.includes('financeiro') || msg.includes('parcela') || msg.includes('acordo') || msg.includes('vencimento')) {
-      if (onNavigate) onNavigate('financial');
-    } else if (type === 'tarefa' || title.includes('tarefa') || msg.includes('tarefa')) {
+    if (type === 'tarefa' || title.includes('tarefa') || msg.includes('tarefa')) {
       if (onNavigate) onNavigate('tasks');
+    } else if (type === 'financeiro' || title.includes('financeiro') || msg.includes('financeiro') || msg.includes('parcela') || msg.includes('acordo') || msg.includes('vencimento')) {
+      if (onNavigate) onNavigate('financial');
     } else if (type === 'entidade' || title.includes('cliente') || msg.includes('cliente') || title.includes('entidade')) {
       if (onNavigate) onNavigate('entities');
     } else if (type === 'processo' || title.includes('processo') || msg.includes('processo') || title.includes('caso')) {
