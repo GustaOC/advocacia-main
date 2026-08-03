@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -33,6 +33,11 @@ export function PublicationsModule() {
   // Modal
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingPub, setEditingPub] = useState<Publication | null>(null);
+
+  // Import State
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
 
   // Form State
   const [title, setTitle] = useState('');
@@ -127,6 +132,61 @@ export function PublicationsModule() {
     } else {
       createMutation.mutate(payload);
     }
+  };
+
+  const handleImportPublications = async () => {
+    if (!importFile) {
+        toast({ title: "Erro", description: "Por favor, selecione uma planilha Excel (.xlsx)", variant: "destructive" });
+        return;
+    }
+
+    setIsImporting(true);
+    try {
+        const formData = new FormData();
+        formData.append("file", importFile);
+
+        const response = await fetch('/api/publications/import', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Falha ao importar publicações.");
+        }
+
+        if (result.successCount > 0) {
+            toast({ title: "Importação concluída!", description: `${result.successCount} publicação(ões) importada(s) com sucesso.` });
+            queryClient.invalidateQueries({ queryKey: ['publications'] });
+        }
+
+        if (result.errors && result.errors.length > 0) {
+            console.error("Erros de importação:", result.errors);
+            toast({ title: "Alguns itens falharam", description: "Verifique o console para mais detalhes.", variant: "destructive" });
+        }
+
+        if (result.successCount === 0 && result.errorCount === 0) {
+            toast({ title: "Arquivo vazio", description: "Nenhum dado válido encontrado.", variant: "destructive" });
+        }
+
+        setIsImportModalOpen(false);
+        setImportFile(null);
+    } catch (error: any) {
+        toast({ title: "Erro na importação", description: error.message, variant: "destructive" });
+    } finally {
+        setIsImporting(false);
+    }
+  };
+
+  const quickAssignAndComplete = (pub: Publication, employeeId: string) => {
+    updateMutation.mutate({
+      id: pub.id,
+      data: {
+        assigned_to: employeeId,
+        status: 'Concluída'
+      }
+    });
   };
 
   // 1. Group publications by Month for the root folder view
@@ -288,6 +348,9 @@ export function PublicationsModule() {
             </div>
             {user?.role === 'admin' && (
               <div className="flex gap-3 items-center">
+                <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl h-12 px-4" onClick={() => setIsImportModalOpen(true)}>
+                  <Upload className="mr-2 h-4 w-4" /> Importar
+                </Button>
                 <Button onClick={openNewModal} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl h-12 px-6">
                   <Plus className="mr-2 h-4 w-4" /> Nova Publicação
                 </Button>
@@ -424,24 +487,44 @@ export function PublicationsModule() {
                       <h4 className="text-lg font-bold text-brand-black line-clamp-2 mb-2">{pub.title}</h4>
                       {pub.description && <p className="text-sm text-brand-gray line-clamp-3 mb-4">{pub.description}</p>}
 
-                      <div className="pt-4 border-t border-brand-gray/10 flex justify-between items-center mt-auto">
-                        <div className="flex items-center text-sm text-brand-gray">
-                          <Users className="h-4 w-4 mr-2 opacity-70" />
-                          <span className="font-medium truncate max-w-[150px]">
-                            {pub.assigned_user?.name || "Sem responsável"}
-                          </span>
-                        </div>
-                        
-                        {(user?.role === 'admin' || user?.id === pub.assigned_to) && (
-                          <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button variant="ghost" size="icon" onClick={() => openEditModal(pub)} className="h-8 w-8 text-brand hover:bg-brand-light">
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            {user?.role === 'admin' && (
-                              <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(pub.id)} className="h-8 w-8 text-red-500 hover:bg-red-50">
-                                <Trash2 className="h-4 w-4" />
+                      <div className="pt-4 border-t border-brand-gray/10 flex flex-col space-y-3 mt-auto">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center text-sm text-brand-gray">
+                            <Users className="h-4 w-4 mr-2 opacity-70" />
+                            <span className="font-medium truncate max-w-[150px]">
+                              {pub.assigned_user?.name || "Sem responsável"}
+                            </span>
+                          </div>
+                          
+                          {(user?.role === 'admin' || user?.id === pub.assigned_to) && (
+                            <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button variant="ghost" size="icon" onClick={() => openEditModal(pub)} className="h-8 w-8 text-brand hover:bg-brand-light">
+                                <Edit className="h-4 w-4" />
                               </Button>
-                            )}
+                              {user?.role === 'admin' && (
+                                <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(pub.id)} className="h-8 w-8 text-red-500 hover:bg-red-50">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Quick Assign & Complete for unassigned publications */}
+                        {!pub.assigned_to && user?.role === 'admin' && (
+                          <div className="flex gap-2 items-center bg-brand-light/10 p-2 rounded-lg border border-brand-light/30">
+                            <Select onValueChange={(val) => quickAssignAndComplete(pub, val)}>
+                              <SelectTrigger className="h-8 text-xs bg-white">
+                                <SelectValue placeholder="Atribuir e Concluir..." />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {employees.map((emp: any) => (
+                                  <SelectItem key={emp.id} value={emp.id} className="text-xs">
+                                    {emp.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </div>
                         )}
                       </div>
@@ -514,6 +597,27 @@ export function PublicationsModule() {
             <Button variant="outline" onClick={closeModal} className="border-2 border-brand-gray rounded-sm">Cancelar</Button>
             <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="bg-brand text-white hover:bg-brand-dark rounded-sm">
               {editingPub ? 'Salvar Alterações' : 'Criar Publicação'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isImportModalOpen} onOpenChange={setIsImportModalOpen}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-serif text-brand-black border-b border-brand-gray/20 pb-4">Importar Planilha</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label>Selecione o arquivo Excel (.xlsx)</Label>
+              <p className="text-xs text-brand-gray mb-2">As abas devem conter datas no nome (ex: Publicações 15-07) e os números de processo soltos nas colunas.</p>
+              <Input type="file" accept=".xlsx, .xls" onChange={(e) => setImportFile(e.target.files?.[0] || null)} className="cursor-pointer" />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-4 border-t border-brand-gray/20">
+            <Button variant="outline" onClick={() => setIsImportModalOpen(false)} disabled={isImporting}>Cancelar</Button>
+            <Button onClick={handleImportPublications} disabled={!importFile || isImporting} className="bg-brand text-white hover:bg-brand-dark">
+              {isImporting ? 'Importando...' : 'Importar'}
             </Button>
           </div>
         </DialogContent>
