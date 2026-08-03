@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isSameMonth } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -21,6 +21,9 @@ export function PublicationsModule() {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingPub, setEditingPub] = useState<Publication | null>(null);
@@ -121,7 +124,14 @@ export function PublicationsModule() {
   const groupedByMonth = useMemo(() => {
     const groups: { [key: string]: Publication[] } = {};
     
-    publications.forEach(pub => {
+    // Apply filters
+    const filteredPubs = publications.filter(pub => {
+      const matchesSearch = pub.title.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = filterStatus === 'all' || pub.status === filterStatus;
+      return matchesSearch && matchesStatus;
+    });
+
+    filteredPubs.forEach(pub => {
       const date = parseISO(pub.publication_date);
       const monthKey = format(date, 'MMMM yyyy', { locale: ptBR });
       if (!groups[monthKey]) groups[monthKey] = [];
@@ -141,28 +151,102 @@ export function PublicationsModule() {
     });
 
     return { groups, sortedKeys };
-  }, [publications]);
+  }, [publications, searchTerm, filterStatus]);
 
   if (isLoading) {
     return <div className="p-8 text-center text-brand-gray">Carregando publicações...</div>;
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-end mb-8">
-        <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm w-full md:w-auto flex-1">
-          <h2 className="text-3xl font-serif text-brand-black tracking-tight">Publicações</h2>
-          <p className="text-brand-gray mt-2 font-medium">Cronograma de postagens e artigos.</p>
-        </div>
-        {user?.role === 'admin' && (
-          <div className="ml-4">
-            <Button onClick={openNewModal} className="bg-brand text-white hover:bg-brand-dark shadow-sm rounded-none mb-6 px-6 h-[116px]">
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Publicação
-            </Button>
-          </div>
-        )}
+    <div className="space-y-6">
+      <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm">
+        <h2 className="text-3xl font-serif text-brand-black tracking-tight">Publicações</h2>
+        <p className="text-brand-gray mt-2 font-medium">Cronograma de postagens e artigos.</p>
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Total</p>
+                <p className="text-3xl font-serif text-brand-black">{publications.length}</p>
+              </div>
+              <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                <Megaphone className="w-5 h-5 text-brand" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Pendentes</p>
+                <p className="text-3xl font-serif text-brand-black">{publications.filter(p => p.status === 'Pendente').length}</p>
+              </div>
+              <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
+                <Clock className="w-5 h-5 text-brand" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Concluídas</p>
+                <p className="text-3xl font-serif text-brand-black">{publications.filter(p => p.status === 'Concluída').length}</p>
+              </div>
+              <div className="p-2 bg-green-50 border border-brand-gray/10 rounded-sm">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Canceladas</p>
+                <p className="text-3xl font-serif text-brand-black">{publications.filter(p => p.status === 'Cancelada').length}</p>
+              </div>
+              <div className="p-2 bg-red-50 border border-brand-gray/10 rounded-sm">
+                <Trash2 className="w-5 h-5 text-red-500" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+        <CardContent className="p-6">
+          <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center">
+            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
+                <Input placeholder="Buscar por título..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
+              </div>
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger className="w-[200px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os Status</SelectItem>
+                  <SelectItem value="Pendente">Pendente</SelectItem>
+                  <SelectItem value="Concluída">Concluída</SelectItem>
+                  <SelectItem value="Cancelada">Cancelada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {user?.role === 'admin' && (
+              <div className="flex gap-3 items-center">
+                <Button onClick={openNewModal} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl h-12 px-6">
+                  <Plus className="mr-2 h-4 w-4" /> Nova Publicação
+                </Button>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="space-y-12">
         {groupedByMonth.sortedKeys.length === 0 ? (
