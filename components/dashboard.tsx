@@ -32,7 +32,8 @@ import { SystemSettingsModal } from './system-settings-modal'
 import { UserSettingsModal } from './user-settings-modal'
 import { TemplatesModule } from "./templates-module"
 import CruzamentoPage from "@/app/dashboard/cruzamento/page"; // <-- CORREÇÃO: Importa o novo componente
-import { Mail } from "lucide-react"; // Importar Mail para os ícones (Chrome não é mais necessário)
+import { Mail, Megaphone } from "lucide-react"; // Importar Mail para os ícones (Chrome não é mais necessário)
+import { PublicationsModule } from "@/components/publications-module";
 
 interface GlobalFilters {
   cases?: { status: string };
@@ -59,6 +60,7 @@ const menuItems = [
     { value: "financial", label: "Financeiro", icon: DollarSign, description: "Controle financeiro", color: "from-brand-sage to-brand-sage/90" },
     { value: "calendar", label: "Agenda", icon: Calendar, description: "Compromissos e prazos", color: "from-brand-gray/80 to-brand-gray" },
     { value: "tasks", label: "Tarefas", icon: CheckSquare, description: "Tarefas e lembretes", color: "from-brand to-brand-700" },
+    { value: "publications", label: "Publicações", icon: Megaphone, description: "Agendamento de publicações", color: "from-purple-500 to-indigo-500" },
     // { value: "google-workspace", label: "Google Workspace", icon: Chrome, description: "Integração com serviços Google", color: "from-blue-500 to-red-500" }, // REMOVIDO: Google Workspace Hub
     { value: "gmail-inbox", label: "Gmail Inbox", icon: Mail, description: "Sua caixa de entrada do Gmail", color: "from-brand-beige to-brand-beige/90 text-brand-black" }, // Novo item de menu
     { value: "employees", label: "Equipe", icon: Users, description: "Gerenciar colaboradores", color: "from-brand-black to-brand-black/90" },
@@ -495,6 +497,7 @@ export function Dashboard() {
     financial: <FinancialModule />,
     calendar: <CalendarModule />,
     tasks: <TasksModule />,
+    publications: <PublicationsModule />,
     // "google-workspace": <GoogleWorkspaceModule />, // REMOVIDO: Google Workspace Hub
     "gmail-inbox": <GmailInboxModule />, // Adicionar o novo módulo
     employees: <EmployeeManagement />,

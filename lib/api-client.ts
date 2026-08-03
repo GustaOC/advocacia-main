@@ -16,6 +16,20 @@ export interface Task {
   assigned_user?: { name: string; email: string };
 }
 
+export interface Publication {
+  id: string;
+  title: string;
+  description?: string | null;
+  publication_date: string;
+  assigned_to?: string | null;
+  assigned_by?: string | null;
+  status: 'Pendente' | 'Concluída' | 'Cancelada';
+  task_id?: string | null;
+  created_at: string;
+  updated_at: string;
+  assigned_user?: { name: string; email: string };
+}
+
 // ============================================================================
 // TIPAGEM (Interfaces para os dados da API)
 // ============================================================================
@@ -382,6 +396,12 @@ export class ApiClient {
   async createTask(data: Partial<Task>): Promise<Task> { return instance.post('/tasks', data); }
   async updateTask(id: string, data: Partial<Task>): Promise<Task> { return instance.put(`/tasks/${id}`, data); }
   async deleteTask(id: string): Promise<{ message: string }> { return instance.delete(`/tasks`, { params: { id } }); }
+
+  // Métodos de Publicações
+  async getPublications(filters?: { assigned_to?: string; status?: string }): Promise<Publication[]> { return instance.get('/publications', { params: filters }); }
+  async createPublication(data: Partial<Publication>): Promise<Publication> { return instance.post('/publications', data); }
+  async updatePublication(id: string, data: Partial<Publication>): Promise<Publication> { return instance.put(`/publications/${id}`, data); }
+  async deletePublication(id: string): Promise<{ message: string }> { return instance.delete(`/publications/${id}`); }
 
   // Métodos de Autenticação
   async getCurrentUser(): Promise<any> { return instance.get('/auth/me'); }
