@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
-import { format, parseISO, isSameMonth } from 'date-fns';
+import { format, parseISO, isValid } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export function PublicationsModule() {
@@ -22,12 +22,19 @@ export function PublicationsModule() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Navigation state
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  // Filters
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
 
+  // Modal
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingPub, setEditingPub] = useState<Publication | null>(null);
 
+  // Form State
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [pubDate, setPubDate] = useState(format(new Date(), 'yyyy-MM-dd'));
@@ -82,7 +89,8 @@ export function PublicationsModule() {
     setEditingPub(null);
     setTitle('');
     setDescription('');
-    setPubDate(format(new Date(), 'yyyy-MM-dd'));
+    // Auto-fill date if a day folder is open
+    setPubDate(selectedDate ? selectedDate : format(new Date(), 'yyyy-MM-dd'));
     setAssignedTo('none');
     setModalOpen(true);
   };
@@ -121,37 +129,76 @@ export function PublicationsModule() {
     }
   };
 
-  const groupedByMonth = useMemo(() => {
-    const groups: { [key: string]: Publication[] } = {};
+  // 1. Group publications by Month for the root folder view
+  const monthsFolders = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const monthsMap = new Map<string, Publication[]>();
     
-    // Apply filters
-    const filteredPubs = publications.filter(pub => {
+    // Always show 12 months for the current year
+    for (let i = 0; i < 12; i++) {
+      const date = new Date(currentYear, i, 1);
+      const key = format(date, 'yyyy-MM');
+      monthsMap.set(key, []);
+    }
+
+    // Assign publications to their respective month folders
+    publications.forEach(pub => {
+      if (!pub.publication_date) return;
+      
+      const pubDate = parseISO(pub.publication_date);
+      if (!isValid(pubDate)) return;
+
+      const key = format(pubDate, 'yyyy-MM');
+      if (!monthsMap.has(key)) {
+        monthsMap.set(key, []);
+      }
+      monthsMap.get(key)!.push(pub);
+    });
+
+    const sortedKeys = Array.from(monthsMap.keys()).sort();
+    return { keys: sortedKeys, map: monthsMap };
+  }, [publications]);
+
+  // 2. Compute Days for the selected month
+  const daysInMonth = useMemo(() => {
+    if (!selectedMonth) return [];
+    
+    const [yearStr, monthStr] = selectedMonth.split('-');
+    const year = parseInt(yearStr || '', 10);
+    const month = parseInt(monthStr || '', 10);
+    
+    // get number of days in that month
+    const numDays = new Date(year, month, 0).getDate();
+    
+    const days = [];
+    const pubsInMonth = monthsFolders.map.get(selectedMonth) || [];
+
+    for (let i = 1; i <= numDays; i++) {
+      const dateStr = `${selectedMonth}-${i.toString().padStart(2, '0')}`;
+      const pubsInDay = pubsInMonth.filter(p => p.publication_date?.startsWith(dateStr));
+      
+      // We push a folder for every single day
+      days.push({
+        date: dateStr,
+        dayNumber: i,
+        pubs: pubsInDay
+      });
+    }
+    return days;
+  }, [selectedMonth, monthsFolders]);
+
+  // 3. Compute the active publications when viewing a specific day
+  const pubsForSelectedDate = useMemo(() => {
+    if (!selectedDate) return [];
+    const dayData = daysInMonth.find(d => d.date === selectedDate);
+    if (!dayData) return [];
+
+    return dayData.pubs.filter(pub => {
       const matchesSearch = pub.title.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = filterStatus === 'all' || pub.status === filterStatus;
       return matchesSearch && matchesStatus;
     });
-
-    filteredPubs.forEach(pub => {
-      const date = parseISO(pub.publication_date);
-      const monthKey = format(date, 'MMMM yyyy', { locale: ptBR });
-      if (!groups[monthKey]) groups[monthKey] = [];
-      groups[monthKey].push(pub);
-    });
-
-    // Ordenar as publicações dentro de cada mês por data
-    Object.keys(groups).forEach(key => {
-      groups[key]!.sort((a, b) => new Date(a.publication_date).getTime() - new Date(b.publication_date).getTime());
-    });
-
-    // Ordenar as chaves (meses)
-    const sortedKeys = Object.keys(groups).sort((a, b) => {
-      const dateA = parseISO(groups[a]?.[0]?.publication_date || new Date().toISOString());
-      const dateB = parseISO(groups[b]?.[0]?.publication_date || new Date().toISOString());
-      return dateB.getTime() - dateA.getTime(); // Mais recentes primeiro
-    });
-
-    return { groups, sortedKeys };
-  }, [publications, searchTerm, filterStatus]);
+  }, [selectedDate, daysInMonth, searchTerm, filterStatus]);
 
   if (isLoading) {
     return <div className="p-8 text-center text-brand-gray">Carregando publicações...</div>;
@@ -159,9 +206,10 @@ export function PublicationsModule() {
 
   return (
     <div className="space-y-6">
+      {/* HEADER SECTION */}
       <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm">
         <h2 className="text-3xl font-serif text-brand-black tracking-tight">Publicações</h2>
-        <p className="text-brand-gray mt-2 font-medium">Cronograma de postagens e artigos.</p>
+        <p className="text-brand-gray mt-2 font-medium">Cronograma de postagens e artigos organizado por pastas.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -219,9 +267,10 @@ export function PublicationsModule() {
         </Card>
       </div>
 
-      <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+      <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-4">
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center">
+            {/* SEARCH / FILTERS - APPLIED PRIMARILY AT DAY LEVEL */}
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-gray h-5 w-5" />
@@ -248,30 +297,125 @@ export function PublicationsModule() {
         </CardContent>
       </Card>
 
-      <div className="space-y-12">
-        {groupedByMonth.sortedKeys.length === 0 ? (
-          <div className="text-center py-16 bg-white/50 rounded-lg border-2 border-dashed border-brand-gray/30">
-            <FileText className="h-12 w-12 text-brand-gray/40 mx-auto mb-4" />
-            <h3 className="text-xl font-serif text-brand-gray">Nenhuma publicação agendada</h3>
-          </div>
-        ) : (
-          groupedByMonth.sortedKeys.map(month => (
-            <div key={month} className="space-y-4">
-              <h3 className="text-2xl font-serif text-brand capitalize border-b border-brand-gray/20 pb-2">{month}</h3>
+      {/* EXPLORER BREADCRUMBS */}
+      <div className="bg-white border-b border-brand-gray/20 py-4 px-6 rounded-t-xl flex items-center space-x-2 text-brand-gray shadow-sm">
+        <button 
+          onClick={() => { setSelectedMonth(null); setSelectedDate(null); }} 
+          className="hover:text-brand font-medium flex items-center transition-colors"
+        >
+          <FolderOpen className="w-5 h-5 mr-2 text-brand-sage" /> Publicações
+        </button>
+        
+        {selectedMonth && (
+          <>
+            <ChevronRight className="w-4 h-4 mx-2" />
+            <button 
+              onClick={() => setSelectedDate(null)} 
+              className={`font-medium capitalize transition-colors ${!selectedDate ? 'text-brand-black' : 'hover:text-brand'}`}
+            >
+              {format(parseISO(`${selectedMonth}-01`), 'MMMM yyyy', { locale: ptBR })}
+            </button>
+          </>
+        )}
+        
+        {selectedDate && (
+          <>
+            <ChevronRight className="w-4 h-4 mx-2" />
+            <span className="text-brand-black font-semibold">
+              Dia {parseInt(selectedDate.split('-')[2] || '1', 10)}
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* FOLDER VIEW PORT */}
+      <div className="bg-white/50 min-h-[400px] p-6 rounded-b-xl border border-t-0 border-brand-gray/20">
+        
+        {/* VIEW 1: MONTHS FOLDERS */}
+        {!selectedMonth && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {monthsFolders.keys.map(monthKey => {
+              const pubCount = monthsFolders.map.get(monthKey)!.length;
+              const date = parseISO(`${monthKey}-01`);
               
+              return (
+                <Card 
+                  key={monthKey} 
+                  className="cursor-pointer group hover:bg-brand-light/5 hover:border-brand-light transition-all duration-300 shadow-sm hover:shadow-md border border-brand-gray/10" 
+                  onClick={() => setSelectedMonth(monthKey)}
+                >
+                  <CardContent className="p-6 flex flex-col items-center justify-center text-center space-y-3">
+                    <div className="relative transform group-hover:scale-110 transition-transform duration-300">
+                      <Folder className="w-16 h-16 text-brand-sage/60" fill="currentColor" />
+                      {pubCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-brand text-white text-[10px] min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full font-bold shadow-sm">
+                          {pubCount}
+                        </span>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      <span className="block font-bold text-brand-black capitalize text-base">
+                        {format(date, 'MMMM', { locale: ptBR })}
+                      </span>
+                      <span className="block text-xs text-brand-gray font-medium">
+                        {format(date, 'yyyy')}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+
+        {/* VIEW 2: DAYS FOLDERS */}
+        {selectedMonth && !selectedDate && (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-4">
+            {daysInMonth.map(day => {
+              const pubCount = day.pubs.length;
+              return (
+                <Card 
+                  key={day.date} 
+                  className="cursor-pointer group hover:bg-brand-light/5 hover:border-brand-light transition-all duration-300 shadow-sm border border-brand-gray/10" 
+                  onClick={() => setSelectedDate(day.date)}
+                >
+                  <CardContent className="p-4 flex flex-col items-center justify-center text-center space-y-2">
+                    <div className="relative transform group-hover:-translate-y-1 transition-transform duration-300">
+                      <Folder className="w-12 h-12 text-brand-beige" fill="currentColor" />
+                      {pubCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-brand text-white text-[10px] min-w-[20px] h-5 px-1 flex items-center justify-center rounded-full font-bold shadow-sm ring-2 ring-white">
+                          {pubCount}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="font-bold text-brand-black text-lg leading-tight">{day.dayNumber}</span>
+                      <span className="text-[10px] text-brand-gray uppercase font-semibold">
+                        {format(parseISO(day.date), 'EEE', { locale: ptBR })}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
+
+        {/* VIEW 3: PUBLICATIONS LIST FOR SELECTED DAY */}
+        {selectedMonth && selectedDate && (
+          <div className="space-y-6">
+            {pubsForSelectedDate.length === 0 ? (
+              <div className="text-center py-16 bg-white/50 rounded-lg border-2 border-dashed border-brand-gray/30">
+                <FileText className="h-12 w-12 text-brand-gray/40 mx-auto mb-4" />
+                <h3 className="text-xl font-serif text-brand-gray">Nenhuma publicação encontrada para este dia</h3>
+                <p className="text-sm text-brand-gray/60 mt-2">Clique em Nova Publicação para agendar algo.</p>
+              </div>
+            ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {groupedByMonth.groups[month]!.map(pub => (
+                {pubsForSelectedDate.map(pub => (
                   <Card key={pub.id} className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-2 border-brand-light/50 overflow-hidden relative bg-white">
                     <CardContent className="p-6 h-full flex flex-col">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex flex-col">
-                          <span className="text-3xl font-bold text-brand tabular-nums leading-none">
-                            {format(parseISO(pub.publication_date), 'dd')}
-                          </span>
-                          <span className="text-xs font-semibold text-brand-gray uppercase tracking-wider mt-1">
-                            {format(parseISO(pub.publication_date), 'EEEE', { locale: ptBR })}
-                          </span>
-                        </div>
+                      <div className="flex justify-end mb-4">
                         <Badge variant="outline" className={pub.status === 'Concluída' ? 'bg-green-50 text-green-700 border-green-200' : pub.status === 'Pendente' ? 'bg-brand-light/20 text-brand border-brand-light' : 'bg-red-50 text-red-700 border-red-200'}>
                           {pub.status}
                         </Badge>
@@ -305,8 +449,8 @@ export function PublicationsModule() {
                   </Card>
                 ))}
               </div>
-            </div>
-          ))
+            )}
+          </div>
         )}
       </div>
 
