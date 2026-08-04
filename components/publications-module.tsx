@@ -180,12 +180,11 @@ export function PublicationsModule() {
     }
   };
 
-  const quickAssignAndComplete = (pub: Publication, employeeId: string) => {
+  const quickAssign = (pub: Publication, employeeId: string) => {
     updateMutation.mutate({
       id: pub.id,
       data: {
-        assigned_to: employeeId,
-        status: 'Concluída'
+        assigned_to: employeeId
       }
     });
   };
@@ -537,12 +536,12 @@ export function PublicationsModule() {
                           )}
                         </div>
 
-                        {/* Quick Assign & Complete for unassigned publications */}
+                        {/* Quick Assign for unassigned publications */}
                         {!pub.assigned_to && user?.role === 'admin' && (
                           <div className="flex gap-2 items-center bg-brand-light/10 p-2 rounded-lg border border-brand-light/30">
-                            <Select onValueChange={(val) => quickAssignAndComplete(pub, val)}>
+                            <Select onValueChange={(val) => quickAssign(pub, val)}>
                               <SelectTrigger className="h-8 text-xs bg-white">
-                                <SelectValue placeholder="Atribuir e Concluir..." />
+                                <SelectValue placeholder="Atribuir..." />
                               </SelectTrigger>
                               <SelectContent>
                                 {employees.map((emp: any) => (
