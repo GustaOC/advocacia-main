@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
 import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
-import { format, parseISO, isValid } from 'date-fns';
+import { format, parseISO, isValid, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 export function PublicationsModule() {
@@ -94,8 +94,8 @@ export function PublicationsModule() {
     setEditingPub(null);
     setTitle('');
     setDescription('');
-    // Auto-fill date if a day folder is open
-    setPubDate(selectedDate ? selectedDate : format(new Date(), 'yyyy-MM-dd'));
+    // Auto-fill date if a day folder is open, otherwise default to today + 5 days
+    setPubDate(selectedDate ? selectedDate : format(addDays(new Date(), 5), 'yyyy-MM-dd'));
     setAssignedTo('none');
     setModalOpen(true);
   };
