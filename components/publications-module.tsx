@@ -44,6 +44,7 @@ export function PublicationsModule() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [pubDate, setPubDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [dueDate, setDueDate] = useState('');
   const [assignedTo, setAssignedTo] = useState<string | 'none'>('none');
 
   const { data: publications = [], isLoading } = useQuery({
@@ -97,6 +98,7 @@ export function PublicationsModule() {
     setDescription('');
     // Auto-fill date if a day folder is open, otherwise default to today + 5 days
     setPubDate(selectedDate ? selectedDate : format(addDays(new Date(), 5), 'yyyy-MM-dd'));
+    setDueDate('');
     setAssignedTo('none');
     setModalOpen(true);
   };
@@ -106,6 +108,7 @@ export function PublicationsModule() {
     setTitle(pub.title);
     setDescription(pub.description || '');
     setPubDate(pub.publication_date ? (pub.publication_date.split('T')[0] as string) : format(new Date(), 'yyyy-MM-dd'));
+    setDueDate(pub.due_date ? (pub.due_date.split('T')[0] as string) : '');
     setAssignedTo(pub.assigned_to || 'none');
     setModalOpen(true);
   };
@@ -125,6 +128,7 @@ export function PublicationsModule() {
       title,
       description,
       publication_date: pubDate,
+      due_date: dueDate || null,
       assigned_to: assignedTo === 'none' ? null : assignedTo,
     };
 
@@ -512,6 +516,11 @@ export function PublicationsModule() {
 
                       <h4 className="text-lg font-bold text-brand-black line-clamp-2 mb-2">{pub.title}</h4>
                       {pub.description && <p className="text-sm text-brand-gray line-clamp-3 mb-4">{pub.description}</p>}
+                      {pub.due_date && (
+                        <div className="flex items-center text-xs font-semibold text-brand bg-brand-light/20 p-2 rounded-md mb-2">
+                          Prazo Final: {format(parseISO(pub.due_date), 'dd/MM/yyyy')}
+                        </div>
+                      )}
 
                       <div className="pt-4 border-t border-brand-gray/10 flex flex-col space-y-3 mt-auto">
                         <div className="flex justify-between items-center">
@@ -581,27 +590,31 @@ export function PublicationsModule() {
               <Textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="Instruções ou conteúdo base..." />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Data da Publicação *</Label>
-                <Input type="date" value={pubDate} onChange={e => setPubDate(e.target.value)} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Data da Publicação *</Label>
+                  <Input type="date" value={pubDate} onChange={e => setPubDate(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Prazo Final</Label>
+                  <Input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} />
+                </div>
+                
+                <div className="space-y-2 md:col-span-2">
+                  <Label>Responsável</Label>
+                  <Select value={assignedTo} onValueChange={setAssignedTo}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Sem responsável</SelectItem>
+                      {employees.map((emp: any) => (
+                        <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              
-              <div className="space-y-2">
-                <Label>Responsável</Label>
-                <Select value={assignedTo} onValueChange={setAssignedTo}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Sem responsável</SelectItem>
-                    {employees.map((emp: any) => (
-                      <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
 
             {editingPub && (
               <div className="space-y-2">

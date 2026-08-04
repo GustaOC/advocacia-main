@@ -46,7 +46,7 @@ export async function POST(request: Request) {
           priority: "Média",
           status: "Pendente",
           assigned_to: body.assigned_to,
-          due_date: body.publication_date,
+          due_date: body.due_date || body.publication_date,
         }])
         .select()
         .single();
@@ -69,6 +69,7 @@ export async function POST(request: Request) {
         title: body.title,
         description: body.description || null,
         publication_date: body.publication_date,
+        due_date: body.due_date || null,
         assigned_to: body.assigned_to || null,
         status: body.status || "Pendente",
         task_id: taskId

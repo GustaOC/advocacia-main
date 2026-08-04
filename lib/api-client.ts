@@ -25,6 +25,7 @@ export interface Publication {
   assigned_by?: string | null;
   status: 'Pendente' | 'Concluída' | 'Cancelada';
   task_id?: string | null;
+  due_date?: string | null;
   created_at: string;
   updated_at: string;
   assigned_user?: { name: string; email: string };

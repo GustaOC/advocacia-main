@@ -31,7 +31,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         // Se tinha tarefa antes, atualiza
         if (taskId) {
           await supabase.from("tasks").update({
-            assigned_to: body.assigned_to
+            assigned_to: body.assigned_to,
+            due_date: body.due_date !== undefined ? body.due_date : originalPub.due_date || originalPub.publication_date
           }).eq("id", taskId);
         } else {
           // Se não tinha tarefa, cria
@@ -43,7 +44,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
               priority: "Média",
               status: "Pendente",
               assigned_to: body.assigned_to,
-              due_date: body.publication_date || originalPub.publication_date,
+              due_date: body.due_date !== undefined ? body.due_date : originalPub.due_date || originalPub.publication_date,
             }])
             .select()
             .single();
@@ -69,9 +70,15 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       }
     }
 
-    // Atualiza status da tarefa caso a publicação seja concluída/cancelada
-    if (body.status && body.status !== originalPub.status && taskId) {
-      await supabase.from("tasks").update({ status: body.status }).eq("id", taskId);
+    // Atualiza status e prazo da tarefa caso a publicação seja alterada
+    if (taskId) {
+      const taskUpdates: any = {};
+      if (body.status && body.status !== originalPub.status) taskUpdates.status = body.status;
+      if (body.due_date !== undefined && body.due_date !== originalPub.due_date) taskUpdates.due_date = body.due_date;
+      
+      if (Object.keys(taskUpdates).length > 0) {
+        await supabase.from("tasks").update(taskUpdates).eq("id", taskId);
+      }
     }
 
     // Atualiza a publicação
@@ -81,6 +88,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         title: body.title,
         description: body.description,
         publication_date: body.publication_date,
+        due_date: body.due_date !== undefined ? body.due_date : originalPub.due_date,
         assigned_to: body.assigned_to,
         status: body.status,
         task_id: taskId,
