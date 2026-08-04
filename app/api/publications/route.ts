@@ -14,7 +14,8 @@ export async function GET(request: Request) {
         *,
         assigned_user:user_profiles!publications_assigned_to_fkey(name)
       `)
-      .order("publication_date", { ascending: true });
+      .order("publication_date", { ascending: true })
+      .order("created_at", { ascending: true });
 
     if (error) throw error;
 
