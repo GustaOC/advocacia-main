@@ -60,6 +60,22 @@ export async function PATCH(request: Request) {
       throw error;
     }
 
+    // Se a tarefa mudou de status, atualiza também a publicação associada (se existir)
+    if (updates.status) {
+      const { data: pubData } = await supabase
+        .from("publications")
+        .select("id")
+        .eq("task_id", id)
+        .maybeSingle();
+
+      if (pubData) {
+        await supabase
+          .from("publications")
+          .update({ status: updates.status, updated_at: new Date().toISOString() })
+          .eq("id", pubData.id);
+      }
+    }
+
     if (updates.assigned_to) {
       await supabase.from("notifications").insert([{
         user_id: updates.assigned_to,
