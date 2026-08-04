@@ -29,6 +29,7 @@ export function PublicationsModule() {
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [selectedYearFilter, setSelectedYearFilter] = useState<string>(new Date().getFullYear().toString());
 
   // Modal
   const [isModalOpen, setModalOpen] = useState(false);
@@ -191,12 +192,12 @@ export function PublicationsModule() {
 
   // 1. Group publications by Month for the root folder view
   const monthsFolders = useMemo(() => {
-    const currentYear = new Date().getFullYear();
+    const filterYear = parseInt(selectedYearFilter, 10);
     const monthsMap = new Map<string, Publication[]>();
     
-    // Always show 12 months for the current year
+    // Always show 12 months for the selected year
     for (let i = 0; i < 12; i++) {
-      const date = new Date(currentYear, i, 1);
+      const date = new Date(filterYear, i, 1);
       const key = format(date, 'yyyy-MM');
       monthsMap.set(key, []);
     }
@@ -204,6 +205,7 @@ export function PublicationsModule() {
     // Assign publications to their respective month folders
     publications.forEach(pub => {
       if (!pub.publication_date) return;
+      if (!pub.publication_date.startsWith(selectedYearFilter)) return; // Filter by selected year
       
       const pubDate = parseISO(pub.publication_date);
       if (!isValid(pubDate)) return;
@@ -217,6 +219,17 @@ export function PublicationsModule() {
 
     const sortedKeys = Array.from(monthsMap.keys()).sort();
     return { keys: sortedKeys, map: monthsMap };
+  }, [publications, selectedYearFilter]);
+
+  const availableYears = useMemo(() => {
+    const years = new Set<string>();
+    years.add(new Date().getFullYear().toString());
+    publications.forEach(pub => {
+      if (pub.publication_date) {
+        years.add(pub.publication_date.substring(0, 4));
+      }
+    });
+    return Array.from(years).sort().reverse();
   }, [publications]);
 
   // 2. Compute Days for the selected month
@@ -337,12 +350,26 @@ export function PublicationsModule() {
                 <Input placeholder="Buscar por título..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
               </div>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="w-[200px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+                <SelectTrigger className="w-[160px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os Status</SelectItem>
                   <SelectItem value="Pendente">Pendente</SelectItem>
                   <SelectItem value="Concluída">Concluída</SelectItem>
                   <SelectItem value="Cancelada">Cancelada</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={selectedYearFilter} onValueChange={(val) => {
+                setSelectedYearFilter(val);
+                setSelectedMonth(null);
+                setSelectedDate(null);
+              }}>
+                <SelectTrigger className="w-[120px] h-12 bg-white border-2 border-brand-gray rounded-xl">
+                  <SelectValue placeholder="Ano" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableYears.map(year => (
+                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
