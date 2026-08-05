@@ -10,9 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isValid, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -189,8 +190,23 @@ export function PublicationsModule() {
     updateMutation.mutate({
       id: pub.id,
       data: {
-        assigned_to: employeeId
+        assigned_to: employeeId === 'none' ? null : employeeId
       }
+    });
+  };
+
+  const quickUpdateStatus = (pub: Publication, status: string) => {
+    updateMutation.mutate({
+      id: pub.id,
+      data: { status: status as "Pendente" | "Concluída" | "Cancelada" }
+    });
+  };
+
+  const quickUpdateTitle = (pub: Publication, title: string) => {
+    if (!title.trim() || title === pub.title) return;
+    updateMutation.mutate({
+      id: pub.id,
+      data: { title: title.trim() }
     });
   };
 
@@ -505,55 +521,44 @@ export function PublicationsModule() {
                 <p className="text-sm text-brand-gray/60 mt-2">Clique em Nova Publicação para agendar algo.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {pubsForSelectedDate.map(pub => (
-                  <Card key={pub.id} className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-2 border-brand-light/50 overflow-hidden relative bg-white">
-                    <CardContent className="p-6 h-full flex flex-col">
-                      <div className="flex justify-end mb-4">
-                        <Badge variant="outline" className={pub.status === 'Concluída' ? 'bg-green-50 text-green-700 border-green-200' : pub.status === 'Pendente' ? 'bg-brand-light/20 text-brand border-brand-light' : 'bg-red-50 text-red-700 border-red-200'}>
-                          {pub.status}
-                        </Badge>
-                      </div>
-
-                      <h4 className="text-lg font-bold text-brand-black line-clamp-2 mb-2">{pub.title}</h4>
-                      {pub.description && <p className="text-sm text-brand-gray line-clamp-3 mb-4">{pub.description}</p>}
-                      {pub.due_date && (
-                        <div className="flex items-center text-xs font-semibold text-brand bg-brand-light/20 p-2 rounded-md mb-2">
-                          Prazo Final: {format(parseISO(pub.due_date), 'dd/MM/yyyy')}
-                        </div>
-                      )}
-
-                      <div className="pt-4 border-t border-brand-gray/10 flex flex-col space-y-3 mt-auto">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center text-sm text-brand-gray">
-                            <Users className="h-4 w-4 mr-2 opacity-70" />
-                            <span className="font-medium truncate max-w-[150px]">
-                              {pub.assigned_user?.name || "Sem responsável"}
-                            </span>
-                          </div>
-                          
-                          {(user?.role === 'admin' || user?.id === pub.assigned_to) && (
-                            <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <Button variant="ghost" size="icon" onClick={() => openEditModal(pub)} className="h-8 w-8 text-brand hover:bg-brand-light">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              {user?.role === 'admin' && (
-                                <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(pub.id)} className="h-8 w-8 text-red-500 hover:bg-red-50">
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
+              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-brand-black hover:bg-brand-darkolive">
+                        <TableHead className="text-brand-beige font-bold w-12">#</TableHead>
+                        <TableHead className="text-brand-beige font-bold min-w-[200px]">Número da Publicação</TableHead>
+                        <TableHead className="text-brand-beige font-bold">Datas</TableHead>
+                        <TableHead className="text-brand-beige font-bold">Responsável</TableHead>
+                        <TableHead className="text-brand-beige font-bold">Status</TableHead>
+                        <TableHead className="text-right text-brand-beige font-bold">Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {pubsForSelectedDate.map((pub, index) => (
+                        <TableRow key={pub.id} className="group hover:bg-gradient-to-r hover:from-brand-light/20 hover:to-transparent transition-all duration-200">
+                          <TableCell className="font-medium text-brand-gray/50">{index + 1}</TableCell>
+                          <TableCell>
+                            <Input 
+                              defaultValue={pub.title} 
+                              onBlur={(e) => quickUpdateTitle(pub, e.target.value)}
+                              className="h-8 text-sm bg-transparent border-transparent hover:border-brand-gray/30 focus:border-brand focus:bg-white transition-all shadow-none"
+                              placeholder="Colar número..."
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex flex-col text-xs text-brand-gray">
+                              <div>Pub: <span className="font-semibold text-brand-black">{pub.publication_date ? format(parseISO(pub.publication_date), 'dd/MM/yyyy') : '-'}</span></div>
+                              {pub.due_date && <div>Prazo: <span className="font-semibold text-brand">{format(parseISO(pub.due_date), 'dd/MM/yyyy')}</span></div>}
                             </div>
-                          )}
-                        </div>
-
-                        {/* Quick Assign for unassigned publications */}
-                        {!pub.assigned_to && user?.role === 'admin' && (
-                          <div className="flex gap-2 items-center bg-brand-light/10 p-2 rounded-lg border border-brand-light/30">
-                            <Select onValueChange={(val) => quickAssign(pub, val)}>
-                              <SelectTrigger className="h-8 text-xs bg-white">
+                          </TableCell>
+                          <TableCell>
+                            <Select defaultValue={pub.assigned_to || "none"} onValueChange={(val) => quickAssign(pub, val)}>
+                              <SelectTrigger className="h-8 text-xs bg-transparent border-transparent hover:border-brand-gray/30 focus:border-brand focus:bg-white shadow-none w-[160px]">
                                 <SelectValue placeholder="Atribuir..." />
                               </SelectTrigger>
                               <SelectContent>
+                                <SelectItem value="none" className="text-xs text-brand-gray italic">Sem responsável</SelectItem>
                                 {employees.map((emp: any) => (
                                   <SelectItem key={emp.id} value={emp.id} className="text-xs">
                                     {emp.name}
@@ -561,13 +566,41 @@ export function PublicationsModule() {
                                 ))}
                               </SelectContent>
                             </Select>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                          </TableCell>
+                          <TableCell>
+                            <Select defaultValue={pub.status} onValueChange={(val) => quickUpdateStatus(pub, val)}>
+                              <SelectTrigger className={`h-8 text-xs border-transparent hover:border-brand-gray/30 focus:border-brand shadow-none w-[130px] font-semibold ${
+                                pub.status === 'Concluída' ? 'bg-green-50 text-green-700' : 
+                                pub.status === 'Pendente' ? 'bg-brand-light/20 text-brand' : 
+                                'bg-red-50 text-red-700'
+                              }`}>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Pendente" className="text-xs font-semibold text-brand">Pendente</SelectItem>
+                                <SelectItem value="Concluída" className="text-xs font-semibold text-green-700">Concluída</SelectItem>
+                                <SelectItem value="Cancelada" className="text-xs font-semibold text-red-700">Cancelada</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex gap-1 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button variant="ghost" size="icon" onClick={() => openEditModal(pub)} className="h-8 w-8 text-brand hover:bg-brand-light" title="Abrir (Ver detalhes e observações)">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              {user?.role === 'admin' && (
+                                <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(pub.id)} className="h-8 w-8 text-red-500 hover:bg-red-50" title="Excluir">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             )}
           </div>
         )}
