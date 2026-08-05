@@ -56,6 +56,19 @@ export async function POST(req: NextRequest) {
           if (cellValue && typeof cellValue === 'string' && cellValue.trim() !== '') {
             const title = cellValue.trim();
             
+            // Check for existing publication with same title and date
+            const { data: existingPubs } = await supabase
+              .from('publications')
+              .select('id')
+              .eq('title', title)
+              .eq('publication_date', pubDateStr)
+              .limit(1);
+
+            if (existingPubs && existingPubs.length > 0) {
+              // Skip duplicate
+              continue;
+            }
+            
             // Insert into database
             const { error: insertError } = await supabase
               .from('publications')
