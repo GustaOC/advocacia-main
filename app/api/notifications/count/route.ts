@@ -17,11 +17,34 @@ export async function GET(req: Request) {
       .eq("is_read", false)
       .eq("user_id", user.id);
 
-    const { count, error } = await query;
-
+    const { count: notifCount, error } = await query;
     if (error) throw error;
+    
+    let totalCount = notifCount || 0;
 
-    return NextResponse.json({ count: count || 0 });
+    // 2. Fetch Tasks count
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split('T')[0] as string;
+
+    let tasksQuery = supabase
+      .from("tasks")
+      .select("*", { count: 'exact', head: true })
+      .neq("status", "Concluída");
+
+    if (user.role === 'admin') {
+      tasksQuery = tasksQuery.lte("due_date", todayStr);
+    } else {
+      tasksQuery = tasksQuery.eq("assigned_to", user.id);
+    }
+
+    const { count: tasksCount, error: tasksError } = await tasksQuery;
+    
+    if (!tasksError && tasksCount) {
+      totalCount += tasksCount;
+    }
+
+    return NextResponse.json({ count: totalCount });
   } catch (error: any) {
     return NextResponse.json({ count: 0 });
   }
