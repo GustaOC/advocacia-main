@@ -528,6 +528,7 @@ export function PublicationsModule() {
                       <TableRow className="bg-brand-black hover:bg-brand-darkolive">
                         <TableHead className="text-brand-beige font-bold w-12">#</TableHead>
                         <TableHead className="text-brand-beige font-bold min-w-[200px]">Número da Publicação</TableHead>
+                        <TableHead className="text-brand-beige font-bold min-w-[200px]">Anotações</TableHead>
                         <TableHead className="text-brand-beige font-bold">Datas</TableHead>
                         <TableHead className="text-brand-beige font-bold">Responsável</TableHead>
                         <TableHead className="text-brand-beige font-bold">Status</TableHead>
@@ -545,6 +546,11 @@ export function PublicationsModule() {
                               className="h-8 text-sm bg-transparent border-transparent hover:border-brand-gray/30 focus:border-brand focus:bg-white transition-all shadow-none"
                               placeholder="Colar número..."
                             />
+                          </TableCell>
+                          <TableCell>
+                            <div className="text-xs text-brand-gray line-clamp-2 max-w-[250px]" title={pub.description || ""}>
+                              {pub.description || "-"}
+                            </div>
                           </TableCell>
                           <TableCell>
                             <div className="flex flex-col text-xs text-brand-gray">
