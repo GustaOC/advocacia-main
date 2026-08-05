@@ -72,9 +72,10 @@ export function PublicationsModule() {
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string, data: Partial<Publication> }) => apiClient.updatePublication(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['publications'] });
-      toast({ title: 'Sucesso', description: 'Publicação atualizada.' });
-      closeModal();
+      queryClient.invalidateQueries({ queryKey: ["publications"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      toast({title: "Sucesso!", description: "Publicação atualizada com sucesso!"});
+      setModalOpen(false);
     },
     onError: (err: any) => {
       toast({ title: 'Erro', description: err.message || 'Falha ao atualizar publicação', variant: 'destructive' });

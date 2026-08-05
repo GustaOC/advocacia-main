@@ -240,6 +240,7 @@ export function TasksModule() {
     onSuccess: () => {
       toast({title: "Sucesso!", description: "Tarefa atualizada."});
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["publications"] });
       setEditingTask(null);
     },
     onError: (error: any) => {
