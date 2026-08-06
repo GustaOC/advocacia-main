@@ -276,7 +276,7 @@ export class ApiClient {
     page: number = 1, pageSize: number = 10, filters?: FinancialAgreementFilters
   ): Promise<PaginatedResponse<FinancialAgreement>> {
     const params = { page, pageSize, ...filters };
-    return instance.get('/financial-agreements/paginated', { params });
+    return instance.get('/financial-agreements', { params });
   }
 
   async getFinancialStats(): Promise<FinancialStats> { return instance.get('/financial-agreements/stats'); }

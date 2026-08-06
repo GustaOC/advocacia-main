@@ -393,7 +393,7 @@ export function TasksModule() {
 
       {/* Modal de Nova Tarefa Moderno */}
       <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl">
+        <DialogContent aria-describedby={undefined} className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-brand-black">Criar Nova Tarefa</DialogTitle>
           </DialogHeader>
@@ -561,7 +561,7 @@ export function TasksModule() {
 
       {/* Modal de Ver Todas as Tarefas */}
       <Dialog open={isAllTasksModalOpen} onOpenChange={setAllTasksModalOpen}>
-        <DialogContent className="sm:max-w-4xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl max-h-[80vh] flex flex-col">
+        <DialogContent aria-describedby={undefined} className="sm:max-w-4xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl max-h-[80vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-brand-black">Todas as Tarefas</DialogTitle>
           </DialogHeader>
