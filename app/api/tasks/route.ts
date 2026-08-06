@@ -44,8 +44,8 @@ export async function PATCH(request: Request) {
     );
     const body = await request.json();
     
-    // Extrai o ID e o restante dos dados a serem atualizados
-    const { id, ...updates } = body;
+    // Extrai o ID e o restante dos dados a serem atualizados, removendo campos de join
+    const { id, assigned_user, ...updates } = body;
 
     if (!id) {
       return NextResponse.json({ error: "ID da tarefa é obrigatório." }, { status: 400 });
@@ -71,9 +71,14 @@ export async function PATCH(request: Request) {
         .maybeSingle();
 
       if (pubData) {
+        let pubStatus = updates.status;
+        if (pubStatus === 'Em Andamento') {
+          pubStatus = 'Pendente';
+        }
+
         await supabase
           .from("publications")
-          .update({ status: updates.status, updated_at: new Date().toISOString() })
+          .update({ status: pubStatus, updated_at: new Date().toISOString() })
           .eq("id", pubData.id);
       }
     }
