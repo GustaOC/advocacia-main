@@ -596,6 +596,10 @@ export function TasksModule() {
              {tasks.filter(t => {
                 if (filterAssigned !== 'all' && t.assigned_to !== filterAssigned) return false;
                 return true;
+             }).sort((a, b) => {
+                if (!a.due_date) return 1;
+                if (!b.due_date) return -1;
+                return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
              }).map(task => (
                 <div key={task.id as string} className="p-4 border rounded-lg shadow-sm bg-brand-light/50 flex justify-between items-center">
                   <div>
