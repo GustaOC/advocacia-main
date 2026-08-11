@@ -271,7 +271,8 @@ export function AudienciasModule() {
               endAccessor="end"
               style={{ height: 600 }}
               selectable
-              views={['month']}
+              popup
+              views={['month', 'day', 'agenda']}
               onSelectSlot={handleSelectSlot}
               onSelectEvent={handleSelectEvent}
               onNavigate={handleNavigate}
