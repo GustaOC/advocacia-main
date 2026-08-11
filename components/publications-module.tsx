@@ -63,6 +63,7 @@ export function PublicationsModule() {
     mutationFn: (data: Partial<Publication>) => apiClient.createPublication(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['publications'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast({ title: 'Sucesso', description: 'Publicação criada.' });
       closeModal();
     },

@@ -48,7 +48,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             }])
             .select()
             .single();
-          if (taskError) throw taskError;
+          if (taskError) {
+            console.error("ERRO AO CRIAR TAREFA:", taskError);
+            throw taskError;
+          }
           taskId = taskData.id;
         }
 

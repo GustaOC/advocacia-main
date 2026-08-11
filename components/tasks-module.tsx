@@ -105,11 +105,13 @@ const TaskCard = ({
     'Baixa': { color: 'from-green-500 to-green-600', label: 'Baixa', icon: CheckCircle }
   };
 
-  const statusConfig = {
+  const statusConfig: Record<string, { bg: string, border: string }> = {
     'Pendente': { bg: 'bg-brand-light/50', border: 'border-brand-gray' },
     'Em Andamento': { bg: 'bg-brand-light/50', border: 'border-brand-light' },
     'Concluída': { bg: 'bg-green-50', border: 'border-green-200' },
-    'Cancelada': { bg: 'bg-red-50', border: 'border-red-200' }
+    'Cancelada': { bg: 'bg-red-50', border: 'border-red-200' },
+    'Audiência': { bg: 'bg-amber-50', border: 'border-amber-200' },
+    'Transferido': { bg: 'bg-blue-50', border: 'border-blue-200' },
   };
 
   const currentPriority = task.priority || 'Média';
@@ -118,9 +120,10 @@ const TaskCard = ({
   const priorityColor = priorityConfig[currentPriority].color;
   
   const currentStatus = task.status || 'Pendente';
+  const currentStatusConfig = (statusConfig[currentStatus] || statusConfig['Pendente']) as { bg: string, border: string };
 
   return (
-    <Card className={`group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-2 ${statusConfig[currentStatus].border} ${statusConfig[currentStatus].bg} relative overflow-hidden`}>
+    <Card className={`group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-2 ${currentStatusConfig.border} ${currentStatusConfig.bg} relative overflow-hidden`}>
       <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white to-transparent rounded-full transform translate-x-8 -translate-y-8"></div>
       
       <CardContent className="p-4 relative z-10">
