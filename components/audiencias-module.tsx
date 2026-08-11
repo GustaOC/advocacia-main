@@ -90,8 +90,17 @@ export function AudienciasModule() {
         apiClient.getTasks(),
         apiClient.getPublications()
       ]);
+      // Remove publicações concluídas ou canceladas da agenda
+      const activeTasks = tasks.filter((t: any) => {
+        const titleLower = t.title?.toLowerCase() || '';
+        const isPublication = titleLower.includes('publicação') || titleLower.includes('publicacao') || titleLower.includes('audiência') || titleLower.includes('audiencia');
+        if (isPublication && (t.status === 'Concluída' || t.status === 'Cancelada' || t.status === 'Transferido')) {
+          return false;
+        }
+        return true;
+      });
       
-      const mappedEvents: CalendarEvent[] = tasks.map((t: any) => {
+      const mappedEvents: CalendarEvent[] = activeTasks.map((t: any) => {
         const dateStr = t.due_date ? String(t.due_date).split('T')[0] : null;
         const dateObj = dateStr ? new Date(`${dateStr}T12:00:00`) : new Date();
         
