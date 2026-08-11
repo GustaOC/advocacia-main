@@ -290,14 +290,13 @@ export function TasksModule() {
     return tasks.filter(task => task.assigned_to === user?.id);
   }, [tasks, user]);
 
-  // Tarefas do dia atual
-  const todayTasks = useMemo(() => {
+  // Mostrar todas as tarefas atribuídas ao usuário no Kanban
+  const activeTasks = useMemo(() => {
     return visibleTasks.filter(task => {
-      const dateString = (task as any).created_at;
-      if (!dateString) return true;
-      const taskDate = new Date(dateString);
-      const today = new Date();
-      return taskDate.getDate() === today.getDate() && taskDate.getMonth() === today.getMonth() && taskDate.getFullYear() === today.getFullYear();
+      // Opcional: Se quisermos esconder tarefas concluídas antigas, poderíamos fazer aqui.
+      // Mas como é um Kanban, vamos deixar o usuário ver o fluxo completo.
+      // Se houver muitas tarefas concluídas, podemos limitar depois.
+      return true;
     });
   }, [visibleTasks]);
 
@@ -350,7 +349,7 @@ export function TasksModule() {
       </div>
 
       {/* Estatísticas */}
-      <TasksStats tasks={todayTasks} />
+      <TasksStats tasks={activeTasks} />
 
       {/* Kanban Board Moderno */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -362,7 +361,7 @@ export function TasksModule() {
                 <div className="flex items-center justify-between">
                   <h3 className={`font-bold text-lg ${column.color.includes("brand-black") ? "text-white" : "text-brand"}`}>{column.title}</h3>
                   <Badge variant="secondary" className="bg-white/80 text-brand font-semibold shadow-sm">
-                    {todayTasks.filter(task => task.status === column.id).length}
+                    {activeTasks.filter(task => task.status === column.id).length}
                   </Badge>
                 </div>
               </CardContent>
@@ -370,7 +369,7 @@ export function TasksModule() {
             
             {/* Tarefas da coluna */}
             <div className="space-y-4 min-h-[500px]">
-              {todayTasks
+              {activeTasks
                 .filter(task => task.status === column.id)
                 .map(task => (
                   <TaskCard 
@@ -383,7 +382,7 @@ export function TasksModule() {
                   />
                 ))}
               
-              {todayTasks.filter(task => task.status === column.id).length === 0 && (
+              {activeTasks.filter(task => task.status === column.id).length === 0 && (
                 <div className="text-center py-12 text-brand-gray">
                   <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-30" />
                   <p className="font-medium">Nenhuma tarefa</p>
