@@ -649,6 +649,7 @@ export function PublicationsModule() {
                                 pub.status === 'Concluída' ? 'bg-green-50 text-green-700' : 
                                 pub.status === 'Pendente' ? 'bg-brand-light/20 text-brand' : 
                                 pub.status === 'Audiência' ? 'bg-amber-50 text-amber-700' :
+                                pub.status === 'Transferido' ? 'bg-blue-50 text-blue-700' :
                                 'bg-red-50 text-red-700'
                               }`}>
                                 <SelectValue />
@@ -658,6 +659,7 @@ export function PublicationsModule() {
                                 <SelectItem value="Audiência" className="text-xs font-semibold text-amber-700">Audiência</SelectItem>
                                 <SelectItem value="Concluída" className="text-xs font-semibold text-green-700">Concluída</SelectItem>
                                 <SelectItem value="Cancelada" className="text-xs font-semibold text-red-700">Cancelada</SelectItem>
+                                <SelectItem value="Transferido" className="text-xs font-semibold text-blue-700">Transferido</SelectItem>
                               </SelectContent>
                             </Select>
                           </TableCell>
