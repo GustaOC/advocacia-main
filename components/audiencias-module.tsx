@@ -298,6 +298,7 @@ export function AudienciasModule() {
                   date: "Data",
                   time: "Hora",
                   event: "Evento",
+                  showMore: (count) => `+${count} mais`,
               }}
             />
           )}

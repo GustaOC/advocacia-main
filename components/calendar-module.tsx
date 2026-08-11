@@ -299,6 +299,7 @@ export function CalendarModule() {
                   date: "Data",
                   time: "Hora",
                   event: "Evento",
+                  showMore: (count) => `+${count} mais`,
               }}
             />
           )}
