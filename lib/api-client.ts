@@ -23,7 +23,7 @@ export interface Publication {
   publication_date: string;
   assigned_to?: string | null;
   assigned_by?: string | null;
-  status: 'Pendente' | 'Concluída' | 'Cancelada';
+  status: 'Pendente' | 'Concluída' | 'Cancelada' | 'Audiência';
   task_id?: string | null;
   due_date?: string | null;
   created_at: string;

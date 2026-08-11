@@ -228,7 +228,7 @@ export function PublicationsModule() {
   const quickUpdateStatus = (pub: Publication, status: string) => {
     updateMutation.mutate({
       id: pub.id,
-      data: { status: status as "Pendente" | "Concluída" | "Cancelada" }
+      data: { status: status as "Pendente" | "Concluída" | "Cancelada" | "Audiência" }
     });
   };
 
@@ -335,7 +335,7 @@ export function PublicationsModule() {
         <p className="text-brand-gray mt-2 font-medium">Cronograma de postagens e artigos organizado por pastas.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
           <CardContent className="p-6">
             <div className="flex items-start justify-between">
@@ -344,7 +344,20 @@ export function PublicationsModule() {
                 <p className="text-3xl font-serif text-brand-black">{publications.length}</p>
               </div>
               <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
-                <Megaphone className="w-5 h-5 text-brand" />
+                <FileText className="w-5 h-5 text-brand" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Audiências</p>
+                <p className="text-3xl font-serif text-brand-black">{publications.filter(p => p.status === 'Audiência').length}</p>
+              </div>
+              <div className="p-2 bg-amber-50 border border-brand-gray/10 rounded-sm">
+                <Users className="w-5 h-5 text-amber-600" />
               </div>
             </div>
           </CardContent>
@@ -404,6 +417,7 @@ export function PublicationsModule() {
                 <SelectContent>
                   <SelectItem value="all">Todos os Status</SelectItem>
                   <SelectItem value="Pendente">Pendente</SelectItem>
+                  <SelectItem value="Audiência">Audiência</SelectItem>
                   <SelectItem value="Concluída">Concluída</SelectItem>
                   <SelectItem value="Cancelada">Cancelada</SelectItem>
                 </SelectContent>
@@ -620,12 +634,14 @@ export function PublicationsModule() {
                               <SelectTrigger className={`h-8 text-xs border-transparent hover:border-brand-gray/30 focus:border-brand shadow-none w-[130px] font-semibold ${
                                 pub.status === 'Concluída' ? 'bg-green-50 text-green-700' : 
                                 pub.status === 'Pendente' ? 'bg-brand-light/20 text-brand' : 
+                                pub.status === 'Audiência' ? 'bg-amber-50 text-amber-700' :
                                 'bg-red-50 text-red-700'
                               }`}>
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="Pendente" className="text-xs font-semibold text-brand">Pendente</SelectItem>
+                                <SelectItem value="Audiência" className="text-xs font-semibold text-amber-700">Audiência</SelectItem>
                                 <SelectItem value="Concluída" className="text-xs font-semibold text-green-700">Concluída</SelectItem>
                                 <SelectItem value="Cancelada" className="text-xs font-semibold text-red-700">Cancelada</SelectItem>
                               </SelectContent>
@@ -708,6 +724,7 @@ export function PublicationsModule() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Pendente">Pendente</SelectItem>
+                    <SelectItem value="Audiência">Audiência</SelectItem>
                     <SelectItem value="Concluída">Concluída</SelectItem>
                     <SelectItem value="Cancelada">Cancelada</SelectItem>
                   </SelectContent>

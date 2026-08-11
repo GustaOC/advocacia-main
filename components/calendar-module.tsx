@@ -88,7 +88,10 @@ export function CalendarModule() {
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
     try {
-      const tasks = await apiClient.getTasks();
+      const [tasks, publications] = await Promise.all([
+        apiClient.getTasks(),
+        apiClient.getPublications()
+      ]);
       
       const mappedEvents: CalendarEvent[] = tasks.map((t: any) => {
         const dateStr = t.due_date ? String(t.due_date).split('T')[0] : null;
@@ -111,8 +114,27 @@ export function CalendarModule() {
         };
       });
 
-      // Filtra as tarefas e eventos para mostrar estritamente as do usuário atual
-      const visibleEvents = mappedEvents.filter(event => {
+      const hearingPubs = publications.filter((p: any) => p.status === 'Audiência');
+      const mappedPubs: CalendarEvent[] = hearingPubs.map((p: any) => {
+        const dateStr = p.due_date ? String(p.due_date).split('T')[0] : (p.publication_date ? String(p.publication_date).split('T')[0] : null);
+        const dateObj = dateStr ? new Date(`${dateStr}T12:00:00`) : new Date();
+
+        return {
+          id: `pub-${p.id}`,
+          title: `Audiência: ${p.title}`,
+          start: dateObj,
+          end: dateObj,
+          type: 'hearing',
+          description: p.description || '',
+          userId: p.assigned_to || 'unassigned',
+        };
+      });
+
+      const allEvents = [...mappedEvents, ...mappedPubs];
+
+      // Filtra as tarefas e eventos para mostrar as do usuário atual ou todas se for admin
+      const visibleEvents = allEvents.filter(event => {
+        if (user?.role === 'admin') return true;
         return event.userId === user?.id;
       });
 
