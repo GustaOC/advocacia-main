@@ -228,7 +228,7 @@ export function PublicationsModule() {
   const quickUpdateStatus = (pub: Publication, status: string) => {
     updateMutation.mutate({
       id: pub.id,
-      data: { status: status as "Pendente" | "Concluída" | "Cancelada" | "Audiência" }
+      data: { status: status as "Pendente" | "Concluída" | "Cancelada" | "Audiência" | "Transferido" }
     });
   };
 
@@ -335,7 +335,7 @@ export function PublicationsModule() {
         <p className="text-brand-gray mt-2 font-medium">Cronograma de postagens e artigos organizado por pastas.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
         <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
           <CardContent className="p-6">
             <div className="flex items-start justify-between">
@@ -401,6 +401,19 @@ export function PublicationsModule() {
             </div>
           </CardContent>
         </Card>
+        <Card className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Transferidas</p>
+                <p className="text-3xl font-serif text-brand-black">{publications.filter(p => p.status === 'Transferido').length}</p>
+              </div>
+              <div className="p-2 bg-blue-50 border border-brand-gray/10 rounded-sm">
+                <FolderOpen className="w-5 h-5 text-blue-500" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-4">
@@ -420,6 +433,7 @@ export function PublicationsModule() {
                   <SelectItem value="Audiência">Audiência</SelectItem>
                   <SelectItem value="Concluída">Concluída</SelectItem>
                   <SelectItem value="Cancelada">Cancelada</SelectItem>
+                  <SelectItem value="Transferido">Transferido</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={selectedYearFilter} onValueChange={(val) => {
@@ -727,6 +741,7 @@ export function PublicationsModule() {
                     <SelectItem value="Audiência">Audiência</SelectItem>
                     <SelectItem value="Concluída">Concluída</SelectItem>
                     <SelectItem value="Cancelada">Cancelada</SelectItem>
+                    <SelectItem value="Transferido">Transferido</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
