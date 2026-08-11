@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isValid, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -38,8 +38,9 @@ export function PublicationsModule() {
 
   // Import State
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [importFile, setImportFile] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
+  const [isRemovingDuplicates, setIsRemovingDuplicates] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
 
   // Form State
   const [title, setTitle] = useState('');
@@ -164,25 +165,54 @@ export function PublicationsModule() {
         }
 
         if (result.successCount > 0) {
-            toast({ title: "Importação concluída!", description: `${result.successCount} publicação(ões) importada(s) com sucesso.` });
+            toast({ title: "Sucesso", description: `${result.successCount} publicações importadas.` });
             queryClient.invalidateQueries({ queryKey: ['publications'] });
         }
 
         if (result.errors && result.errors.length > 0) {
-            console.error("Erros de importação:", result.errors);
-            toast({ title: "Alguns itens falharam", description: "Verifique o console para mais detalhes.", variant: "destructive" });
+            toast({ title: "Aviso", description: `Houve ${result.errors.length} erros. Veja o console.`, variant: "destructive" });
+            console.log("Erros de importação:", result.errors);
         }
-
-        if (result.successCount === 0 && result.errorCount === 0) {
-            toast({ title: "Arquivo vazio", description: "Nenhum dado válido encontrado.", variant: "destructive" });
-        }
-
-        setIsImportModalOpen(false);
-        setImportFile(null);
     } catch (error: any) {
         toast({ title: "Erro na importação", description: error.message, variant: "destructive" });
     } finally {
         setIsImporting(false);
+        setIsImportModalOpen(false);
+        setImportFile(null);
+    }
+  };
+
+  const handleRemoveDuplicatesForDay = async () => {
+    if (!pubsForSelectedDate || pubsForSelectedDate.length === 0) return;
+
+    setIsRemovingDuplicates(true);
+    const seen = new Set<string>();
+    const toDeleteIds: string[] = [];
+
+    // Reverse to keep the first one found (the oldest or newest depending on sort order)
+    for (const pub of pubsForSelectedDate) {
+      const key = pub.title.trim().toLowerCase();
+      if (seen.has(key)) {
+        toDeleteIds.push(pub.id);
+      } else {
+        seen.add(key);
+      }
+    }
+
+    if (toDeleteIds.length === 0) {
+      toast({ title: 'Tudo certo', description: 'Nenhuma publicação repetida encontrada neste dia.' });
+      setIsRemovingDuplicates(false);
+      return;
+    }
+
+    try {
+      await Promise.all(toDeleteIds.map(id => apiClient.deletePublication(id)));
+      queryClient.invalidateQueries({ queryKey: ['publications'] });
+      toast({ title: 'Sucesso', description: `${toDeleteIds.length} publicações repetidas foram removidas.` });
+    } catch (err: any) {
+      toast({ title: 'Erro', description: 'Falha ao remover repetidas.', variant: 'destructive' });
+    } finally {
+      setIsRemovingDuplicates(false);
     }
   };
 
@@ -521,8 +551,20 @@ export function PublicationsModule() {
                 <p className="text-sm text-brand-gray/60 mt-2">Clique em Nova Publicação para agendar algo.</p>
               </div>
             ) : (
-              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
-                <CardContent className="p-0">
+              <div className="space-y-4">
+                <div className="flex justify-end">
+                  <Button 
+                    onClick={handleRemoveDuplicatesForDay} 
+                    disabled={isRemovingDuplicates}
+                    variant="outline" 
+                    className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 h-9"
+                  >
+                    {isRemovingDuplicates ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+                    Remover Repetidos deste Dia
+                  </Button>
+                </div>
+                <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+                  <CardContent className="p-0">
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-brand-black hover:bg-brand-darkolive">
@@ -607,6 +649,7 @@ export function PublicationsModule() {
                   </Table>
                 </CardContent>
               </Card>
+              </div>
             )}
           </div>
         )}

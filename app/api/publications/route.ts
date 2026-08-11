@@ -36,21 +36,6 @@ export async function POST(request: Request) {
 
     let taskId = null;
 
-    // Verificar duplicidade
-    const { data: existingPubs } = await supabase
-      .from("publications")
-      .select("id")
-      .eq("title", body.title)
-      .eq("publication_date", body.publication_date)
-      .limit(1);
-
-    if (existingPubs && existingPubs.length > 0) {
-      return NextResponse.json(
-        { error: "Já existe uma publicação com este número/título para esta data." },
-        { status: 400 }
-      );
-    }
-
     // Se houver um responsável, cria uma tarefa para ele
     if (body.assigned_to) {
       const { data: taskData, error: taskError } = await supabase
