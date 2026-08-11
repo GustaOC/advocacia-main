@@ -6,6 +6,7 @@ export const AVAILABLE_PAGES = [
   { key: "templates", label: "Modelos" },
   { key: "financial", label: "Financeiro" },
   { key: "calendar", label: "Agenda" },
+  { key: "audiencias", label: "Audiências" },
   { key: "tasks", label: "Tarefas" },
   { key: "gmail-inbox", label: "Gmail Inbox" },
   { key: "employees", label: "Equipe" },

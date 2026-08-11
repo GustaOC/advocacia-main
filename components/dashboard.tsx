@@ -31,6 +31,7 @@ import { NotificationsDropdown } from "./notifications-dropdown"
 import { SystemSettingsModal } from './system-settings-modal'
 import { UserSettingsModal } from './user-settings-modal'
 import { TemplatesModule } from "./templates-module"
+import { AudienciasModule } from './audiencias-module';
 import CruzamentoPage from "@/app/dashboard/cruzamento/page"; // <-- CORREÇÃO: Importa o novo componente
 import { Mail, Megaphone } from "lucide-react"; // Importar Mail para os ícones (Chrome não é mais necessário)
 import { PublicationsModule } from "@/components/publications-module";
@@ -59,6 +60,7 @@ const menuItems = [
     { value: "templates", label: "Modelos", icon: FileCode, description: "Templates de documentos", color: "from-brand-light to-brand-light/90 text-brand-black" },
     { value: "financial", label: "Financeiro", icon: DollarSign, description: "Controle financeiro", color: "from-brand-sage to-brand-sage/90" },
     { value: "calendar", label: "Agenda", icon: Calendar, description: "Compromissos e prazos", color: "from-brand-gray/80 to-brand-gray" },
+    { value: "audiencias", label: "Audiências", icon: AlertCircle, description: "Agenda exclusiva para audiências", color: "from-amber-500 to-amber-600" },
     { value: "tasks", label: "Tarefas", icon: CheckSquare, description: "Tarefas e lembretes", color: "from-brand to-brand-700" },
     { value: "publications", label: "Publicações", icon: Megaphone, description: "Agendamento de publicações", color: "from-purple-500 to-indigo-500" },
     // { value: "google-workspace", label: "Google Workspace", icon: Chrome, description: "Integração com serviços Google", color: "from-blue-500 to-red-500" }, // REMOVIDO: Google Workspace Hub
@@ -496,6 +498,7 @@ export function Dashboard() {
     templates: <TemplatesModule />,
     financial: <FinancialModule />,
     calendar: <CalendarModule />,
+    audiencias: <AudienciasModule />,
     tasks: <TasksModule />,
     publications: <PublicationsModule />,
     // "google-workspace": <GoogleWorkspaceModule />, // REMOVIDO: Google Workspace Hub
