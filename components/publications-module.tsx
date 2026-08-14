@@ -258,6 +258,16 @@ export function PublicationsModule() {
       if (!pub.publication_date) return;
       if (!pub.publication_date.startsWith(selectedYearFilter)) return; // Filter by selected year
       
+      const matchesSearch = pub.title.toLowerCase().includes(searchTerm.toLowerCase());
+      if (!matchesSearch) return;
+
+      if (filterStatus === 'all') {
+        // By default, hide completed, canceled, transferred
+        if (pub.status === 'Concluída' || pub.status === 'Cancelada' || pub.status === 'Transferido') return;
+      } else if (filterStatus !== 'everything') {
+        if (pub.status !== filterStatus) return;
+      }
+
       const pubDate = parseISO(pub.publication_date);
       if (!isValid(pubDate)) return;
 
@@ -270,7 +280,7 @@ export function PublicationsModule() {
 
     const sortedKeys = Array.from(monthsMap.keys()).sort();
     return { keys: sortedKeys, map: monthsMap };
-  }, [publications, selectedYearFilter]);
+  }, [publications, selectedYearFilter, searchTerm, filterStatus]);
 
   const availableYears = useMemo(() => {
     const years = new Set<string>();
@@ -317,12 +327,8 @@ export function PublicationsModule() {
     const dayData = daysInMonth.find(d => d.date === selectedDate);
     if (!dayData) return [];
 
-    return dayData.pubs.filter(pub => {
-      const matchesSearch = pub.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = filterStatus === 'all' || pub.status === filterStatus;
-      return matchesSearch && matchesStatus;
-    });
-  }, [selectedDate, daysInMonth, searchTerm, filterStatus]);
+    return dayData.pubs; // Already filtered by monthsFolders
+  }, [selectedDate, daysInMonth]);
 
   if (isLoading) {
     return <div className="p-8 text-center text-brand-gray">Carregando publicações...</div>;
@@ -427,9 +433,10 @@ export function PublicationsModule() {
                 <Input placeholder="Buscar por título..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 h-12 bg-white border-2 border-brand-gray focus:border-brand-gray rounded-xl" />
               </div>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger className="w-[160px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
+                <SelectTrigger className="w-[180px] h-12 bg-white border-2 border-brand-gray rounded-xl"><SelectValue placeholder="Status" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos os Status</SelectItem>
+                  <SelectItem value="all">Ativas (Pendente/Audiência)</SelectItem>
+                  <SelectItem value="everything">Exibir Tudo (Com Concluídas)</SelectItem>
                   <SelectItem value="Pendente">Pendente</SelectItem>
                   <SelectItem value="Audiência">Audiência</SelectItem>
                   <SelectItem value="Concluída">Concluída</SelectItem>
