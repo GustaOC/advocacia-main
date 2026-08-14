@@ -13,12 +13,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 // ADICIONADO O SWITCH
 import { Switch } from "@/components/ui/switch";
-import { Plus, Search, Eye, Edit, Trash2, Loader2, Briefcase, Filter, Upload, AlertTriangle, Clock, LayoutGrid, List, Star, TrendingUp, DollarSign, Calendar, FileSignature, Handshake, Store, Scale, FileText } from "lucide-react";
+import { Plus, Search, Eye, Edit, Trash2, Loader2, Briefcase, Filter, Upload, AlertTriangle, Clock, LayoutGrid, List, Star, TrendingUp, DollarSign, Calendar, FileSignature, Handshake, Store, Scale, FileText, Download } from "lucide-react";
 import { apiClient, type Entity, type Case } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DocumentUpload } from "@/components/document-upload";
 import { DocumentsModule } from "@/components/documents-module";
+import * as XLSX from "xlsx";
 
 interface ExtendedCase extends Case {
   status_reason?: string | null;
@@ -260,6 +261,54 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
     const openViewModal = (caseItem: ExtendedCase) => {
         setSelectedCaseForView(caseItem);
         setIsViewModalOpen(true);
+    };
+
+    const handleExportExcel = (caseItem: ExtendedCase) => {
+        try {
+            const clienteEntity = caseItem.case_parties?.find(p => p.role === 'Cliente')?.entities;
+            const executadoEntity = caseItem.case_parties?.find(p => p.role === 'Executado')?.entities;
+            
+            const dataToExport = [
+                {
+                    "Nº do Processo": caseItem.case_number || '',
+                    "Vara/Tribunal": caseItem.court || '',
+                    "Título": caseItem.title || '',
+                    "Cliente": clienteEntity ? clienteEntity.name : '',
+                    "CPF/CNPJ Cliente": clienteEntity ? (clienteEntity as any).document || '' : '',
+                    "Executado": executadoEntity ? executadoEntity.name : '',
+                    "CPF/CNPJ Executado": executadoEntity ? (executadoEntity as any).document || '' : '',
+                    "Status": caseItem.status || '',
+                    "Prioridade": caseItem.priority || '',
+                    "Valor da Causa (R$)": caseItem.value || '',
+                    "Possui Alvará": caseItem.has_alvara ? 'Sim' : 'Não',
+                    "Valor do Alvará (R$)": caseItem.alvara_value || '',
+                    "Descrição": caseItem.description || '',
+                    "Tipo de Acordo": caseItem.agreement_type || '',
+                    "Valor do Acordo (R$)": caseItem.agreement_value || '',
+                    "Valor de Entrada (R$)": caseItem.down_payment || '',
+                    "Parcelas": caseItem.installments || '',
+                    "Vencimento da Parcela": caseItem.installment_due_date ? new Date(caseItem.installment_due_date).toLocaleDateString('pt-BR') : '',
+                    "Criado em": caseItem.created_at ? new Date(caseItem.created_at).toLocaleDateString('pt-BR') : '',
+                }
+            ];
+
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Detalhes do Caso");
+
+            ws['!cols'] = [
+                { wch: 25 }, { wch: 20 }, { wch: 30 }, { wch: 30 }, { wch: 20 }, 
+                { wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, 
+                { wch: 15 }, { wch: 20 }, { wch: 40 }, { wch: 15 }, { wch: 20 }, 
+                { wch: 20 }, { wch: 10 }, { wch: 20 }, { wch: 15 }
+            ];
+
+            XLSX.writeFile(wb, `Processo_${caseItem.case_number?.replace(/\D/g, '') || caseItem.id}.xlsx`);
+            toast({ title: "Sucesso!", description: "Processo exportado para Excel com sucesso." });
+        } catch (error) {
+            console.error("Erro ao exportar Excel:", error);
+            toast({ title: "Erro", description: "Falha ao exportar processo.", variant: "destructive" });
+        }
     };
 
     const handleDeleteCase = (id: number) => {
@@ -589,6 +638,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                         <TableCell><div className="flex flex-col items-start space-y-1">{getStatusBadge(caseItem.status)}{caseItem.status_reason && (<span className="text-xs text-brand-sage mt-1">{caseItem.status_reason}</span>)}</div></TableCell>
                                         <TableCell><div className="text-sm text-brand-gray">{caseItem.case_parties.map(p => p.entities.name).join(', ')}</div></TableCell>
                                         <TableCell className="text-right"><div className="flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button variant="ghost" size="icon" onClick={() => handleExportExcel(caseItem)} className="hover:bg-green-100 hover:text-green-600 rounded-lg"><Download className="h-4 w-4" /></Button>
                                             <Button variant="ghost" size="icon" onClick={() => openViewModal(caseItem)} className="hover:bg-brand-gray hover:text-brand-gray rounded-lg"><Eye className="h-4 w-4" /></Button>
                                             <Button variant="ghost" size="icon" onClick={() => openEditModal(caseItem)} className="hover:bg-brand-light hover:text-brand rounded-lg"><Edit className="h-4 w-4" /></Button>
                                             <Button variant="ghost" size="icon" onClick={() => handleDeleteCase(caseItem.id)} className="hover:bg-red-100 hover:text-red-700 rounded-lg"><Trash2 className="h-4 w-4" /></Button>
@@ -617,7 +667,9 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                                 <div className="flex justify-between items-center">
                                                     {getPriorityBadge(caseItem.priority)}
                                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-green-100 hover:text-green-600" onClick={() => handleExportExcel(caseItem)}><Download className="h-4 w-4" /></Button>
                                                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-brand-gray hover:text-brand-gray" onClick={() => openViewModal(caseItem)}><Eye className="h-4 w-4" /></Button>
+                                                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-brand-light hover:text-brand" onClick={() => openEditModal(caseItem)}><Edit className="h-4 w-4" /></Button>
                                                         <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:bg-red-100" onClick={() => handleDeleteCase(caseItem.id)}><Trash2 className="h-4 w-4" /></Button>
                                                     </div>
                                                 </div>
@@ -685,7 +737,10 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                             </div>
                         </div>
                     )}
-                    <DialogFooter>
+                    <DialogFooter className="flex sm:justify-between items-center w-full gap-2 mt-4">
+                        <Button variant="default" onClick={() => selectedCaseForView && handleExportExcel(selectedCaseForView)} className="bg-green-600 hover:bg-green-700 text-white rounded-xl flex items-center justify-center">
+                            <Download className="mr-2 h-4 w-4" /> Exportar Dados
+                        </Button>
                         <Button variant="outline" onClick={() => setIsViewModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Fechar</Button>
                     </DialogFooter>
                 </DialogContent>
