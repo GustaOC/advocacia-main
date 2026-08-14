@@ -28,12 +28,14 @@ export function UserSettingsModal({ isOpen, onClose }: UserSettingsModalProps) {
   const [saving, setSaving] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
 
   // Preenche os campos quando o modal abre ou o usuário muda
   useEffect(() => {
     if (isOpen && user) {
       setName(user.name || "")
       setEmail(user.email || "")
+      setPhone(user.phone || "")
     }
   }, [isOpen, user])
 
@@ -57,7 +59,7 @@ const roleInfo = ROLE_LABELS[roleKey]
       const response = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email }),
+        body: JSON.stringify({ name, email, phone }),
       })
 
       if (response.ok) {
@@ -133,6 +135,16 @@ const roleInfo = ROLE_LABELS[roleKey]
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label>Telefone</Label>
+              <Input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="(00) 00000-0000"
               />
             </div>
           </div>

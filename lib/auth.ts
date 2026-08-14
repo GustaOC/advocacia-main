@@ -11,6 +11,7 @@ export interface AuthUser {
   id: string;
   email: string;
   name?: string; // adicione essa linha
+  phone?: string;
   role?: string;
   permissions?: Permission[];
 }
@@ -46,6 +47,7 @@ export async function getSessionUser(): Promise<AuthUser | null> {
     id: authUser.id,
     email: authUser.email ?? "",
     name: profile?.name || profile?.full_name || authUser.user_metadata?.full_name || authUser.email,
+    phone: profile?.phone || "",
     role: profile?.role || 'member',
     permissions: profile?.permissions || [],
   };

@@ -9,7 +9,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
 
-    const { name, email } = await req.json();
+    const { name, email, phone } = await req.json();
     const supabase = createAdminClient();
 
     // 1. Atualizar o e-mail de acesso de forma segura via Auth Admin
@@ -32,6 +32,7 @@ export async function PUT(req: Request) {
       if (name && 'name' in currentProfile) updateData.name = name;
       if (name && 'full_name' in currentProfile) updateData.full_name = name;
       if (email && 'email' in currentProfile) updateData.email = email;
+      if (phone !== undefined && 'phone' in currentProfile) updateData.phone = phone;
 
       if (Object.keys(updateData).length > 0) {
         const { error: profileError } = await supabase
