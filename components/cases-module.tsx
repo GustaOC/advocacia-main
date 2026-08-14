@@ -311,6 +311,53 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
         }
     };
 
+    const handleExportAllExcel = () => {
+        try {
+            const dataToExport = cases.map(caseItem => {
+                const clienteEntity = caseItem.case_parties?.find(p => p.role === 'Cliente')?.entities;
+                const executadoEntity = caseItem.case_parties?.find(p => p.role === 'Executado')?.entities;
+                return {
+                    "Nº do Processo": caseItem.case_number || '',
+                    "Vara/Tribunal": caseItem.court || '',
+                    "Título": caseItem.title || '',
+                    "Cliente": clienteEntity ? clienteEntity.name : '',
+                    "CPF/CNPJ Cliente": clienteEntity ? (clienteEntity as any).document || '' : '',
+                    "Executado": executadoEntity ? executadoEntity.name : '',
+                    "CPF/CNPJ Executado": executadoEntity ? (executadoEntity as any).document || '' : '',
+                    "Status": caseItem.status || '',
+                    "Prioridade": caseItem.priority || '',
+                    "Valor da Causa (R$)": caseItem.value || '',
+                    "Possui Alvará": caseItem.has_alvara ? 'Sim' : 'Não',
+                    "Valor do Alvará (R$)": caseItem.alvara_value || '',
+                    "Descrição": caseItem.description || '',
+                    "Tipo de Acordo": caseItem.agreement_type || '',
+                    "Valor do Acordo (R$)": caseItem.agreement_value || '',
+                    "Valor de Entrada (R$)": caseItem.down_payment || '',
+                    "Parcelas": caseItem.installments || '',
+                    "Vencimento da Parcela": caseItem.installment_due_date ? new Date(caseItem.installment_due_date).toLocaleDateString('pt-BR') : '',
+                    "Criado em": caseItem.created_at ? new Date(caseItem.created_at).toLocaleDateString('pt-BR') : '',
+                };
+            });
+
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Todos os Processos");
+
+            ws['!cols'] = [
+                { wch: 25 }, { wch: 20 }, { wch: 30 }, { wch: 30 }, { wch: 20 }, 
+                { wch: 30 }, { wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, 
+                { wch: 15 }, { wch: 20 }, { wch: 40 }, { wch: 15 }, { wch: 20 }, 
+                { wch: 20 }, { wch: 10 }, { wch: 20 }, { wch: 15 }
+            ];
+
+            XLSX.writeFile(wb, `Todos_os_Processos_${new Date().toISOString().split('T')[0]}.xlsx`);
+            toast({ title: "Sucesso!", description: "Todos os processos exportados para Excel com sucesso." });
+        } catch (error) {
+            console.error("Erro ao exportar Excel:", error);
+            toast({ title: "Erro", description: "Falha ao exportar processos.", variant: "destructive" });
+        }
+    };
+
     const handleDeleteCase = (id: number) => {
         if (window.confirm('Tem certeza que deseja excluir este processo? Esta ação removerá também os acordos e parcelas associadas e não pode ser desfeita.')) {
             deleteCaseMutation.mutate(id);
@@ -610,6 +657,7 @@ export function CasesModule({ initialFilters }: CasesModuleProps) {
                                 <Button variant={viewMode === 'list' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('list')} className={`rounded-lg ${viewMode === 'list' ? '' : 'text-brand hover:text-brand-black'}`}><List className="h-4 w-4" /></Button>
                                 <Button variant={viewMode === 'kanban' ? 'default' : 'ghost'} size="sm" onClick={() => setViewMode('kanban')} className={`rounded-lg ${viewMode === 'kanban' ? '' : 'text-brand hover:text-brand-black'}`}><LayoutGrid className="h-4 w-4" /></Button>
                             </div>
+                            <Button variant="outline" className="border-2 border-green-600 text-green-700 hover:bg-green-50 hover:text-green-800 rounded-xl" onClick={handleExportAllExcel}><Download className="mr-2 h-4 w-4" /> Exportar Todos</Button>
                             <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl" onClick={() => setIsImportModalOpen(true)}><Upload className="mr-2 h-4 w-4" /> Importar</Button>
                             <Button onClick={openCreateModal} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl"><Plus className="mr-2 h-4 w-4" /> Novo Caso</Button>
                         </div>
