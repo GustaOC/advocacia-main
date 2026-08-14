@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { getSessionUser } from "@/lib/auth";
+import { sendSMS } from "@/lib/sms";
 
 export const dynamic = 'force-dynamic';
 
@@ -84,13 +86,23 @@ export async function PATCH(request: Request) {
     }
 
     if (updates.assigned_to) {
+      const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, full_name, phone').eq('id', updates.assigned_to).single();
+      const assigneeName = assigneeProfile?.name || assigneeProfile?.full_name || 'você';
+
       await supabase.from("notifications").insert([{
         user_id: updates.assigned_to,
         title: "Nova tarefa atribuída",
-        message: `A tarefa "${data.title}" foi atribuída a você.`,
+        message: `A tarefa "${data.title}" foi atribuída a ${assigneeName}.`,
         type: "info",
         is_read: false
       }]);
+
+      if (assigneeProfile?.phone) {
+        const currentUser = await getSessionUser();
+        const assignerName = currentUser?.name || 'Alguém';
+        const smsMessage = `${assignerName} atribuiu a tarefa "${data.title}" para você.`;
+        sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+      }
     }
 
     return NextResponse.json(data);
@@ -155,13 +167,23 @@ export async function POST(request: Request) {
     }
 
     if (body.assigned_to) {
+      const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, full_name, phone').eq('id', body.assigned_to).single();
+      const assigneeName = assigneeProfile?.name || assigneeProfile?.full_name || 'você';
+
       await supabase.from("notifications").insert([{
         user_id: body.assigned_to,
         title: "Nova tarefa",
-        message: `Uma nova tarefa "${body.title}" foi atribuída a você.`,
+        message: `Uma nova tarefa "${body.title}" foi atribuída a ${assigneeName}.`,
         type: "info",
         is_read: false
       }]);
+
+      if (assigneeProfile?.phone) {
+        const currentUser = await getSessionUser();
+        const assignerName = currentUser?.name || 'Alguém';
+        const smsMessage = `${assignerName} atribuiu a tarefa "${body.title}" para você.`;
+        sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+      }
     }
 
     return NextResponse.json(data);
