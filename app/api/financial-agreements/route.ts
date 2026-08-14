@@ -230,11 +230,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // PASSO 7: Atualiza a tabela 'cases', vinculando o ID deste acordo a ela
+    // PASSO 7: Atualiza a tabela 'cases', vinculando o ID deste acordo a ela e atualizando o status para 'Acordo'
     if (insertedAgreement.case_id) {
       const { error: linkErr } = await supabase
         .from('cases')
-        .update({ financial_agreement_id: insertedAgreement.id })
+        .update({ 
+          financial_agreement_id: insertedAgreement.id,
+          status: 'Acordo' 
+        })
         .eq('id', insertedAgreement.case_id);
         
       if (linkErr) console.error('Erro ao vincular acordo ao processo:', linkErr);
