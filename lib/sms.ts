@@ -23,6 +23,10 @@ export async function sendSMS(to: string, message: string): Promise<boolean> {
   
   const formattedTo = `+${cleanedTo}`;
 
+  const isWhatsApp = true; // Define se vamos usar WhatsApp ou SMS normal
+  const prefixTo = isWhatsApp ? 'whatsapp:' : '';
+  const prefixFrom = isWhatsApp ? 'whatsapp:' : '';
+
   try {
     const response = await fetch(
       `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
@@ -33,8 +37,8 @@ export async function sendSMS(to: string, message: string): Promise<boolean> {
           Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString("base64")}`,
         },
         body: new URLSearchParams({
-          To: formattedTo,
-          From: fromNumber,
+          To: `${prefixTo}${formattedTo}`,
+          From: `${prefixFrom}${fromNumber}`,
           Body: message,
         }),
       }
@@ -42,11 +46,11 @@ export async function sendSMS(to: string, message: string): Promise<boolean> {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("[SMS] Erro ao enviar SMS pelo Twilio:", errorText);
+      console.error("[Twilio] Erro ao enviar mensagem:", errorText);
       return false;
     }
 
-    console.log(`[SMS] Enviado com sucesso para ${formattedTo}`);
+    console.log(`[Twilio] Enviado com sucesso para ${formattedTo} via ${isWhatsApp ? 'WhatsApp' : 'SMS'}`);
     return true;
   } catch (error) {
     console.error("[SMS] Exceção ao enviar SMS:", error);

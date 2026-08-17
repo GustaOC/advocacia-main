@@ -156,7 +156,7 @@ export async function getCases(page: number = 1, limit: number = 10) {
       case_parties (
         role,
         entity_id,
-        entities:entity_id (id, name)
+        entities:entity_id (id, name, document)
       )
     `, { count: "exact" })
     .order("created_at", { ascending: false })
