@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
-import pdf from "pdf-parse";
 import { requirePermission } from "@/lib/auth";
+
+// Corrige o erro do Webpack na Vercel para módulos CommonJS sem default export
+const pdf = require("pdf-parse");
 
 export const dynamic = 'force-dynamic';
 
