@@ -95,68 +95,176 @@ async function runScraper() {
     console.log("📂 Navegando para as publicações de hoje...");
     await page.goto('https://app.faz.adv.br/#/publicacoes/hoje', { waitUntil: 'domcontentloaded', timeout: 60000 });
     
-    // Aguarda um tempo fixo extra para garantir que tabelas/APIs da página carreguem
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+    // Força o clique na aba "Hoje" pelo menu caso o SPA do site nos redirecione para "Não Lidas" por padrão
+    console.log("👉 Forçando o clique na aba 'Hoje'...");
+    await page.evaluate(() => {
+      // 1. Tenta achar pelo link exato (href)
+      const link = document.querySelector('a[href*="/publicacoes/hoje"]');
+      if (link) {
+        link.click();
+        return;
+      }
+      
+      // 2. Se não for tag 'a', procura um item de menu que contenha "Hoje" seguido de um número (o badge 33)
+      const elements = Array.from(document.querySelectorAll('div, li, button, a'));
+      const hojeElement = elements.find(el => {
+         const text = el.innerText ? el.innerText.trim() : '';
+         // Verifica se o texto começa com "Hoje" e tem algum número (como "Hoje 33" ou "Hoje\n33")
+         return text.startsWith('Hoje') && /\d/.test(text) && el.offsetHeight > 0 && el.children.length > 0;
+      });
+      if (hojeElement) {
+         hojeElement.click();
+      }
+    });
+
+    // Aguarda um tempo fixo extra para garantir que tabelas/APIs da aba Hoje carreguem
     await new Promise(resolve => setTimeout(resolve, 8000));
     
-    console.log("📄 Extraindo texto da página...");
-    const rawText = await page.evaluate(() => document.body.innerText);
-    
-    console.log(`🧠 Texto extraído (${rawText.length} caracteres). Enviando para análise da IA (OpenAI)...`);
-    
-    const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Modelo rápido, inteligente e barato
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content: `Você é um assistente jurídico de elite. O usuário colou o texto bruto de uma página web de controle de publicações e intimações.
+    // Tira um screenshot para debug
+    await page.screenshot({ path: 'debug-screenshot.png', fullPage: true });
+
+    let hasNextPage = true;
+    let currentPage = 1;
+    const allPublicacoes = [];
+
+    while (hasNextPage) {
+      console.log(`\n📄 Lendo página ${currentPage}...`);
+      const rawText = await page.evaluate(() => document.body.innerText);
+      
+      // Salva o texto bruto da página 1 para a gente investigar
+      if (currentPage === 1) {
+        fs.writeFileSync('debug-page1.txt', rawText);
+      }
+      
+      console.log(`🧠 Texto extraído (${rawText.length} caracteres). Enviando para análise da IA (OpenAI)...`);
+      
+      const aiResponse = await openai.chat.completions.create({
+        model: "gpt-4o-mini", // Modelo rápido, inteligente e barato
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: `Você é um assistente jurídico de elite. O usuário colou o texto bruto de uma página web de controle de publicações e intimações.
 Sua missão é ignorar cabeçalhos, menus e lixo da página, focar apenas nos blocos que parecem ser "Publicações", "Andamentos" ou "Intimações".
 Para cada uma, extraia:
-1. "title": O assunto principal, nome da ação, vara ou nº do processo (máx 150 caracteres).
+1. "title": DEVE SER EXATAMENTE E APENAS O NÚMERO DO PROCESSO (ex: 0001234-56.2023.8.26.0000). Nada de texto a mais. Se não achar, deixe vazio.
 2. "description": O texto completo do andamento (ou um resumo rico se for gigantesco).
-3. "status": Defina o status dessa publicação. Escolha OBRIGATORIAMENTE um destes: "Pendente", "Audiência", "Concluída", "Cancelada" ou "Transferido".
 
 Responda SOMENTE com um JSON no seguinte formato:
 {
   "publicacoes": [
-    { "title": "...", "description": "...", "status": "..." }
+    { "title": "...", "description": "..." }
   ]
 }`
-        },
-        {
-          role: "user",
-          content: rawText.substring(0, 30000) // Limita o texto para não estourar os tokens
-        }
-      ]
-    });
+          },
+          {
+            role: "user",
+            content: rawText.substring(0, 30000) // Limita o texto para não estourar os tokens
+          }
+        ]
+      });
 
-    const aiResultStr = aiResponse.choices[0].message.content;
-    const aiResult = JSON.parse(aiResultStr);
-    const publicacoes = aiResult.publicacoes || [];
-    
-    console.log(`✅ A IA encontrou e interpretou ${publicacoes.length} publicações.`);
-    
-    if (publicacoes.length > 0) {
-      console.log("💾 Salvando no banco de dados (Supabase)...");
-      const pubDateStr = new Date().toISOString().split('T')[0];
+      const aiResultStr = aiResponse.choices[0].message.content;
+      const aiResult = JSON.parse(aiResultStr);
+      const publicacoes = aiResult.publicacoes || [];
       
-      const inserts = publicacoes.map(pub => ({
-        title: pub.title,
-        description: pub.description,
-        status: pub.status,
-        publication_date: pubDateStr,
-        assigned_by: null // "Robô"
-      }));
-
-      const { error } = await supabase.from('publications').insert(inserts);
-      
-      if (error) {
-        console.error("❌ Erro ao salvar no Supabase:", error);
+      if (publicacoes.length > 0) {
+        allPublicacoes.push(...publicacoes);
+        console.log(`✅ A IA encontrou e interpretou ${publicacoes.length} publicações na página ${currentPage}.`);
       } else {
-        console.log("🎉 Sucesso! Todas as publicações foram salvas no sistema.");
+        console.log(`ℹ️ Nenhuma publicação encontrada na página ${currentPage}.`);
+      }
+
+      // Procura botão de próxima página e clica
+      const foundNext = await page.evaluate(() => {
+        // Tenta achar botões de navegação comuns
+        const nextSelectors = [
+          'button[aria-label="Next page"]',
+          'button[aria-label="Próxima página"]',
+          'a[aria-label="Next"]',
+          '.pagination-next',
+          '.next-page',
+          'li.next a',
+          'button.next',
+          'button[title="Próxima Página"]',
+          'button[title="Next Page"]',
+          '.q-table__bottom .q-btn:last-child', // Padrão Quasar (comum no FAZ Adv se for Vue/Quasar)
+          '.v-data-footer__icons-after button' // Padrão Vuetify
+        ];
+        
+        let nextBtn = null;
+        for (const sel of nextSelectors) {
+          const btn = document.querySelector(sel);
+          if (btn && !btn.disabled && !btn.classList.contains('disabled') && !btn.hasAttribute('disabled')) {
+             nextBtn = btn; break;
+          }
+        }
+        
+         // Busca textual como plano B
+         if (!nextBtn) {
+            const elements = Array.from(document.querySelectorAll('button, a, div[role="button"], i, span'));
+            nextBtn = elements.find(el => {
+               const text = el.innerText ? el.innerText.trim().toLowerCase() : '';
+               // Matches exactly to avoid "Próxima marcação"
+               const isMatch = text === 'próxima »' || text === 'próxima' || text === 'próximo' || text === 'next' || text === 'próxima página';
+               
+               const parentLi = el.closest('li');
+               const isParentDisabled = parentLi && (parentLi.classList.contains('disabled') || parentLi.classList.contains('q-disabled'));
+               
+               const isDisabled = el.disabled || el.classList.contains('disabled') || el.classList.contains('q-disabled') || el.getAttribute('aria-disabled') === 'true' || el.hasAttribute('disabled') || isParentDisabled;
+               const isVisible = el.offsetWidth > 0 && el.offsetHeight > 0;
+               
+               return isMatch && !isDisabled && isVisible;
+            });
+         }
+        
+        if (nextBtn) {
+          nextBtn.click();
+          return true;
+        }
+        return false;
+      });
+
+      if (foundNext) {
+        console.log("➡️ Indo para a próxima página...");
+        currentPage++;
+        await new Promise(resolve => setTimeout(resolve, 6000)); // Aguarda 6s para a próxima página carregar
+      } else {
+        console.log("🏁 Fim das páginas atingido.");
+        hasNextPage = false;
+      }
+    }
+    
+    if (allPublicacoes.length > 0) {
+      const pubDateStr = new Date().toISOString().split('T')[0];
+      const inserts = [];
+
+      for (const pub of allPublicacoes) {
+        inserts.push({
+          title: pub.title || 'S/N',
+          description: pub.description,
+          status: 'Pendente',
+          publication_date: pubDateStr,
+          assigned_by: null // "Robô"
+        });
+      }
+      
+      if (inserts.length === 0) {
+         console.log("ℹ️ Nenhuma publicação capturada para salvar.");
+      } else {
+        console.log(`💾 Salvando ${inserts.length} publicações no banco de dados (Supabase)...`);
+        const { error } = await supabase.from('publications').insert(inserts);
+        
+        if (error) {
+          console.error("❌ Erro ao salvar no Supabase:", error);
+        } else {
+          console.log("🎉 Sucesso! Todas as publicações foram salvas no sistema.");
+        }
       }
     } else {
-      console.log("Nenhuma publicação encontrada para hoje.");
+      console.log("Nenhuma publicação encontrada para hoje em nenhuma página.");
     }
     
   } catch (err) {

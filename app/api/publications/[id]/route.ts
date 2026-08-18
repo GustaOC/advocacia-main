@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { getSessionUser } from "@/lib/auth";
+import { sendEmail } from "@/lib/email";
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -63,6 +65,29 @@ export async function PUT(request: Request, { params }: { params: { id: string }
           type: "info",
           is_read: false
         }]);
+
+        // Envia E-mail de notificação
+        const { data: authUser } = await supabase.auth.admin.getUserById(body.assigned_to);
+        const assigneeEmail = authUser?.user?.email;
+        if (assigneeEmail) {
+          const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, full_name').eq('id', body.assigned_to).single();
+          const assigneeName = assigneeProfile?.name || assigneeProfile?.full_name || 'você';
+          const currentUser = await getSessionUser();
+          const assignerName = currentUser?.name || 'Alguém';
+          
+          const emailHtml = `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+              <h2>Olá, ${assigneeName}!</h2>
+              <p><strong>${assignerName}</strong> acabou de atribuir uma publicação para você no FAZ Adv.</p>
+              <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
+                <h3 style="margin-top: 0;">${body.title || originalPub.title}</h3>
+                ${body.description || originalPub.description ? `<p>${body.description || originalPub.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
+              </div>
+              <p><a href="https://app.faz.adv.br/publicacoes" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Publicações</a></p>
+            </div>
+          `;
+          sendEmail(assigneeEmail, `Nova Publicação: ${body.title || originalPub.title}`, emailHtml).catch(console.error);
+        }
 
       } else {
         // Se removeu o assigned_to, cancela ou remove a tarefa

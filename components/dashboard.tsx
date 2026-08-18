@@ -22,6 +22,7 @@ import EntitiesModule from "@/components/entities-module"
 import { CasesModule } from "@/components/cases-module"
 import { FinancialModule } from "@/components/financial-module"
 import { PetitionsModule } from "@/components/petitions-module"
+import { PetitionWorkflowsModule } from "./petition-workflows-module"
 import { EmployeeManagement } from "@/components/employee-management"
 import { BrandLogo } from "@/components/brand-logo"
 import { CalendarModule } from "@/components/calendar-module"
@@ -494,7 +495,7 @@ export function Dashboard() {
     entities: <EntitiesModule />,
     cases: <CasesModule initialFilters={globalFilters.cases} />,
     cruzamento: <CruzamentoPage />, // <-- CORREÇÃO: Adicionada a nova página ao conteúdo das abas
-    petitions: <PetitionsModule />,
+    petitions: <PetitionWorkflowsModule />,
     templates: <TemplatesModule />,
     financial: <FinancialModule />,
     calendar: <CalendarModule />,

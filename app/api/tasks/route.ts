@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSessionUser } from "@/lib/auth";
 import { sendSMS } from "@/lib/sms";
+import { sendEmail } from "@/lib/email";
 
 export const dynamic = 'force-dynamic';
 
@@ -103,6 +104,26 @@ export async function PATCH(request: Request) {
         const smsMessage = `${assignerName} atribuiu a tarefa "${data.title}" para você.`;
         sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
       }
+
+      // Envia E-mail de notificação
+      const { data: authUser } = await supabase.auth.admin.getUserById(updates.assigned_to);
+      const assigneeEmail = authUser?.user?.email;
+      if (assigneeEmail) {
+        const currentUser = await getSessionUser();
+        const assignerName = currentUser?.name || 'Alguém';
+        const emailHtml = `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2>Olá, ${assigneeName}!</h2>
+            <p><strong>${assignerName}</strong> acabou de atribuir uma tarefa para você no FAZ Adv.</p>
+            <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
+              <h3 style="margin-top: 0;">${data.title}</h3>
+              ${data.description ? `<p>${data.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
+            </div>
+            <p><a href="https://app.faz.adv.br/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
+          </div>
+        `;
+        sendEmail(assigneeEmail, `Nova Tarefa: ${data.title}`, emailHtml).catch(console.error);
+      }
     }
 
     return NextResponse.json(data);
@@ -183,6 +204,26 @@ export async function POST(request: Request) {
         const assignerName = currentUser?.name || 'Alguém';
         const smsMessage = `${assignerName} atribuiu a tarefa "${body.title}" para você.`;
         sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+      }
+
+      // Envia E-mail de notificação
+      const { data: authUser } = await supabase.auth.admin.getUserById(body.assigned_to);
+      const assigneeEmail = authUser?.user?.email;
+      if (assigneeEmail) {
+        const currentUser = await getSessionUser();
+        const assignerName = currentUser?.name || 'Alguém';
+        const emailHtml = `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2>Olá, ${assigneeName}!</h2>
+            <p><strong>${assignerName}</strong> acabou de criar e atribuir uma tarefa para você no FAZ Adv.</p>
+            <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
+              <h3 style="margin-top: 0;">${body.title}</h3>
+              ${body.description ? `<p>${body.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
+            </div>
+            <p><a href="https://app.faz.adv.br/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
+          </div>
+        `;
+        sendEmail(assigneeEmail, `Nova Tarefa: ${body.title}`, emailHtml).catch(console.error);
       }
     }
 
