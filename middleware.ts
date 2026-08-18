@@ -1,7 +1,7 @@
 // middleware.ts - VERSÃO COMPLETA E CORRIGIDA
 
 import { NextResponse, type NextRequest } from "next/server";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseMiddlewareClient } from "@/lib/supabase/middleware";
 
 // Lista de rotas que NÃO exigem autenticação
 const PUBLIC_PATHS = [
@@ -70,7 +70,7 @@ export async function middleware(req: NextRequest) {
   res.headers.set("Referrer-Policy", "origin-when-cross-origin");
 
   try {
-    const supabase = createSupabaseServerClient(req, res);
+    const supabase = createSupabaseMiddlewareClient(req, res);
     
     // Verifica se há um usuário na sessão
     const { data: { user }, error } = await supabase.auth.getUser();
