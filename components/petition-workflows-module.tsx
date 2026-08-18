@@ -38,7 +38,7 @@ export function PetitionWorkflowsModule() {
     queryKey: ['cases'],
     queryFn: () => apiClient.getCases()
   });
-  const cases = casesData?.cases || casesData || [];
+  const cases: any[] = Array.isArray(casesData) ? casesData : (casesData?.cases || []);
 
   const createMutation = useMutation({
     mutationFn: (data: { title: string; case_id?: number }) => apiClient.createPetitionWorkflow(data),
