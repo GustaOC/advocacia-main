@@ -233,7 +233,7 @@ export function PetitionWorkflowsModule() {
                           <div className="flex-1 h-2 bg-brand-light/50 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-brand rounded-full transition-all duration-500"
-                              style={{ width: \`\${(workflow.current_step / 10) * 100}%\` }}
+                              style={{ width: `${(workflow.current_step / 10) * 100}%` }}
                             />
                           </div>
                           <span className="text-xs text-brand-gray font-medium w-8">
@@ -256,32 +256,32 @@ export function PetitionWorkflowsModule() {
                                 const isPending = !isCompleted && !isCurrent;
                                 
                                 return (
-                                  <div key={step.id} className={\`relative pl-8 pb-6 border-l-2 \${
+                                  <div key={step.id} className={`relative pl-8 pb-6 border-l-2 ${
                                     isCompleted ? 'border-green-500' :
                                     isCurrent ? 'border-brand' :
                                     'border-brand-gray/30'
-                                  }\`}>
+                                  }`}>
                                     {/* Circle indicator */}
-                                    <div className={\`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 \${
+                                    <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 ${
                                       isCompleted ? 'bg-green-500 border-green-500' :
                                       isCurrent ? 'bg-brand border-brand animate-pulse' :
                                       'bg-white border-brand-gray/30'
-                                    }\`} />
+                                    }`} />
                                     
                                     {/* Step content */}
-                                    <div className={\`ml-4 p-4 rounded-md shadow-sm transition-all \${
+                                    <div className={`ml-4 p-4 rounded-md shadow-sm transition-all ${
                                       isCompleted ? 'bg-green-50/50 border border-green-100' :
                                       isCurrent ? 'bg-white border border-brand ring-1 ring-brand/10' :
                                       'bg-white border border-brand-gray/20 opacity-70'
-                                    }\`}>
+                                    }`}>
                                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                         <div>
                                           <div className="flex items-center gap-2">
-                                            <span className={\`font-bold \${
+                                            <span className={`font-bold ${
                                               isCompleted ? 'text-green-800' :
                                               isCurrent ? 'text-brand' :
                                               'text-brand-gray'
-                                            }\`}>
+                                            }`}>
                                               Etapa {step.step_number}: {step.step_name}
                                             </span>
                                             {isCompleted && step.completed_at && (
@@ -395,7 +395,7 @@ export function PetitionWorkflowsModule() {
                 <SelectContent>
                   <SelectItem value="none">Nenhum</SelectItem>
                   {cases.map((c: any) => (
-                    <SelectItem key={c.id} value={c.id.toString()}>{c.case_number ? \`\${c.case_number} - \` : ''}{c.title}</SelectItem>
+                    <SelectItem key={c.id} value={c.id.toString()}>{c.case_number ? `${c.case_number} - ` : ''}{c.title}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

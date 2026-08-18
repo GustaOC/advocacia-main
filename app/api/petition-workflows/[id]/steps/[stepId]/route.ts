@@ -104,18 +104,18 @@ export async function PUT(
           const { data: authUser } = await supabase.auth.admin.getUserById(nextStep.assigned_to);
           const assigneeEmail = authUser?.user?.email;
           if (assigneeEmail) {
-            const emailHtml = \`
+            const emailHtml = `
               <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-                <h2>Olá, \${assigneeName}!</h2>
+                <h2>Olá, ${assigneeName}!</h2>
                 <p>A etapa anterior foi concluída e a seguinte etapa do workflow está agora disponível para você iniciar:</p>
                 <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
-                  <h3 style="margin-top: 0;">\${nextStep.step_name}</h3>
-                  <p>Workflow: <strong>\${workflow.title}</strong></p>
+                  <h3 style="margin-top: 0;">${nextStep.step_name}</h3>
+                  <p>Workflow: <strong>${workflow.title}</strong></p>
                 </div>
                 <p><a href="https://app.faz.adv.br/petition-workflows" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Workflows</a></p>
               </div>
-            \`;
-            sendEmail(assigneeEmail, \`Etapa disponível: \${nextStep.step_name}\`, emailHtml).catch(console.error);
+            `;
+            sendEmail(assigneeEmail, `Etapa disponível: ${nextStep.step_name}`, emailHtml).catch(console.error);
           }
         }
       } else if (step.step_number === 10) {
