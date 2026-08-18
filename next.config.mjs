@@ -4,6 +4,14 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+
+  // Suprime os warnings de serialização de strings grandes no cache do webpack
+  webpack: (config, { isServer }) => {
+    config.infrastructureLogging = {
+      level: 'error',
+    };
+    return config;
+  },
   
   images: {
     remotePatterns: [

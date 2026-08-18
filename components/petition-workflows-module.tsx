@@ -95,7 +95,7 @@ export function PetitionWorkflowsModule() {
     setExpandedWorkflowId(prev => prev === id ? null : id);
   };
 
-  const totalPetições = workflows.length;
+  const totalPeticoes = workflows.length;
   const emAndamento = workflows.filter((w: any) => w.status === 'Em andamento').length;
   const concluidas = workflows.filter((w: any) => w.status === 'Concluída').length;
   
@@ -127,7 +127,7 @@ export function PetitionWorkflowsModule() {
             <div className="flex items-start justify-between">
               <div className="space-y-1">
                 <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">Total de Petições</p>
-                <p className="text-3xl font-serif text-brand-black">{totalPetições}</p>
+                <p className="text-3xl font-serif text-brand-black">{totalPeticoes}</p>
               </div>
               <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
                 <FileText className="w-5 h-5 text-brand" />
