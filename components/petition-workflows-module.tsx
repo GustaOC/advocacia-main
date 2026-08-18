@@ -316,26 +316,29 @@ export function PetitionWorkflowsModule() {
                                               ) : (() => {
                                                 const currentSelectVal = pendingAssignees[step.id] !== undefined ? pendingAssignees[step.id] : (step.assigned_to || 'none');
                                                 const isDirty = pendingAssignees[step.id] !== undefined && pendingAssignees[step.id] !== (step.assigned_to || 'none');
+                                                const isAlreadyAssigned = !!step.assigned_to;
                                                 
                                                 return (
-                                                  <div className="flex gap-2 items-center">
-                                                    <Button 
-                                                      size="sm" 
-                                                      variant="outline" 
-                                                      onClick={() => {
-                                                        if (isDirty) {
-                                                          handleAssignTo(workflow.id, step.id, currentSelectVal);
-                                                          setPendingAssignees(prev => { const n = {...prev}; delete n[step.id]; return n; });
-                                                        } else {
-                                                          handleAssignToMe(workflow.id, step.id);
-                                                        }
-                                                      }}
-                                                      disabled={updateStepMutation.isPending}
-                                                      className="border-brand text-brand hover:bg-brand-light"
-                                                    >
-                                                      {isDirty && currentSelectVal !== user?.id ? "Atribuir" : "Atribuir a mim"}
-                                                    </Button>
-                                                    <Select value={currentSelectVal} onValueChange={(val) => setPendingAssignees(prev => ({...prev, [step.id]: val}))}>
+                                                  <div className={`flex gap-2 items-center ${isAlreadyAssigned ? 'opacity-60 grayscale' : ''}`}>
+                                                    {!isAlreadyAssigned && (
+                                                      <Button 
+                                                        size="sm" 
+                                                        variant="outline" 
+                                                        onClick={() => {
+                                                          if (isDirty) {
+                                                            handleAssignTo(workflow.id, step.id, currentSelectVal);
+                                                            setPendingAssignees(prev => { const n = {...prev}; delete n[step.id]; return n; });
+                                                          } else {
+                                                            handleAssignToMe(workflow.id, step.id);
+                                                          }
+                                                        }}
+                                                        disabled={updateStepMutation.isPending}
+                                                        className="border-brand text-brand hover:bg-brand-light"
+                                                      >
+                                                        {isDirty && currentSelectVal !== user?.id ? "Atribuir" : "Atribuir a mim"}
+                                                      </Button>
+                                                    )}
+                                                    <Select disabled={isAlreadyAssigned || updateStepMutation.isPending} value={currentSelectVal} onValueChange={(val) => setPendingAssignees(prev => ({...prev, [step.id]: val}))}>
                                                       <SelectTrigger className="w-[140px] h-9 text-xs">
                                                         <SelectValue placeholder="Delegar..." />
                                                       </SelectTrigger>
@@ -352,17 +355,19 @@ export function PetitionWorkflowsModule() {
                                             </>
                                           )}
                                           {isPending && !isCurrent && !isCompleted && (
-                                            <Select value={step.assigned_to || 'none'} onValueChange={(val) => handleAssignTo(workflow.id, step.id, val)}>
-                                              <SelectTrigger className="w-[140px] h-8 text-xs bg-transparent">
-                                                <SelectValue placeholder="Responsável..." />
-                                              </SelectTrigger>
-                                              <SelectContent>
-                                                <SelectItem value="none">Ninguém</SelectItem>
-                                                {employees.map((emp: any) => (
-                                                  <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
-                                                ))}
-                                              </SelectContent>
-                                            </Select>
+                                            <div className={step.assigned_to ? 'opacity-60 grayscale' : ''}>
+                                              <Select disabled={!!step.assigned_to || updateStepMutation.isPending} value={step.assigned_to || 'none'} onValueChange={(val) => handleAssignTo(workflow.id, step.id, val)}>
+                                                <SelectTrigger className="w-[140px] h-8 text-xs bg-transparent">
+                                                  <SelectValue placeholder="Responsável..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                  <SelectItem value="none">Ninguém</SelectItem>
+                                                  {employees.map((emp: any) => (
+                                                    <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                                                  ))}
+                                                </SelectContent>
+                                              </Select>
+                                            </div>
                                           )}
                                         </div>
                                       </div>
