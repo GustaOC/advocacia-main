@@ -23,6 +23,7 @@ export function PetitionWorkflowsModule() {
   const [newTitle, setNewTitle] = useState('');
   const [newCaseId, setNewCaseId] = useState<string>('none');
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
+  const [pendingAssignees, setPendingAssignees] = useState<Record<string, string>>({});
 
   const { data: workflows = [], isLoading } = useQuery({
     queryKey: ['petition-workflows'],
@@ -312,29 +313,42 @@ export function PetitionWorkflowsModule() {
                                                   <CheckCircle className="w-4 h-4 mr-2" />
                                                   Concluir Etapa
                                                 </Button>
-                                              ) : (
-                                                <div className="flex gap-2 items-center">
-                                                  <Button 
-                                                    size="sm" 
-                                                    variant="outline" 
-                                                    onClick={() => handleAssignToMe(workflow.id, step.id)}
-                                                    className="border-brand text-brand hover:bg-brand-light"
-                                                  >
-                                                    Atribuir a mim
-                                                  </Button>
-                                                  <Select value={step.assigned_to || 'none'} onValueChange={(val) => handleAssignTo(workflow.id, step.id, val)}>
-                                                    <SelectTrigger className="w-[140px] h-9 text-xs">
-                                                      <SelectValue placeholder="Delegar..." />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                      <SelectItem value="none">Ninguém</SelectItem>
-                                                      {employees.map((emp: any) => (
-                                                        <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
-                                                      ))}
-                                                    </SelectContent>
-                                                  </Select>
-                                                </div>
-                                              )}
+                                              ) : (() => {
+                                                const currentSelectVal = pendingAssignees[step.id] !== undefined ? pendingAssignees[step.id] : (step.assigned_to || 'none');
+                                                const isDirty = pendingAssignees[step.id] !== undefined && pendingAssignees[step.id] !== (step.assigned_to || 'none');
+                                                
+                                                return (
+                                                  <div className="flex gap-2 items-center">
+                                                    <Button 
+                                                      size="sm" 
+                                                      variant="outline" 
+                                                      onClick={() => {
+                                                        if (isDirty) {
+                                                          handleAssignTo(workflow.id, step.id, currentSelectVal);
+                                                          setPendingAssignees(prev => { const n = {...prev}; delete n[step.id]; return n; });
+                                                        } else {
+                                                          handleAssignToMe(workflow.id, step.id);
+                                                        }
+                                                      }}
+                                                      disabled={updateStepMutation.isPending}
+                                                      className="border-brand text-brand hover:bg-brand-light"
+                                                    >
+                                                      {isDirty && currentSelectVal !== user?.id ? "Atribuir" : "Atribuir a mim"}
+                                                    </Button>
+                                                    <Select value={currentSelectVal} onValueChange={(val) => setPendingAssignees(prev => ({...prev, [step.id]: val}))}>
+                                                      <SelectTrigger className="w-[140px] h-9 text-xs">
+                                                        <SelectValue placeholder="Delegar..." />
+                                                      </SelectTrigger>
+                                                      <SelectContent>
+                                                        <SelectItem value="none">Ninguém</SelectItem>
+                                                        {employees.map((emp: any) => (
+                                                          <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
+                                                        ))}
+                                                      </SelectContent>
+                                                    </Select>
+                                                  </div>
+                                                );
+                                              })()}
                                             </>
                                           )}
                                           {isPending && !isCurrent && !isCompleted && (
