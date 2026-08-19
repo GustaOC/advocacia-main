@@ -143,6 +143,7 @@ async function runScraper() {
       const aiResponse = await openai.chat.completions.create({
         model: "gpt-4o-mini", // Modelo rápido, inteligente e barato
         response_format: { type: "json_object" },
+        max_tokens: 16000,
         messages: [
           {
             role: "system",
@@ -150,7 +151,9 @@ async function runScraper() {
 Sua missão é ignorar cabeçalhos, menus e lixo da página, focar apenas nos blocos que parecem ser "Publicações", "Andamentos" ou "Intimações".
 Para cada uma, extraia:
 1. "title": DEVE SER EXATAMENTE E APENAS O NÚMERO DO PROCESSO (ex: 0001234-56.2023.8.26.0000). Nada de texto a mais. Se não achar, deixe vazio.
-2. "description": O texto completo do andamento (ou um resumo rico se for gigantesco).
+2. "description": O texto completo do andamento.
+
+IMPORTANTE: Você DEVE extrair rigorosamente TODAS as publicações presentes no texto. Não omita, resuma ou agrupe nenhuma. Se houver 10 publicações na página, o JSON DEVE conter 10 itens no array.
 
 Responda SOMENTE com um JSON no seguinte formato:
 {
@@ -161,7 +164,7 @@ Responda SOMENTE com um JSON no seguinte formato:
           },
           {
             role: "user",
-            content: rawText.substring(0, 30000) // Limita o texto para não estourar os tokens
+            content: rawText.substring(0, 35000) // Limita o texto para não estourar os tokens
           }
         ]
       });
@@ -230,7 +233,7 @@ Responda SOMENTE com um JSON no seguinte formato:
       if (foundNext) {
         console.log("➡️ Indo para a próxima página...");
         currentPage++;
-        await new Promise(resolve => setTimeout(resolve, 6000)); // Aguarda 6s para a próxima página carregar
+        await new Promise(resolve => setTimeout(resolve, 8000)); // Aguarda 8s para a próxima página carregar
       } else {
         console.log("🏁 Fim das páginas atingido.");
         hasNextPage = false;
