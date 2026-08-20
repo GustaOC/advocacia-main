@@ -219,14 +219,18 @@ async function runScraper() {
       const pubDateStr = new Date().toISOString().split('T')[0];
       const inserts = [];
 
+      const baseTime = new Date().getTime();
+      let offset = 0;
       for (const pub of allPublicacoes) {
         inserts.push({
           title: pub.title || 'S/N',
           description: pub.description,
           status: 'Pendente',
           publication_date: pub.publication_date || pubDateStr,
-          assigned_by: null // "Robô"
+          assigned_by: null, // "Robô"
+          created_at: new Date(baseTime + offset).toISOString()
         });
+        offset += 1000;
       }
       
       if (inserts.length === 0) {
