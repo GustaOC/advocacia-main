@@ -144,6 +144,25 @@ export function PublicationsModule() {
     }
   };
 
+  
+  const handleSyncFazAdv = async () => {
+    try {
+      setIsSyncing(true);
+      toast({ title: "Iniciando", description: "Robô FAZ Adv sendo acionado na nuvem..." });
+      const res = await fetch('/api/run-robo', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        toast({ title: "Sucesso", description: data.message || "Aguarde ~1 minuto e recarregue a página." });
+      } else {
+        toast({ title: "Erro", description: data.error || "Erro ao acionar robô.", variant: "destructive" });
+      }
+    } catch (err) {
+      toast({ title: "Erro", description: "Erro de conexão ao acionar robô.", variant: "destructive" });
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const handleImportPublications = async () => {
     if (!importFile) {
         toast({ title: "Erro", description: "Por favor, selecione uma planilha Excel (.xlsx)", variant: "destructive" });
