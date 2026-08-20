@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer';
-import { OpenAI } from 'openai';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -13,10 +12,6 @@ if (!process.env.FAZ_ADV_USER || !process.env.FAZ_ADV_PASS) {
   process.exit(1);
 }
 
-if (!process.env.OPENAI_API_KEY) {
-  console.error("❌ ERRO: OPENAI_API_KEY não definida no arquivo .env.local");
-  process.exit(1);
-}
 
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   console.error("❌ ERRO: Credenciais do Supabase não encontradas no .env.local");
@@ -29,9 +24,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 async function runScraper() {
   console.log("🤖 Iniciando Robô de Publicações...");
@@ -138,44 +130,36 @@ async function runScraper() {
         fs.writeFileSync('debug-page1.txt', rawText);
       }
       
-      console.log(`🧠 Texto extraído (${rawText.length} caracteres). Enviando para análise da IA (OpenAI)...`);
+      console.log(`🔍 Extraindo processo e data via Regex (${rawText.length} caracteres)...`);
+      const publicacoes = [];
+      const processBlocks = rawText.split(/Processo:\s*/i);
       
-      const aiResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini", // Modelo rápido, inteligente e barato
-        response_format: { type: "json_object" },
-        max_tokens: 16000,
-        messages: [
-          {
-            role: "system",
-            content: `Você é um assistente jurídico de elite. O usuário colou o texto bruto de uma página web de controle de publicações e intimações.
-Sua missão é ignorar cabeçalhos, menus e lixo da página, focar apenas nos blocos que parecem ser "Publicações", "Andamentos" ou "Intimações".
-Para cada uma, extraia:
-1. "title": DEVE SER EXATAMENTE E APENAS O NÚMERO DO PROCESSO (ex: 0001234-56.2023.8.26.0000). Nada de texto a mais. Se não achar, deixe vazio.
-2. "description": O texto completo do andamento.
-
-IMPORTANTE: Você DEVE extrair rigorosamente TODAS as publicações presentes no texto. Não omita, resuma ou agrupe nenhuma. Se houver 10 publicações na página, o JSON DEVE conter 10 itens no array.
-
-Responda SOMENTE com um JSON no seguinte formato:
-{
-  "publicacoes": [
-    { "title": "...", "description": "..." }
-  ]
-}`
-          },
-          {
-            role: "user",
-            content: rawText.substring(0, 35000) // Limita o texto para não estourar os tokens
-          }
-        ]
-      });
-
-      const aiResultStr = aiResponse.choices[0].message.content;
-      const aiResult = JSON.parse(aiResultStr);
-      const publicacoes = aiResult.publicacoes || [];
+      for (let i = 1; i < processBlocks.length; i++) {
+         const block = processBlocks[i];
+         const processMatch = block.match(/^([\d\.\-]+)/);
+         if (processMatch) {
+             const title = processMatch[1];
+             let pubDateStr = new Date().toISOString().split('T')[0];
+             
+             const prevBlock = processBlocks[i-1];
+             const datasEncontradas = prevBlock.match(/\d{2}\/\d{2}\/\d{4}/g);
+             if (datasEncontradas && datasEncontradas.length > 0) {
+                 const ultimaData = datasEncontradas[datasEncontradas.length - 1]; 
+                 const [day, month, year] = ultimaData.split('/');
+                 pubDateStr = `${year}-${month}-${day}`;
+             }
+             
+             publicacoes.push({
+                 title: title,
+                 description: "",
+                 publication_date: pubDateStr
+             });
+         }
+      }
       
       if (publicacoes.length > 0) {
         allPublicacoes.push(...publicacoes);
-        console.log(`✅ A IA encontrou e interpretou ${publicacoes.length} publicações na página ${currentPage}.`);
+        console.log(`✅ O robô encontrou ${publicacoes.length} publicações na página ${currentPage}.`);
       } else {
         console.log(`ℹ️ Nenhuma publicação encontrada na página ${currentPage}.`);
       }
