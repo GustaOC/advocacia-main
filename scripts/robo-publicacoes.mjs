@@ -124,37 +124,28 @@ async function runScraper() {
     while (hasNextPage) {
       console.log(`\n📄 Lendo página ${currentPage}...`);
       const rawText = await page.evaluate(() => document.body.innerText);
-      
-      // Salva o texto bruto da página 1 para a gente investigar
-      if (currentPage === 1) {
-        fs.writeFileSync('debug-page1.txt', rawText);
-      }
-      
+            
       console.log(`🔍 Extraindo processo e data via Regex (${rawText.length} caracteres)...`);
       const publicacoes = [];
-      const processBlocks = rawText.split(/Processo:\s*/i);
+      const processBlocks = rawText.split(/Publicação:\s*(?=\d{2}\/\d{2}\/\d{4})/i);
       
       for (let i = 1; i < processBlocks.length; i++) {
          const block = processBlocks[i];
-         const processMatch = block.match(/^([\d\.\-]+)/);
-         if (processMatch) {
-             const title = processMatch[1];
-             let pubDateStr = new Date().toISOString().split('T')[0];
-             
-             const prevBlock = processBlocks[i-1];
-             const datasEncontradas = prevBlock.match(/\d{2}\/\d{2}\/\d{4}/g);
-             if (datasEncontradas && datasEncontradas.length > 0) {
-                 const ultimaData = datasEncontradas[datasEncontradas.length - 1]; 
-                 const [day, month, year] = ultimaData.split('/');
-                 pubDateStr = `${year}-${month}-${day}`;
-             }
-             
-             publicacoes.push({
-                 title: title,
-                 description: "",
-                 publication_date: pubDateStr
-             });
+         const dateMatch = block.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+         const processMatch = block.match(/\b\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b/);
+         
+         const title = processMatch ? processMatch[0] : 'S/N';
+         let pubDateStr = new Date().toISOString().split('T')[0];
+         
+         if (dateMatch) {
+             pubDateStr = `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`;
          }
+         
+         publicacoes.push({
+             title: title,
+             description: "",
+             publication_date: pubDateStr
+         });
       }
       
       if (publicacoes.length > 0) {
@@ -233,7 +224,7 @@ async function runScraper() {
           title: pub.title || 'S/N',
           description: pub.description,
           status: 'Pendente',
-          publication_date: pubDateStr,
+          publication_date: pub.publication_date || pubDateStr,
           assigned_by: null // "Robô"
         });
       }
