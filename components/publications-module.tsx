@@ -38,6 +38,7 @@ export function PublicationsModule() {
 
   // Import State
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isRemovingDuplicates, setIsRemovingDuplicates] = useState(false);
   const [importFile, setImportFile] = useState<File | null>(null);
@@ -461,6 +462,16 @@ export function PublicationsModule() {
             </div>
             {user?.role === 'admin' && (
               <div className="flex gap-3 items-center">
+                
+                <Button 
+                  variant="outline" 
+                  className="border-2 border-brand hover:bg-brand/10 text-brand rounded-xl h-12 px-4" 
+                  onClick={handleSyncFazAdv}
+                  disabled={isSyncing}
+                >
+                  <RefreshCw className={`mr-2 h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} /> 
+                  {isSyncing ? 'Sincronizando...' : 'Sincronizar FAZ Adv'}
+                </Button>
                 <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl h-12 px-4" onClick={() => setIsImportModalOpen(true)}>
                   <Upload className="mr-2 h-4 w-4" /> Importar
                 </Button>
