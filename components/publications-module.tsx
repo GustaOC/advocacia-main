@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2 } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isValid, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
