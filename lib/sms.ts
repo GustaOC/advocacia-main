@@ -1,59 +1,46 @@
-// lib/sms.ts
+/**
+ * Utilitário para envio de SMS usando a API do SMS Barato.
+ * Requer a chave configurada no .env.local como SMS_BARATO_KEY.
+ */
 
-export async function sendSMS(to: string, message: string): Promise<boolean> {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const fromNumber = process.env.TWILIO_PHONE_NUMBER;
-
-  if (!accountSid || !authToken || !fromNumber) {
-    console.warn(`[SMS Mock] Simulação de Envio. O número ${to} receberia a seguinte mensagem:\n"${message}"`);
-    console.warn("[SMS Mock] Para enviar de verdade, configure TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN e TWILIO_PHONE_NUMBER no seu .env.local.");
-    return false;
-  }
-
-  if (!to) return false;
-
-  // Limpa o número para conter apenas dígitos
-  let cleanedTo = to.replace(/\D/g, '');
-  
-  // Se for celular do Brasil e não começar com 55, adicionamos
-  if (cleanedTo.length >= 10 && cleanedTo.length <= 11 && !cleanedTo.startsWith('55')) {
-    cleanedTo = '55' + cleanedTo;
-  }
-  
-  const formattedTo = `+${cleanedTo}`;
-
-  const isWhatsApp = true; // Define se vamos usar WhatsApp ou SMS normal
-  const prefixTo = isWhatsApp ? 'whatsapp:' : '';
-  const prefixFrom = isWhatsApp ? 'whatsapp:' : '';
-
+export async function sendSMS(numero: string, mensagem: string) {
   try {
-    const response = await fetch(
-      `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString("base64")}`,
-        },
-        body: new URLSearchParams({
-          To: `${prefixTo}${formattedTo}`,
-          From: `${prefixFrom}${fromNumber}`,
-          Body: message,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[Twilio] Erro ao enviar mensagem:", errorText);
+    const apiKey = process.env.SMS_BARATO_KEY;
+    if (!apiKey) {
+      console.warn("⚠️ SMS_BARATO_KEY não configurada. O SMS não será enviado.");
       return false;
     }
 
-    console.log(`[Twilio] Enviado com sucesso para ${formattedTo} via ${isWhatsApp ? 'WhatsApp' : 'SMS'}`);
-    return true;
+    // Limpa o número de telefone (remove parênteses, espaços e traços)
+    const cleanNumber = numero.replace(/\D/g, '');
+
+    if (!cleanNumber || cleanNumber.length < 10) {
+      console.warn("⚠️ Número de telefone inválido para envio de SMS:", numero);
+      return false;
+    }
+
+    // A documentação do SMS Barato geralmente funciona via HTTP POST/GET no /send
+    // Com parâmetros URLSearchParams (key, number, msg)
+    const params = new URLSearchParams({
+      token: apiKey, // Pode variar entre 'token' ou 'key' de acordo com a doc que o suporte enviar
+      number: cleanNumber,
+      msg: mensagem
+    });
+
+    // Subtitua pelo endpoint EXATO fornecido pelo suporte do SMS Barato (normalmente sistema81 ou painel)
+    const url = `https://sistema81.smsbarato.com.br/send?${params.toString()}`;
+
+    const response = await fetch(url, { method: 'GET' });
+    
+    if (response.ok) {
+      console.log(`✅ SMS enviado com sucesso para ${cleanNumber}`);
+      return true;
+    } else {
+      console.error(`❌ Falha ao enviar SMS para ${cleanNumber}. Status:`, response.status);
+      return false;
+    }
   } catch (error) {
-    console.error("[SMS] Exceção ao enviar SMS:", error);
+    console.error("❌ Erro interno ao enviar SMS:", error);
     return false;
   }
 }

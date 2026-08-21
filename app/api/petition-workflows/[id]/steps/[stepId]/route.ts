@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSessionUser } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
+import { sendSMS } from "@/lib/sms";
 
 export const dynamic = 'force-dynamic';
 
@@ -87,7 +88,7 @@ export async function PUT(
           // Notificação e E-mail
           const { data: assigneeProfile } = await supabase
             .from("user_profiles")
-            .select("name, full_name")
+            .select("name, full_name, phone")
             .eq("id", nextStep.assigned_to)
             .single();
             
@@ -116,6 +117,11 @@ export async function PUT(
               </div>
             `;
             sendEmail(assigneeEmail, `Etapa disponível: ${nextStep.step_name}`, emailHtml).catch(console.error);
+          }
+          
+          if (assigneeProfile?.phone) {
+            const smsMessage = `FAZ ADV: Olá ${assigneeName.split(' ')[0]}! A etapa "${nextStep.step_name}" do caso ${workflow.title} foi passada para você e está pronta para iniciar.`;
+            sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
           }
         }
       } else if (step.step_number === 13) {
