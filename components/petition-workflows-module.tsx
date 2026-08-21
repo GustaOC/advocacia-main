@@ -260,7 +260,7 @@ export function PetitionWorkflowsModule() {
                           <div className="p-8 max-w-4xl mx-auto">
                             <h4 className="font-serif text-xl text-brand-black mb-6">Linha do Tempo da Petição</h4>
                             <div className="space-y-0">
-                              {workflow.steps?.map((step: any, index: number) => {
+                              {(workflow.steps ? [...workflow.steps].sort((a: any, b: any) => a.step_number - b.step_number) : []).map((step: any, index: number) => {
                                 const isCompleted = step.status === 'Concluída';
                                 const isCurrent = step.step_number === workflow.current_step && workflow.status !== 'Concluída';
                                 const isPending = !isCompleted && !isCurrent;
@@ -310,76 +310,27 @@ export function PetitionWorkflowsModule() {
                                         </div>
                                         
                                         <div className="flex items-center gap-2">
-                                          {isCurrent && (
-                                            <>
-                                              {step.assigned_to === user?.id ? (
-                                                <Button 
-                                                  size="sm" 
-                                                  onClick={() => handleCompleteStep(workflow.id, step.id)}
-                                                  disabled={updateStepMutation.isPending}
-                                                  className="bg-brand text-white hover:bg-brand/90"
-                                                >
-                                                  <CheckCircle className="w-4 h-4 mr-2" />
-                                                  Concluir Etapa
-                                                </Button>
-                                              ) : (() => {
-                                                const currentSelectVal = pendingAssignees[step.id] !== undefined ? pendingAssignees[step.id] : (step.assigned_to || 'none');
-                                                const isDirty = pendingAssignees[step.id] !== undefined && pendingAssignees[step.id] !== (step.assigned_to || 'none');
-                                                const isAlreadyAssigned = !!step.assigned_to;
-                                                
-                                                return (
-                                                  <div className={`flex gap-2 items-center ${isAlreadyAssigned ? 'opacity-60 grayscale' : ''}`}>
-                                                    {!isAlreadyAssigned && (
-                                                      <Button 
-                                                        size="sm" 
-                                                        variant="outline" 
-                                                        onClick={() => {
-                                                          if (isDirty) {
-                                                            handleAssignTo(workflow.id, step.id, currentSelectVal);
-                                                            setPendingAssignees(prev => { const n = {...prev}; delete n[step.id]; return n; });
-                                                          } else {
-                                                            handleAssignToMe(workflow.id, step.id);
-                                                          }
-                                                        }}
-                                                        disabled={updateStepMutation.isPending}
-                                                        className="border-brand text-brand hover:bg-brand-light"
-                                                      >
-                                                        {isDirty && currentSelectVal !== user?.id ? "Atribuir" : "Atribuir a mim"}
-                                                      </Button>
-                                                    )}
-                                                    <Select disabled={isAlreadyAssigned || updateStepMutation.isPending} value={currentSelectVal} onValueChange={(val) => setPendingAssignees(prev => ({...prev, [step.id]: val}))}>
-                                                      <SelectTrigger className="w-[140px] h-9 text-xs">
-                                                        <SelectValue placeholder="Delegar..." />
-                                                      </SelectTrigger>
-                                                      <SelectContent>
-                                                        <SelectItem value="none">Ninguém</SelectItem>
-                                                        {employees.map((emp: any) => (
-                                                          <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
-                                                        ))}
-                                                      </SelectContent>
-                                                    </Select>
-                                                  </div>
-                                                );
-                                              })()}
-                                            </>
-                                          )}
-                                          {isPending && !isCurrent && !isCompleted && (
-                                            <div className={step.assigned_to ? 'opacity-60 grayscale' : ''}>
-                                              <Select disabled={!!step.assigned_to || updateStepMutation.isPending} value={step.assigned_to || 'none'} onValueChange={(val) => handleAssignTo(workflow.id, step.id, val)}>
-                                                <SelectTrigger className="w-[140px] h-8 text-xs bg-transparent">
-                                                  <SelectValue placeholder="Responsável..." />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                  <SelectItem value="none">Ninguém</SelectItem>
-                                                  {employees.map((emp: any) => (
-                                                    <SelectItem key={emp.id} value={emp.id}>{emp.name}</SelectItem>
-                                                  ))}
-                                                </SelectContent>
-                                              </Select>
-                                            </div>
+                                          {isCurrent && (step.assigned_to === user?.id || user?.role === 'admin') && (
+                                            <Button 
+                                              size="sm" 
+                                              onClick={() => handleCompleteStep(workflow.id, step.id)}
+                                              disabled={updateStepMutation.isPending}
+                                              className="bg-brand text-white hover:bg-brand/90"
+                                            >
+                                              <CheckCircle className="w-4 h-4 mr-2" />
+                                              Concluir Etapa
+                                            </Button>
                                           )}
                                         </div>
                                       </div>
+                                      
+                                      {step.notes && (
+                                        <div className="mt-3 bg-brand-light/20 p-3 rounded-md border border-brand-gray/20 text-sm text-brand-black w-full">
+                                          <span className="font-semibold block mb-1 text-brand-sage">Observação:</span>
+                                          {step.notes}
+                                        </div>
+                                      )}
+                                      
                                     </div>
                                   </div>
                                 );
