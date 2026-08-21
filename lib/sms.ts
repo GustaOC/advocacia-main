@@ -31,17 +31,17 @@ export async function sendSMS(numero: string, mensagem: string) {
         dest: cleanNumber,
         text: mensagem
       });
-      url = \`https://sistema81.smsbarato.com.br/send?\${params.toString()}\`;
+      url = `https://sistema81.smsbarato.com.br/send?${params.toString()}`;
     }
 
     const response = await fetch(url, { method: 'GET' });
     const text = await response.text();
     
     if (response.ok) {
-      console.log(\`✅ SMS enviado para \${cleanNumber}. Resposta: \${text}\`);
+      console.log(`✅ SMS enviado para ${cleanNumber}. Resposta: ${text}`);
       return true;
     } else {
-      console.error(\`❌ Falha SMS para \${cleanNumber}. Status: \${response.status}. Resp: \${text}\`);
+      console.error(`❌ Falha SMS para ${cleanNumber}. Status: ${response.status}. Resp: ${text}`);
       return false;
     }
   } catch (error) {
