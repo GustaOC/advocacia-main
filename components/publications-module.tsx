@@ -152,10 +152,10 @@ export function PublicationsModule() {
   const handleSyncFazAdv = async () => {
     try {
       setIsSyncing(true);
-      toast({ title: "Iniciando", description: "Robô FAZ Adv sendo acionado na nuvem..." });
+      toast({ title: "Iniciando", description: "Robô Públicações sendo acionado na nuvem..." });
       const res = await fetch('/api/run-robo', { method: 'POST' });
       const data = await res.json();
-      console.log("🤖 [Robô FAZ Adv] Resposta do servidor:", data);
+      console.log("🤖 [Robô Públicações] Resposta do servidor:", data);
       if (res.ok) {
         toast({ title: "Sucesso", description: data.message || "Aguarde ~1 minuto e recarregue a página." });
       } else {
@@ -512,7 +512,7 @@ export function PublicationsModule() {
                   disabled={isSyncing}
                 >
                   <RefreshCw className={`mr-2 h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} /> 
-                  {isSyncing ? 'Sincronizando...' : 'Sincronizar FAZ Adv'}
+                  {isSyncing ? 'Sincronizando...' : 'Sincronizar Públicações'}
                 </Button>
                 <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl h-12 px-4" onClick={() => setIsImportModalOpen(true)}>
                   <Upload className="mr-2 h-4 w-4" /> Importar

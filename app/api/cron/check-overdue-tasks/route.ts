@@ -88,7 +88,7 @@ export async function GET(request: Request) {
     }
 
     if (cassioProfile?.phone) {
-      const smsMsg = `FAZ ADV: Dr. Cassio, existem \${missedTasks.length} tarefas que voce delegou que estao ATRASADAS. Acesse o sistema para verificar.`;
+      const smsMsg = `Cássio Miguel Advogados: Dr. Cassio, existem \${missedTasks.length} tarefas que voce delegou que estao ATRASADAS. Acesse o sistema para verificar.`;
       await sendSMS(cassioProfile.phone, smsMsg);
     }
 

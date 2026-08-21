@@ -120,7 +120,7 @@ export async function PUT(
           }
           
           if (assigneeProfile?.phone) {
-            const smsMessage = `FAZ ADV: Olá ${assigneeName.split(' ')[0]}! A etapa "${nextStep.step_name}" do caso ${workflow.title} foi passada para você e está pronta para iniciar.`;
+            const smsMessage = `Cássio Miguel Advogados: Olá ${assigneeName.split(' ')[0]}! A etapa "${nextStep.step_name}" do caso ${workflow.title} foi passada para você e está pronta para iniciar.`;
             sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
           }
         }
