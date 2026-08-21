@@ -120,9 +120,6 @@ async function runScraper() {
 
     // Aguarda um tempo fixo extra para garantir que tabelas/APIs da aba Hoje carreguem
     await new Promise(resolve => setTimeout(resolve, 8000));
-    
-    // Tira um screenshot para debug
-    await page.screenshot({ path: 'debug-screenshot.png', fullPage: true });
 
     let hasNextPage = true;
     let currentPage = 1;
@@ -130,6 +127,11 @@ async function runScraper() {
 
     while (hasNextPage) {
       console.log(`\n📄 Lendo página ${currentPage}...`);
+      
+      // Salva o screenshot
+      const shotPath = `screenshot-page-${currentPage}.png`;
+      await page.screenshot({ path: shotPath, fullPage: true });
+      
       const rawText = await page.evaluate(() => document.body.innerText);
             
       console.log(`🔍 Extraindo processo e data via Regex (${rawText.length} caracteres)...`);
@@ -226,6 +228,27 @@ async function runScraper() {
       }
     }
     
+    const runDateStr = new Date().toISOString().split('T')[0];
+    
+    // Fazer upload de todos os screenshots para o Supabase Storage
+    console.log("☁️ Fazendo upload dos prints das páginas...");
+    for (let p = 1; p < currentPage; p++) {
+       const sPath = `screenshot-page-${p}.png`;
+       if (fs.existsSync(sPath)) {
+           const fileBuffer = fs.readFileSync(sPath);
+           const fileName = `${runDateStr}/pagina-${p}.png`;
+           const { error: uploadError } = await supabase.storage.from('publications_screenshots').upload(fileName, fileBuffer, {
+               contentType: 'image/png',
+               upsert: true
+           });
+           if (uploadError) {
+               console.error(`❌ Erro ao upar screenshot ${p}:`, uploadError);
+           } else {
+               console.log(`📸 Upload concluído: ${fileName}`);
+           }
+       }
+    }
+
     if (allPublicacoes.length > 0) {
       const pubDateStr = new Date().toISOString().split('T')[0];
       const inserts = [];

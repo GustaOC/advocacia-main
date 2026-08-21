@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2, RefreshCw } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2, RefreshCw, ImageIcon, ExternalLink } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isValid, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -38,6 +39,9 @@ export function PublicationsModule() {
 
   // Import State
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [screenshotsModalDate, setScreenshotsModalDate] = useState<string | null>(null);
+  const [screenshots, setScreenshots] = useState<string[]>([]);
+  const [isScreenshotsLoading, setIsScreenshotsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isRemovingDuplicates, setIsRemovingDuplicates] = useState(false);
@@ -161,6 +165,28 @@ export function PublicationsModule() {
       toast({ title: "Erro", description: "Erro de conexão ao acionar robô.", variant: "destructive" });
     } finally {
       setIsSyncing(false);
+    }
+  };
+
+  
+  const openScreenshots = async (date: string) => {
+    setScreenshotsModalDate(date);
+    setIsScreenshotsLoading(true);
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.storage.from('publications_screenshots').list(date);
+      if (error) throw error;
+      
+      const urls = data
+        .filter(f => f.name !== '.emptyFolderPlaceholder' && f.name.endsWith('.png'))
+        .map(f => supabase.storage.from('publications_screenshots').getPublicUrl(`${date}/${f.name}`).data.publicUrl);
+        
+      setScreenshots(urls);
+    } catch (err) {
+      console.error(err);
+      toast({ title: 'Erro ao carregar imagens', variant: 'destructive' });
+    } finally {
+      setIsScreenshotsLoading(false);
     }
   };
 
@@ -619,7 +645,14 @@ export function PublicationsModule() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-2">
+                  <Button
+                    onClick={() => openScreenshots(selectedDate)}
+                    variant="outline"
+                    className="border-brand text-brand hover:bg-brand/10 h-9"
+                  >
+                    <ImageIcon className="mr-2 h-4 w-4" /> Imagem das Publicações
+                  </Button>
                   <Button 
                     onClick={handleRemoveDuplicatesForDay} 
                     disabled={isRemovingDuplicates}
@@ -814,6 +847,45 @@ export function PublicationsModule() {
             <Button onClick={handleImportPublications} disabled={!importFile || isImporting} className="bg-brand text-white hover:bg-brand-dark">
               {isImporting ? 'Importando...' : 'Importar'}
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Screenshots */}
+      <Dialog open={!!screenshotsModalDate} onOpenChange={(open) => !open && setScreenshotsModalDate(null)}>
+        <DialogContent className="sm:max-w-4xl bg-white max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-serif text-brand-black border-b border-brand-gray/20 pb-4 flex items-center">
+              <ImageIcon className="mr-3 h-6 w-6 text-brand" />
+              Imagens do Robô - {screenshotsModalDate && format(parseISO(screenshotsModalDate), 'dd/MM/yyyy')}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4">
+            {isScreenshotsLoading ? (
+              <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                <Loader2 className="h-10 w-10 text-brand animate-spin" />
+                <p className="text-brand-gray">Carregando prints das páginas...</p>
+              </div>
+            ) : screenshots.length === 0 ? (
+              <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                <p className="text-brand-gray font-medium">Nenhuma imagem encontrada para este dia.</p>
+                <p className="text-sm text-brand-gray/60 mt-1">O robô pode não ter salvo prints nesta data.</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {screenshots.map((url, i) => (
+                  <div key={i} className="rounded-xl overflow-hidden border border-brand-gray/20 shadow-sm relative group">
+                    <div className="bg-brand-black text-brand-beige px-4 py-2 flex justify-between items-center">
+                      <span className="font-semibold text-sm">Página {i + 1}</span>
+                      <a href={url} target="_blank" rel="noreferrer" className="text-brand-beige hover:text-white transition-colors">
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    </div>
+                    <img src={url} alt={`Print ${i+1}`} className="w-full h-auto" loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
