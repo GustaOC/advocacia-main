@@ -141,6 +141,22 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         const smsMessage = `Cássio Miguel Advogados: ${userName} marcou a publicação "${body.title || originalPub.title}" como TRANSFERIDO.`;
         await sendSMS(cassioProfile.phone, smsMessage).catch(console.error);
       }
+
+      // Email para Dr. Cassio
+      const { data: cassioAuth } = await supabase.auth.admin.getUserById(CASSIO_ID);
+      if (cassioAuth?.user?.email) {
+        const emailHtml = `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2>Publicação Transferida</h2>
+            <p>O usuário <strong>${userName}</strong> marcou a seguinte publicação como TRANSFERIDO:</p>
+            <div style="padding: 15px; border-left: 4px solid #ffaa00; background: #f9f9f9; margin: 15px 0;">
+              <h3 style="margin-top: 0;">${body.title || originalPub.title}</h3>
+            </div>
+            <p><a href="https://app.faz.adv.br/publicacoes" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Publicações</a></p>
+          </div>
+        `;
+        await sendEmail(cassioAuth.user.email, `Publicação TRANSFERIDA: ${body.title || originalPub.title}`, emailHtml).catch(console.error);
+      }
     }
 
 

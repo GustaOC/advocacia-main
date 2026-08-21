@@ -122,6 +122,22 @@ export async function GET(request: Request) {
       }
     }
 
+    // Enviar Email para Cassio
+    const { data: cassioAuth } = await supabase.auth.admin.getUserById(CASSIO_ID);
+    const cassioEmail = cassioAuth?.user?.email;
+    if (cassioEmail && smsMessages.length > 0) {
+       const emailHtml = `
+         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+           <h2>Relatório de Atrasos Diário</h2>
+           <ul>
+             ${smsMessages.map(msg => `<li>${msg}</li>`).join('')}
+           </ul>
+           <p><a href="https://app.faz.adv.br" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Sistema</a></p>
+         </div>
+       `;
+       await sendEmail(cassioEmail, "FAZ Adv - Relatório de Atrasos", emailHtml).catch(console.error);
+    }
+
     return NextResponse.json({ 
       message: "Alertas enviados com sucesso", 
       totalAlerts 
