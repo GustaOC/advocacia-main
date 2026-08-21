@@ -32,12 +32,18 @@ async function runScraper() {
   const path = await import('path');
   
   // O wrapper resolve o problema do Flatpak não rodar com o binário direto
-  const wrapperPath = path.resolve('./scripts/chrome-wrapper.sh');
-  if (fs.existsSync(wrapperPath)) {
-    executablePath = wrapperPath;
+  // No GitHub Actions, deixa o Puppeteer usar o Chromium dele mesmo
+  if (process.env.GITHUB_ACTIONS) {
+    console.log("Servidor GitHub Actions detectado. Usando Chromium embutido.");
+    executablePath = undefined;
+  } else {
+    const wrapperPath = path.resolve('./scripts/chrome-wrapper.sh');
+    if (fs.existsSync(wrapperPath)) {
+      executablePath = wrapperPath;
+    }
   }
 
-  if (!executablePath) {
+  if (executablePath === null) { // Executa essa busca manual apenas se não for GitHub Actions
     const browserPaths = [
       '/usr/bin/google-chrome',
       '/usr/bin/google-chrome-stable',
