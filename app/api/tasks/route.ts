@@ -103,7 +103,7 @@ export async function PATCH(request: Request) {
         const assignerName = currentUser?.name || 'Alguém';
         const dueDateStr = data.due_date ? new Date(data.due_date).toLocaleDateString('pt-BR') : 'Sem prazo';
         const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a tarefa "${data.title}" para você. Prazo: ${dueDateStr}. Para mais detalhes, cheque o sistema.`;
-        sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+        await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
       }
 
       // Envia E-mail de notificação
@@ -123,7 +123,7 @@ export async function PATCH(request: Request) {
             <p><a href="https://app.faz.adv.br/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
           </div>
         `;
-        sendEmail(assigneeEmail, `Nova Tarefa: ${data.title}`, emailHtml).catch(console.error);
+        await sendEmail(assigneeEmail, `Nova Tarefa: ${data.title}`, emailHtml).catch(console.error);
       }
     }
 
@@ -205,7 +205,7 @@ export async function POST(request: Request) {
         const assignerName = currentUser?.name || 'Alguém';
         const dueDateStr = body.due_date ? new Date(body.due_date).toLocaleDateString('pt-BR') : 'Sem prazo';
         const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a tarefa "${body.title}" para você. Prazo: ${dueDateStr}. Para mais detalhes, cheque o sistema.`;
-        sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+        await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
       }
 
       // Envia E-mail de notificação
@@ -225,7 +225,7 @@ export async function POST(request: Request) {
             <p><a href="https://app.faz.adv.br/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
           </div>
         `;
-        sendEmail(assigneeEmail, `Nova Tarefa: ${body.title}`, emailHtml).catch(console.error);
+        await sendEmail(assigneeEmail, `Nova Tarefa: ${body.title}`, emailHtml).catch(console.error);
       }
     }
 

@@ -116,12 +116,12 @@ export async function PUT(
                 <p><a href="https://app.faz.adv.br/petition-workflows" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Workflows</a></p>
               </div>
             `;
-            sendEmail(assigneeEmail, `Etapa disponível: ${nextStep.step_name}`, emailHtml).catch(console.error);
+            await sendEmail(assigneeEmail, `Etapa disponível: ${nextStep.step_name}`, emailHtml).catch(console.error);
           }
           
           if (assigneeProfile?.phone) {
             const smsMessage = `Cássio Miguel Advogados: Olá ${assigneeName.split(' ')[0]}! A etapa "${nextStep.step_name}" do caso ${workflow.title} foi passada para você e está pronta para iniciar.`;
-            sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+            await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
           }
         }
       } else if (step.step_number === 13) {
