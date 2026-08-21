@@ -50,7 +50,7 @@ export async function PUT(
     // Tratamento de conclusão de etapa
     if (body.status === "Concluída") {
       // Bloquear se não for o responsável e não for admin
-      if (step.assigned_to !== user.id && user.role !== "admin") {
+      if (step.assigned_to !== user.id) {
         return NextResponse.json(
           { error: "Apenas o responsável pela etapa pode concluí-la." },
           { status: 403 }

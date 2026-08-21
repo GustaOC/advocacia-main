@@ -310,7 +310,7 @@ export function PetitionWorkflowsModule() {
                                         </div>
                                         
                                         <div className="flex items-center gap-2">
-                                          {isCurrent && (step.assigned_to === user?.id || user?.role === 'admin') && (
+                                          {isCurrent && step.assigned_to === user?.id && (
                                             <Button 
                                               size="sm" 
                                               onClick={() => handleCompleteStep(workflow.id, step.id)}
