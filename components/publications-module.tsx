@@ -151,6 +151,7 @@ export function PublicationsModule() {
       toast({ title: "Iniciando", description: "Robô FAZ Adv sendo acionado na nuvem..." });
       const res = await fetch('/api/run-robo', { method: 'POST' });
       const data = await res.json();
+      console.log("🤖 [Robô FAZ Adv] Resposta do servidor:", data);
       if (res.ok) {
         toast({ title: "Sucesso", description: data.message || "Aguarde ~1 minuto e recarregue a página." });
       } else {
