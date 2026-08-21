@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   authors: [{ name: 'Cássio Miguel Advocacia' }],
   robots: 'index, follow',
   icons: {
-    icon: '/favicon-light.png',
-    apple: '/favicon-light.png',
+    icon: '/favicon-large.png',
+    apple: '/favicon-large.png',
   }
 }
 
