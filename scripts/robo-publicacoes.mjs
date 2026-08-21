@@ -66,6 +66,7 @@ async function runScraper() {
   });
   
   const page = await browser.newPage();
+  await page.setViewport({ width: 1920, height: 1080 });
   
   try {
     console.log("🌐 Acessando página de login do FAZ Adv...");
@@ -132,6 +133,10 @@ async function runScraper() {
       const rawText = await page.evaluate(() => document.body.innerText);
             
       console.log(`🔍 Extraindo processo e data via Regex (${rawText.length} caracteres)...`);
+      if (currentPage === 1) {
+         console.log("Trecho da tela (primeiros 1000 caracteres):\n", rawText.substring(0, 1000));
+      }
+
       const publicacoes = [];
       const processBlocks = rawText.split(/Publicação:\s*(?=\d{2}\/\d{2}\/\d{4})/i);
       
