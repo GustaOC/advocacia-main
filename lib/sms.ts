@@ -1,6 +1,5 @@
 /**
- * Utilitário para envio de SMS usando a API do SMS Barato.
- * Requer a chave configurada no .env.local como SMS_BARATO_KEY.
+ * Utilitário para envio de SMS
  */
 
 export async function sendSMS(numero: string, mensagem: string) {
@@ -11,32 +10,48 @@ export async function sendSMS(numero: string, mensagem: string) {
       return false;
     }
 
-    // Limpa o número de telefone (remove parênteses, espaços e traços)
     const cleanNumber = numero.replace(/\D/g, '');
+    if (!cleanNumber || cleanNumber.length < 10) return false;
 
-    if (!cleanNumber || cleanNumber.length < 10) {
-      console.warn("⚠️ Número de telefone inválido para envio de SMS:", numero);
-      return false;
+    // Se o cliente definiu a URL customizada na Vercel, usamos ela, caso contrário tentamos o padrão
+    const customUrl = process.env.SMS_BARATO_URL;
+    
+    let url = "";
+    if (customUrl) {
+      // Exemplo de url customizada: https://api.site.com/send?key={key}&number={number}&msg={msg}
+      url = customUrl
+        .replace("{key}", apiKey)
+        .replace("{token}", apiKey)
+        .replace("{number}", cleanNumber)
+        .replace("{msg}", encodeURIComponent(mensagem));
+    } else {
+      // Tenta usar a plataforma SMS DEV/SMS Barato padrão
+      // Tenta o sistema81, muito comum em revendas
+      const params = new URLSearchParams({
+        token: apiKey,
+        number: cleanNumber,
+        msg: mensagem
+      });
+      url = \`https://sistema81.smsbarato.com.br/send?\${params.toString()}\`;
     }
 
-    // A documentação do SMS Barato geralmente funciona via HTTP POST/GET no /send
-    // Com parâmetros URLSearchParams (key, number, msg)
-    const params = new URLSearchParams({
-      token: apiKey, // Pode variar entre 'token' ou 'key' de acordo com a doc que o suporte enviar
-      number: cleanNumber,
-      msg: mensagem
-    });
-
-    // Subtitua pelo endpoint EXATO fornecido pelo suporte do SMS Barato (normalmente sistema81 ou painel)
-    const url = `https://sistema81.smsbarato.com.br/send?${params.toString()}`;
-
     const response = await fetch(url, { method: 'GET' });
+    const text = await response.text();
     
     if (response.ok) {
-      console.log(`✅ SMS enviado com sucesso para ${cleanNumber}`);
+      console.log(\`✅ SMS enviado para \${cleanNumber}. Resposta: \${text}\`);
       return true;
     } else {
-      console.error(`❌ Falha ao enviar SMS para ${cleanNumber}. Status:`, response.status);
+      console.error(\`❌ Falha SMS para \${cleanNumber}. Status: \${response.status}. Resp: \${text}\`);
+      
+      // Tentar fallback se for erro de autenticacao/rota
+      if (response.status === 400 || response.status === 404) {
+         console.log("Tentando endpoint alternativo (SMS Dev)...");
+         const fallbackUrl = \`https://api.smsdev.com.br/v1/send?key=\${apiKey}&type=9&number=\${cleanNumber}&msg=\${encodeURIComponent(mensagem)}\`;
+         const fRes = await fetch(fallbackUrl);
+         const fText = await fRes.text();
+         console.log(\`Resposta Fallback: \${fRes.status} - \${fText}\`);
+      }
       return false;
     }
   } catch (error) {
