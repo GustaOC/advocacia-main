@@ -1,0 +1,28 @@
+name: Robô de Publicações FAZ Adv
+
+on:
+  workflow_dispatch: # Permite acionamento manual via botão do site
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Rodar o Robô
+        env:
+          FAZ_ADV_USER: ${{ secrets.FAZ_ADV_USER }}
+          FAZ_ADV_PASS: ${{ secrets.FAZ_ADV_PASS }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/robo-publicacoes.mjs
