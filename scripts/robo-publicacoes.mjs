@@ -68,6 +68,14 @@ async function runScraper() {
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 1080 });
   
+  // Força o idioma para Português (Brasil) para o FAZ Adv não traduzir a palavra "Publicação" ou mudar a data
+  await page.setExtraHTTPHeaders({
+    'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
+  });
+  
+  // Força o fuso horário do Brasil
+  await page.emulateTimezone('America/Sao_Paulo');
+  
   try {
     console.log("🌐 Acessando página de login do FAZ Adv...");
     await page.goto('https://app.faz.adv.br/#/login', { waitUntil: 'domcontentloaded', timeout: 60000 });
