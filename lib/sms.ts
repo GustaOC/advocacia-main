@@ -1,5 +1,5 @@
 /**
- * Utilitário para envio de SMS
+ * Utilitário para envio de SMS usando a API do SMS Barato.
  */
 
 export async function sendSMS(numero: string, mensagem: string) {
@@ -13,24 +13,23 @@ export async function sendSMS(numero: string, mensagem: string) {
     const cleanNumber = numero.replace(/\D/g, '');
     if (!cleanNumber || cleanNumber.length < 10) return false;
 
-    // Se o cliente definiu a URL customizada na Vercel, usamos ela, caso contrário tentamos o padrão
+    // Se o cliente definiu a URL customizada na Vercel, usamos ela
     const customUrl = process.env.SMS_BARATO_URL;
     
     let url = "";
     if (customUrl) {
-      // Exemplo de url customizada: https://api.site.com/send?key={key}&number={number}&msg={msg}
       url = customUrl
         .replace("{key}", apiKey)
         .replace("{token}", apiKey)
         .replace("{number}", cleanNumber)
         .replace("{msg}", encodeURIComponent(mensagem));
     } else {
-      // Tenta usar a plataforma SMS DEV/SMS Barato padrão
-      // Tenta o sistema81, muito comum em revendas
+      // Endpoint EXATO fornecido pelo cliente:
+      // https://sistema81.smsbarato.com.br/send?chave=SUA_CHAVE&dest=11988887777&text=Sua+mensagem+aqui
       const params = new URLSearchParams({
-        token: apiKey,
-        number: cleanNumber,
-        msg: mensagem
+        chave: apiKey,
+        dest: cleanNumber,
+        text: mensagem
       });
       url = \`https://sistema81.smsbarato.com.br/send?\${params.toString()}\`;
     }
@@ -43,15 +42,6 @@ export async function sendSMS(numero: string, mensagem: string) {
       return true;
     } else {
       console.error(\`❌ Falha SMS para \${cleanNumber}. Status: \${response.status}. Resp: \${text}\`);
-      
-      // Tentar fallback se for erro de autenticacao/rota
-      if (response.status === 400 || response.status === 404) {
-         console.log("Tentando endpoint alternativo (SMS Dev)...");
-         const fallbackUrl = \`https://api.smsdev.com.br/v1/send?key=\${apiKey}&type=9&number=\${cleanNumber}&msg=\${encodeURIComponent(mensagem)}\`;
-         const fRes = await fetch(fallbackUrl);
-         const fText = await fRes.text();
-         console.log(\`Resposta Fallback: \${fRes.status} - \${fText}\`);
-      }
       return false;
     }
   } catch (error) {
