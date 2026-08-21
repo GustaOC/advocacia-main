@@ -64,23 +64,34 @@ export async function POST(request: Request) {
 
     if (workflowError) throw workflowError;
 
-    const stepNames = [
-      "Triagem, organização dos documentos (renomear) e resumo NotebookLM",
-      "Claude + NotebookLM: descrever problema, anexar resumo/docs, solicitar teses + docs pendentes",
-      "Fechamento de acordo",
-      "Procuração",
-      "Agente ChatGPT: elaborar petição inicial",
-      "Claude Skill Auditoria (contestar a petição)",
-      "Avaliar resultado da auditoria",
-      "Formatação da petição",
-      "Análise final do documento",
-      "Protocolo"
+    
+    const USERS = {
+      GUSTAVO: 'f17e2449-612b-4159-bf39-31f3109d6755',
+      CASSIO: '9e1b52fd-ab8a-43c3-ba7d-03b9705870e1',
+      AMABILLIN: 'c766d4cf-1f79-497c-92a3-4378905aafe9'
+    };
+
+    const stepConfigs = [
+      { name: "Recebimento do caso e triagem inicial", assign: USERS.GUSTAVO },
+      { name: "Organização, nomeação e conferência dos documentos (GPT)", assign: USERS.GUSTAVO },
+      { name: "Análise documental inicial (claude)", assign: USERS.CASSIO },
+      { name: "Tese jurídica (claude)", assign: USERS.CASSIO },
+      { name: "Apresentação da viabilidade ao cliente", assign: USERS.CASSIO },
+      { name: "Proposta honorários (claude)", assign: USERS.CASSIO },
+      { name: "Fechamento de acordo", assign: USERS.CASSIO },
+      { name: "Preparação dos insumos e contratos para petição", assign: USERS.GUSTAVO },
+      { name: "Elaboração da petição (claude)", assign: USERS.CASSIO },
+      { name: "Formatação da petição", assign: USERS.AMABILLIN },
+      { name: "Auditoria e leitura da petição formatada", assign: USERS.CASSIO },
+      { name: "Protocolo e organização final", assign: USERS.GUSTAVO },
+      { name: "Acompanhamento pós-protocolo", assign: USERS.AMABILLIN }
     ];
 
-    const stepsToInsert = stepNames.map((name, index) => ({
+    const stepsToInsert = stepConfigs.map((cfg, index) => ({
       workflow_id: workflow.id,
       step_number: index + 1,
-      step_name: name,
+      step_name: cfg.name,
+      assigned_to: cfg.assign,
       status: "Pendente",
     }));
 

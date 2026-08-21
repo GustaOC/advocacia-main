@@ -23,6 +23,8 @@ export function PetitionWorkflowsModule() {
   const [newTitle, setNewTitle] = useState('');
   const [newCaseId, setNewCaseId] = useState<string>('none');
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
+  const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string} | null>(null);
+  const [stepNotes, setStepNotes] = useState("");
   const [pendingAssignees, setPendingAssignees] = useState<Record<string, string>>({});
 
   const { data: workflows = [], isLoading } = useQuery({
@@ -85,11 +87,18 @@ export function PetitionWorkflowsModule() {
   };
 
   const handleCompleteStep = (workflowId: string, stepId: string) => {
+    setStepNotes("");
+    setCompletingStep({ workflowId, stepId });
+  };
+  
+  const confirmCompleteStep = () => {
+    if (!completingStep) return;
     updateStepMutation.mutate({
-      workflowId,
-      stepId,
-      data: { status: 'Concluída' }
+      workflowId: completingStep.workflowId,
+      stepId: completingStep.stepId,
+      data: { status: 'Concluída', notes: stepNotes }
     });
+    setCompletingStep(null);
   };
 
   const toggleExpand = (id: string) => {
@@ -234,11 +243,11 @@ export function PetitionWorkflowsModule() {
                           <div className="flex-1 h-2 bg-brand-light/50 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-brand rounded-full transition-all duration-500"
-                              style={{ width: `${(workflow.current_step / 10) * 100}%` }}
+                              style={{ width: `${(workflow.current_step / 13) * 100}%` }}
                             />
                           </div>
                           <span className="text-xs text-brand-gray font-medium w-8">
-                            {workflow.current_step}/10
+                            {workflow.current_step}/13
                           </span>
                         </div>
                       </TableCell>
@@ -427,6 +436,33 @@ export function PetitionWorkflowsModule() {
               Criar
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!completingStep} onOpenChange={(open) => !open && setCompletingStep(null)}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-serif text-brand-black">Concluir Etapa</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-brand-black">Alguma observação? (Opcional)</label>
+              <textarea
+                className="w-full h-24 p-3 border border-brand-gray/30 rounded-md focus:outline-none focus:ring-2 focus:ring-brand/50 text-brand-black"
+                placeholder="Deixe uma observação para a próxima pessoa..."
+                value={stepNotes}
+                onChange={(e) => setStepNotes(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setCompletingStep(null)} className="border-brand-gray text-brand-gray hover:bg-brand-gray/10">
+                Cancelar
+              </Button>
+              <Button onClick={confirmCompleteStep} className="bg-brand text-white hover:bg-brand/90">
+                Confirmar e Avançar
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
