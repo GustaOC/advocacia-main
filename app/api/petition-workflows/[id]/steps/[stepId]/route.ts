@@ -85,12 +85,14 @@ export async function PUT(
             .update({ status: "Em andamento" })
             .eq("id", nextStep.id);
 
-          // Notificação e E-mail
-          const { data: assigneeProfile } = await supabase
-            .from("user_profiles")
-            .select('name, phone')
-            .eq("id", nextStep.assigned_to)
-            .single();
+          // Dispara avisos SOMENTE se mudou de pessoa (para não espamar quem tem várias etapas seguidas)
+          if (nextStep.assigned_to !== step.assigned_to) {
+            // Notificação e E-mail
+            const { data: assigneeProfile } = await supabase
+              .from("user_profiles")
+              .select('name, phone')
+              .eq("id", nextStep.assigned_to)
+              .single();
             
           const assigneeName = assigneeProfile?.name || "você";
 
@@ -123,6 +125,7 @@ export async function PUT(
             const smsMessage = `Cássio Miguel Advogados: Olá ${assigneeName.split(' ')[0]}! A etapa "${nextStep.step_name}" do caso ${workflow.title} foi passada para você e está pronta para iniciar.`;
             await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
           }
+          } // fecha if assigned_to !== step.assigned_to
         }
       } else if (step.step_number === 13) {
         // Conclui o workflow inteiro se for a etapa 10
