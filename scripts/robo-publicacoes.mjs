@@ -232,7 +232,7 @@ async function runScraper() {
     
     // Fazer upload de todos os screenshots para o Supabase Storage
     console.log("☁️ Fazendo upload dos prints das páginas...");
-    for (let p = 1; p < currentPage; p++) {
+    for (let p = 1; p <= currentPage; p++) {
        const sPath = `screenshot-page-${p}.png`;
        if (fs.existsSync(sPath)) {
            const fileBuffer = fs.readFileSync(sPath);
