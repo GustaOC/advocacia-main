@@ -88,11 +88,11 @@ export async function PUT(
           // Notificação e E-mail
           const { data: assigneeProfile } = await supabase
             .from("user_profiles")
-            .select("name, full_name, phone")
+            .select('name, phone')
             .eq("id", nextStep.assigned_to)
             .single();
             
-          const assigneeName = assigneeProfile?.name || assigneeProfile?.full_name || "você";
+          const assigneeName = assigneeProfile?.name || "você";
 
           await supabase.from("notifications").insert([{
             user_id: nextStep.assigned_to,

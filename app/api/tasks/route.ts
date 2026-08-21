@@ -87,8 +87,8 @@ export async function PATCH(request: Request) {
     }
 
     if (updates.assigned_to) {
-      const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, full_name, phone').eq('id', updates.assigned_to).single();
-      const assigneeName = assigneeProfile?.name || assigneeProfile?.full_name || 'você';
+      const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, phone').eq('id', updates.assigned_to).single();
+      const assigneeName = assigneeProfile?.name || 'você';
 
       await supabase.from("notifications").insert([{
         user_id: updates.assigned_to,
@@ -198,8 +198,8 @@ export async function POST(request: Request) {
     }
 
     if (body.assigned_to) {
-      const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, full_name, phone').eq('id', body.assigned_to).single();
-      const assigneeName = assigneeProfile?.name || assigneeProfile?.full_name || 'você';
+      const { data: assigneeProfile } = await supabase.from('user_profiles').select('name, phone').eq('id', body.assigned_to).single();
+      const assigneeName = assigneeProfile?.name || 'você';
 
       await supabase.from("notifications").insert([{
         user_id: body.assigned_to,
