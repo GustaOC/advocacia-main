@@ -103,7 +103,16 @@ export async function PATCH(request: Request) {
         const assignerName = currentUser?.name || 'Alguém';
         const dueDateStr = data.due_date ? new Date(data.due_date).toLocaleDateString('pt-BR') : 'Sem prazo';
         const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a tarefa "${data.title}" para você. Prazo: ${dueDateStr}. Para mais detalhes, cheque o sistema.`;
-        await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+        
+        const smsResult = await sendSMS(assigneeProfile.phone, smsMessage).catch(e => e.message);
+        await supabase.from("notifications").insert([{
+          user_id: body.assigned_to,
+          title: "DEBUG SMS",
+          message: `Tried sending to ${assigneeProfile.phone}. Key present: ${!!process.env.SMS_BARATO_KEY}. Result: ${smsResult}`,
+          type: "info",
+          is_read: false
+        }]);
+
       }
 
       // Envia E-mail de notificação
@@ -205,7 +214,16 @@ export async function POST(request: Request) {
         const assignerName = currentUser?.name || 'Alguém';
         const dueDateStr = body.due_date ? new Date(body.due_date).toLocaleDateString('pt-BR') : 'Sem prazo';
         const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a tarefa "${body.title}" para você. Prazo: ${dueDateStr}. Para mais detalhes, cheque o sistema.`;
-        await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
+        
+        const smsResult = await sendSMS(assigneeProfile.phone, smsMessage).catch(e => e.message);
+        await supabase.from("notifications").insert([{
+          user_id: body.assigned_to,
+          title: "DEBUG SMS POST",
+          message: `Tried sending to ${assigneeProfile.phone}. Key present: ${!!process.env.SMS_BARATO_KEY}. Result: ${smsResult}`,
+          type: "info",
+          is_read: false
+        }]);
+
       }
 
       // Envia E-mail de notificação
