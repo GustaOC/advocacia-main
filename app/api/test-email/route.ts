@@ -36,7 +36,7 @@ export async function GET(request: Request) {
     });
 
     const info = await transporter.sendMail({
-      from: \`"FAZ Adv Debug" <\${process.env.SMTP_USER}>\`,
+      from: `"FAZ Adv Debug" <${process.env.SMTP_USER}>`,
       to,
       subject: "Teste de E-mail FAZ Adv",
       html: "<h1>Se você recebeu isso, a API de email está funcionando perfeitamente!</h1>",
