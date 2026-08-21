@@ -173,15 +173,11 @@ export function PublicationsModule() {
     setScreenshotsModalDate(date);
     setIsScreenshotsLoading(true);
     try {
-      const supabase = createClient();
-      const { data, error } = await supabase.storage.from('publications_screenshots').list(date);
-      if (error) throw error;
+      const res = await fetch(`/api/publications/screenshots?date=${date}`);
+      if (!res.ok) throw new Error('Falha ao buscar imagens');
       
-      const urls = data
-        .filter(f => f.name !== '.emptyFolderPlaceholder' && f.name.endsWith('.png'))
-        .map(f => supabase.storage.from('publications_screenshots').getPublicUrl(`${date}/${f.name}`).data.publicUrl);
-        
-      setScreenshots(urls);
+      const { urls } = await res.json();
+      setScreenshots(urls || []);
     } catch (err) {
       console.error(err);
       toast({ title: 'Erro ao carregar imagens', variant: 'destructive' });
