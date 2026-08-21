@@ -101,7 +101,8 @@ export async function PATCH(request: Request) {
       if (assigneeProfile?.phone) {
         const currentUser = await getSessionUser();
         const assignerName = currentUser?.name || 'Alguém';
-        const smsMessage = `${assignerName} atribuiu a tarefa "${data.title}" para você.`;
+        const dueDateStr = data.due_date ? new Date(data.due_date).toLocaleDateString('pt-BR') : 'Sem prazo';
+        const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a tarefa "${data.title}" para você. Prazo: ${dueDateStr}. Para mais detalhes, cheque o sistema.`;
         sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
       }
 
@@ -114,7 +115,7 @@ export async function PATCH(request: Request) {
         const emailHtml = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
             <h2>Olá, ${assigneeName}!</h2>
-            <p><strong>${assignerName}</strong> acabou de atribuir uma tarefa para você no FAZ Adv.</p>
+            <p><strong>${assignerName}</strong> acabou de atribuir uma tarefa para você no sistema Cássio Miguel Advogados.</p>
             <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
               <h3 style="margin-top: 0;">${data.title}</h3>
               ${data.description ? `<p>${data.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
@@ -202,7 +203,8 @@ export async function POST(request: Request) {
       if (assigneeProfile?.phone) {
         const currentUser = await getSessionUser();
         const assignerName = currentUser?.name || 'Alguém';
-        const smsMessage = `${assignerName} atribuiu a tarefa "${body.title}" para você.`;
+        const dueDateStr = body.due_date ? new Date(body.due_date).toLocaleDateString('pt-BR') : 'Sem prazo';
+        const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a tarefa "${body.title}" para você. Prazo: ${dueDateStr}. Para mais detalhes, cheque o sistema.`;
         sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
       }
 
@@ -215,7 +217,7 @@ export async function POST(request: Request) {
         const emailHtml = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
             <h2>Olá, ${assigneeName}!</h2>
-            <p><strong>${assignerName}</strong> acabou de criar e atribuir uma tarefa para você no FAZ Adv.</p>
+            <p><strong>${assignerName}</strong> acabou de criar e atribuir uma tarefa para você no sistema Cássio Miguel Advogados.</p>
             <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
               <h3 style="margin-top: 0;">${body.title}</h3>
               ${body.description ? `<p>${body.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
