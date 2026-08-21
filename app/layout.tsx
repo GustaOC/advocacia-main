@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   keywords: 'advocacia, advogado, campo grande, direito civil, direito empresarial',
   authors: [{ name: 'Cássio Miguel Advocacia' }],
   robots: 'index, follow',
+  icons: {
+    icon: '/logo-monogram.png',
+    apple: '/logo-monogram.png',
+  }
 }
 
 export const viewport: Viewport = {
