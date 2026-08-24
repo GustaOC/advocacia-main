@@ -108,7 +108,7 @@ export function PetitionWorkflowsModule() {
       "protocolo": [{ title: "Comando de Protocolo", text: "Gere um checklist final passo a passo para o protocolo desta ação no sistema eletrônico (PJe, e-SAJ, etc), incluindo a correta tipificação da classe judicial, os assuntos do CNJ e a sequência correta de juntada dos anexos." }],
       "Acompanhamento pós protocolo": [{ title: "Comando de Acompanhamento", text: "Elabore um cronograma de tarefas de acompanhamento processual para este caso nos próximos 30, 60 e 90 dias. Inclua lembretes para verificar despachos iniciais, citações e possíveis prazos de emenda à inicial." }]
     };
-    return prompts[stepName] || [{ title: "Comando Genérico", text: `Aja como um assistente jurídico e auxilie na etapa: ${stepName}.` }];
+    return prompts[stepName] || [];
   };
 
   const handleOpenPromptModal = (stepName: string) => {
@@ -340,15 +340,16 @@ export function PetitionWorkflowsModule() {
                                         </div>
                                         
                                         <div className="flex items-center gap-2">
+                                          {getClaudePrompts(step.step_name).length > 0 && (
                                           <Button 
                                             size="sm" 
                                             variant="outline"
                                             className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 bg-blue-50/50"
                                             onClick={() => handleOpenPromptModal(step.step_name)}
                                           >
-                                            
                                             Comando skill
                                           </Button>
+                                          )}
                                           {isCurrent && step.assigned_to === user?.id && (
                                             <Button 
                                               size="sm" 
