@@ -273,11 +273,11 @@ export function PetitionWorkflowsModule() {
                           <div className="flex-1 h-2 bg-brand-light/50 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-brand rounded-full transition-all duration-500"
-                              style={{ width: `${(workflow.current_step / 13) * 100}%` }}
+                              style={{ width: `${(workflow.current_step / 12) * 100}%` }}
                             />
                           </div>
                           <span className="text-xs text-brand-gray font-medium w-8">
-                            {workflow.current_step}/13
+                            {workflow.current_step}/12
                           </span>
                         </div>
                       </TableCell>
