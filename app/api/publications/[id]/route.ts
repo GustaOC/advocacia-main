@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSessionUser } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
-import { sendSMS } from "@/lib/sms";
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -92,13 +91,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
           await sendEmail(assigneeEmail, `Nova Publicação: ${body.title || originalPub.title}`, emailHtml).catch(console.error);
         }
 
-        if (assigneeProfile?.phone) {
-          const currentUser = await getSessionUser();
-          const assignerName = currentUser?.name || 'Alguém';
-          const smsMessage = `Cássio Miguel Advogados: ${assignerName} atribuiu a publicação "${body.title || originalPub.title}" para você. Verifique o sistema.`;
-          await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
-        }
-
       } else {
         // Se removeu o assigned_to, cancela ou remove a tarefa
         if (taskId) {
@@ -134,13 +126,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         type: "warning",
         is_read: false
       }]);
-
-      // SMS para Dr. Cassio
-      const { data: cassioProfile } = await supabase.from('user_profiles').select('phone').eq('id', CASSIO_ID).single();
-      if (cassioProfile?.phone) {
-        const smsMessage = `Cássio Miguel Advogados: ${userName} marcou a publicação "${body.title || originalPub.title}" como TRANSFERIDO.`;
-        await sendSMS(cassioProfile.phone, smsMessage).catch(console.error);
-      }
 
       // Email para Dr. Cassio
       const { data: cassioAuth } = await supabase.auth.admin.getUserById(CASSIO_ID);

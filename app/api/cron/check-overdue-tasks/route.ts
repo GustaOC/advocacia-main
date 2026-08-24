@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
-import { sendSMS } from "@/lib/sms";
 
 export const dynamic = 'force-dynamic';
 
@@ -115,10 +114,6 @@ export async function GET(request: Request) {
       if (missedSteps.length > 0) {
         const nomesEtapas = missedSteps.map(m => m.step.assigned_user?.name?.split(' ')[0] || 'alguém').join(', ');
         smsMessages.push(`Cássio Miguel Advogados: ${missedSteps.length} etapas de petição atrasaram o prazo de 2 dias (Com: ${nomesEtapas}). Cheque o sistema.`);
-      }
-      
-      for (const msg of smsMessages) {
-        await sendSMS(cassioProfile.phone, msg);
       }
     }
 

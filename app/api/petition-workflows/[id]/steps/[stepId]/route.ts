@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSessionUser } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
-import { sendSMS } from "@/lib/sms";
 
 export const dynamic = 'force-dynamic';
 
@@ -119,11 +118,6 @@ export async function PUT(
               </div>
             `;
             await sendEmail(assigneeEmail, `Etapa disponível: ${nextStep.step_name}`, emailHtml).catch(console.error);
-          }
-          
-          if (assigneeProfile?.phone) {
-            const smsMessage = `Cássio Miguel Advogados: Olá ${assigneeName.split(' ')[0]}! A etapa "${nextStep.step_name}" do caso ${workflow.title} foi passada para você e está pronta para iniciar.`;
-            await sendSMS(assigneeProfile.phone, smsMessage).catch(console.error);
           }
           } // fecha if assigned_to !== step.assigned_to
         }
