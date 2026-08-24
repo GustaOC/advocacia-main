@@ -478,7 +478,9 @@ export function PetitionWorkflowsModule() {
                     variant="outline"
                     className="h-8 text-xs border-blue-200 text-blue-700 hover:bg-blue-50"
                     onClick={() => {
-                      navigator.clipboard.writeText(cmd.text);
+                      const match = cmd.text.match(/```([\s\S]*?)```/);
+                      const textToCopy = match && match[1] ? match[1].trim() : cmd.text;
+                      navigator.clipboard.writeText(textToCopy);
                       toast({
                         title: "Copiado!",
                         description: "Comando copiado para a área de transferência.",
