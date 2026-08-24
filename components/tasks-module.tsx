@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/hooks/use-auth';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient, type Task } from '@/lib/api-client';
+import { createClient } from '@/lib/supabase/client';
 
 interface Employee { 
   id: string; 
@@ -132,9 +133,7 @@ const TaskCard = ({
             <h4 className="font-semibold text-brand-black line-clamp-2 group-hover:text-brand transition-colors">
               {task.title}
             </h4>
-            {task.description && (
-              <p className="text-sm text-brand-gray line-clamp-1">{task.description}</p>
-            )}
+            {renderDescription(task.description)}
           </div>
 
           <div className="flex items-center justify-between">
@@ -189,6 +188,34 @@ const TaskCard = ({
   );
 };
 
+
+const renderDescription = (text?: string | null) => {
+  if (!text) return null;
+  const imgRegex = /!\[.*?\]\((.*?)\)/g;
+  let cleanText = text;
+  const images = [];
+  let match;
+  while ((match = imgRegex.exec(text)) !== null) {
+    images.push(match[1]);
+    cleanText = cleanText.replace(match[0], '');
+  }
+  cleanText = cleanText.trim();
+  return (
+    <>
+      {cleanText && <p className="text-sm text-brand-gray line-clamp-1">{cleanText}</p>}
+      {images.length > 0 && (
+        <div className="mt-2 flex gap-2 flex-wrap">
+          {images.map((img, i) => (
+            <a key={i} href={img} target="_blank" rel="noopener noreferrer">
+              <img src={img} alt="Anexo" className="w-12 h-12 object-cover rounded-md border border-brand-gray/30 hover:opacity-80 transition-opacity" />
+            </a>
+          ))}
+        </div>
+      )}
+    </>
+  );
+};
+
 export function TasksModule() {
   const { toast } = useToast();
   const { user, can } = useAuth();
@@ -196,6 +223,53 @@ export function TasksModule() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isAllTasksModalOpen, setAllTasksModalOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isEditing: boolean = false) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      const supabase = createClient();
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      
+      const { error } = await supabase.storage
+        .from('task-attachments')
+        .upload(fileName, file);
+        
+      if (error) throw error;
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('task-attachments')
+        .getPublicUrl(fileName);
+        
+      const imageMarkdown = ` \n![Anexo](${publicUrl})`;
+      
+      if (isEditing && editingTask) {
+        setEditingTask({...editingTask, description: (editingTask.description || '') + imageMarkdown});
+      } else {
+        setNewTask({...newTask, description: (newTask.description || '') + imageMarkdown});
+      }
+      
+      toast({
+        title: "Imagem enviada!",
+        description: "A imagem foi adicionada à descrição."
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erro ao enviar",
+        description: error.message
+      });
+    } finally {
+      setIsUploading(false);
+      e.target.value = '';
+    }
+  };
+
   const [filterAssigned, setFilterAssigned] = useState("all");
   const [filterCreatedByAdmin, setFilterCreatedByAdmin] = useState(false);
   
@@ -420,6 +494,18 @@ export function TasksModule() {
               />
             </div>
             
+            <div className="space-y-2">
+              <Label className="text-brand font-semibold">Anexar Imagem</Label>
+              <Input 
+                type="file" 
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, false)}
+                disabled={isUploading}
+                className="bg-white border-2 border-brand-gray file:text-brand file:font-semibold file:bg-brand-light/20 file:border-0 file:rounded-md file:mr-4 file:px-3 file:py-1 cursor-pointer"
+              />
+              {isUploading && <p className="text-xs text-brand-gray">Enviando imagem...</p>}
+            </div>
+            
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-brand font-semibold">Responsável</Label>
@@ -499,6 +585,18 @@ export function TasksModule() {
                   onChange={e => setEditingTask({...editingTask, description: e.target.value})}
                   className="bg-white border-2 border-brand-gray focus:border-brand-gray"
                 />
+              </div>
+              
+              <div className="space-y-2">
+                <Label className="text-brand font-semibold">Anexar Imagem</Label>
+                <Input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, true)}
+                  disabled={isUploading}
+                  className="bg-white border-2 border-brand-gray file:text-brand file:font-semibold file:bg-brand-light/20 file:border-0 file:rounded-md file:mr-4 file:px-3 file:py-1 cursor-pointer"
+                />
+                {isUploading && <p className="text-xs text-brand-gray">Enviando imagem...</p>}
               </div>
               
               <div className="grid grid-cols-2 gap-4">
@@ -606,7 +704,7 @@ export function TasksModule() {
                 <div key={task.id as string} className="p-4 border rounded-lg shadow-sm bg-brand-light/50 flex justify-between items-center">
                   <div>
                     <h4 className="font-bold text-brand">{task.title}</h4>
-                    <p className="text-sm text-brand-gray">{task.description}</p>
+                    {renderDescription(task.description)}
                     <div className="mt-2 flex gap-2">
                       <Badge variant="outline">{task.status}</Badge>
                       <Badge variant="outline">{new Date((task as any).created_at || '').toLocaleDateString('pt-BR')}</Badge>
