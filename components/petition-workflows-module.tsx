@@ -92,7 +92,7 @@ export function PetitionWorkflowsModule() {
 
   
       const getClaudePrompts = (stepName: string) => {
-    const prompts: Record<string, {title: string, text: string}[]> = {
+    const prompts: Record<string, {title: string, text: string, image?: string}[]> = {
       "Triagem inicial": [],
       "Organização e nomeação dos documentos": [{ title: "Organização e Nomenclatura", text: "**Entrada mínima:**\n```\n/organizacao-e-nomenclatura-de-arquivos\n\nOrganize e sugira a nomenclatura dos arquivos deste caso.\nTipo de caso: [SE CONHECIDO]\n```\n\n" }],
       "Análise documental e Resumo": [{ title: "Análise Documental Jurídica", text: "**Entrada mínima:**\n```\n/analise-documental-juridica\n\nRepresentamos: [PARTE]\nAnalise todos os documentos deste caso.\nContexto adicional: [SE NECESSÁRIO]\n```" }],
@@ -100,7 +100,7 @@ export function PetitionWorkflowsModule() {
   { title: "Tese Jurídica (Geral)", text: "**Entrada mínima:**\n```\n/tese-juridica\n\nRepresentamos: [PARTE].\nObjetivo material: [OBJETIVO]\nUtilize a análise documental anterior e os documentos originais.\n```" }
 ],
       "Viabilidade e proposta honorários": [{ title: "Proposta de Honorários", text: "**Entrada mínima:**\n```\n/proposta-honorarios\n\nCliente: [SE NÃO ESTIVER NO CONTEXTO]\nObjeto: [SE NÃO ESTIVER NO CONTEXTO]\n```\nA Skill pergunta obrigatoriamente o **modelo de honorários** (fixo, pró-labore + êxito, mensalidade, por etapa, ou combinação) e as **instâncias/fases incluídas**, caso ainda não estejam definidas — e não avança sem essas respostas.\n\n" }],
-                  "Elaborar petição": [{ title: "Petição Inicial", text: "**Dica: Objetivo Material vs. Processual**\n- **Objetivo material** responde: *O que o cliente quer alcançar na vida real?*\n- **Objetivo processual** responde: *Qual provimento judicial deve ser pedido para produzir esse resultado?*\n\n*Exemplos:*\n| Situação | Objetivo material | Objetivo processual |\n|---|---|---|\n| Cobrança indevida | Recuperar o dinheiro | Condenação à restituição |\n| Contrato inadimplido | Receber o que foi contratado | Condenação ao cumprimento ou pagamento |\n| Contrato inviável | Encerrar a relação | Resolução contratual e definição dos efeitos patrimoniais |\n\n**Entrada mínima:**" + "\n```\n/peticao-inicial\n\nContratação formalizada.\n\nRepresentamos: [NOME DA PARTE AUTORA].\n\nObjetivo processual:\n[INFORMAR O PROVIMENTO JURISDICIONAL PRETENDIDO].\n\nUtilize automaticamente a tese jurídica consolidada, os relatórios, resumos, documentos e demais informações deste caso já disponíveis no contexto.\n\nElabore a versão final completa da petição inicial conforme a Skill, preservando integralmente a estratégia jurídica previamente definida.\n\nSe houver informação realmente impeditiva ou questão bloqueante ainda não definida pelo advogado, não crie solução jurídica autônoma. Prossiga até onde for possível e indique o ponto no controle interno antes do protocolo.\n\nContexto adicional:\n[INCLUIR SOMENTE SE HOUVER ORIENTAÇÃO ESPECÍFICA PARA ESTE CASO].\n\n```\n\n" }, { title: "Mandado de Segurança", text: "**Entrada mínima:**\n```\n/mandado-de-seguranca\n\nContratação formalizada.\nImpetrante: [PARTE]\nObjetivo: [OBJETIVO]\nNatureza do ato: [ADMINISTRATIVO / OMISSÃO / JUDICIAL]\n```\nPara ato judicial, acrescentar: `Aplique o protocolo reforçado de excepcionalidade.`\n\n" }, { title: "Execução e Cumprimento", text: "**Entrada mínima:**\n```\n/execucao-e-cumprimento\n\nRepresentamos: [EXEQUENTE / EXECUTADO]\nProcedimento: [cumprimento de sentença / execução de título extrajudicial]\nObjetivo: [OBJETIVO]\n```\nPara pedir apenas auditoria, sem peça: `Modo: auditoria de título e cálculo. Não elabore peça.`\n\n" }],
+                  "Elaborar petição": [{ title: "Petição Inicial", image: "/objetivo-processual.png", text: "**Entrada mínima:**\n```\n/peticao-inicial\n\nContratação formalizada.\n\nRepresentamos: [NOME DA PARTE AUTORA].\n\nObjetivo processual:\n[INFORMAR O PROVIMENTO JURISDICIONAL PRETENDIDO].\n\nUtilize automaticamente a tese jurídica consolidada, os relatórios, resumos, documentos e demais informações deste caso já disponíveis no contexto.\n\nElabore a versão final completa da petição inicial conforme a Skill, preservando integralmente a estratégia jurídica previamente definida.\n\nSe houver informação realmente impeditiva ou questão bloqueante ainda não definida pelo advogado, não crie solução jurídica autônoma. Prossiga até onde for possível e indique o ponto no controle interno antes do protocolo.\n\nContexto adicional:\n[INCLUIR SOMENTE SE HOUVER ORIENTAÇÃO ESPECÍFICA PARA ESTE CASO].\n\n```\n\n" }, { title: "Mandado de Segurança", text: "**Entrada mínima:**\n```\n/mandado-de-seguranca\n\nContratação formalizada.\nImpetrante: [PARTE]\nObjetivo: [OBJETIVO]\nNatureza do ato: [ADMINISTRATIVO / OMISSÃO / JUDICIAL]\n```\nPara ato judicial, acrescentar: `Aplique o protocolo reforçado de excepcionalidade.`\n\n" }, { title: "Execução e Cumprimento", text: "**Entrada mínima:**\n```\n/execucao-e-cumprimento\n\nRepresentamos: [EXEQUENTE / EXECUTADO]\nProcedimento: [cumprimento de sentença / execução de título extrajudicial]\nObjetivo: [OBJETIVO]\n```\nPara pedir apenas auditoria, sem peça: `Modo: auditoria de título e cálculo. Não elabore peça.`\n\n" }],
                             };
     return prompts[stepName] || [];
   };
@@ -487,6 +487,11 @@ export function PetitionWorkflowsModule() {
                   </Button>
                 </div>
                 <div className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200 whitespace-pre-wrap leading-relaxed shadow-inner">
+                  {cmd.image && (
+                    <div className="mb-4">
+                      <img src={cmd.image} alt="Dica" className="max-w-full rounded border border-slate-200" />
+                    </div>
+                  )}
                   {cmd.text}
                 </div>
               </div>
