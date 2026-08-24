@@ -91,16 +91,34 @@ async function runScraper() {
       await passInput.type(process.env.FAZ_ADV_PASS);
       
       console.log("⏳ Logando...");
+      // Tenta clicar no botão ENTRAR também
+      await page.evaluate(() => {
+        const btns = Array.from(document.querySelectorAll('button'));
+        const loginBtn = btns.find(b => b.innerText.toUpperCase().includes('ENTRAR'));
+        if (loginBtn) loginBtn.click();
+      });
+      
+      await new Promise(r => setTimeout(r, 1000));
       await passInput.press('Enter');
       
-      // Aguarda 10 segundos ou até a navegação terminar
-      await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 10000 }).catch(() => {});
+      console.log("⏳ Aguardando autenticação (10s)...");
+      // Espera fixa de 10s para garantir que cookies e tokens do localStorage sejam definidos pelo SPA
+      await new Promise(resolve => setTimeout(resolve, 10000));
     } else {
       console.log("⚠️ Campos de login não encontrados. Tentando prosseguir...");
     }
     
     console.log("📂 Navegando para as publicações de hoje...");
     await page.goto('https://app.faz.adv.br/#/publicacoes/hoje', { waitUntil: 'domcontentloaded', timeout: 60000 });
+    
+    // Mais espera para garantir que a página "Hoje" carregue
+    await new Promise(resolve => setTimeout(resolve, 8000));
+    
+    // Verifica se ainda estamos na tela de login
+    const isLogin = await page.evaluate(() => document.body.innerText.includes('Esqueci minha senha'));
+    if (isLogin) {
+       console.log("❌ ERRO: O robô ainda está na tela de login! A autenticação falhou.");
+    }
     
     await new Promise(resolve => setTimeout(resolve, 5000));
     
