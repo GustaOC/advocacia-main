@@ -137,7 +137,7 @@ export async function PATCH(request: Request) {
               <h3 style="margin-top: 0;">${data.title}</h3>
               ${formatDescriptionForEmail(data.description)}
             </div>
-            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
+            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/dashboard?tab=tasks" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
           </div>
         `;
         await sendEmail(assigneeEmail, `Nova Tarefa: ${data.title}`, emailHtml).catch(console.error);
@@ -230,7 +230,7 @@ export async function POST(request: Request) {
               <h3 style="margin-top: 0;">${body.title}</h3>
               ${formatDescriptionForEmail(body.description)}
             </div>
-            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
+            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/dashboard?tab=tasks" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
           </div>
         `;
         await sendEmail(assigneeEmail, `Nova Tarefa: ${body.title}`, emailHtml).catch(console.error);

@@ -114,7 +114,7 @@ export async function PUT(
                   <h3 style="margin-top: 0;">${nextStep.step_name}</h3>
                   <p>Workflow: <strong>${workflow.title}</strong></p>
                 </div>
-                <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/petition-workflows" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Workflows</a></p>
+                <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/dashboard?tab=petitions" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Workflows</a></p>
               </div>
             `;
             await sendEmail(assigneeEmail, `Etapa disponível: ${nextStep.step_name}`, emailHtml).catch(console.error);
@@ -155,7 +155,7 @@ export async function PUT(
 
     return NextResponse.json(updatedStep);
   } catch (error: any) {
-    console.error(`Erro PUT /api/petition-workflows/.../steps/${params.stepId}:`, error);
+    console.error(`Erro PUT /api/dashboard?tab=petitions/.../steps/${params.stepId}:`, error);
     return NextResponse.json(
       { error: error.message || "Falha ao atualizar etapa." },
       { status: 500 }

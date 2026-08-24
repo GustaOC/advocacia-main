@@ -476,7 +476,13 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
 }
 
 export function Dashboard() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('tab') || "overview";
+    }
+    return "overview";
+  });
   const [globalFilters, setGlobalFilters] = useState<GlobalFilters>({});
   const [isSystemSettingsOpen, setSystemSettingsOpen] = useState(false);
   const [isUserSettingsOpen, setUserSettingsOpen] = useState(false);
