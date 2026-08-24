@@ -5,6 +5,33 @@ import { sendEmail } from "@/lib/email";
 
 export const dynamic = 'force-dynamic';
 
+
+function formatDescriptionForEmail(text: string | null | undefined) {
+  if (!text) return '<p><em>Sem descrição detalhada.</em></p>';
+  const imgRegex = /!\[.*?\]\((.*?)\)/g;
+  let cleanText = text;
+  const images = [];
+  let match;
+  while ((match = imgRegex.exec(text)) !== null) {
+    images.push(match[1]);
+    cleanText = cleanText.replace(match[0], '');
+  }
+  cleanText = cleanText.trim();
+  
+  let html = '';
+  if (cleanText) html += `<p>${cleanText}</p>`;
+  else if (images.length === 0) return '<p><em>Sem descrição detalhada.</em></p>';
+  
+  if (images.length > 0) {
+    html += '<div style="margin-top: 10px;">';
+    images.forEach(img => {
+      html += `<img src="${img}" alt="Anexo" style="max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #ddd;" />`;
+    });
+    html += '</div>';
+  }
+  return html;
+}
+
 export async function GET(request: Request) {
   try {
     // Instancia o cliente diretamente com as variáveis de ambiente
@@ -108,9 +135,9 @@ export async function PATCH(request: Request) {
             <p><strong>${assignerName}</strong> acabou de atribuir uma tarefa para você no sistema Cássio Miguel Advogados.</p>
             <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
               <h3 style="margin-top: 0;">${data.title}</h3>
-              ${data.description ? `<p>${data.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
+              ${formatDescriptionForEmail(data.description)}
             </div>
-            <p><a href="https://app.faz.adv.br/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
+            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
           </div>
         `;
         await sendEmail(assigneeEmail, `Nova Tarefa: ${data.title}`, emailHtml).catch(console.error);
@@ -201,9 +228,9 @@ export async function POST(request: Request) {
             <p><strong>${assignerName}</strong> acabou de criar e atribuir uma tarefa para você no sistema Cássio Miguel Advogados.</p>
             <div style="padding: 15px; border-left: 4px solid #007bff; background: #f9f9f9; margin: 15px 0;">
               <h3 style="margin-top: 0;">${body.title}</h3>
-              ${body.description ? `<p>${body.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
+              ${formatDescriptionForEmail(body.description)}
             </div>
-            <p><a href="https://app.faz.adv.br/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
+            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/tarefas" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Tarefas</a></p>
           </div>
         `;
         await sendEmail(assigneeEmail, `Nova Tarefa: ${body.title}`, emailHtml).catch(console.error);

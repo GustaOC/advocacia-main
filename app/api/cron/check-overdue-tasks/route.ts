@@ -127,7 +127,7 @@ export async function GET(request: Request) {
            <ul>
              ${smsMessages.map(msg => `<li>${msg}</li>`).join('')}
            </ul>
-           <p><a href="https://app.faz.adv.br" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Sistema</a></p>
+           <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Sistema</a></p>
          </div>
        `;
        await sendEmail(cassioEmail, "Cássio Miguel Advogados - Relatório de Atrasos", emailHtml).catch(console.error);

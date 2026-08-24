@@ -85,7 +85,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                 <h3 style="margin-top: 0;">${body.title || originalPub.title}</h3>
                 ${body.description || originalPub.description ? `<p>${body.description || originalPub.description}</p>` : '<p><em>Sem descrição detalhada.</em></p>'}
               </div>
-              <p><a href="https://app.faz.adv.br/publicacoes" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Publicações</a></p>
+              <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/publicacoes" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Publicações</a></p>
             </div>
           `;
           await sendEmail(assigneeEmail, `Nova Publicação: ${body.title || originalPub.title}`, emailHtml).catch(console.error);
@@ -137,7 +137,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             <div style="padding: 15px; border-left: 4px solid #ffaa00; background: #f9f9f9; margin: 15px 0;">
               <h3 style="margin-top: 0;">${body.title || originalPub.title}</h3>
             </div>
-            <p><a href="https://app.faz.adv.br/publicacoes" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Publicações</a></p>
+            <p><a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://cassiomiguel.com.br'}/publicacoes" style="display:inline-block; padding:10px 15px; background:#007bff; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Publicações</a></p>
           </div>
         `;
         await sendEmail(cassioAuth.user.email, `Publicação TRANSFERIDA: ${body.title || originalPub.title}`, emailHtml).catch(console.error);
