@@ -91,10 +91,10 @@ export function PetitionWorkflowsModule() {
   };
 
   
-  const getClaudePrompts = (stepName: string) => {
+      const getClaudePrompts = (stepName: string) => {
     const prompts: Record<string, {title: string, text: string}[]> = {
       "Triagem inicial": [{ title: "Comando de Triagem", text: "Aja como um analista jurídico especializado. Realize a triagem inicial do seguinte caso, identificando as partes envolvidas, o tipo de ação, a urgência (ex: liminar) e se há impedimentos preliminares. Liste as informações de forma estruturada." }],
-      "Organização e nomeação dos documentos": [{ title: "Comando de Organização", text: "Analise a lista de documentos desorganizados e forneça uma sugestão de padrão de nomenclatura claro (ex: '01_Doc_Pessoal_RG.pdf') e organize-os por categoria (pessoais, provas, custas, procuração) para facilitar o anexo na petição." }],
+      "Organização e nomeação dos documentos": [{ title: "Organização e Nomenclatura", text: "**Aciona com:** `/organizacao-e-nomenclatura-de-arquivos casos/[CASO]/`\n\n**Use quando:** o acervo de um caso chega desorganizado, com nomes genéricos (`documento1.pdf`, `final2.pdf`), sem ordem cronológica clara ou com prováveis duplicidades — antes de rodar a análise documental.\n\n**Não use quando:** os arquivos já estão bem nomeados e ordenados (a Skill é dispensável); para resumir juridicamente documentos; para montar cronologia probatória; para definir tese, avaliar mérito, redigir peça ou fazer auditoria pré-protocolo.\n\n**Pré-requisito:** nenhum — pode ser a primeira Skill do caso.\n\n**Entrada mínima:**\n```\n/organizacao-e-nomenclatura-de-arquivos\n\nOrganize e sugira a nomenclatura dos arquivos deste caso.\nTipo de caso: [SE CONHECIDO]\n```\n\n**Produz:** Plano de Organização Documental (diagnóstico do acervo, padrão de nomenclatura, relação original→sugerido, ordem recomendada, estrutura de pastas quando útil, duplicidades/versões, documentos referenciados mas não localizados, índice final). **Não altera o conteúdo dos documentos.**\n\n**Encaminha para:** `analise-documental-juridica`." }],
       "Análise documental e Resumo": [{ title: "Comando de Resumo", text: "Faça uma análise profunda dos documentos fornecidos. Elabore um resumo cronológico e detalhado dos fatos para ser utilizado diretamente na fundamentação fática da petição inicial, destacando as datas mais relevantes e possíveis provas faltantes." }],
       "Tese jurídica": [{ title: "Comando de Tese Jurídica", text: "Aja como um advogado sênior especialista na área. Baseado no resumo dos fatos fornecido, identifique e elabore a melhor tese jurídica para a petição inicial, citando jurisprudência atualizada e artigos de lei aplicáveis ao caso para garantir máxima chance de êxito." }],
       "Viabilidade e proposta honorários": [{ title: "Comando de Viabilidade", text: "Com base na complexidade do caso, na tese jurídica e no tempo estimado de tramitação, analise a viabilidade comercial desta ação e sugira parâmetros e valores estratégicos para a proposta de honorários advocatícios (pro labore e ad exitum)." }],
@@ -344,7 +344,7 @@ export function PetitionWorkflowsModule() {
                                             className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 bg-blue-50/50"
                                             onClick={() => handleOpenPromptModal(step.step_name)}
                                           >
-                                            <Sparkles className="w-4 h-4 mr-2" />
+                                            
                                             Comando skill
                                           </Button>
                                           {isCurrent && step.assigned_to === user?.id && (
@@ -459,7 +459,7 @@ export function PetitionWorkflowsModule() {
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-blue-600" />
+              
               Comandos Skill: {selectedPromptStep}
             </DialogTitle>
           </DialogHeader>
