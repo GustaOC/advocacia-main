@@ -72,19 +72,18 @@ export async function POST(request: Request) {
     };
 
     const stepConfigs = [
-      { name: "Recebimento do caso e triagem inicial", assign: USERS.GUSTAVO },
-      { name: "Organização, nomeação e conferência dos documentos (GPT)", assign: USERS.GUSTAVO },
-      { name: "Análise documental inicial (claude)", assign: USERS.CASSIO },
-      { name: "Tese jurídica (claude)", assign: USERS.CASSIO },
-      { name: "Apresentação da viabilidade ao cliente", assign: USERS.CASSIO },
-      { name: "Proposta honorários (claude)", assign: USERS.CASSIO },
-      { name: "Fechamento de acordo", assign: USERS.CASSIO },
-      { name: "Preparação dos insumos e contratos para petição", assign: USERS.GUSTAVO },
-      { name: "Elaboração da petição (claude)", assign: USERS.CASSIO },
-      { name: "Formatação da petição", assign: USERS.AMABILLIN },
-      { name: "Auditoria e leitura da petição formatada", assign: USERS.CASSIO },
-      { name: "Protocolo e organização final", assign: USERS.GUSTAVO },
-      { name: "Acompanhamento pós-protocolo", assign: USERS.AMABILLIN }
+      { name: "Triagem inicial", assign: USERS.GUSTAVO },
+      { name: "Organização e nomeação dos documentos", assign: USERS.GUSTAVO },
+      { name: "Análise documental e Resumo", assign: USERS.GUSTAVO },
+      { name: "Tese jurídica", assign: USERS.CASSIO },
+      { name: "Viabilidade e proposta honorários", assign: USERS.CASSIO },
+      { name: "Formatar proposta de honorários", assign: USERS.GUSTAVO },
+      { name: "Preparação dos insumos. ( documentos necessários) e contrato de honorários", assign: USERS.GUSTAVO },
+      { name: "Elaborar petição", assign: USERS.AMABILLIN },
+      { name: "Formatar word", assign: USERS.AMABILLIN },
+      { name: "Revisão final", assign: USERS.CASSIO },
+      { name: "protocolo", assign: USERS.GUSTAVO },
+      { name: "Acompanhamento pós protocolo", assign: USERS.CASSIO }
     ];
 
     const stepsToInsert = stepConfigs.map((cfg, index) => ({

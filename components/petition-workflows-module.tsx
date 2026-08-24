@@ -11,13 +11,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User } from 'lucide-react';
+import { FileText, CheckCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles } from 'lucide-react';
 
 export function PetitionWorkflowsModule() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -83,6 +85,34 @@ export function PetitionWorkflowsModule() {
       workflowId,
       stepId,
       data: { assigned_to: employeeId === 'none' ? null : employeeId }
+    });
+  };
+
+  
+  const getClaudePrompt = (stepName: string) => {
+    const prompts: Record<string, string> = {
+      "Triagem inicial": "Aja como um analista jurídico especializado. Realize a triagem inicial do seguinte caso, identificando as partes envolvidas, o tipo de ação, a urgência (ex: liminar) e se há impedimentos preliminares. Liste as informações de forma estruturada.",
+      "Organização e nomeação dos documentos": "Analise a lista de documentos desorganizados e forneça uma sugestão de padrão de nomenclatura claro (ex: '01_Doc_Pessoal_RG.pdf') e organize-os por categoria (pessoais, provas, custas, procuração) para facilitar o anexo na petição.",
+      "Análise documental e Resumo": "Faça uma análise profunda dos documentos fornecidos. Elabore um resumo cronológico e detalhado dos fatos para ser utilizado diretamente na fundamentação fática da petição inicial, destacando as datas mais relevantes e possíveis provas faltantes.",
+      "Tese jurídica": "Aja como um advogado sênior especialista na área. Baseado no resumo dos fatos fornecido, identifique e elabore a melhor tese jurídica para a petição inicial, citando jurisprudência atualizada e artigos de lei aplicáveis ao caso para garantir máxima chance de êxito.",
+      "Viabilidade e proposta honorários": "Com base na complexidade do caso, na tese jurídica e no tempo estimado de tramitação, analise a viabilidade comercial desta ação e sugira parâmetros e valores estratégicos para a proposta de honorários advocatícios (pro labore e ad exitum).",
+      "Formatar proposta de honorários": "Aja como um redator comercial jurídico. Escreva uma mensagem profissional, persuasiva e clara para o cliente, apresentando a proposta de honorários (valores, formas de pagamento e escopo do serviço) para fechamento rápido do acordo.",
+      "Preparação dos insumos. ( documentos necessários) e contrato de honorários": "Gere um checklist detalhado e amigável para enviar ao cliente com todos os documentos adicionais que ele ainda precisa nos fornecer. Em seguida, elabore um modelo atualizado de contrato de prestação de serviços advocatícios para este caso específico.",
+      "Elaborar petição": "Aja como um advogado redator de excelência. Utilizando o resumo fático e a tese jurídica previamente aprovados, redija a Petição Inicial completa. Utilize linguagem clara, evite 'juridiquês' excessivo onde desnecessário e estruture os pedidos de forma lógica e exaustiva.",
+      "Formatar word": "Aja como um formatador de textos jurídicos. Revise a petição abaixo removendo marcadores complexos, ajustando os parágrafos para o formato forense (recuo, sem negritos excessivos) e garantindo que o texto possa ser colado perfeitamente no Microsoft Word para o protocolo.",
+      "Revisão final": "Aja como um advogado auditor impiedoso. Revise esta petição inicial procurando brechas, erros processuais, falta de pedidos essenciais (como justiça gratuita ou citação) e sugira melhorias críticas antes do protocolo final no PJe.",
+      "protocolo": "Gere um checklist final passo a passo para o protocolo desta ação no sistema eletrônico (PJe, e-SAJ, etc), incluindo a correta tipificação da classe judicial, os assuntos do CNJ e a sequência correta de juntada dos anexos.",
+      "Acompanhamento pós protocolo": "Elabore um cronograma de tarefas de acompanhamento processual para este caso nos próximos 30, 60 e 90 dias. Inclua lembretes para verificar despachos iniciais, citações e possíveis prazos de emenda à inicial."
+    };
+    return prompts[stepName] || `Aja como um assistente jurídico de alta performance e auxilie na etapa: ${stepName}. Por favor, me dê as instruções de como proceder ou analise os dados fornecidos a seguir.`;
+  };
+
+  const handleCopyClaudePrompt = (stepName: string) => {
+    const prompt = getClaudePrompt(stepName);
+    navigator.clipboard.writeText(prompt);
+    toast({
+      title: "Comando do claude copiado !",
+      description: "Cole no Claude (ou ChatGPT) para executar a skill dessa etapa.",
     });
   };
 
@@ -310,6 +340,15 @@ export function PetitionWorkflowsModule() {
                                         </div>
                                         
                                         <div className="flex items-center gap-2">
+                                          <Button 
+                                            size="sm" 
+                                            variant="outline"
+                                            className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 bg-blue-50/50"
+                                            onClick={() => handleCopyClaudePrompt(step.step_name)}
+                                          >
+                                            <Sparkles className="w-4 h-4 mr-2" />
+                                            Comando skill
+                                          </Button>
                                           {isCurrent && step.assigned_to === user?.id && (
                                             <Button 
                                               size="sm" 
