@@ -21,7 +21,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          from: `FAZ Adv <sistema@cassiomiguel.com.br>`,
+          from: `Cássio Miguel Advogados <sistema@cassiomiguel.com.br>`,
           to,
           subject,
           html
@@ -44,7 +44,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
       return;
     }
     const info = await transporter.sendMail({
-      from: `"FAZ Adv" <${process.env.SMTP_USER}>`,
+      from: `"Cássio Miguel Advogados" <${process.env.SMTP_USER}>`,
       to,
       subject,
       html,
