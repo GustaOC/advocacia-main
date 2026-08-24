@@ -231,20 +231,21 @@ export function TasksModule() {
 
     try {
       setIsUploading(true);
-      const supabase = createClient();
-      
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-      
-      const { error } = await supabase.storage
-        .from('task-attachments')
-        .upload(fileName, file);
-        
-      if (error) throw error;
-      
-      const { data: { publicUrl } } = supabase.storage
-        .from('task-attachments')
-        .getPublicUrl(fileName);
+            const formData = new FormData();
+      formData.append('file', file);
+      formData.append('bucket', 'task-attachments');
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro no upload');
+      }
+
+      const { url: publicUrl } = await response.json();
         
       const imageMarkdown = ` \n![Anexo](${publicUrl})`;
       
