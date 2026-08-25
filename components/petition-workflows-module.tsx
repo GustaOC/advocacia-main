@@ -344,16 +344,7 @@ export function PetitionWorkflowsModule() {
                                             Comando skill
                                           </Button>
                                           )}
-                                          {step.step_name === "Viabilidade e proposta e contrato de honorários, proc., decl., doc. pessoais. [GPT]" && (
-                                            <Button 
-                                              size="sm" 
-                                              variant="outline"
-                                              className="border-purple-200 text-purple-700 hover:bg-purple-50 hover:text-purple-800 bg-purple-50/50"
-                                              onClick={() => window.open("https://www.canva.com/design/DAHTNOE8X9k/RP4I0cwWZ7FWpO6LIliAEA/edit", "_blank")}
-                                            >
-                                              Canva
-                                            </Button>
-                                          )}
+                                          
                                           {isCurrent && step.assigned_to === user?.id && (
                                             <Button 
                                               size="sm" 
