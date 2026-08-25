@@ -73,14 +73,14 @@ export async function POST(request: Request) {
 
     const stepConfigs = [
       { name: "Triagem inicial", assign: USERS.GUSTAVO },
-      { name: "Organização e nomeação dos documentos", assign: USERS.GUSTAVO },
-      { name: "Análise documental e Resumo", assign: USERS.GUSTAVO },
-      { name: "Tese jurídica", assign: USERS.GUSTAVO },
-      { name: "Viabilidade e proposta e contrato de honorários, proc., decl., doc. pessoais.", assign: USERS.CASSIO },
+      { name: "Organização e nomeação dos documentos [Gemini]", assign: USERS.GUSTAVO },
+      { name: "Análise documental e Resumo [NotebookLM]", assign: USERS.GUSTAVO },
+      { name: "Tese jurídica [Sonnet - temática / Opus - tese jurídica]", assign: USERS.GUSTAVO },
+      { name: "Viabilidade e proposta e contrato de honorários, proc., decl., doc. pessoais. [GPT]", assign: USERS.CASSIO },
       { name: "Documentação complementar", assign: USERS.GUSTAVO },
       { name: "Elaborar petição", assign: USERS.GUSTAVO },
-      { name: "Formatar word e auditoria", assign: USERS.AMABILLIN },
-      { name: "Revisão final", assign: USERS.CASSIO },
+      { name: "Formatar word e auditoria [Sonnet]", assign: USERS.AMABILLIN },
+      { name: "Revisão final [GPT]", assign: USERS.CASSIO },
       { name: "Protocolo e numeração do processo", assign: USERS.GUSTAVO },
       { name: "Acompanhamento pós protocolo", assign: USERS.CASSIO }
     ];
