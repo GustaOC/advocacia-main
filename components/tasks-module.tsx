@@ -192,22 +192,43 @@ const TaskCard = ({
 const renderDescription = (text?: string | null) => {
   if (!text) return null;
   const imgRegex = /!\[.*?\]\((.*?)\)/g;
+  const linkRegex = /\[(.*?)\]\((.*?)\)/g;
+  
   let cleanText = text;
-  const images = [];
+  const images: string[] = [];
+  const links: {label: string, url: string}[] = [];
+  
   let match;
   while ((match = imgRegex.exec(text)) !== null) {
-    images.push(match[1]);
+    images.push(match[1]!);
     cleanText = cleanText.replace(match[0], '');
   }
+  
+  // Now extract links from what's left
+  while ((match = linkRegex.exec(cleanText)) !== null) {
+    links.push({label: match[1]!, url: match[2]!});
+    cleanText = cleanText.replace(match[0], '');
+  }
+  
   cleanText = cleanText.trim();
+  
   return (
     <>
-      {cleanText && <p className="text-sm text-brand-gray line-clamp-1">{cleanText}</p>}
+      {cleanText && <p className="text-sm text-brand-gray line-clamp-1 whitespace-pre-line">{cleanText}</p>}
       {images.length > 0 && (
         <div className="mt-2 flex gap-2 flex-wrap">
           {images.map((img, i) => (
-            <a key={i} href={img} target="_blank" rel="noopener noreferrer">
+            <a key={i} href={img} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
               <img src={img} alt="Anexo" className="w-12 h-12 object-cover rounded-md border border-brand-gray/30 hover:opacity-80 transition-opacity" />
+            </a>
+          ))}
+        </div>
+      )}
+      {links.length > 0 && (
+        <div className="mt-2 flex flex-col gap-1">
+          {links.map((link, i) => (
+            <a key={'link'+i} href={link.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-xs text-brand hover:underline inline-flex items-center gap-1">
+              {link.label}
             </a>
           ))}
         </div>
@@ -247,12 +268,14 @@ export function TasksModule() {
 
       const { url: publicUrl } = await response.json();
         
-      const imageMarkdown = ` \n![Anexo](${publicUrl})`;
+      const isImage = file.type.startsWith('image/');
+      const fileName = file.name;
+      const fileMarkdown = isImage ? ` \n![Anexo](${publicUrl})` : ` \n[📄 Anexo - ${fileName}](${publicUrl})`;
       
       if (isEditing && editingTask) {
-        setEditingTask({...editingTask, description: (editingTask.description || '') + imageMarkdown});
+        setEditingTask({...editingTask, description: (editingTask.description || '') + fileMarkdown});
       } else {
-        setNewTask({...newTask, description: (newTask.description || '') + imageMarkdown});
+        setNewTask({...newTask, description: (newTask.description || '') + fileMarkdown});
       }
       
       toast({
@@ -504,7 +527,7 @@ export function TasksModule() {
                 disabled={isUploading}
                 className="bg-white border-2 border-brand-gray file:text-brand file:font-semibold file:bg-brand-light/20 file:border-0 file:rounded-md file:mr-4 file:px-3 file:py-1 cursor-pointer"
               />
-              {isUploading && <p className="text-xs text-brand-gray">Enviando imagem...</p>}
+              {isUploading && <p className="text-xs text-brand-gray">Enviando arquivo...</p>}
             </div>
             
             <div className="grid grid-cols-2 gap-4">
@@ -597,7 +620,7 @@ export function TasksModule() {
                   disabled={isUploading}
                   className="bg-white border-2 border-brand-gray file:text-brand file:font-semibold file:bg-brand-light/20 file:border-0 file:rounded-md file:mr-4 file:px-3 file:py-1 cursor-pointer"
                 />
-                {isUploading && <p className="text-xs text-brand-gray">Enviando imagem...</p>}
+                {isUploading && <p className="text-xs text-brand-gray">Enviando arquivo...</p>}
               </div>
               
               <div className="grid grid-cols-2 gap-4">

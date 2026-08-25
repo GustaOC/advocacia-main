@@ -8,28 +8,19 @@ export const dynamic = 'force-dynamic';
 
 function formatDescriptionForEmail(text: string | null | undefined) {
   if (!text) return '<p><em>Sem descrição detalhada.</em></p>';
-  const imgRegex = /!\[.*?\]\((.*?)\)/g;
-  let cleanText = text;
-  const images = [];
-  let match;
-  while ((match = imgRegex.exec(text)) !== null) {
-    images.push(match[1]);
-    cleanText = cleanText.replace(match[0], '');
-  }
-  cleanText = cleanText.trim();
+
+  let htmlText = text;
+
+  // Imagens
+  htmlText = htmlText.replace(/!\[.*?\]\((.*?)\)/g, '<br/><img src="$1" alt="Anexo" style="max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #ddd;" />');
   
-  let html = '';
-  if (cleanText) html += `<p>${cleanText}</p>`;
-  else if (images.length === 0) return '<p><em>Sem descrição detalhada.</em></p>';
+  // Links (Word, PDF, planilhas, etc)
+  htmlText = htmlText.replace(/\[(.*?)\]\((.*?)\)/g, '<br/><a href="$2" target="_blank" style="display:inline-block; margin-top:10px; color:#007bff; text-decoration:underline; font-weight:bold;">$1</a>');
   
-  if (images.length > 0) {
-    html += '<div style="margin-top: 10px;">';
-    images.forEach(img => {
-      html += `<img src="${img}" alt="Anexo" style="max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #ddd;" />`;
-    });
-    html += '</div>';
-  }
-  return html;
+  // Quebras de linha
+  htmlText = htmlText.replace(/\n/g, '<br/>');
+
+  return `<p>${htmlText}</p>`;
 }
 
 export async function GET(request: Request) {
