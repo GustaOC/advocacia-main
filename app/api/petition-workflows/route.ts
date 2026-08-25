@@ -75,14 +75,13 @@ export async function POST(request: Request) {
       { name: "Triagem inicial", assign: USERS.GUSTAVO },
       { name: "Organização e nomeação dos documentos", assign: USERS.GUSTAVO },
       { name: "Análise documental e Resumo", assign: USERS.GUSTAVO },
-      { name: "Tese jurídica", assign: USERS.CASSIO },
-      { name: "Viabilidade e proposta honorários", assign: USERS.CASSIO },
-      { name: "Formatar proposta de honorários", assign: USERS.GUSTAVO },
-      { name: "Preparação dos insumos. ( documentos necessários) e contrato de honorários", assign: USERS.GUSTAVO },
-      { name: "Elaborar petição", assign: USERS.AMABILLIN },
-      { name: "Formatar word", assign: USERS.AMABILLIN },
+      { name: "Tese jurídica", assign: USERS.GUSTAVO },
+      { name: "Viabilidade e proposta e contrato de honorários, proc., decl., doc. pessoais.", assign: USERS.CASSIO },
+      { name: "Documentação complementar", assign: USERS.GUSTAVO },
+      { name: "Elaborar petição", assign: USERS.GUSTAVO },
+      { name: "Formatar word e auditoria", assign: USERS.AMABILLIN },
       { name: "Revisão final", assign: USERS.CASSIO },
-      { name: "protocolo", assign: USERS.GUSTAVO },
+      { name: "Protocolo e numeração do processo", assign: USERS.GUSTAVO },
       { name: "Acompanhamento pós protocolo", assign: USERS.CASSIO }
     ];
 
