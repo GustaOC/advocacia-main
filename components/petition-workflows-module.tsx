@@ -62,7 +62,8 @@ export function PetitionWorkflowsModule() {
   const [newTitle, setNewTitle] = useState('');
   const [newCaseId, setNewCaseId] = useState<string>('none');
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
-  const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string} | null>(null);
+  const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string, stepName: string, workflowTitle: string} | null>(null);
+  const [processNumber, setProcessNumber] = useState("");
   const [stepNotes, setStepNotes] = useState("");
   const [pendingAssignees, setPendingAssignees] = useState<Record<string, string>>({});
 
@@ -145,19 +146,29 @@ export function PetitionWorkflowsModule() {
     setIsPromptModalOpen(true);
   };
 
-  const handleCompleteStep = (workflowId: string, stepId: string) => {
+  const handleCompleteStep = (workflowId: string, stepId: string, stepName: string, workflowTitle: string) => {
     setStepNotes("");
-    setCompletingStep({ workflowId, stepId });
+    setCompletingStep({ workflowId, stepId, stepName, workflowTitle });
   };
   
-  const confirmCompleteStep = () => {
+  const confirmCompleteStep = async () => {
     if (!completingStep) return;
+    
+    if (processNumber && completingStep.stepName.includes("Protocolo")) {
+       try {
+         await apiClient.updatePetitionWorkflow(completingStep.workflowId, { title: `${completingStep.workflowTitle} - Proc: ${processNumber}` });
+       } catch (e) {
+         console.error("Failed to update workflow title with process number", e);
+       }
+    }
+
     updateStepMutation.mutate({
       workflowId: completingStep.workflowId,
       stepId: completingStep.stepId,
       data: { status: 'Concluída', notes: stepNotes }
     });
     setCompletingStep(null);
+    setProcessNumber("");
   };
 
   const toggleExpand = (id: string) => {
@@ -284,8 +295,28 @@ export function PetitionWorkflowsModule() {
                           <ChevronRight className="h-5 w-5 text-brand-gray" />
                         )}
                       </TableCell>
-                      <TableCell className="font-semibold text-brand-black">
-                        {workflow.title}
+                      <TableCell className="font-semibold text-brand-black relative group">
+                        <div className="flex items-center gap-2">
+                          {workflow.title}
+                          {workflow.title.includes(' - Proc: ') && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                              title="Copiar número do processo"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const parts = workflow.title.split(' - Proc: ');
+                                if (parts.length > 1) {
+                                  navigator.clipboard.writeText(parts[1].trim());
+                                  toast({ title: "Copiado!", description: "Número do processo copiado para a área de transferência." });
+                                }
+                              }}
+                            >
+                              <Copy className="w-3 h-3 text-brand-gray" />
+                            </Button>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell className="text-brand-gray text-sm">
                         {workflow.case ? `${workflow.case.case_number || ''} - ${workflow.case.title || ''}` : '-'}
@@ -399,7 +430,7 @@ export function PetitionWorkflowsModule() {
                                           {isCurrent && step.assigned_to === user?.id && (
                                             <Button 
                                               size="sm" 
-                                              onClick={() => handleCompleteStep(workflow.id, step.id)}
+                                              onClick={() => handleCompleteStep(workflow.id, step.id, step.step_name, workflow.title)}
                                               disabled={updateStepMutation.isPending}
                                               className="bg-brand text-white hover:bg-brand/90"
                                             >
