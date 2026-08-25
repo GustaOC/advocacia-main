@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +15,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy } from 'lucide-react';
+import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy } from 'lucide-react';
 
 export function PetitionWorkflowsModule() {
   const { user } = useAuth();
@@ -23,6 +24,40 @@ export function PetitionWorkflowsModule() {
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
+
+  const [isProblemModalOpen, setIsProblemModalOpen] = useState(false);
+  const [problemTitle, setProblemTitle] = useState("");
+  const [problemDesc, setProblemDesc] = useState("");
+  const [problemWorkflowId, setProblemWorkflowId] = useState<string | null>(null);
+  const [problemStepNumber, setProblemStepNumber] = useState<number | null>(null);
+
+  const reportProblemMutation = useMutation({
+    mutationFn: async () => {
+      if (!problemWorkflowId || !problemStepNumber) return;
+      const res = await fetch(`/api/petition-workflows/${problemWorkflowId}/problem`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: problemTitle,
+          description: problemDesc,
+          current_step: problemStepNumber
+        })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Problemática reportada", description: "O fluxo foi atualizado e enviado para o Dr. Cássio." });
+      queryClient.invalidateQueries({ queryKey: ["petitionWorkflows"] });
+      setIsProblemModalOpen(false);
+      setProblemTitle("");
+      setProblemDesc("");
+    },
+    onError: (err: any) => {
+      toast({ title: "Erro", description: err.message, variant: "destructive" });
+    }
+  });
+
   const [selectedPromptStep, setSelectedPromptStep] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newCaseId, setNewCaseId] = useState<string>('none');
@@ -344,6 +379,22 @@ export function PetitionWorkflowsModule() {
                                             Comando skill
                                           </Button>
                                           )}
+
+                                          {step.step_name.includes("Tese jurídica") && isCurrent && (
+                                            <Button 
+                                              size="sm" 
+                                              variant="outline"
+                                              className="border-amber-200 text-amber-700 hover:bg-amber-50 hover:text-amber-800 bg-amber-50/50"
+                                              onClick={() => {
+                                                setProblemWorkflowId(workflow.id);
+                                                setProblemStepNumber(step.step_number);
+                                                setIsProblemModalOpen(true);
+                                              }}
+                                            >
+                                              Problemática
+                                            </Button>
+                                          )}
+
                                           
                                           {isCurrent && step.assigned_to === user?.id && (
                                             <Button 
@@ -501,6 +552,49 @@ export function PetitionWorkflowsModule() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsPromptModalOpen(false)}>Fechar</Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isProblemModalOpen} onOpenChange={setIsProblemModalOpen}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-serif text-amber-700 border-b border-amber-200 pb-4 flex items-center gap-2">
+              <AlertCircle className="w-6 h-6" />
+              Reportar Problemática
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <p className="text-sm text-gray-600">
+              Isso criará uma etapa de bloqueio e transferirá a responsabilidade imediatamente para o Dr. Cássio. A tese só poderá ser concluída após a resolução desta problemática.
+            </p>
+            <div className="space-y-2">
+              <Label>Título do Problema</Label>
+              <Input 
+                value={problemTitle} 
+                onChange={e => setProblemTitle(e.target.value)} 
+                placeholder="Ex: Documento faltando, Divergência de valor..." 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Descrição / Observações</Label>
+              <Textarea 
+                value={problemDesc} 
+                onChange={e => setProblemDesc(e.target.value)} 
+                rows={4} 
+                placeholder="Descreva o que aconteceu..." 
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setIsProblemModalOpen(false)}>Cancelar</Button>
+              <Button 
+                onClick={() => reportProblemMutation.mutate()} 
+                disabled={!problemTitle || reportProblemMutation.isPending}
+                className="bg-amber-600 text-white hover:bg-amber-700"
+              >
+                {reportProblemMutation.isPending ? "Enviando..." : "Reportar Problemática"}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
