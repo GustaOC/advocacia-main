@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { apiClient, Publication } from '@/lib/api-client';
-import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2, RefreshCw, ImageIcon, ExternalLink } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, Edit, Eye, FileText, Plus, Trash2, Users, Megaphone, Search, Folder, ChevronRight, FolderOpen, Upload, Loader2, RefreshCw, ImageIcon, ExternalLink , History as HistoryIcon } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { format, parseISO, isValid, addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -39,6 +39,9 @@ export function PublicationsModule() {
 
   // Import State
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [screenshotsModalDate, setScreenshotsModalDate] = useState<string | null>(null);
   const [screenshots, setScreenshots] = useState<string[]>([]);
   const [isScreenshotsLoading, setIsScreenshotsLoading] = useState(false);
@@ -100,6 +103,29 @@ export function PublicationsModule() {
       toast({ title: 'Erro', description: err.message || 'Falha ao remover publicação', variant: 'destructive' });
     }
   });
+
+  
+  const fetchHistory = async () => {
+    try {
+      setIsLoadingHistory(true);
+      const res = await fetch('/api/publications/history');
+      if (res.ok) {
+        const data = await res.json();
+        setHistoryData(data);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isHistoryModalOpen) {
+      fetchHistory();
+    }
+  }, [isHistoryModalOpen]);
+
 
   const openNewModal = () => {
     setEditingPub(null);
@@ -517,6 +543,9 @@ export function PublicationsModule() {
                 <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl h-12 px-4" onClick={() => setIsImportModalOpen(true)}>
                   <Upload className="mr-2 h-4 w-4" /> Importar
                 </Button>
+                <Button variant="outline" className="border-2 border-brand-gray hover:border-brand-gray hover:bg-brand-gray rounded-xl h-12 px-4" onClick={() => setIsHistoryModalOpen(true)}>
+                  <HistoryIcon className="mr-2 h-4 w-4" /> Histórico
+                </Button>
                 <Button onClick={openNewModal} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg rounded-xl h-12 px-6">
                   <Plus className="mr-2 h-4 w-4" /> Nova Publicação
                 </Button>
@@ -825,6 +854,77 @@ export function PublicationsModule() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* HISTÓRICO MODAL */}
+      <Dialog open={isHistoryModalOpen} onOpenChange={setIsHistoryModalOpen}>
+        <DialogContent className="max-w-3xl bg-[#f4f5f1] h-[80vh] flex flex-col overflow-hidden p-0 border-0 shadow-2xl rounded-xl">
+          <div className="bg-[#242d26] p-6 text-white shrink-0">
+            <DialogTitle className="text-2xl font-serif flex items-center gap-3">
+              <HistoryIcon className="w-6 h-6 text-[#c5c6bb]" />
+              Histórico de Alterações das Publicações
+            </DialogTitle>
+            <p className="text-[#aeb8b2] mt-2 text-sm font-light tracking-wide">Acompanhe quem alterou status ou atribuições das publicações.</p>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-white to-[#f4f5f1]">
+            {isLoadingHistory ? (
+              <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3c4740]"></div></div>
+            ) : historyData.length === 0 ? (
+              <div className="text-center py-16">
+                <HistoryIcon className="h-16 w-16 text-[#b2b5aa]/30 mx-auto mb-4" />
+                <h3 className="text-xl font-serif text-[#3c4740]">Nenhum histórico recente</h3>
+                <p className="text-sm text-[#4a5f51]/70 mt-2">As alterações nas publicações começarão a aparecer aqui.</p>
+              </div>
+            ) : (
+              <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-[#c5c6bb] before:to-transparent">
+                {(() => {
+                  // Agrupar por data
+                  const grouped = historyData.reduce((acc, curr) => {
+                    const dateObj = new Date(curr.timestamp);
+                    const dateStr = dateObj.toLocaleDateString('pt-BR');
+                    if (!acc[dateStr]) acc[dateStr] = [];
+                    acc[dateStr].push(curr);
+                    return acc;
+                  }, {});
+                  
+                  return Object.keys(grouped).map(dateStr => (
+                    <div key={dateStr} className="relative z-10">
+                      <div className="flex items-center justify-center mb-6">
+                        <span className="bg-[#303b32] text-white text-xs font-bold tracking-widest uppercase py-1 px-4 rounded-full shadow-md">
+                          {dateStr}
+                        </span>
+                      </div>
+                      <div className="space-y-4">
+                        {grouped[dateStr].map((event: any, idx: number) => {
+                          const timeStr = new Date(event.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                          return (
+                            <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                              <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-[#9aa08f] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                                <HistoryIcon className="w-4 h-4" />
+                              </div>
+                              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-[#c5c6bb]/50 bg-white shadow-sm hover:shadow-md transition-shadow">
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className="font-bold text-[#1f2622] text-sm">{event.user}</span>
+                                  <time className="text-xs font-medium text-[#8b998a] bg-[#f4f5f1] px-2 py-1 rounded-md">{timeStr}</time>
+                                </div>
+                                <div className="text-sm text-[#4a5f51]">
+                                  <span className="font-medium text-[#3c4740] block mb-1">Na publicação: {event.publication_title}</span>
+                                  {event.action}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
 
       <Dialog open={isImportModalOpen} onOpenChange={setIsImportModalOpen}>
         <DialogContent className="sm:max-w-md bg-white">

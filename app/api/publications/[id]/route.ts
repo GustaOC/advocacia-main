@@ -145,12 +145,61 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
 
 
+    
+    // --- HISTÓRICO EMBUTIDO NA DESCRIÇÃO ---
+    let newDescription = body.description !== undefined ? body.description : (originalPub.description || '');
+    
+    // Extrai o histórico existente
+    let history = [];
+    const historyMatch = newDescription.match(/<!-- HISTORY: ([\\s\\S]*?) -->/);
+    if (historyMatch) {
+      try {
+        history = JSON.parse(historyMatch[1]);
+      } catch (e) {}
+      newDescription = newDescription.replace(/\\s*<!-- HISTORY: [\\s\\S]*? -->/, '');
+    }
+    
+    // Determina as ações que ocorreram
+    const actions = [];
+    if (body.status && body.status !== originalPub.status) {
+      actions.push(`Status alterado de "${originalPub.status}" para "${body.status}"`);
+    }
+    if (body.assigned_to !== undefined && body.assigned_to !== originalPub.assigned_to) {
+      if (body.assigned_to) {
+         const { data: assigneeProfile } = await supabase.from('user_profiles').select('name').eq('id', body.assigned_to).single();
+         actions.push(`Atribuída para ${assigneeProfile?.name || 'outro usuário'}`);
+      } else {
+         actions.push(`Atribuição removida`);
+      }
+    }
+    
+    if (actions.length > 0) {
+      const currentUser = await getSessionUser();
+      const userName = currentUser?.name || 'Sistema';
+      
+      actions.forEach(action => {
+        history.push({
+          timestamp: new Date().toISOString(),
+          user: userName,
+          action: action
+        });
+      });
+      
+      // Limita a 50 eventos para não estourar muito o texto
+      if (history.length > 50) history = history.slice(-50);
+    }
+    
+    if (history.length > 0) {
+      newDescription = `${newDescription.trim()}\n\n<!-- HISTORY: ${JSON.stringify(history)} -->`;
+    }
+    // ----------------------------------------
+
     // Atualiza a publicação
     const { data, error } = await supabase
       .from("publications")
       .update({
         title: body.title,
-        description: body.description,
+        description: newDescription,
         publication_date: body.publication_date,
         due_date: body.due_date !== undefined ? body.due_date : originalPub.due_date,
         assigned_to: body.assigned_to,

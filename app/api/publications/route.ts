@@ -19,7 +19,15 @@ export async function GET(request: Request) {
 
     if (error) throw error;
 
-    return NextResponse.json(data || []);
+    // Remove o historico embutido da descricao para nao poluir o frontend
+    const cleanedData = (data || []).map(pub => {
+      if (pub.description) {
+        pub.description = pub.description.replace(/\\s*<!-- HISTORY: [\\s\\S]*? -->/, '');
+      }
+      return pub;
+    });
+
+    return NextResponse.json(cleanedData);
   } catch (error: any) {
     console.error("Erro GET /api/publications:", error);
     return NextResponse.json({ error: error.message || "Falha ao buscar publicações." }, { status: 500 });
