@@ -128,13 +128,15 @@ async function runScraper() {
     console.log("👉 Clicando na aba correta (apenas data)...");
     
     const clicked = await page.evaluate(() => {
-      const elements = Array.from(document.querySelectorAll('li.nav-item, li, a'));
+      const elements = Array.from(document.querySelectorAll('li.nav-item, li, a, div'));
       for (const el of elements) {
-          const text = el.innerText || '';
-          if (text.match(/\d{2}\/\d{2}\/\d{4}/) && !text.match(/ 0$/) && !text.match(/\n0$/) && !el.classList.contains('active')) {
-              // Encontrou a aba com a data!
-              const clickable = el.querySelector('a') || el;
-              clickable.click();
+          const text = el.innerText ? el.innerText.trim() : '';
+          // Procura especificamente a aba "Hoje" que tenha um número (ex: "Hoje 0", "Hoje\n5")
+          if (text.startsWith('Hoje') && /\d/.test(text)) {
+              if (!el.classList.contains('active')) {
+                  const clickable = el.querySelector('a') || el;
+                  clickable.click();
+              }
               return true;
           }
       }
@@ -142,10 +144,10 @@ async function runScraper() {
     });
 
     if (clicked) {
-        console.log("✅ Clique realizado na aba via script DOM!");
+        console.log("✅ Clique realizado na aba 'Hoje' via script DOM!");
         await new Promise(resolve => setTimeout(resolve, 8000)); // Espera o conteúdo da aba carregar
     } else {
-        console.log("⚠️ Nenhuma aba de data válida (ou não clicada). Seguindo na tela atual.");
+        console.log("⚠️ Aba 'Hoje' não encontrada ou erro no clique. Seguindo na tela atual.");
     }
     // Aguardando as publicações carregarem dinamicamente...
     console.log("👉 Aguardando as publicações aparecerem na tela...");
