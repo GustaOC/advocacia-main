@@ -109,7 +109,7 @@ async function runScraper() {
     }
     
     console.log("📂 Navegando para as publicações de hoje...");
-    await page.goto('https://app.faz.adv.br/#/publicacoes/hoje', { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.goto('https://app.faz.adv.br/#/publicacoes', { waitUntil: 'domcontentloaded', timeout: 60000 });
     
     // Mais espera para garantir que a página "Hoje" carregue
     await new Promise(resolve => setTimeout(resolve, 8000));
@@ -122,70 +122,103 @@ async function runScraper() {
     
     await new Promise(resolve => setTimeout(resolve, 5000));
     
-    // Força o clique na aba "Hoje" pelo menu caso o SPA do site nos redirecione para "Não Lidas" por padrão
-    console.log("👉 Forçando o clique na aba 'Hoje'...");
-    await page.evaluate(() => {
-      // 1. Tenta achar pelo link exato (href)
-      const link = document.querySelector('a[href*="/publicacoes/hoje"]');
-      if (link) {
-        link.click();
-        return;
+    // Selecionando aba correta para não cair em "Não Lidas"
+    console.log("👉 Aguardando menu de abas carregar...");
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log("👉 Clicando na aba correta (apenas data)...");
+    
+    const clicked = await page.evaluate(() => {
+      const elements = Array.from(document.querySelectorAll('li.nav-item, li, a'));
+      for (const el of elements) {
+          const text = el.innerText || '';
+          if (text.match(/\d{2}\/\d{2}\/\d{4}/) && !text.match(/ 0$/) && !text.match(/\n0$/) && !el.classList.contains('active')) {
+              // Encontrou a aba com a data!
+              const clickable = el.querySelector('a') || el;
+              clickable.click();
+              return true;
+          }
       }
-      
-      // 2. Se não for tag 'a', procura um item de menu que contenha "Hoje" seguido de um número (o badge 33)
-      const elements = Array.from(document.querySelectorAll('div, li, button, a'));
-      const hojeElement = elements.find(el => {
-         const text = el.innerText ? el.innerText.trim() : '';
-         // Verifica se o texto começa com "Hoje" e tem algum número (como "Hoje 33" ou "Hoje\n33")
-         return text.startsWith('Hoje') && /\d/.test(text) && el.offsetHeight > 0 && el.children.length > 0;
-      });
-      if (hojeElement) {
-         hojeElement.click();
-      }
+      return false;
     });
 
-    // Aguarda um tempo fixo extra para garantir que tabelas/APIs da aba Hoje carreguem
-    await new Promise(resolve => setTimeout(resolve, 8000));
+    if (clicked) {
+        console.log("✅ Clique realizado na aba via script DOM!");
+        await new Promise(resolve => setTimeout(resolve, 8000)); // Espera o conteúdo da aba carregar
+    } else {
+        console.log("⚠️ Nenhuma aba de data válida (ou não clicada). Seguindo na tela atual.");
+    }
+    // Aguardando as publicações carregarem dinamicamente...
+    console.log("👉 Aguardando as publicações aparecerem na tela...");
+    try {
+       await page.waitForSelector('.publicacao, .indicadores', { timeout: 20000 });
+       console.log("✅ Elementos de publicação encontrados!");
+    } catch(e) {
+       console.log("⚠️ Timeout aguardando .publicacao. A aba pode estar vazia.");
+    }
+    // Aguarda mais 2 segundinhos só pra ter certeza que estabilizou
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     let hasNextPage = true;
     let currentPage = 1;
     const allPublicacoes = [];
 
-    while (hasNextPage) {
+    while (hasNextPage && currentPage <= 5) {
       console.log(`\n📄 Lendo página ${currentPage}...`);
       
       // Salva o screenshot
       const shotPath = `screenshot-page-${currentPage}.png`;
       await page.screenshot({ path: shotPath, fullPage: true });
       
+      
       const rawText = await page.evaluate(() => document.body.innerText);
+
             
       console.log(`🔍 Extraindo processo e data via Regex (${rawText.length} caracteres)...`);
       if (currentPage === 1) {
          console.log("Trecho da tela (primeiros 1000 caracteres):\n", rawText.substring(0, 1000));
       }
 
-      const publicacoes = [];
-      const processBlocks = rawText.split(/Publicação:\s*(?=\d{2}\/\d{2}\/\d{4})/i);
-      
-      for (let i = 1; i < processBlocks.length; i++) {
-         const block = processBlocks[i];
-         const dateMatch = block.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-         const processMatch = block.match(/\b\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b/);
+      const publicacoes = await page.evaluate(() => {
+         const pubs = [];
+         // Procurar pelos blocos de publicação (geralmente tem a classe .publicacao ou algo similar)
+         // Vamos ser mais genéricos caso a classe mude, buscando os nós que têm o texto "Publicação:" e o CNJ
+         const elements = Array.from(document.querySelectorAll('div'));
          
-         const title = processMatch ? processMatch[0] : 'S/N';
-         let pubDateStr = new Date().toISOString().split('T')[0];
+         // Mas também podemos focar nos que têm '.publicacao'
+         const pubCards = document.querySelectorAll('.publicacao');
          
-         if (dateMatch) {
-             pubDateStr = `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`;
+         if (pubCards.length > 0) {
+             for (const card of pubCards) {
+                 const text = card.innerText || '';
+                 const processMatch = text.match(/\b\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b/);
+                 const dateMatch = text.match(/Publicação:\s*(\d{2})\/(\d{2})\/(\d{4})/i);
+                 
+                 if (processMatch || dateMatch) {
+                     pubs.push({
+                         title: processMatch ? processMatch[0] : 'S/N',
+                         description: text.substring(0, 500) + (text.length > 500 ? '...' : ''), // salva o comecinho pra debug
+                         publication_date: dateMatch ? `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}` : new Date().toISOString().split('T')[0]
+                     });
+                 }
+             }
+         } else {
+             // Fallback para varrer todo o texto via Regex caso não ache a classe
+             const rawText = document.body.innerText;
+             const processBlocks = rawText.split(/Publicação:\s*(?=\d{2}\/\d{2}\/\d{4})/i);
+             for (let i = 1; i < processBlocks.length; i++) {
+                 const block = processBlocks[i];
+                 const dateMatch = block.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+                 const processMatch = block.match(/\b\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b/);
+                 
+                 pubs.push({
+                     title: processMatch ? processMatch[0] : 'S/N',
+                     description: "",
+                     publication_date: dateMatch ? `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}` : new Date().toISOString().split('T')[0]
+                 });
+             }
          }
-         
-         publicacoes.push({
-             title: title,
-             description: "",
-             publication_date: pubDateStr
-         });
-      }
+         return pubs;
+      });
       
       if (publicacoes.length > 0) {
         allPublicacoes.push(...publicacoes);
