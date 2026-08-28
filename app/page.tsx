@@ -1,417 +1,546 @@
-'use client'
+"use client"
 
+import type React from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
-import { Scale, ShieldCheck, AlertTriangle, ScrollText, ChevronRight } from "lucide-react"
-import { motion, Variants } from "framer-motion"
+import Link from "next/link"
+import { motion } from "framer-motion"
 
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-}
+export default function LandingPage() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-const fadeInLeft: Variants = {
-  hidden: { opacity: 0, x: -40 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
-}
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-const fadeInRight: Variants = {
-  hidden: { opacity: 0, x: 40 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
-}
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent("Olá! Gostaria de agendar uma consulta jurídica.");
+    window.open(`https://wa.me/5567996449627?text=${message}`, "_blank");
+  };
 
-const staggerContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as any } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
     }
-  }
-}
+  };
 
-export default function PremiumLandingPage() {
   return (
-    <div className="font-sans antialiased text-[#1f2622] bg-[#f4f5f0] selection:bg-[#4a5f51] selection:text-white overflow-hidden">
-      
-      {/* SEÇÃO 1: HERO */}
-      <section className="relative w-full bg-[#303b32] text-[#f2f4f0] overflow-hidden flex items-center justify-center min-h-[600px] lg:h-[80vh]">
-        <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M54.627%200l.83.83-26.626%2026.627-.83-.83L54.627%200zm-5.83%200l.83.83-26.627%2026.627-.83-.83L48.796%200zm-5.83%200l.83.83-26.627%2026.627-.83-.83L42.966%200z%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%221%22%20fill-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E')]"></div>
-        <div className="container mx-auto px-6 lg:px-16 relative z-10 grid lg:grid-cols-2 gap-8 items-center h-full pt-16 lg:pt-0">
+    <div className="min-h-screen bg-[#E3E0D7] text-[#000000] font-sans selection:bg-[#95A08A] selection:text-white">
+      {/* 1. HEADER */}
+      <header 
+        className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-white lg:text-white text-[#000000]"}`}
+      >
+        <div className="container mx-auto px-6 md:px-12 lg:px-24 h-[80px] flex justify-between items-center">
+          <Link href="/" className="font-serif text-xl tracking-wide z-50">
+            <span className={`transition-colors duration-700 ${!scrolled && !menuOpen ? "text-white lg:text-[#E3E0D7]" : "text-[#000000]"}`}>
+              CÁSSIO MIGUEL
+            </span>
+          </Link>
           
-          <motion.div 
-            className="space-y-6 max-w-xl pb-12 lg:pb-0"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
+          <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
+            <Link href="#atuacao" className="hover:text-[#95A08A] transition-colors">Atuação</Link>
+            <Link href="#metodo" className="hover:text-[#95A08A] transition-colors">Método</Link>
+            <Link href="#perfil" className="hover:text-[#95A08A] transition-colors">Perfil</Link>
+            <Link href="#analises" className="hover:text-[#95A08A] transition-colors">Análises</Link>
+            <Link href="#contato" className="hover:text-[#95A08A] transition-colors">Contato</Link>
+          </nav>
+
+          <button 
+            className="lg:hidden z-50 focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
           >
-            <motion.div variants={fadeInUp} className="mb-8">
-              <Image 
-                src="/logo.png" 
-                alt="Cássio Miguel Sociedade Individual de Advocacia" 
-                width={240} 
-                height={100} 
-                className="object-contain"
-                priority
-              />
+            <span className={`block w-6 h-px mb-1.5 bg-current transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+            <span className={`block w-6 h-px mb-1.5 bg-current transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"}`}></span>
+            <span className={`block w-6 h-px bg-current transition-transform ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}></span>
+          </button>
+        </div>
+
+        {/* MOBILE MENU */}
+        <div className={`fixed inset-0 bg-[#3C443D] text-[#E3E0D7] z-40 flex flex-col justify-center px-6 transition-transform duration-700 ease-in-out ${menuOpen ? "translate-x-0" : "translate-x-full"}`}>
+          <nav className="flex flex-col space-y-8 text-2xl font-serif">
+            <Link href="#atuacao" onClick={() => setMenuOpen(false)}>Atuação</Link>
+            <Link href="#metodo" onClick={() => setMenuOpen(false)}>Método</Link>
+            <Link href="#perfil" onClick={() => setMenuOpen(false)}>Perfil</Link>
+            <Link href="#analises" onClick={() => setMenuOpen(false)}>Análises</Link>
+            <Link href="#contato" onClick={() => setMenuOpen(false)}>Contato</Link>
+          </nav>
+          <div className="mt-16 text-sm tracking-widest text-[#95A08A] flex flex-col space-y-4">
+            <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a href="mailto:contato@cassiomiguel.adv.br">E-mail</a>
+            <a href="#">Instagram</a>
+            <a href="#">LinkedIn</a>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        {/* 2. HERO */}
+        <section className="relative w-full min-h-[90vh] flex flex-col lg:flex-row bg-[#3C443D] overflow-hidden">
+          {/* Lado Esquerdo - 55% */}
+          <div className="w-full lg:w-[55%] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
+            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl">
+              <motion.span variants={fadeInUp} className="text-[#95A08A] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                Advocacia Estratégica
+              </motion.span>
+              <motion.h1 variants={fadeInUp} className="font-serif text-white text-[42px] md:text-[50px] lg:text-[64px] leading-[1.05] mb-8">
+                Técnica e confiança<br />que permanecem.
+              </motion.h1>
+              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md">
+                Advocacia estratégica em questões cíveis e administrativas de maior complexidade,
+                com análise individualizada, precisão processual e acompanhamento pessoal.
+              </motion.p>
+              <motion.button 
+                variants={fadeInUp}
+                onClick={handleWhatsApp}
+                className="inline-flex items-center justify-center bg-transparent border border-[#A8ABA2] text-[#E3E0D7] hover:bg-[#E3E0D7] hover:text-[#3C443D] px-7 py-3.5 text-sm font-medium transition-colors duration-300 rounded"
+              >
+                Entrar em contato <span className="ml-2">→</span>
+              </motion.button>
             </motion.div>
-            
-            <motion.h1 variants={fadeInUp} className="font-serif text-4xl lg:text-5xl xl:text-6xl leading-tight tracking-tight text-white">
-              Engenharia Processual para Casos de Alta Complexidade
-            </motion.h1>
-            
-            <motion.p variants={fadeInUp} className="text-base lg:text-lg font-light leading-relaxed text-[#c3cdc5]">
-              Em litígios de alto impacto, a sua melhor defesa não é uma reação comum — é uma arquitetura estratégica. Proteja seu patrimônio, carreira e reputação com uma atuação cirúrgica nas esferas Civil e Administrativa.
-            </motion.p>
-            
-            <motion.div variants={fadeInUp} className="pt-4">
-              <button className="border border-[#8b998a] text-white px-6 py-3 text-sm font-medium hover:bg-[#8b998a] hover:text-[#1f2622] transition-colors rounded-sm inline-flex items-center">
-                [Agendar Consulta Estratégica Privada com o Dr. Cássio Miguel]
-              </button>
-            </motion.div>
-          </motion.div>
+          </div>
           
-          <motion.div 
-            className="hidden lg:flex justify-end items-end h-full relative"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-          >
-            <div className="relative w-[110%] h-[110%] -mr-16 -mb-4">
-              <Image 
-                src="/hero.png" 
-                alt="Dr. Cássio Miguel" 
-                fill
-                style={{ objectFit: 'cover', objectPosition: 'top center' }}
-                className="drop-shadow-2xl"
-                priority
-              />
+          {/* Lado Direito - 45% Fotografia */}
+          <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative">
+            <Image 
+              src="https://i.postimg.cc/4NmVt2Gp/AAAA.jpg" 
+              alt="Dr. Cássio Miguel" 
+              fill
+              priority
+              className="object-cover object-top grayscale-[20%] contrast-[1.05]"
+              sizes="(max-width: 1024px) 100vw, 45vw"
+            />
+          </div>
+        </section>
+
+        {/* 3. FORMA DE ATUAÇÃO */}
+        <section id="atuacao" className="py-24 md:py-32 lg:py-40 bg-[#E3E0D7]">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24">
+            <motion.div 
+              initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
+              className="max-w-4xl"
+            >
+              <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                Nossa forma de atuar
+              </motion.span>
+              <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl leading-[1.1] mb-10">
+                Cada caso exige uma<br />estratégia própria.
+              </motion.h2>
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light">
+                <motion.div variants={fadeInUp}>
+                  <p className="mb-6">
+                    A advocacia não se resume à aplicação de modelos. Fatos, documentos, riscos e
+                    objetivos precisam ser compreendidos antes da definição do caminho jurídico.
+                  </p>
+                  <p>
+                    O trabalho do escritório parte dessa análise para construir estratégias adequadas às
+                    particularidades de cada caso, com atenção à prova, às questões processuais e às
+                    consequências práticas de cada decisão.
+                  </p>
+                </motion.div>
+                <motion.div variants={fadeInUp}>
+                  <p className="mb-6">
+                    A relação com o cliente é conduzida com clareza, discrição e acompanhamento próximo
+                    ao longo de toda a atuação.
+                  </p>
+                  <p>
+                    Essa abordagem traduz diretamente a premissa original da identidade: cada caso contém
+                    uma história particular e a estratégia nasce do tempo dedicado à sua compreensão.
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 4. ÁREAS DE ATUAÇÃO */}
+        <section className="py-20 bg-[#E3E0D7]">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-5xl">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="space-y-0">
+              
+              <motion.div variants={fadeInUp} className="border-t border-[#A8ABA2]/30 py-10 flex flex-col md:flex-row gap-6 md:gap-12 group hover:bg-[#EDEDED]/50 transition-colors duration-500">
+                <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">01</div>
+                <div>
+                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Contencioso Cível</h3>
+                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
+                    Atuação em questões contratuais, responsabilidade civil, conflitos patrimoniais e demais
+                    litígios que demandem análise jurídica e processual aprofundada.
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeInUp} className="border-t border-[#A8ABA2]/30 py-10 flex flex-col md:flex-row gap-6 md:gap-12 group hover:bg-[#EDEDED]/50 transition-colors duration-500">
+                <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">02</div>
+                <div>
+                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Direito Administrativo Sancionador</h3>
+                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
+                    Atuação em processos administrativos, sindicâncias, procedimentos disciplinares e
+                    questões capazes de produzir repercussões profissionais ou patrimoniais.
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeInUp} className="border-t border-b border-[#A8ABA2]/30 py-10 flex flex-col md:flex-row gap-6 md:gap-12 group hover:bg-[#EDEDED]/50 transition-colors duration-500">
+                <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">03</div>
+                <div>
+                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Recursos e Medidas de Urgência</h3>
+                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
+                    Atuação em recursos, mandados de segurança, tutelas de urgência e demais medidas
+                    processuais adequadas às circunstâncias do caso.
+                  </p>
+                </div>
+              </motion.div>
+
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 5. SITUAÇÕES EM QUE ATUAMOS */}
+        <section className="py-24 bg-[#EDEDED]">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24">
+            <div className="grid lg:grid-cols-2 gap-16">
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+                <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                  Situações que exigem atuação estratégica
+                </motion.span>
+                <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-4xl leading-[1.2]">
+                  Quando o processo exige uma análise<br />além do óbvio.
+                </motion.h2>
+              </motion.div>
+              
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="space-y-8">
+                {[
+                  "Disputas patrimoniais relevantes",
+                  "Processos já em andamento",
+                  "Decisões desfavoráveis",
+                  "Medidas urgentes",
+                  "Recursos",
+                  "Processos administrativos"
+                ].map((item, index) => (
+                  <motion.div key={index} variants={fadeInUp} className="flex items-start gap-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#95A08A] mt-2 shrink-0"></span>
+                    <p className="text-[#3C443D] text-lg font-light">{item}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* SEÇÃO 2: O MANIFESTO */}
-      <section className="py-20 bg-white relative overflow-hidden border-b border-[#e5e7e3]">
-        <div className="absolute right-[-5%] top-[10%] opacity-[0.03] w-96 h-96 pointer-events-none">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.984 9.07L14.4 7.656 16.52 9.778l-1.414 1.414-2.122-2.121zM9.449 14.727l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zM22.182 5.535l-2.121-2.121-1.414 1.414 2.121 2.121 1.414-1.414zM2.828 16.971L5.657 14.142l4.243 4.243-2.829 2.828-4.243-4.242zM15.101 11.899l4.242-4.242 1.415 1.414-4.243 4.243-1.414-1.415z"/></svg>
-        </div>
-        
-        <motion.div 
-          className="container mx-auto px-6 lg:px-16 relative z-10 max-w-4xl"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-        >
-          <motion.span variants={fadeInUp} className="text-sm font-bold tracking-widest uppercase text-[#1f2622] block mb-4">O MANIFESTO</motion.span>
-          <motion.h2 variants={fadeInUp} className="font-serif text-3xl lg:text-4xl leading-snug text-[#1f2622] mb-8">
-            A diferença entre um processo comum e um desfecho favorável está nos detalhes da técnica.
-          </motion.h2>
-          <motion.div variants={fadeInUp} className="space-y-6 text-[#4a5f51] text-base leading-relaxed">
-            <p>
-              Na alta advocacia, não há espaço para amadorismo, teses genéricas ou modelos pré-formatados. Seja enfrentando um processo cível de alto valor econômico ou uma sindicância administrativa que ameaça sua liberdade de exercer a profissão, cada movimento precisa ser milimetricamente calculado.
-            </p>
-            <p>
-              Grandes batalhas jurídicas são vencidas na engenharia processual: o domínio absoluto dos prazos, das nulidades, da produção de provas e da jurisprudência dominante. Nós não apenas defendemos; nós antecipamos os passos do oponente, neutralizando riscos antes que eles se transformem em prejuízos irreparáveis.
-            </p>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* SEÇÃO 3: ÁREAS DE DOMÍNIO */}
-      <section className="py-20 bg-[#f4f5f0] border-b border-[#e5e7e3]">
-        <div className="container mx-auto px-6 lg:px-16">
-          <motion.div 
-            className="mb-12"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <span className="text-sm font-bold tracking-widest uppercase text-[#1f2622] block mb-2">ÁREAS DE DOMÍNIO</span>
-            <h2 className="font-serif text-2xl lg:text-3xl text-[#1f2622] max-w-xl">Atuação Cirúrgica Cível e Administrativa</h2>
-            <p className="mt-4 text-[#4a5f51] font-light max-w-2xl">Unimos a precisão do Direito Processual Civil à firmeza necessária na defesa de prerrogativas administrativas:</p>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 gap-x-12 gap-y-10"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
-          >
-            <motion.div variants={fadeInUp} className="flex space-x-4">
-              <div className="flex-shrink-0 mt-1 bg-[#303b32] w-10 h-10 rounded-md flex items-center justify-center">
-                <Scale className="w-5 h-5 text-white" strokeWidth={2} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Cível</h3>
-                <p className="text-[#4a5f51] text-sm leading-relaxed">
-                  Defesa de direitos contratuais, disputas societárias de alta tensão e ações de responsabilidade civil de expressivo valor econômico.
-                </p>
-              </div>
+        {/* 6. ENGENHARIA PROCESSUAL */}
+        <section id="metodo" className="py-32 bg-[#3C443D] text-[#E3E0D7] overflow-hidden">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="mb-20">
+              <motion.span variants={fadeInUp} className="text-[#95A08A] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                Método
+              </motion.span>
+              <motion.h2 variants={fadeInUp} className="font-serif text-white text-4xl md:text-5xl mb-6">
+                Engenharia Processual
+              </motion.h2>
+              <motion.p variants={fadeInUp} className="text-lg font-light max-w-2xl text-[#A8ABA2]">
+                Estratégia jurídica construída a partir dos fatos, da prova, do procedimento e das
+                consequências de cada decisão.
+              </motion.p>
             </motion.div>
 
-            <motion.div variants={fadeInUp} className="flex space-x-4">
-              <div className="flex-shrink-0 mt-1 bg-[#303b32] w-10 h-10 rounded-md flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5 text-white" strokeWidth={2} />
+            {/* Linha do Tempo Desktop */}
+            <div className="hidden lg:block relative mt-32 mb-16">
+              <div className="absolute top-0 left-0 w-full h-[1px] bg-[#A8ABA2]/20"></div>
+              <motion.div 
+                initial={{ width: 0 }}
+                whileInView={{ width: "100%" }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                viewport={{ once: true }}
+                className="absolute top-0 left-0 h-[1px] bg-[#95A08A]"
+              ></motion.div>
+              
+              <div className="grid grid-cols-4 gap-8 pt-8">
+                {[
+                  { title: "Diagnóstico", desc: "Análise dos autos, documentos, fatos e riscos relevantes." },
+                  { title: "Estratégia", desc: "Definição das alternativas processuais e dos objetivos da atuação." },
+                  { title: "Preparação", desc: "Organização documental, probatória e preparação dos atos necessários." },
+                  { title: "Acompanhamento", desc: "Monitoramento do processo e revisão da estratégia diante de novos fatos ou decisões." }
+                ].map((step, idx) => (
+                  <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 * idx }}
+                    viewport={{ once: true }}
+                    className="relative"
+                  >
+                    <div className="absolute -top-10 left-0 w-3 h-3 rounded-full bg-[#95A08A]"></div>
+                    <span className="font-serif text-[#95A08A] text-xl mb-2 block">0{idx + 1}</span>
+                    <h4 className="text-white font-medium mb-3">{step.title}</h4>
+                    <p className="text-sm text-[#A8ABA2] font-light leading-relaxed">{step.desc}</p>
+                  </motion.div>
+                ))}
               </div>
-              <div>
-                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Blindagem de Carreira</h3>
-                <p className="text-[#4a5f51] text-sm leading-relaxed">
-                  Atuação preventiva e contenciosa para conter sanções administrativas, blindar a reputação profissional e assegurar paridade de armas.
-                </p>
-              </div>
-            </motion.div>
+            </div>
 
-            <motion.div variants={fadeInUp} className="flex space-x-4">
-              <div className="flex-shrink-0 mt-1 bg-[#303b32] w-10 h-10 rounded-md flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-white" strokeWidth={2} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Urgência</h3>
-                <p className="text-[#4a5f51] text-sm leading-relaxed">
-                  Utilização ágil do Mandado de Segurança e de medidas liminares estratégicas para paralisar atos ilegais e abusos de autoridade.
-                </p>
-              </div>
-            </motion.div>
+            {/* Lista Mobile */}
+            <div className="lg:hidden space-y-12 mt-16 border-l border-[#A8ABA2]/20 pl-6 relative">
+              {[
+                  { title: "Diagnóstico", desc: "Análise dos autos, documentos, fatos e riscos relevantes." },
+                  { title: "Estratégia", desc: "Definição das alternativas processuais e dos objetivos da atuação." },
+                  { title: "Preparação", desc: "Organização documental, probatória e preparação dos atos necessários." },
+                  { title: "Acompanhamento", desc: "Monitoramento do processo e revisão da estratégia diante de novos fatos ou decisões." }
+                ].map((step, idx) => (
+                <motion.div 
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 * idx }}
+                  viewport={{ once: true }}
+                  className="relative"
+                >
+                  <div className="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-[#95A08A]"></div>
+                  <span className="font-serif text-[#95A08A] text-xl mb-1 block">0{idx + 1}</span>
+                  <h4 className="text-white font-medium mb-2">{step.title}</h4>
+                  <p className="text-sm text-[#A8ABA2] font-light leading-relaxed">{step.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-            <motion.div variants={fadeInUp} className="flex space-x-4">
-              <div className="flex-shrink-0 mt-1 bg-[#303b32] w-10 h-10 rounded-md flex items-center justify-center">
-                <ScrollText className="w-5 h-5 text-white" strokeWidth={2} />
-              </div>
-              <div>
-                <h3 className="font-serif text-xl text-[#1f2622] mb-2">Recursos</h3>
-                <p className="text-[#4a5f51] text-sm leading-relaxed">
-                  Domínio absoluto da técnica recursal para reverter decisões desfavoráveis com agilidade e rigor científico.
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* SEÇÃO 4: O MÉTODO */}
-      <section className="py-20 bg-[#e8eae6] relative">
-        <div className="container mx-auto px-6 lg:px-16">
-          <motion.div 
-            className="text-center mb-16"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <h2 className="font-serif text-2xl lg:text-3xl text-[#1f2622] mb-2">O Método de Defesa Blindada</h2>
-            <p className="text-[#4a5f51]">Como garantimos a paridade de armas como um processo de engenharia de elite.</p>
-          </motion.div>
-
-          <div className="relative max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8">
+        {/* 7. PERFIL PROFISSIONAL */}
+        <section id="perfil" className="py-24 lg:py-0 bg-[#E3E0D7]">
+          <div className="flex flex-col lg:flex-row min-h-[80vh]">
+            {/* Foto 40% */}
+            <div className="w-full lg:w-[40%] h-[50vh] lg:h-auto relative order-2 lg:order-1">
+               <Image 
+                  src="https://i.postimg.cc/4NmVt2Gp/AAAA.jpg" 
+                  alt="Dr. Cássio Miguel Perfil" 
+                  fill
+                  className="object-cover object-center grayscale-[10%]"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                />
+            </div>
             
-            <motion.div 
-              className="flex flex-col gap-10 md:w-1/3"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInLeft}
-            >
-              <div className="text-right">
-                <span className="text-xl font-bold text-[#1f2622] block mb-1">01. Auditoria</span>
-                <p className="text-[#4a5f51] text-xs leading-relaxed">Mapeamento integral e minucioso de cada prova, documento e cenário processual para identificar pontos vulneráveis.</p>
-              </div>
-              <div className="text-right">
-                <span className="text-xl font-bold text-[#1f2622] block mb-1">02. Alinhamento</span>
-                <p className="text-[#4a5f51] text-xs leading-relaxed">Reuniões restritas de planejamento estratégico para estruturar o discurso e blindar testemunhos.</p>
-              </div>
-            </motion.div>
+            {/* Texto 60% */}
+            <div className="w-full lg:w-[60%] flex flex-col justify-center px-6 md:px-12 lg:px-24 py-16 lg:py-32 order-1 lg:order-2">
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-2xl">
+                <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                  Perfil
+                </motion.span>
+                <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl mb-8 leading-[1.1]">
+                  Responsabilidade que<br />tem rosto e nome.
+                </motion.h2>
+                
+                <motion.div variants={fadeInUp} className="mb-10">
+                  <h3 className="text-lg font-medium text-[#000000]">Cássio Miguel de Oliveira Cavalcante</h3>
+                  <p className="text-[#95A08A] text-sm tracking-wide">OAB/MS nº 22.647</p>
+                </motion.div>
 
-            <motion.div 
-              className="md:w-1/3 flex justify-center opacity-70"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 0.7, scale: 1 }}
-              transition={{ duration: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-            >
-               <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="10" y="10" width="180" height="180" stroke="#1f2622" strokeWidth="2"/>
-                  <path d="M70 10V80H10" stroke="#1f2622" strokeWidth="2"/>
-                  <path d="M190 70H120V10" stroke="#1f2622" strokeWidth="2"/>
-                  <path d="M120 190V130H190" stroke="#1f2622" strokeWidth="2"/>
-                  <path d="M10 130H80V190" stroke="#1f2622" strokeWidth="2"/>
-                  <rect x="80" y="80" width="40" height="40" stroke="#1f2622" strokeWidth="2"/>
-                  <circle cx="100" cy="100" r="10" stroke="#1f2622" strokeWidth="2"/>
-               </svg>
-            </motion.div>
-
-            <motion.div 
-              className="flex flex-col gap-10 md:w-1/3"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInRight}
-            >
-              <div className="text-left">
-                <span className="text-xl font-bold text-[#1f2622] block mb-1">03. Simulação Científica</span>
-                <p className="text-[#4a5f51] text-xs leading-relaxed">Treinamento específico para interrogatórios e audiências cíveis, preparando o cliente para o cenário real.</p>
-              </div>
-              <div className="text-left">
-                <span className="text-xl font-bold text-[#1f2622] block mb-1">04. Atuação Vigilante</span>
-                <p className="text-[#4a5f51] text-xs leading-relaxed">Acompanhamento de atos críticos pelo próprio Dr. Cássio, garantindo proteção contra excessos e ilegalidades.</p>
-              </div>
-            </motion.div>
-
+                <motion.div variants={fadeInUp} className="space-y-6 text-[#3C443D] font-light leading-relaxed">
+                  <p>
+                    Com atuação consolidada na advocacia estratégica, o Dr. Cássio Miguel concentra sua prática 
+                    na resolução de litígios complexos nas áreas cível e administrativa.
+                  </p>
+                  <p>
+                    Acredita que o verdadeiro diferencial jurídico não reside no volume de causas, mas na capacidade 
+                    de imersão técnica em cada dossiê. Sua formação e especializações direcionam-se à construção de 
+                    teses robustas e à engenharia processual meticulosa, fundamentais para a proteção patrimonial e 
+                    reputacional de seus clientes.
+                  </p>
+                </motion.div>
+                
+                <motion.div variants={fadeInUp} className="mt-12">
+                  <button 
+                    onClick={handleWhatsApp}
+                    className="inline-flex items-center text-[#3C443D] hover:text-[#000000] font-medium transition-colors text-sm uppercase tracking-widest border-b border-[#3C443D] pb-1"
+                  >
+                    Ver Perfil Completo <span className="ml-2">→</span>
+                  </button>
+                </motion.div>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* SEÇÃO 5: O PERFIL */}
-      <section className="bg-[#28322a] py-20 lg:py-24 border-y border-[#3f4f44]">
-        <div className="container mx-auto px-6 lg:px-16">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            
-            <motion.div 
-              className="lg:col-span-4 flex justify-center lg:justify-end relative"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInLeft}
-            >
-               <div className="bg-[#dcdfd8] rounded-[2rem] p-2 relative w-64 h-80 overflow-hidden shadow-2xl">
-                 <Image 
-                    src="/perfil.png" 
-                    alt="Dr. Cássio Miguel" 
-                    fill
-                    style={{ objectFit: 'cover' }}
-                    className="rounded-[1.5rem]"
-                  />
-               </div>
+        {/* 8. ANÁLISES JURÍDICAS */}
+        <section id="analises" className="py-24 bg-[#EDEDED]">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="mb-16">
+              <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                Análises
+              </motion.span>
+              <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-4xl max-w-xl leading-[1.2]">
+                Pensar o processo também faz parte da estratégia.
+              </motion.h2>
             </motion.div>
 
-            <motion.div 
-              className="lg:col-span-8 text-[#f2f4f0] max-w-2xl"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInRight}
-            >
-              <span className="text-sm font-bold tracking-widest uppercase text-[#8b998a] block mb-4">O PERFIL</span>
-              <h2 className="font-serif text-3xl lg:text-4xl leading-tight mb-6">
-                Cássio Miguel: A Ciência da Defesa Processual
-              </h2>
-              <div className="space-y-4 text-sm font-light text-[#c3cdc5] leading-relaxed">
-                <p>
-                  Cássio Miguel de Oliveira Cavalcante (OAB/MS nº 22.647) lidera uma banca dedicada a proteger o patrimônio e a integridade profissional de médicos, empresários e servidores públicos.
+            <div className="grid lg:grid-cols-12 gap-8 md:gap-12">
+              {/* Artigo Principal */}
+              <motion.article 
+                initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} 
+                className="lg:col-span-7 group cursor-pointer"
+              >
+                <div className="w-full h-64 md:h-[400px] bg-[#E3E0D7] mb-6 overflow-hidden relative">
+                   <div className="absolute inset-0 bg-[#3C443D]/10 group-hover:bg-transparent transition-colors duration-700"></div>
+                   {/* Placeholder for editorial image */}
+                </div>
+                <div className="flex gap-4 items-center mb-4">
+                  <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Processo Cível</span>
+                  <span className="text-[#A8ABA2] text-xs">5 min leitura</span>
+                </div>
+                <h3 className="font-serif text-2xl md:text-3xl text-[#000000] mb-4 group-hover:text-[#3C443D] transition-colors">
+                  Quando uma decisão interlocutória pode ser impugnada imediatamente?
+                </h3>
+                <p className="text-[#3C443D] font-light leading-relaxed mb-6">
+                  Uma análise sobre os limites do rol taxativo do agravo de instrumento e as alternativas estratégicas diante de decisões urgentes não previstas expressamente na legislação.
                 </p>
-                <p>
-                  Reconhecido pela solidez intelectual e pelo profundo domínio das nuances processuais, sua advocacia afasta-se das soluções de massa para entregar um atendimento artesanal, altamente técnico e combativo. No cenário jurídico contemporâneo, onde detalhes processuais definem fortunas e destinos, o Dr. Cássio Miguel atua como o principal aliado de quem exige o padrão máximo de proteção jurídica.
-                </p>
+                <span className="text-[#000000] text-sm uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
+              </motion.article>
+
+              {/* Artigos Secundários */}
+              <div className="lg:col-span-5 flex flex-col gap-12 lg:gap-0 justify-between">
+                
+                <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
+                  <div className="flex gap-4 items-center mb-3">
+                    <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Direito Administrativo</span>
+                    <span className="text-[#A8ABA2] text-xs">4 min leitura</span>
+                  </div>
+                  <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
+                    Processo administrativo disciplinar: quando a estratégia deve começar?
+                  </h3>
+                  <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
+                    A importância da intervenção técnica desde a sindicância preparatória para evitar a consolidação de teses acusatórias irremediáveis.
+                  </p>
+                  <span className="text-[#000000] text-xs uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
+                </motion.article>
+
+                <div className="hidden lg:block w-full h-[1px] bg-[#A8ABA2]/20 my-auto"></div>
+
+                <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
+                  <div className="flex gap-4 items-center mb-3">
+                    <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Estratégia Processual</span>
+                    <span className="text-[#A8ABA2] text-xs">6 min leitura</span>
+                  </div>
+                  <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
+                    Tutela de urgência: o que realmente precisa ser demonstrado?
+                  </h3>
+                  <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
+                    Além da teoria: como a organização probatória milimétrica define a concessão ou indeferimento de liminares críticas.
+                  </p>
+                  <span className="text-[#000000] text-xs uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
+                </motion.article>
+
               </div>
-            </motion.div>
-
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* SEÇÃO 6: CONSULTORIA E INVESTIMENTO */}
-      <section className="py-20 bg-[#f4f5f0] border-b border-[#e5e7e3]">
-        <div className="container mx-auto px-6 lg:px-16">
-          <motion.div 
-            className="mb-12 text-center"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <span className="text-sm font-bold tracking-widest uppercase text-[#1f2622] block mb-2">CONSULTORIA E INVESTIMENTO</span>
-            <h2 className="font-serif text-2xl lg:text-3xl text-[#1f2622]">Condições de Contratação e Atendimento Premium</h2>
-            <p className="text-[#4a5f51] text-sm mt-2">Atuação pautada pela transparência ética e dedicação exclusiva ao seu caso.</p>
-          </motion.div>
+        {/* 9. FAQ */}
+        <section className="py-24 bg-[#E3E0D7]">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24 max-w-4xl">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="space-y-12">
+              
+              <motion.div variants={fadeInUp}>
+                <h4 className="font-medium text-[#000000] mb-3">Como funciona o primeiro contato?</h4>
+                <p className="text-[#3C443D] font-light leading-relaxed">
+                  O primeiro contato destina-se a uma compreensão preliminar dos fatos. Solicitamos uma breve descrição do cenário para avaliarmos se a demanda se enquadra na área de especialidade e no escopo de atuação do escritório.
+                </p>
+              </motion.div>
 
-          <motion.div 
-            className="max-w-2xl mx-auto text-center bg-[#303b32] text-white p-8 rounded-md shadow-lg"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={fadeInUp}
-          >
-            <h3 className="font-serif text-2xl mb-4 text-[#f2f4f0]">Honorários</h3>
-            <p className="text-sm text-[#c3cdc5] mb-8 leading-relaxed">
-              Nossos honorários são definidos <strong className="text-white">sob consulta</strong>. 
-              <br /><br />
-              Entendemos que cada caso exige uma arquitetura jurídica única. Por isso, a precificação é realizada após a análise minuciosa das especificidades e da complexidade da demanda, garantindo uma proposta justa e transparente.
-            </p>
-            <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#839181] text-white px-8 py-3 text-sm font-medium hover:bg-[#aeb8b2] hover:text-[#1f2622] transition-colors rounded-sm uppercase tracking-widest">
-              Solicitar Orçamento
-            </a>
-          </motion.div>
-        </div>
-      </section>
+              <motion.div variants={fadeInUp}>
+                <h4 className="font-medium text-[#000000] mb-3">Como o escritório avalia uma nova demanda?</h4>
+                <p className="text-[#3C443D] font-light leading-relaxed">
+                  Através de uma análise documental rigorosa. Não emitimos pareceres ou adotamos estratégias baseadas apenas em relatos verbais; cada passo é planejado mediante o estudo aprofundado dos autos e das provas disponíveis.
+                </p>
+              </motion.div>
 
-      {/* SEÇÃO 7: PERGUNTAS FREQUENTES */}
-      <section className="py-20 bg-[#e8eae6] relative overflow-hidden">
-        <div className="absolute right-[-10%] top-[-10%] opacity-[0.04] w-full h-full pointer-events-none">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="w-full h-full"><path d="M12.984 9.07L14.4 7.656 16.52 9.778l-1.414 1.414-2.122-2.121zM9.449 14.727l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zM22.182 5.535l-2.121-2.121-1.414 1.414 2.121 2.121 1.414-1.414zM2.828 16.971L5.657 14.142l4.243 4.243-2.829 2.828-4.243-4.242zM15.101 11.899l4.242-4.242 1.415 1.414-4.243 4.243-1.414-1.415z"/></svg>
-        </div>
-        
-        <motion.div 
-          className="container mx-auto px-6 lg:px-16 max-w-4xl relative z-10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-        >
-          <motion.h2 variants={fadeInUp} className="font-serif text-2xl text-[#1f2622] mb-10 uppercase tracking-widest text-center">Perguntas Frequentes (FAQ)</motion.h2>
+              <motion.div variants={fadeInUp}>
+                <h4 className="font-medium text-[#000000] mb-3">Como são definidos o escopo e os honorários?</h4>
+                <p className="text-[#3C443D] font-light leading-relaxed">
+                  A precificação é estritamente sob consulta, realizada após o diagnóstico inicial. Os honorários refletem a complexidade do caso, o tempo estimado de dedicação exclusiva e a engenharia processual exigida para a defesa eficiente dos seus interesses.
+                </p>
+              </motion.div>
 
-          <div className="space-y-8">
-            <motion.div variants={fadeInUp}>
-              <h4 className="font-bold text-sm mb-2 text-[#1f2622]">QA: O escritório atua em volume de processos?</h4>
-              <p className="text-[#4a5f51] text-sm leading-relaxed">
-                A: Não. Nossa atuação é estritamente "boutique". Limitamos o número de causas aceitas para que o Dr. Cássio Miguel e sua equipe técnica possam se dedicar pessoalmente aos detalhes de cada caso, garantindo um nível incomparável de zelo e estratégia processual.
-              </p>
+              <motion.div variants={fadeInUp}>
+                <h4 className="font-medium text-[#000000] mb-3">Quem acompanha o processo?</h4>
+                <p className="text-[#3C443D] font-light leading-relaxed">
+                  O Dr. Cássio Miguel lidera pessoalmente a condução estratégica de todos os processos assumidos, garantindo que o padrão técnico e a responsabilidade profissional sejam mantidos em todas as instâncias e atos processuais.
+                </p>
+              </motion.div>
+
             </motion.div>
+          </div>
+        </section>
 
-            <motion.div variants={fadeInUp}>
-              <h4 className="font-bold text-sm mb-2 text-[#1f2622]">QA: Como funciona a atuação em casos cíveis e administrativos simultâneos?</h4>
-              <p className="text-[#4a5f51] text-sm leading-relaxed">
-                A: Casos de alta complexidade frequentemente geram reflexos em ambas as áreas. Nossa expertise permite que as defesas andem de forma coordenada, impedindo que uma manifestação na área administrativa prejudique o processo cível, e vice-versa.
-              </p>
+        {/* 10. CONTATO (CTA FINAL) */}
+        <section id="contato" className="py-32 bg-[#D1BFA8] text-center">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+              <motion.span variants={fadeInUp} className="text-[#3C443D] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
+                Contato
+              </motion.span>
+              <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl mb-6 leading-[1.1]">
+                Uma questão jurídica começa<br />por uma boa compreensão do caso.
+              </motion.h2>
+              <motion.p variants={fadeInUp} className="text-[#3C443D] text-lg font-light mb-12">
+                Para conhecer a atuação do escritório ou encaminhar uma questão para análise, entre em contato.
+              </motion.p>
+              <motion.button 
+                variants={fadeInUp}
+                onClick={handleWhatsApp}
+                className="inline-flex items-center justify-center bg-[#3C443D] text-[#E3E0D7] hover:bg-[#000000] hover:text-white px-8 py-4 text-sm font-medium transition-colors duration-300 rounded shadow-sm"
+              >
+                Entrar em contato <span className="ml-2">→</span>
+              </motion.button>
             </motion.div>
+          </div>
+        </section>
+      </main>
 
-            <motion.div variants={fadeInUp}>
-              <h4 className="font-bold text-sm mb-2 text-[#1f2622]">QA: O que não está contemplado nesta proposta?</h4>
-              <p className="text-[#4a5f51] text-sm leading-relaxed">
-                A: Mantemos o rigor da transparência: despesas de custas judiciais, taxas, perícias técnicas de assistentes externos e deslocamentos interestaduais não estão inclusos e são informados previamente. Atuações em novas instâncias ou ações autônomas paralelas não relacionadas à lide inicial demandam novos contratos específicos.
-              </p>
-            </motion.div>
+      {/* 11. FOOTER */}
+      <footer className="bg-[#3C443D] text-[#E3E0D7] py-16 border-t border-[#A8ABA2]/20">
+        <div className="container mx-auto px-6 md:px-12 lg:px-24">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12">
             
+            <div className="space-y-4">
+              <h3 className="font-serif text-2xl text-white mb-6">Cássio Miguel</h3>
+              <div className="text-sm font-light text-[#A8ABA2] space-y-1">
+                <p className="text-[#E3E0D7] font-medium mb-2">Cássio Miguel Sociedade Individual de Advocacia</p>
+                <p>Cássio Miguel de Oliveira Cavalcante</p>
+                <p>OAB/MS nº 22.647</p>
+                <p>Campo Grande — Mato Grosso do Sul</p>
+              </div>
+            </div>
+
+            <div className="space-y-4 text-sm font-light text-[#A8ABA2]">
+              <h4 className="text-white font-medium mb-6 uppercase tracking-widest text-xs">Contato</h4>
+              <p><a href="https://wa.me/5567996449627" className="hover:text-white transition-colors">+55 67 99644-9627</a></p>
+              <p><a href="mailto:contato@cassiomiguel.adv.br" className="hover:text-white transition-colors">contato@cassiomiguel.adv.br</a></p>
+            </div>
+
+            <div className="space-y-4 text-sm font-light text-[#A8ABA2]">
+              <h4 className="text-white font-medium mb-6 uppercase tracking-widest text-xs">Redes</h4>
+              <p><a href="#" className="hover:text-white transition-colors">Instagram</a></p>
+              <p><a href="#" className="hover:text-white transition-colors">LinkedIn</a></p>
+            </div>
 
           </div>
-        </motion.div>
-      </section>
 
-      {/* SEÇÃO 8: FOOTER */}
-      <footer className="bg-[#242d26] text-white py-16 text-center border-t border-[#3f4f44]">
-        <motion.div 
-          className="container mx-auto px-6 max-w-3xl"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={fadeInUp}
-        >
-          <span className="text-sm font-bold tracking-widest uppercase text-[#8b998a] block mb-6">CÁSSIO MIGUEL ADVOCACIA</span>
-          <h2 className="font-serif text-xl lg:text-2xl leading-snug mb-8 text-[#f2f4f0]">
-            Quando a sua reputação e o seu patrimônio exigem a melhor defesa, a técnica é sua única garantia.
-          </h2>
-          
-          <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer" className="border border-[#8b998a] bg-[#303b32] text-white px-6 py-3 text-sm font-medium hover:bg-[#8b998a] hover:text-[#1f2622] transition-colors rounded-sm inline-flex items-center mb-12">
-            Agendar Minha Consulta
-          </a>
-          
-          <div className="text-[10px] font-light text-[#8b998a] tracking-widest uppercase space-y-1">
-            <p>Cássio Miguel Advocacia</p>
-            <p>OAB/MS nº 22.647</p>
-            <p className="pt-2">Todos os direitos reservados</p>
+          <div className="mt-16 pt-8 border-t border-[#A8ABA2]/20 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-light text-[#A8ABA2]">
+            <p>&copy; 2026 Cássio Miguel Sociedade Individual de Advocacia</p>
+            <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
           </div>
-        </motion.div>
+        </div>
       </footer>
     </div>
   )
