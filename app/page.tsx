@@ -45,10 +45,15 @@ export default function LandingPage() {
         className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-white lg:text-white text-[#000000]"}`}
       >
         <div className="container mx-auto px-6 md:px-12 lg:px-24 h-[80px] flex justify-between items-center">
-          <Link href="/" className="font-serif text-xl tracking-wide z-50">
-            <span className={`transition-colors duration-700 ${!scrolled && !menuOpen ? "text-white lg:text-[#E3E0D7]" : "text-[#000000]"}`}>
-              CÁSSIO MIGUEL
-            </span>
+          <Link href="/" className="z-50 relative w-48 h-10">
+            <Image 
+              src={(!scrolled && !menuOpen) ? "/logo-horiz-branco.png" : "/logo-horiz-escuro.png"} 
+              alt="Cássio Miguel Advocacia"
+              fill
+              className="object-contain object-left transition-opacity duration-300"
+              priority
+              sizes="192px"
+            />
           </Link>
           
           <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
