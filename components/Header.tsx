@@ -50,12 +50,12 @@ export default function Header() {
             <Link
               href="/"
               className="flex items-center gap-3 group"
-              aria-label="Página Inicial Cássio Miguel Advocacia"
+              aria-label="Página Inicial Cássio Miguel Sociedade Individual de Advocacia"
             >
               <div className="relative w-44 h-12 transition-transform group-hover:scale-105">
                 <Image
                   src="/logo.png"
-                  alt="Cássio Miguel Advocacia Logo"
+                  alt="Cássio Miguel Sociedade Individual de Advocacia Logo"
                   fill
                   className="object-contain"
                   priority
@@ -149,7 +149,7 @@ export default function Header() {
               <div className="relative w-36 h-10">
                 <Image
                   src="/logo2.png"
-                  alt="Cássio Miguel Advocacia"
+                  alt="Cássio Miguel Sociedade Individual de Advocacia"
                   fill
                   className="object-contain"
                 />

@@ -48,7 +48,7 @@ export default function LandingPage() {
           <Link href="/" className="z-50 relative w-48 h-10">
             <Image 
               src={(!scrolled && !menuOpen) ? "/logo-horiz-branco.png" : "/logo-horiz-escuro.png"} 
-              alt="Cássio Miguel Advocacia"
+              alt="Cássio Miguel Sociedade Individual de Advocacia"
               fill
               className="object-contain object-left transition-opacity duration-300"
               priority
@@ -532,10 +532,11 @@ export default function LandingPage() {
             <div className="space-y-4">
               <h3 className="font-serif text-2xl text-white mb-6">Cássio Miguel</h3>
               <div className="text-sm font-light text-[#A8ABA2] space-y-1">
-                <p className="text-[#E3E0D7] font-medium mb-2">Cássio Miguel Sociedade Individual de Advocacia</p>
-                <p>Cássio Miguel de Oliveira Cavalcante</p>
-                <p>OAB/MS nº 22.647</p>
-                <p>Campo Grande — Mato Grosso do Sul</p>
+                <p className="text-[#E3E0D7] font-medium mb-2 uppercase tracking-wide">Cássio Miguel Sociedade Individual de Advocacia</p>
+                <p>Cássio Miguel de Oliveira Cavalcante (OAB/MS nº 22.647)</p>
+                <p>CNPJ: 43.734.988/0001-25</p>
+                <p>Av. Afonso Pena, 5723 - Sala 11</p>
+                <p>CEP: 79031-010 - Campo Grande/MS</p>
               </div>
             </div>
 

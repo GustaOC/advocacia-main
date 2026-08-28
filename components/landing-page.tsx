@@ -34,7 +34,7 @@ export function LandingPage() {
           <div className="relative w-40 h-12">
             <Image 
               src="/logo.png" 
-              alt="Cássio Miguel Advocacia" 
+              alt="Cássio Miguel Sociedade Individual de Advocacia" 
               fill 
               className="object-contain" 
               priority 
@@ -88,7 +88,7 @@ export function LandingPage() {
 
       <footer className="bg-brand text-white py-12">
         <div className="container mx-auto px-6 text-center text-brand-gray">
-          <p>&copy; {new Date().getFullYear()} Cássio Miguel Advocacia. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Cássio Miguel Sociedade Individual de Advocacia. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

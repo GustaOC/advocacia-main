@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
-            <h3 className="font-semibold text-lg mb-4">Cássio Miguel Advocacia</h3>
+            <h3 className="font-semibold text-lg mb-4">Cássio Miguel Sociedade Individual de Advocacia</h3>
             <p className="text-sm text-brand-gray">Assessoria jurídica completa e personalizada para proteger seus interesses.</p>
           </div>
           <div>
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t border-brand/80 pt-8 text-center text-xs text-brand-gray">
-          <p>&copy; {new Date().getFullYear()} Cássio Miguel Advocacia. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Cássio Miguel Sociedade Individual de Advocacia. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

@@ -23,10 +23,10 @@ const marcellus = Marcellus({
 });
 
 export const metadata: Metadata = {
-  title: 'Cássio Miguel Advocacia | Assessoria Jurídica em Campo Grande/MS',
+  title: 'Cássio Miguel Sociedade Individual de Advocacia',
   description: 'Assessoria jurídica especializada em direito civil e empresarial. Atendimento personalizado em Campo Grande — soluções práticas e seguras para pessoas e empresas.',
   keywords: 'advocacia, advogado, campo grande, direito civil, direito empresarial',
-  authors: [{ name: 'Cássio Miguel Advocacia' }],
+  authors: [{ name: 'Cássio Miguel Sociedade Individual de Advocacia' }],
   robots: 'index, follow',
   icons: {
     icon: '/favicon-google-style.png',
