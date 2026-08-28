@@ -327,48 +327,21 @@ export default function PremiumLandingPage() {
           </motion.div>
 
           <motion.div 
-            className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto"
+            className="max-w-2xl mx-auto text-center bg-[#303b32] text-white p-8 rounded-md shadow-lg"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            variants={staggerContainer}
+            variants={fadeInUp}
           >
-            <motion.div variants={fadeInUp} className="flex flex-col lg:flex-row gap-4">
-              <div className="bg-[#303b32] text-white p-6 rounded-md flex-1">
-                <h3 className="font-serif text-lg mb-2">1. Honorários de Pró-Labore</h3>
-                <p className="text-xs text-[#aeb8b2] mb-4">Estudo, Engenharia Inicial e Atuação Ordinária</p>
-                <p className="text-xs font-light text-[#c3cdc5] mb-6">
-                  Garante a dedicação prioritária do escritório, análise minuciosa, elaboração de teses defensivas e acompanhamento dos atos ordinários.
-                </p>
-                <div className="text-xs font-light text-[#aeb8b2] border-t border-[#4a5f51] pt-4 space-y-2">
-                  <p>Entrada: R$ [Inserir Valor] no ato.</p>
-                  <p>Saldo: R$ [Inserir Valor] no mês subsequente.</p>
-                </div>
-              </div>
-              <div className="bg-[#839181] text-white p-6 rounded-md flex-1 flex flex-col items-center justify-center text-center">
-                <span className="text-2xl font-serif">R$ [Valor]</span>
-                <span className="text-xs mt-2 block opacity-80">no mês subsequente</span>
-              </div>
-            </motion.div>
-
-            <motion.div variants={fadeInUp} className="flex flex-col lg:flex-row gap-4">
-              <div className="bg-[#303b32] text-white p-6 rounded-md flex-1">
-                <h3 className="font-serif text-lg mb-2">2. Honorários de Êxito</h3>
-                <p className="text-xs text-[#aeb8b2] mb-4">Foco no Resultado</p>
-                <p className="text-xs font-light text-[#c3cdc5] mb-6">
-                  Alinhamento de interesses: devidos estritamente no caso de desfecho vitorioso (arquivamento ou procedência total).
-                </p>
-                <div className="text-xs font-light text-[#aeb8b2] border-t border-[#4a5f51] pt-4 space-y-2">
-                  <p>Entrada de Êxito (30%): R$ [Valor] em até 3 dias úteis.</p>
-                  <p>Saldo (70%): R$ [Valor] parcelado em até 4x.</p>
-                </div>
-              </div>
-              <div className="bg-[#839181] text-white p-6 rounded-md flex-1 flex flex-col items-center justify-center text-center">
-                <span className="text-2xl font-serif">R$ [Valor]</span>
-                <span className="text-xs mt-2 block opacity-80">em até 4x mensais</span>
-              </div>
-            </motion.div>
-
+            <h3 className="font-serif text-2xl mb-4 text-[#f2f4f0]">Honorários</h3>
+            <p className="text-sm text-[#c3cdc5] mb-8 leading-relaxed">
+              Nossos honorários são definidos <strong className="text-white">sob consulta</strong>. 
+              <br /><br />
+              Entendemos que cada caso exige uma arquitetura jurídica única. Por isso, a precificação é realizada após a análise minuciosa das especificidades e da complexidade da demanda, garantindo uma proposta justa e transparente.
+            </p>
+            <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#839181] text-white px-8 py-3 text-sm font-medium hover:bg-[#aeb8b2] hover:text-[#1f2622] transition-colors rounded-sm uppercase tracking-widest">
+              Solicitar Orçamento
+            </a>
           </motion.div>
         </div>
       </section>
@@ -410,12 +383,7 @@ export default function PremiumLandingPage() {
               </p>
             </motion.div>
             
-            <motion.div variants={fadeInUp}>
-              <h4 className="font-bold text-sm mb-2 text-[#1f2622]">QA: Qual a validade desta proposta?</h4>
-              <p className="text-[#4a5f51] text-sm leading-relaxed">
-                A: Devido à limitação de vagas em nossa carteira para garantir a máxima atenção aos clientes ativos, esta proposta de condições especiais tem validade improrrogável até 07/05/2026.
-              </p>
-            </motion.div>
+
           </div>
         </motion.div>
       </section>
@@ -429,20 +397,19 @@ export default function PremiumLandingPage() {
           viewport={{ once: true, margin: "-50px" }}
           variants={fadeInUp}
         >
-          <span className="text-sm font-bold tracking-widest uppercase text-[#8b998a] block mb-6">FOOTER</span>
+          <span className="text-sm font-bold tracking-widest uppercase text-[#8b998a] block mb-6">CÁSSIO MIGUEL ADVOCACIA</span>
           <h2 className="font-serif text-xl lg:text-2xl leading-snug mb-8 text-[#f2f4f0]">
             Quando a sua reputação e o seu patrimônio exigem a melhor defesa, a técnica é sua única garantia.
           </h2>
           
-          <button className="border border-[#8b998a] bg-[#303b32] text-white px-6 py-3 text-sm font-medium hover:bg-[#8b998a] hover:text-[#1f2622] transition-colors rounded-sm inline-flex items-center mb-12">
-            [Assegurar Minha Defesa Processual de Elite agora]
-          </button>
+          <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer" className="border border-[#8b998a] bg-[#303b32] text-white px-6 py-3 text-sm font-medium hover:bg-[#8b998a] hover:text-[#1f2622] transition-colors rounded-sm inline-flex items-center mb-12">
+            Agendar Minha Consulta
+          </a>
           
           <div className="text-[10px] font-light text-[#8b998a] tracking-widest uppercase space-y-1">
-            <p>Firma de Miguel</p>
-            <p>CNPJ: [Inserir]</p>
+            <p>Cássio Miguel Advocacia</p>
             <p>OAB/MS nº 22.647</p>
-            <p className="pt-2">All rights reserved</p>
+            <p className="pt-2">Todos os direitos reservados</p>
           </div>
         </motion.div>
       </footer>
