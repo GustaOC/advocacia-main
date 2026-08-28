@@ -114,13 +114,13 @@ export default function LandingPage() {
           </div>
           
           {/* Lado Direito - 45% Fotografia */}
-          <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative">
+          <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative flex items-center justify-center bg-[#EDEDED]">
             <Image 
-              src="https://i.postimg.cc/4NmVt2Gp/AAAA.jpg" 
-              alt="Dr. Cássio Miguel" 
+              src="/icone-cm.jpg" 
+              alt="Ícone Cássio Miguel" 
               fill
               priority
-              className="object-cover object-top grayscale-[20%] contrast-[1.05]"
+              className="object-cover object-center"
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
           </div>
