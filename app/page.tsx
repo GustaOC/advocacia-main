@@ -400,14 +400,16 @@ export default function LandingPage() {
                 className="lg:col-span-7 group cursor-pointer"
               >
                 <div className="w-full h-64 md:h-[400px] bg-[#E3E0D7] mb-6 overflow-hidden relative flex items-center justify-center">
-                   <div className="absolute inset-0 bg-[#3C443D]/10 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none"></div>
-                   <Image 
-                     src="/icone-artigo.jpg" 
-                     alt="Análise Jurídica" 
-                     fill 
-                     className="object-cover object-center group-hover:scale-[1.03] transition-transform duration-700"
-                     sizes="(max-width: 1024px) 100vw, 60vw"
-                   />
+                   <div className="absolute inset-0 bg-[#3C443D]/10 group-hover:bg-transparent transition-colors duration-700 z-20 pointer-events-none"></div>
+                   <div className="relative w-[45%] h-[65%] group-hover:scale-[1.03] transition-transform duration-700 z-10">
+                     <Image 
+                       src="/icone-artigo.jpg" 
+                       alt="Análise Jurídica" 
+                       fill 
+                       className="object-contain object-center mix-blend-multiply"
+                       sizes="(max-width: 1024px) 50vw, 30vw"
+                     />
+                   </div>
                 </div>
                 <div className="flex gap-4 items-center mb-4">
                   <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Processo Cível</span>
