@@ -2,6 +2,7 @@
 "use client"
 import { useAuth } from '@/hooks/use-auth'
 import { useState, useCallback, ReactNode, useEffect } from "react"
+import dynamic from "next/dynamic"
 import { useQuery } from '@tanstack/react-query';
 
 import Image from "next/image"
@@ -13,29 +14,29 @@ import {
   ArrowUp, ArrowDown, Sparkles, Zap, Shield, Award, Target, FileSearch
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
-import { GmailInboxModule } from "./gmail-inbox-module"
+const GmailInboxModule = dynamic(() => import('./gmail-inbox-module').then(m => m.GmailInboxModule), { ssr: false })
 // import { GoogleWorkspaceModule } from "./google-workspace-module" // REMOVIDO: Google Workspace Hub
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { apiClient } from "@/lib/api-client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import EntitiesModule from "@/components/entities-module"
-import { CasesModule } from "@/components/cases-module"
-import { FinancialModule } from "@/components/financial-module"
-import { PetitionsModule } from "@/components/petitions-module"
-import { PetitionWorkflowsModule } from "./petition-workflows-module"
-import { EmployeeManagement } from "@/components/employee-management"
+const EntitiesModule = dynamic(() => import('@/components/entities-module'), { ssr: false })
+const CasesModule = dynamic(() => import('@/components/cases-module').then(m => m.CasesModule), { ssr: false })
+const FinancialModule = dynamic(() => import('@/components/financial-module').then(m => m.FinancialModule), { ssr: false })
+const PetitionsModule = dynamic(() => import('@/components/petitions-module').then(m => m.PetitionsModule), { ssr: false })
+const PetitionWorkflowsModule = dynamic(() => import('./petition-workflows-module').then(m => m.PetitionWorkflowsModule), { ssr: false })
+const EmployeeManagement = dynamic(() => import('@/components/employee-management').then(m => m.EmployeeManagement), { ssr: false })
 import { BrandLogo } from "@/components/brand-logo"
-import { CalendarModule } from "@/components/calendar-module"
-import { TasksModule } from "@/components/tasks-module"
-import { ReportsModule } from "@/components/reports-module"
+const CalendarModule = dynamic(() => import('@/components/calendar-module').then(m => m.CalendarModule), { ssr: false })
+const TasksModule = dynamic(() => import('@/components/tasks-module').then(m => m.TasksModule), { ssr: false })
+const ReportsModule = dynamic(() => import('@/components/reports-module').then(m => m.ReportsModule), { ssr: false })
 import { NotificationsDropdown } from "./notifications-dropdown"
 import { SystemSettingsModal } from './system-settings-modal'
 import { UserSettingsModal } from './user-settings-modal'
-import { TemplatesModule } from "./templates-module"
-import { AudienciasModule } from './audiencias-module';
-import CruzamentoPage from "@/app/dashboard/cruzamento/page"; // <-- CORREÇÃO: Importa o novo componente
+const TemplatesModule = dynamic(() => import('./templates-module').then(m => m.TemplatesModule), { ssr: false })
+const AudienciasModule = dynamic(() => import('./audiencias-module').then(m => m.AudienciasModule), { ssr: false });
+const CruzamentoPage = dynamic(() => import('@/app/dashboard/cruzamento/page'), { ssr: false }); // <-- CORREÇÃO: Importa o novo componente
 import { Mail, Megaphone } from "lucide-react"; // Importar Mail para os ícones (Chrome não é mais necessário)
-import { PublicationsModule } from "@/components/publications-module";
+const PublicationsModule = dynamic(() => import('@/components/publications-module').then(m => m.PublicationsModule), { ssr: false });
 
 interface GlobalFilters {
   cases?: { status: string };
@@ -496,21 +497,23 @@ export function Dashboard() {
     setGlobalFilters(filters);
   };
 
-  const TABS_CONTENT: { [key: string]: React.ReactNode } = {
-    overview: null, // Handled directly in ModernLayout
-    entities: <EntitiesModule />,
-    cases: <CasesModule initialFilters={globalFilters.cases} />,
-    cruzamento: <CruzamentoPage />, // <-- CORREÇÃO: Adicionada a nova página ao conteúdo das abas
-    petitions: <PetitionWorkflowsModule />,
-    templates: <TemplatesModule />,
-    financial: <FinancialModule />,
-    calendar: <CalendarModule />,
-    audiencias: <AudienciasModule />,
-    tasks: <TasksModule />,
-    publications: <PublicationsModule />,
-    // "google-workspace": <GoogleWorkspaceModule />, // REMOVIDO: Google Workspace Hub
-    "gmail-inbox": <GmailInboxModule />, // Adicionar o novo módulo
-    employees: <EmployeeManagement />,
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case 'overview': return null;
+      case 'entities': return <EntitiesModule />;
+      case 'cases': return <CasesModule initialFilters={globalFilters.cases} />;
+      case 'cruzamento': return <CruzamentoPage />;
+      case 'petitions': return <PetitionWorkflowsModule />;
+      case 'templates': return <TemplatesModule />;
+      case 'financial': return <FinancialModule />;
+      case 'calendar': return <CalendarModule />;
+      case 'audiencias': return <AudienciasModule />;
+      case 'tasks': return <TasksModule />;
+      case 'publications': return <PublicationsModule />;
+      case 'gmail-inbox': return <GmailInboxModule />;
+      case 'employees': return <EmployeeManagement />;
+      default: return null;
+    }
   };
 
   return (
@@ -539,7 +542,7 @@ export function Dashboard() {
         onUserSettings={() => setUserSettingsOpen(true)}
         onSystemSettings={() => setSystemSettingsOpen(true)}
       >
-        {TABS_CONTENT[activeTab]}
+        {renderActiveTab()}
       </ModernLayout>
       <SystemSettingsModal isOpen={isSystemSettingsOpen} onClose={() => setSystemSettingsOpen(false)} />
       <UserSettingsModal isOpen={isUserSettingsOpen} onClose={() => setUserSettingsOpen(false)} />

@@ -20,10 +20,20 @@ export default function MonacoEditor({
   const editorRef = useRef<HTMLDivElement>(null);
   const editorInstance = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
+  const onChangeRef = useRef(onChange);
+  
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Garante que um patch necessário para o Monaco Editor seja carregado
-      require("../public/monaco-fix.js");
+      try {
+        require("../public/monaco-fix.js");
+      } catch (e) {
+        console.warn("Could not load monaco-fix.js", e);
+      }
 
       if (editorRef.current && !editorInstance.current) {
         // Cria a instância do editor apenas uma vez
@@ -38,7 +48,9 @@ export default function MonacoEditor({
         // Adiciona um "ouvinte" para capturar as mudanças de conteúdo
         editor.onDidChangeModelContent(() => {
           // Quando o usuário digita, a função 'onChange' é chamada
-          onChange(editor.getValue());
+          if (onChangeRef.current) {
+            onChangeRef.current(editor.getValue());
+          }
         });
 
         editorInstance.current = editor;
@@ -52,7 +64,7 @@ export default function MonacoEditor({
         }
       };
     }
-  }, [language, onChange, value]);
+  }, [language]); // Removido 'value' e 'onChange' para não recriar a cada tecla
 
   // Este efeito garante que, se o valor mudar por uma ação externa (ex: selecionar outra petição),
   // o conteúdo do editor seja atualizado.
