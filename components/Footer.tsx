@@ -24,7 +24,7 @@ export default function Footer() {
             <address className="space-y-3 text-sm not-italic text-brand-gray">
               <p className="flex items-center justify-center md:justify-start gap-2"><MapPin className="h-4 w-4"/> Campo Grande, MS</p>
               <p className="flex items-center justify-center md:justify-start gap-2"><Phone className="h-4 w-4"/> (67) 99644-9627</p>
-              <p className="flex items-center justify-center md:justify-start gap-2"><Mail className="h-4 w-4"/> contato@cassiomiguel.adv.br</p>
+              <p className="flex items-center justify-center md:justify-start gap-2"><Mail className="h-4 w-4"/> advogado@cassiomiguel.com.br</p>
             </address>
           </div>
         </div>
