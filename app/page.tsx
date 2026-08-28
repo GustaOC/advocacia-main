@@ -42,7 +42,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#E3E0D7] text-[#000000] font-sans selection:bg-[#95A08A] selection:text-white">
       {/* 1. HEADER */}
       <header 
-        className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-white lg:text-white text-[#000000]"}`}
+        className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-white"}`}
       >
         <div className="container mx-auto px-6 md:px-12 lg:px-24 h-[80px] flex justify-between items-center">
           <Link href="/" className="z-50 relative w-48 h-10">
