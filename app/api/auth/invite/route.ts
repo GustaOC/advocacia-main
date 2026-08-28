@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     // Usando a chave de serviço como segredo para assinar o JWT
-    const secretKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const secretKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!secretKey) {
       return NextResponse.json({ error: 'Configuração do servidor ausente (Secret Key)' }, { status: 500 });
     }

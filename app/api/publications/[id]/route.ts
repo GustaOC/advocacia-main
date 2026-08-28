@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, requireAuth } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
+
+export const dynamic = 'force-dynamic';
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -218,6 +221,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(data);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro PUT /api/publications/[id]:", error);
     return NextResponse.json({ error: error.message || "Falha ao atualizar publicação." }, { status: 500 });
   }
@@ -225,6 +229,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -251,6 +256,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro DELETE /api/publications/[id]:", error);
     return NextResponse.json({ error: error.message || "Falha ao excluir publicação." }, { status: 500 });
   }

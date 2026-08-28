@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, requireAuth } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
 
 export const dynamic = 'force-dynamic';
@@ -25,6 +25,7 @@ function formatDescriptionForEmail(text: string | null | undefined) {
 
 export async function GET(request: Request) {
   try {
+    const user = await requireAuth();
     // Instancia o cliente diretamente com as variáveis de ambiente
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -48,6 +49,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(data || []);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro GET /api/tasks:", error);
     return NextResponse.json(
       { error: error.message || "Falha ao buscar tarefas." },
@@ -58,6 +60,7 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -137,6 +140,7 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json(data);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro PATCH /api/tasks:", error);
     return NextResponse.json(
       { error: error.message || "Falha ao atualizar tarefa." },
@@ -147,6 +151,7 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -163,6 +168,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro DELETE /api/tasks:", error);
     return NextResponse.json({ error: error.message || "Falha ao excluir tarefa." }, { status: 500 });
   }
@@ -170,6 +176,7 @@ export async function DELETE(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -230,6 +237,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(data);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro POST /api/tasks:", error);
     return NextResponse.json(
       { error: error.message || "Falha ao criar tarefa." },

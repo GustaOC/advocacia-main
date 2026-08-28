@@ -10,7 +10,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ valid: false, error: 'Token não fornecido.' }, { status: 400 });
     }
 
-    const secretKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const secretKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!secretKey) {
       return NextResponse.json({ valid: false, error: 'Configuração do servidor ausente.' }, { status: 500 });
     }

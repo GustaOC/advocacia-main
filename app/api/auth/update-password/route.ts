@@ -5,6 +5,7 @@ import { z } from 'zod'
 // CORREÇÃO: Mantendo a consistência com o resto do projeto.
 import { createAdminClient } from '@/lib/supabase/server' 
 import { withRateLimit } from '@/lib/with-rate-limit'
+import { requireAuth } from '@/lib/auth'
 
 // CORREÇÃO: Garantindo que a rota seja sempre dinâmica.
 export const dynamic = 'force-dynamic'
@@ -26,6 +27,10 @@ const BodySchema = z
 
 async function POST_handler(req: NextRequest): Promise<NextResponse> {
   try {
+    const user = await requireAuth()
+    if (!user) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
+    }
     const json = await req.json()
     const parsed = BodySchema.safeParse(json)
     if (!parsed.success) {

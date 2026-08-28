@@ -18,6 +18,7 @@ const PUBLIC_API_PATTERNS = [
   '/api/auth/logout',
   '/api/auth/callback',
   '/api/auth/verify-invite',
+  '/api/cron',
 ];
 
 function isPublic(pathname: string): boolean {
@@ -47,7 +48,6 @@ function isPublic(pathname: string): boolean {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  console.log(`[Middleware] Processando rota: ${pathname}`);
   const res = NextResponse.next();
 
   // ✅ CORREÇÃO: Aplicando os Headers de Segurança diretamente no middleware

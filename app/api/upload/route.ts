@@ -1,14 +1,27 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAuth } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
+    const user = await requireAuth();
     const formData = await request.formData();
     const file = formData.get('file') as File;
     const bucket = formData.get('bucket') as string || 'task-attachments';
     
     if (!file) {
       return NextResponse.json({ error: 'Nenhum arquivo enviado' }, { status: 400 });
+    }
+
+    if (file.size > 25 * 1024 * 1024) {
+      return NextResponse.json({ error: 'Arquivo muito grande (máximo 25MB)' }, { status: 400 });
+    }
+
+    const allowedBuckets = ['task-attachments', 'chat-files'];
+    if (!allowedBuckets.includes(bucket)) {
+      return NextResponse.json({ error: 'Bucket inválido' }, { status: 403 });
     }
 
     const supabase = createClient(

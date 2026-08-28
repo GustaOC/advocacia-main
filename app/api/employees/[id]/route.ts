@@ -14,7 +14,7 @@ const EmployeeUpdateSchema = z.object({
 // PUT: Atualizar um funcionário
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     try {
-        // await requirePermission("employees_edit");
+        await requirePermission("employees_edit");
         const body = await req.json();
         const parsedData = EmployeeUpdateSchema.parse(body);
 
@@ -42,7 +42,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 // DELETE: Desativar um funcionário
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     try {
-        // await requirePermission("employees_delete");
+        await requirePermission("employees_delete");
         const supabase = createAdminClient();
 
         // Em vez de deletar, vamos desativar o funcionário (soft delete)

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +9,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -40,6 +42,7 @@ export async function GET(
 
     return NextResponse.json(data);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error(`Erro GET /api/petition-workflows/${params.id}:`, error);
     return NextResponse.json(
       { error: error.message || "Falha ao buscar workflow." },
@@ -53,6 +56,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -79,6 +83,7 @@ export async function PUT(
 
     return NextResponse.json(data);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error(`Erro PUT /api/petition-workflows/${params.id}:`, error);
     return NextResponse.json(
       { error: error.message || "Falha ao atualizar workflow." },
@@ -92,6 +97,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -107,6 +113,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error(`Erro DELETE /api/petition-workflows/${params.id}:`, error);
     return NextResponse.json(
       { error: error.message || "Falha ao excluir workflow." },

@@ -8,6 +8,9 @@ export const dynamic = 'force-dynamic' // CORREÇÃO APLICADA
 
 // NOTE: Rota de ferramenta para migrar usuários da tabela 'employees' para 'auth.users'
 export async function GET() {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not available' }, { status: 404 });
+  }
   try {
     // CORREÇÃO: Adicionada verificação de variáveis de ambiente
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY

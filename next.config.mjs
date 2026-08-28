@@ -1,53 +1,28 @@
-// @ts-check
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-
-  // Suprime os warnings de serialização de strings grandes no cache do webpack
-  webpack: (config, { isServer }) => {
-    config.infrastructureLogging = {
-      level: 'error',
-    };
-    return config;
-  },
-  
+  poweredByHeader: false,
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'i.postimg.cc',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'owrpceuduerrzfbkedie.supabase.co',
-        port: '',
-        pathname: '/storage/**',
-      },
+      { protocol: 'https', hostname: '**.supabase.co' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'i.postimg.cc' }
     ],
   },
-
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: '/(.*)',
         headers: [
-          {
-            key: "Content-Security-Policy",
-            value: `
-              default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http: wss: ws:;
-            `.replace(/\s{2,}/g, " ").trim()
-          },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' }
         ],
       },
-    ];
-  },
-};
+    ]
+  }
+}
 
-export default nextConfig;
+export default nextConfig

@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth';
 
 // Adicionando um GET apenas para fins de debug (para testar acessando direto no navegador)
 export async function GET(request: Request) {
+  if (process.env.NODE_ENV !== 'development') {
+    return NextResponse.json({ error: 'Não encontrado' }, { status: 404 });
+  }
   return NextResponse.json({ 
     status: "ok", 
     message: "A Rota da API está no ar na Vercel e funcionando!",
@@ -11,6 +15,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const user = await requireAuth();
     const githubUrl = 'https://api.github.com/repos/GustaOC/advocacia-main/actions/workflows/robo-publicacoes.yml/dispatches';
     const githubToken = process.env.GITHUB_PAT;
 
@@ -42,6 +47,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Robô acionado com sucesso no GitHub Actions!' });
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro no gatilho do robô:", error);
     return NextResponse.json({ error: 'Erro interno no servidor ao acionar robô.' }, { status: 500 });
   }

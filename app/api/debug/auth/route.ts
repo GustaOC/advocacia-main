@@ -3,6 +3,9 @@ import { cookies } from 'next/headers'
 import { type NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not available' }, { status: 404 });
+  }
   const cookieStore = cookies()
   const sbAccessToken = cookieStore.get('sb-access-token')?.value
   const sbRefreshToken = cookieStore.get('sb-refresh-token')?.value

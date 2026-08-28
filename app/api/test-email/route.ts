@@ -4,6 +4,9 @@ import nodemailer from 'nodemailer';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not available' }, { status: 404 });
+  }
   try {
     const { searchParams } = new URL(request.url);
     const to = searchParams.get("to");

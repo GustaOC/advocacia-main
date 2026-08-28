@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { getSessionUser } from "@/lib/auth";
+import { getSessionUser, requireAuth } from "@/lib/auth";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
+    const user = await requireAuth();
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -29,6 +30,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(data || []);
   } catch (error: any) {
+    if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro GET /api/petition-workflows:", error);
     return NextResponse.json(
       { error: error.message || "Falha ao buscar workflows." },

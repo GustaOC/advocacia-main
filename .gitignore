@@ -25,3 +25,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Debug and temp files
+*.orig
+*.rej
+*.log
+screenshot-*.png
+debug-*.txt
+tabs-dump.json
+coverage/
+.playwright/
+playwright-report/
+test-results/
+.DS_Store
+Thumbs.db
+Identidade Visual*

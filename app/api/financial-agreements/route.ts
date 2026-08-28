@@ -200,6 +200,7 @@ export async function POST(req: NextRequest) {
     }
 
     const user = await getSessionUser();
+    if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     const supabase = createAdminClient();
     const payload = validationResult.data;
 

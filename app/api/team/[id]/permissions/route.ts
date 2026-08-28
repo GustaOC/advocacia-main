@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { requireAuth } from "@/lib/auth";
+
+export const dynamic = 'force-dynamic'
 
 export async function PUT(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    const user = await requireAuth();
+    if (user.role !== 'admin') {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 403 });
+    }
     const { role, permissions } = await req.json();
     
     const supabase = createAdminClient();
