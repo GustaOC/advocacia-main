@@ -321,14 +321,16 @@ export default function LandingPage() {
         <section id="perfil" className="py-24 lg:py-0 bg-[#E3E0D7]">
           <div className="flex flex-col lg:flex-row min-h-[80vh]">
             {/* Foto 40% */}
-            <div className="w-full lg:w-[40%] h-[50vh] lg:h-auto relative order-2 lg:order-1">
-               <Image 
-                  src="https://i.postimg.cc/4NmVt2Gp/AAAA.jpg" 
-                  alt="Dr. Cássio Miguel Perfil" 
-                  fill
-                  className="object-cover object-center grayscale-[10%]"
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                />
+            <div className="w-full lg:w-[40%] flex items-center justify-center p-6 md:p-12 lg:p-0 order-2 lg:order-1">
+               <div className="relative w-full max-w-[320px] lg:max-w-[400px] aspect-[3/4]">
+                 <Image 
+                    src="/perfil.png" 
+                    alt="Dr. Cássio Miguel Perfil" 
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 100vw, 400px"
+                  />
+               </div>
             </div>
             
             {/* Texto 60% */}
