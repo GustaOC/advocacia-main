@@ -86,7 +86,7 @@ export default function LandingPage() {
           <div className="mt-16 text-sm tracking-widest text-[#95A08A] flex flex-col space-y-4">
             <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer">WhatsApp</a>
             <a href="mailto:advogado@cassiomiguel.com.br">E-mail</a>
-            <a href="#">Instagram</a>
+            <a href="https://www.instagram.com/cassiomigueladv" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a href="#">LinkedIn</a>
           </div>
         </div>
@@ -548,7 +548,7 @@ export default function LandingPage() {
 
             <div className="space-y-4 text-sm font-light text-[#A8ABA2]">
               <h4 className="text-white font-medium mb-6 uppercase tracking-widest text-xs">Redes</h4>
-              <p><a href="#" className="hover:text-white transition-colors">Instagram</a></p>
+              <p><a href="https://www.instagram.com/cassiomigueladv" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a></p>
               <p><a href="#" className="hover:text-white transition-colors">LinkedIn</a></p>
             </div>
 
