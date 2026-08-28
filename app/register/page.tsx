@@ -1,14 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@/lib/supabase/client';
 import { Loader2, ShieldAlert } from 'lucide-react';
 
 export default function RegisterPage() {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createClient();
 
   const [inviteValid, setInviteValid] = useState<boolean | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
