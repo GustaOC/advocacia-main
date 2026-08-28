@@ -113,16 +113,18 @@ export default function LandingPage() {
             </motion.div>
           </div>
           
-          {/* Lado Direito - 45% Fotografia */}
-          <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative flex items-center justify-center bg-[#EDEDED]">
-            <Image 
-              src="/icone-cm.jpg" 
-              alt="Ícone Cássio Miguel" 
-              fill
-              priority
-              className="object-cover object-center"
-              sizes="(max-width: 1024px) 100vw, 45vw"
-            />
+          {/* Lado Direito - 45% Logotipo */}
+          <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative flex items-center justify-center bg-[#E3E0D7]">
+            <div className="relative w-2/3 h-2/3 max-w-sm">
+              <Image 
+                src="/logo-vertical-verde-escuro.png" 
+                alt="Logo Cássio Miguel" 
+                fill
+                priority
+                className="object-contain object-center opacity-90"
+                sizes="(max-width: 1024px) 80vw, 30vw"
+              />
+            </div>
           </div>
         </section>
 
