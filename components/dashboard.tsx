@@ -11,7 +11,8 @@ import {
   Users, FileText, DollarSign, Calendar, CheckSquare, BarChart2,
   Briefcase, LogOut, Settings, Scale, FileCode, Bell, TrendingUp,
   Activity, AlertCircle, Clock, Star, Menu, ChevronLeft, ChevronRight,
-  ArrowUp, ArrowDown, Sparkles, Zap, Shield, Award, Target, FileSearch
+  ArrowUp, ArrowDown, Sparkles, Zap, Shield, Award, Target, FileSearch,
+  MessageSquare
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 const GmailInboxModule = dynamic(() => import('./gmail-inbox-module').then(m => m.GmailInboxModule), { ssr: false })
@@ -53,11 +54,15 @@ interface ModernLayoutProps {
   onSystemSettings: () => void;
 }
 
+const ChatModule = dynamic(() => import('./chat-widget').then(m => m.ChatModule), { ssr: false });
+import { onUnreadCountChange } from './chat-widget';
+
 const menuItems = [
     { value: "overview", label: "Dashboard", icon: BarChart2, description: "Visão geral do escritório", color: "from-brand to-brand-700" },
+    { value: "chat", label: "Chat", icon: MessageSquare, description: "Mensagens da equipe", color: "from-indigo-500 to-indigo-600" },
     { value: "entities", label: "Clientes", icon: Users, description: "Gerenciar clientes e partes", color: "from-brand-sage to-brand-sage/90" },
     { value: "cases", label: "Processos", icon: Briefcase, description: "Acompanhar processos jurídicos", color: "from-brand-gray to-brand-gray/90" },
-    { value: "cruzamento", label: "Cruzamento de Listas", icon: FileSearch, description: "Comparar pagamentos e judicializados", color: "from-brand-sage/80 to-brand-sage" }, // <-- CORREÇÃO: Adicionada vírgula
+    { value: "cruzamento", label: "Cruzamento de Listas", icon: FileSearch, description: "Comparar pagamentos e judicializados", color: "from-brand-sage/80 to-brand-sage" },
     { value: "petitions", label: "Petições", icon: FileText, description: "Documentos e petições", color: "from-brand-beige to-brand-beige/90 text-brand-black" },
     { value: "templates", label: "Modelos", icon: FileCode, description: "Templates de documentos", color: "from-brand-light to-brand-light/90 text-brand-black" },
     { value: "financial", label: "Financeiro", icon: DollarSign, description: "Controle financeiro", color: "from-brand-sage to-brand-sage/90" },
@@ -65,8 +70,7 @@ const menuItems = [
     { value: "audiencias", label: "Audiências", icon: AlertCircle, description: "Agenda exclusiva para audiências", color: "from-amber-500 to-amber-600" },
     { value: "tasks", label: "Tarefas", icon: CheckSquare, description: "Tarefas e lembretes", color: "from-brand to-brand-700" },
     { value: "publications", label: "Publicações", icon: Megaphone, description: "Agendamento de publicações", color: "from-purple-500 to-indigo-500" },
-    // { value: "google-workspace", label: "Google Workspace", icon: Chrome, description: "Integração com serviços Google", color: "from-blue-500 to-red-500" }, // REMOVIDO: Google Workspace Hub
-    { value: "gmail-inbox", label: "Gmail Inbox", icon: Mail, description: "Sua caixa de entrada do Gmail", color: "from-brand-beige to-brand-beige/90 text-brand-black" }, // Novo item de menu
+    { value: "gmail-inbox", label: "Gmail Inbox", icon: Mail, description: "Sua caixa de entrada do Gmail", color: "from-brand-beige to-brand-beige/90 text-brand-black" },
     { value: "employees", label: "Equipe", icon: Users, description: "Gerenciar colaboradores", color: "from-brand-black to-brand-black/90" },
 ]
 
@@ -260,8 +264,17 @@ function Badge({ className, children }: { className: string; children: ReactNode
 function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserSettings, onSystemSettings }: ModernLayoutProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [chatUnreadCount, setChatUnreadCount] = useState(0);
     const activeItem = menuItems.find(item => item.value === activeTab);
     const { user } = useAuth() // adicione essa linha
+
+    // Subscribe to chat unread count
+    useEffect(() => {
+      const unsubscribe = onUnreadCountChange((count) => {
+        setChatUnreadCount(count);
+      });
+      return unsubscribe;
+    }, []);
 
     return (
         <div className="min-h-screen bg-brand-light/50">
@@ -321,12 +334,19 @@ function ModernLayout({ children, activeTab, setActiveTab, handleLogout, onUserS
                                 title={isCollapsed ? item.label : undefined}
                             >
                                 <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-4'} w-full`}>
-                                    <div className={`p-2 rounded-md transition-colors duration-200 ${
-                                        activeTab === item.value 
-                                            ? `bg-brand text-brand-beige shadow-sm` 
-                                            : "text-brand-sage group-hover:text-brand"
-                                    }`}>
-                                        <item.icon className="w-5 h-5" />
+                                    <div className="relative">
+                                      <div className={`p-2 rounded-md transition-colors duration-200 ${
+                                          activeTab === item.value 
+                                              ? `bg-brand text-brand-beige shadow-sm` 
+                                              : "text-brand-sage group-hover:text-brand"
+                                      }`}>
+                                          <item.icon className="w-5 h-5" />
+                                      </div>
+                                      {item.value === 'chat' && chatUnreadCount > 0 && (
+                                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 shadow-sm border-2 border-white">
+                                          {chatUnreadCount > 99 ? '99+' : chatUnreadCount}
+                                        </span>
+                                      )}
                                     </div>
                                     {!isCollapsed && (
                                         <div className="text-left flex-1">
@@ -500,6 +520,7 @@ export function Dashboard() {
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'overview': return null;
+      case 'chat': return <ChatModule />;
       case 'entities': return <EntitiesModule />;
       case 'cases': return <CasesModule initialFilters={globalFilters.cases} />;
       case 'cruzamento': return <CruzamentoPage />;
