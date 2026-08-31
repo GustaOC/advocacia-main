@@ -368,30 +368,32 @@ export default function LandingPage() {
               </motion.h2>
             </motion.div>
 
-            <div className="max-w-4xl">
+            <div className="max-w-5xl">
               {/* Artigo Principal Exclusivo */}
               <motion.article 
                 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} 
-                className="group cursor-pointer"
+                className="group cursor-pointer grid md:grid-cols-2 gap-8 md:gap-12 items-center"
               >
-                <div className="w-full h-64 md:h-[450px] bg-[#E3E0D7] mb-8 overflow-hidden relative flex items-center justify-center">
+                <div className="w-full h-64 md:h-[400px] bg-[#E3E0D7] overflow-hidden relative flex items-center justify-center">
                    <div className="absolute inset-0 bg-[#3C443D]/10 group-hover:bg-transparent transition-colors duration-700 z-20 pointer-events-none"></div>
-                   <div className="relative w-[45%] h-[65%] group-hover:scale-[1.03] transition-transform duration-700 z-10">
+                   <div className="relative w-[50%] h-[70%] group-hover:scale-[1.03] transition-transform duration-700 z-10">
                      <Image 
                        src="/icone-artigo.jpg" 
                        alt="Análise Jurídica sobre Recurso Especial" 
                        fill 
                        className="object-contain object-center mix-blend-multiply"
-                       sizes="(max-width: 1024px) 90vw, 800px"
+                       sizes="(max-width: 1024px) 90vw, 400px"
                      />
                    </div>
                 </div>
-                <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-[#000000] mb-4 group-hover:text-[#3C443D] transition-colors leading-[1.3]">
-                  Recurso especial não é uma terceira instância: o que isso significa na prática?
-                </h3>
-                <p className="text-[#3C443D] md:text-lg font-light leading-relaxed">
-                  Uma análise dos limites de atuação do Superior Tribunal de Justiça e dos aspectos que precisam ser considerados antes da interposição do recurso especial.
-                </p>
+                <div className="flex flex-col justify-center">
+                  <h3 className="font-serif text-2xl md:text-3xl lg:text-4xl text-[#000000] mb-6 group-hover:text-[#3C443D] transition-colors leading-[1.3] text-balance">
+                    Recurso especial não é uma terceira instância: o que isso significa na prática?
+                  </h3>
+                  <p className="text-[#3C443D] md:text-lg font-light leading-relaxed text-justify hyphens-auto">
+                    Uma análise dos limites de atuação do Supe&shy;rior Tri&shy;bunal de Justiça e dos aspectos que precisam ser con&shy;side&shy;rados antes da in&shy;ter&shy;posição do recurso especial.
+                  </p>
+                </div>
               </motion.article>
             </div>
           </div>
