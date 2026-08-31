@@ -386,10 +386,6 @@ export default function LandingPage() {
                      />
                    </div>
                 </div>
-                <div className="flex gap-4 items-center mb-4">
-                  <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Processo Cível</span>
-                  <span className="text-[#A8ABA2] text-xs">5 min leitura</span>
-                </div>
                 <h3 className="font-serif text-2xl md:text-3xl text-[#000000] mb-4 group-hover:text-[#3C443D] transition-colors">
                   Quando uma decisão interlocutória pode ser impugnada imediatamente?
                 </h3>
@@ -399,10 +395,6 @@ export default function LandingPage() {
               <div className="lg:col-span-5 flex flex-col gap-12 lg:gap-0 justify-between">
                 
                 <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
-                  <div className="flex gap-4 items-center mb-3">
-                    <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Recurso Especial</span>
-                    <span className="text-[#A8ABA2] text-xs">4 min leitura</span>
-                  </div>
                   <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
                     Recurso especial não é uma terceira instância: o que isso significa na prática?
                   </h3>
@@ -411,10 +403,6 @@ export default function LandingPage() {
                 <div className="hidden lg:block w-full h-[1px] bg-[#A8ABA2]/20 my-auto"></div>
 
                 <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
-                  <div className="flex gap-4 items-center mb-3">
-                    <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Estratégia Processual</span>
-                    <span className="text-[#A8ABA2] text-xs">6 min leitura</span>
-                  </div>
                   <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
                     Tutela de urgência: o que realmente precisa ser demonstrado?
                   </h3>
