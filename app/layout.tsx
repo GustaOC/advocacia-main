@@ -23,9 +23,9 @@ const marcellus = Marcellus({
 });
 
 export const metadata: Metadata = {
-  title: 'Cássio Miguel Sociedade Individual de Advocacia',
-  description: 'Assessoria jurídica especializada em direito civil e empresarial. Atendimento personalizado em Campo Grande — soluções práticas e seguras para pessoas e empresas.',
-  keywords: 'advocacia, advogado, campo grande, direito civil, direito empresarial',
+  title: 'Cássio Miguel | Direito Privado, Recursos e Atuação no STJ',
+  description: 'Advocacia estratégica em Direito Privado, contencioso e recursos, com atuação perante Tribunais e Superior Tribunal de Justiça. Campo Grande/MS.',
+  keywords: 'advocacia estratégica, direito privado, contencioso, recursos, STJ, advogado campo grande',
   authors: [{ name: 'Cássio Miguel Sociedade Individual de Advocacia' }],
   robots: 'index, follow',
   icons: {

@@ -42,25 +42,31 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#E3E0D7] text-[#000000] font-sans selection:bg-[#95A08A] selection:text-white">
       {/* 1. HEADER */}
       <header 
-        className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-white"}`}
+        className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-[#3C443D]"}`}
       >
-        <div className="container mx-auto px-6 md:px-12 lg:px-24 h-[80px] flex justify-end lg:justify-center items-center relative">
-          <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
-            <Link href="#atuacao" className="hover:text-[#95A08A] transition-colors">Atuação</Link>
-            <Link href="#metodo" className="hover:text-[#95A08A] transition-colors">Método</Link>
-            <Link href="#perfil" className="hover:text-[#95A08A] transition-colors">Perfil</Link>
-            <Link href="#analises" className="hover:text-[#95A08A] transition-colors">Análises</Link>
-            <Link href="#contato" className="hover:text-[#95A08A] transition-colors">Contato</Link>
-          </nav>
+        <div className="container mx-auto h-[80px] flex w-full">
+          {/* Espaço vazio na esquerda (55%) */}
+          <div className="hidden lg:block w-[55%]"></div>
+          
+          {/* Navegação centralizada na direita (45%) */}
+          <div className="w-full lg:w-[45%] flex justify-end lg:justify-center items-center px-6 lg:px-0">
+            <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
+              <Link href="#atuacao" className="hover:text-[#95A08A] transition-colors">Atuação</Link>
+              <Link href="#metodo" className="hover:text-[#95A08A] transition-colors">Método</Link>
+              <Link href="#perfil" className="hover:text-[#95A08A] transition-colors">Perfil</Link>
+              <Link href="#analises" className="hover:text-[#95A08A] transition-colors">Análises</Link>
+              <Link href="#contato" className="hover:text-[#95A08A] transition-colors">Contato</Link>
+            </nav>
 
-          <button 
-            className="lg:hidden z-50 focus:outline-none"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <span className={`block w-6 h-px mb-1.5 bg-current transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-            <span className={`block w-6 h-px mb-1.5 bg-current transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"}`}></span>
-            <span className={`block w-6 h-px bg-current transition-transform ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}></span>
-          </button>
+            <button 
+              className="lg:hidden z-50 focus:outline-none"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <span className={`block w-6 h-px mb-1.5 bg-current transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+              <span className={`block w-6 h-px mb-1.5 bg-current transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"}`}></span>
+              <span className={`block w-6 h-px bg-current transition-transform ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}></span>
+            </button>
+          </div>
         </div>
 
         {/* MOBILE MENU */}
@@ -72,11 +78,6 @@ export default function LandingPage() {
             <Link href="#analises" onClick={() => setMenuOpen(false)}>Análises</Link>
             <Link href="#contato" onClick={() => setMenuOpen(false)}>Contato</Link>
           </nav>
-          <div className="mt-16 text-sm tracking-widest text-[#95A08A] flex flex-col space-y-4">
-            <a href="https://wa.me/5567996449627" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            <a href="mailto:advogado@cassiomiguel.com.br">E-mail</a>
-            <a href="https://www.instagram.com/cassiomigueladv" target="_blank" rel="noopener noreferrer">Instagram</a>
-          </div>
         </div>
       </header>
 
@@ -93,8 +94,7 @@ export default function LandingPage() {
                 Técnica e confiança<br />que permanecem.
               </motion.h1>
               <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md">
-                Advocacia estratégica em questões cíveis e administrativas de maior complexidade,
-                com análise individualizada, precisão processual e acompanhamento pessoal.
+                Advocacia estratégica em Direito Privado e contencioso de maior complexidade, com análise individualizada, precisão processual e acompanhamento pessoal.
               </motion.p>
               <motion.button 
                 variants={fadeInUp}
@@ -147,13 +147,9 @@ export default function LandingPage() {
                   </p>
                 </motion.div>
                 <motion.div variants={fadeInUp}>
-                  <p className="mb-6">
+                  <p>
                     A relação com o cliente é conduzida com clareza, discrição e acompanhamento próximo
                     ao longo de toda a atuação.
-                  </p>
-                  <p>
-                    Essa abordagem traduz diretamente a premissa original da identidade: cada caso contém
-                    uma história particular e a estratégia nasce do tempo dedicado à sua compreensão.
                   </p>
                 </motion.div>
               </div>
@@ -169,10 +165,9 @@ export default function LandingPage() {
               <motion.div variants={fadeInUp} className="border-t border-[#A8ABA2]/30 py-10 flex flex-col md:flex-row gap-6 md:gap-12 group hover:bg-[#EDEDED]/50 transition-colors duration-500">
                 <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">01</div>
                 <div>
-                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Contencioso Cível</h3>
+                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Direito Privado e Patrimonial</h3>
                   <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
-                    Atuação em questões contratuais, responsabilidade civil, conflitos patrimoniais e demais
-                    litígios que demandem análise jurídica e processual aprofundada.
+                    Atuação em questões contratuais, obrigacionais, patrimoniais e demais relações de direito privado, tanto na prevenção de conflitos quanto na condução de litígios que exijam análise jurídica aprofundada.
                   </p>
                 </div>
               </motion.div>
@@ -180,10 +175,9 @@ export default function LandingPage() {
               <motion.div variants={fadeInUp} className="border-t border-[#A8ABA2]/30 py-10 flex flex-col md:flex-row gap-6 md:gap-12 group hover:bg-[#EDEDED]/50 transition-colors duration-500">
                 <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">02</div>
                 <div>
-                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Direito Administrativo Sancionador</h3>
+                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Contencioso Estratégico e Recursos</h3>
                   <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
-                    Atuação em processos administrativos, sindicâncias, procedimentos disciplinares e
-                    questões capazes de produzir repercussões profissionais ou patrimoniais.
+                    Atuação em processos judiciais de maior complexidade, recursos, tutelas de urgência, mandados de segurança e outras medidas processuais que demandem análise aprofundada dos fatos, da prova e da estratégia processual.
                   </p>
                 </div>
               </motion.div>
@@ -191,10 +185,9 @@ export default function LandingPage() {
               <motion.div variants={fadeInUp} className="border-t border-b border-[#A8ABA2]/30 py-10 flex flex-col md:flex-row gap-6 md:gap-12 group hover:bg-[#EDEDED]/50 transition-colors duration-500">
                 <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">03</div>
                 <div>
-                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Recursos e Medidas de Urgência</h3>
+                  <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Atuação perante o Superior Tribunal de Justiça</h3>
                   <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
-                    Atuação em recursos, mandados de segurança, tutelas de urgência e demais medidas
-                    processuais adequadas às circunstâncias do caso.
+                    Atuação em recursos especiais e demais medidas processuais perante o Superior Tribunal de Justiça, desde a análise de viabilidade recursal até a estruturação da controvérsia de direito federal e o acompanhamento do processo perante a Corte.
                   </p>
                 </div>
               </motion.div>
@@ -218,16 +211,20 @@ export default function LandingPage() {
               
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="space-y-8">
                 {[
-                  "Disputas patrimoniais relevantes",
-                  "Processos já em andamento",
-                  "Decisões desfavoráveis",
-                  "Medidas urgentes",
-                  "Recursos",
-                  "Processos administrativos"
+                  { title: "Conflitos contratuais", desc: "Análise de obrigações, inadimplementos e repercussões patrimoniais." },
+                  { title: "Disputas patrimoniais relevantes", desc: "Litígios com alta repercussão financeira ou estratégica." },
+                  { title: "Processos já em andamento", desc: "Reavaliação da estratégia diante da evolução do processo." },
+                  { title: "Decisões desfavoráveis", desc: "Análise das medidas processuais cabíveis." },
+                  { title: "Medidas urgentes", desc: "Situações que exigem resposta processual em prazo reduzido." },
+                  { title: "Recursos aos Tribunais", desc: "Estruturação e acompanhamento da estratégia recursal." },
+                  { title: "Questões submetidas ao Superior Tribunal de Justiça", desc: "Análise e condução de recursos e medidas processuais perante a Corte." }
                 ].map((item, index) => (
                   <motion.div key={index} variants={fadeInUp} className="flex items-start gap-4">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#95A08A] mt-2 shrink-0"></span>
-                    <p className="text-[#3C443D] text-lg font-light">{item}</p>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#95A08A] mt-2.5 shrink-0"></span>
+                    <div>
+                      <p className="text-[#3C443D] text-lg font-medium">{item.title}</p>
+                      <p className="text-[#7A8077] text-sm mt-1 leading-relaxed">{item.desc}</p>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
@@ -345,24 +342,23 @@ export default function LandingPage() {
 
                 <motion.div variants={fadeInUp} className="space-y-6 text-[#3C443D] font-light leading-relaxed">
                   <p>
-                    Com atuação consolidada na advocacia estratégica, o Dr. Cássio Miguel concentra sua prática 
-                    na resolução de litígios complexos nas áreas cível e administrativa.
+                    Advogado com atuação profissional desde 2017, concentra sua prática em Direito Privado, Processo Civil e contencioso estratégico.
                   </p>
                   <p>
-                    Acredita que o verdadeiro diferencial jurídico não reside no volume de causas, mas na capacidade 
-                    de imersão técnica em cada dossiê. Sua formação e especializações direcionam-se à construção de 
-                    teses robustas e à engenharia processual meticulosa, fundamentais para a proteção patrimonial e 
-                    reputacional de seus clientes.
+                    Atua na análise e condução de demandas judiciais, recursos e medidas de urgência, com participação direta na definição da estratégia e no acompanhamento dos casos do escritório.
+                  </p>
+                  <p>
+                    Sua atuação também abrange recursos e medidas processuais perante os Tribunais, inclusive o Superior Tribunal de Justiça.
                   </p>
                 </motion.div>
                 
                 <motion.div variants={fadeInUp} className="mt-12">
-                  <button 
-                    onClick={handleWhatsApp}
+                  <Link 
+                    href="/perfil"
                     className="inline-flex items-center text-[#3C443D] hover:text-[#000000] font-medium transition-colors text-sm uppercase tracking-widest border-b border-[#3C443D] pb-1"
                   >
                     Ver Perfil Completo <span className="ml-2">→</span>
-                  </button>
+                  </Link>
                 </motion.div>
               </motion.div>
             </div>
@@ -417,14 +413,14 @@ export default function LandingPage() {
                 
                 <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
                   <div className="flex gap-4 items-center mb-3">
-                    <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Direito Administrativo</span>
+                    <span className="text-[#95A08A] text-xs font-semibold tracking-widest uppercase">Recurso Especial</span>
                     <span className="text-[#A8ABA2] text-xs">4 min leitura</span>
                   </div>
                   <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
-                    Processo administrativo disciplinar: quando a estratégia deve começar?
+                    Recurso especial não é uma terceira instância: o que isso significa na prática?
                   </h3>
                   <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
-                    A importância da intervenção técnica desde a sindicância preparatória para evitar a consolidação de teses acusatórias irremediáveis.
+                    Uma análise dos limites de atuação do Superior Tribunal de Justiça e dos aspectos que precisam ser considerados antes da interposição do recurso especial.
                   </p>
                   <span className="text-[#000000] text-xs uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
                 </motion.article>
@@ -440,7 +436,7 @@ export default function LandingPage() {
                     Tutela de urgência: o que realmente precisa ser demonstrado?
                   </h3>
                   <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
-                    Além da teoria: como a organização probatória milimétrica define a concessão ou indeferimento de liminares críticas.
+                    Além da teoria: como a organização da prova influencia a análise dos requisitos da tutela de urgência.
                   </p>
                   <span className="text-[#000000] text-xs uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
                 </motion.article>
@@ -472,14 +468,14 @@ export default function LandingPage() {
               <motion.div variants={fadeInUp}>
                 <h4 className="font-medium text-[#000000] mb-3">Como são definidos o escopo e os honorários?</h4>
                 <p className="text-[#3C443D] font-light leading-relaxed">
-                  A precificação é estritamente sob consulta, realizada após o diagnóstico inicial. Os honorários refletem a complexidade do caso, o tempo estimado de dedicação exclusiva e a engenharia processual exigida para a defesa eficiente dos seus interesses.
+                  Os honorários são definidos após a análise inicial da demanda e da extensão do trabalho necessário. As condições da contratação são apresentadas individualmente, de acordo com o escopo da atuação.
                 </p>
               </motion.div>
 
               <motion.div variants={fadeInUp}>
                 <h4 className="font-medium text-[#000000] mb-3">Quem acompanha o processo?</h4>
                 <p className="text-[#3C443D] font-light leading-relaxed">
-                  O Dr. Cássio Miguel lidera pessoalmente a condução estratégica de todos os processos assumidos, garantindo que o padrão técnico e a responsabilidade profissional sejam mantidos em todas as instâncias e atos processuais.
+                  Cássio Miguel participa diretamente da definição da estratégia e do acompanhamento dos momentos relevantes dos casos conduzidos pelo escritório, com o apoio da equipe jurídica conforme as necessidades de cada demanda.
                 </p>
               </motion.div>
 
