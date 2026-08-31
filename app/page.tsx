@@ -132,7 +132,7 @@ export default function LandingPage() {
               <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl leading-[1.1] mb-10">
                 Cada caso exige uma<br />estratégia própria.
               </motion.h2>
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-left">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-justify">
                 <motion.div variants={fadeInUp}>
                   <p className="mb-6">
                     A advocacia não se resume à aplicação de modelos. Fatos, documentos, riscos e
