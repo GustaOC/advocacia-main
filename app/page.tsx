@@ -393,9 +393,6 @@ export default function LandingPage() {
                 <h3 className="font-serif text-2xl md:text-3xl text-[#000000] mb-4 group-hover:text-[#3C443D] transition-colors">
                   Quando uma decisão interlocutória pode ser impugnada imediatamente?
                 </h3>
-                <p className="text-[#3C443D] font-light leading-relaxed mb-6">
-                  Uma análise sobre os limites do rol taxativo do agravo de instrumento e as alternativas estratégicas diante de decisões urgentes não previstas expressamente na legislação.
-                </p>
               </motion.article>
 
               {/* Artigos Secundários */}
@@ -409,9 +406,6 @@ export default function LandingPage() {
                   <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
                     Recurso especial não é uma terceira instância: o que isso significa na prática?
                   </h3>
-                  <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
-                    Uma análise dos limites de atuação do Superior Tribunal de Justiça e dos aspectos que precisam ser considerados antes da interposição do recurso especial.
-                  </p>
                 </motion.article>
 
                 <div className="hidden lg:block w-full h-[1px] bg-[#A8ABA2]/20 my-auto"></div>
@@ -424,9 +418,6 @@ export default function LandingPage() {
                   <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
                     Tutela de urgência: o que realmente precisa ser demonstrado?
                   </h3>
-                  <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
-                    Além da teoria: como a organização da prova influencia a análise dos requisitos da tutela de urgência.
-                  </p>
                 </motion.article>
 
               </div>
