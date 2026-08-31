@@ -202,8 +202,8 @@ export default function LandingPage() {
                 <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
                   Situações que exigem atuação estratégica
                 </motion.span>
-                <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-4xl leading-[1.2]">
-                  Quando o processo exige uma análise<br />além do óbvio.
+                <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-4xl leading-[1.2] text-balance">
+                  Quando o processo exige uma análise além do óbvio.
                 </motion.h2>
               </motion.div>
               
