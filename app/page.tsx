@@ -123,10 +123,10 @@ export default function LandingPage() {
 
         {/* 3. FORMA DE ATUAÇÃO */}
         <section id="atuacao" className="py-24 md:py-32 lg:py-40 bg-[#E3E0D7]">
-          <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col items-center text-center">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24">
             <motion.div 
               initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-              className="max-w-4xl flex flex-col items-center"
+              className="max-w-4xl"
             >
               <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
                 Nossa forma de atuar
