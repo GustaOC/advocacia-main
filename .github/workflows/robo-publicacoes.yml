@@ -2,8 +2,6 @@ name: Robô de Publicações FAZ Adv
 
 on:
   workflow_dispatch: # Permite acionamento manual via botão do site
-  schedule:
-    - cron: '0 10 * * *' # Roda todos os dias às 10:00 UTC (07:00 Horário de Brasília)
 
 jobs:
   run-scraper:
