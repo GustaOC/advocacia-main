@@ -56,7 +56,7 @@ export function JurisprudenceModule() {
           <div>
             <h2 className="text-xl font-bold text-brand-black">Pesquisa Inteligente de Jurisprudência</h2>
             <p className="text-sm text-brand-gray">
-              Descreva o contexto do caso ou digite palavras-chave (ex: "quero jurisprudência sobre administrativo").
+              Descreva o contexto do caso ou digite palavras-chave (ex: &quot;quero jurisprudência sobre administrativo&quot;).
             </p>
           </div>
         </div>

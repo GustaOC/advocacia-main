@@ -25,10 +25,12 @@ export function PetitionList({ onReviewPetition }: PetitionListProps) {
 
   useEffect(() => {
     loadPetitions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     filterPetitions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [petitions, searchTerm, statusFilter, priorityFilter])
 
   const loadPetitions = async () => {

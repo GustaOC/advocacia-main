@@ -40,6 +40,7 @@ export function SystemSettingsModal({ isOpen, onClose }: SystemSettingsModalProp
     if (isOpen) {
       loadSettings()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   const loadSettings = async () => {

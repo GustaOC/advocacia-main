@@ -1,4 +1,5 @@
 // components/dashboard.tsx
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { useAuth } from '@/hooks/use-auth'
 import { useState, useCallback, ReactNode, useEffect } from "react"

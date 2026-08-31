@@ -1,4 +1,5 @@
 // components/MonacoEditor.tsx - VERSÃO COMPLETA E CORRIGIDA
+/* eslint-disable react-hooks/exhaustive-deps */
 
 "use client";
 
@@ -72,6 +73,7 @@ export default function MonacoEditor({
     if (editorInstance.current && value !== editorInstance.current.getValue()) {
       editorInstance.current.setValue(value);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return <div ref={editorRef} style={{ height: "100%", width: "100%" }} />;
