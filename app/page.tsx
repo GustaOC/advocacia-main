@@ -344,14 +344,7 @@ export default function LandingPage() {
                   </p>
                 </motion.div>
                 
-                <motion.div variants={fadeInUp} className="mt-12">
-                  <Link 
-                    href="/perfil"
-                    className="inline-flex items-center text-[#3C443D] hover:text-[#000000] font-medium transition-colors text-sm uppercase tracking-widest border-b border-[#3C443D] pb-1"
-                  >
-                    Ver Perfil Completo <span className="ml-2">→</span>
-                  </Link>
-                </motion.div>
+                
               </motion.div>
             </div>
           </div>
@@ -397,7 +390,6 @@ export default function LandingPage() {
                 <p className="text-[#3C443D] font-light leading-relaxed mb-6">
                   Uma análise sobre os limites do rol taxativo do agravo de instrumento e as alternativas estratégicas diante de decisões urgentes não previstas expressamente na legislação.
                 </p>
-                <span className="text-[#000000] text-sm uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
               </motion.article>
 
               {/* Artigos Secundários */}
@@ -414,7 +406,6 @@ export default function LandingPage() {
                   <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
                     Uma análise dos limites de atuação do Superior Tribunal de Justiça e dos aspectos que precisam ser considerados antes da interposição do recurso especial.
                   </p>
-                  <span className="text-[#000000] text-xs uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
                 </motion.article>
 
                 <div className="hidden lg:block w-full h-[1px] bg-[#A8ABA2]/20 my-auto"></div>
@@ -430,7 +421,6 @@ export default function LandingPage() {
                   <p className="text-[#3C443D] font-light text-sm leading-relaxed mb-4">
                     Além da teoria: como a organização da prova influencia a análise dos requisitos da tutela de urgência.
                   </p>
-                  <span className="text-[#000000] text-xs uppercase tracking-widest font-medium group-hover:text-[#95A08A] transition-colors">Ler análise →</span>
                 </motion.article>
 
               </div>
