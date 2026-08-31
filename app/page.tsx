@@ -96,8 +96,8 @@ export default function LandingPage() {
         {/* 2. HERO */}
         <section className="relative w-full min-h-[90vh] flex flex-col lg:flex-row bg-[#3C443D] overflow-hidden">
           {/* Lado Esquerdo - 55% */}
-          <div className="w-full lg:w-[55%] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
-            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl">
+          <div className="w-full lg:w-[55%] flex flex-col items-center justify-center text-center px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
+            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl flex flex-col items-center">
               <motion.span variants={fadeInUp} className="text-[#95A08A] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
                 Advocacia Estratégica
               </motion.span>
@@ -135,10 +135,10 @@ export default function LandingPage() {
 
         {/* 3. FORMA DE ATUAÇÃO */}
         <section id="atuacao" className="py-24 md:py-32 lg:py-40 bg-[#E3E0D7]">
-          <div className="container mx-auto px-6 md:px-12 lg:px-24">
+          <div className="container mx-auto px-6 md:px-12 lg:px-24 flex flex-col items-center text-center">
             <motion.div 
               initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer}
-              className="max-w-4xl"
+              className="max-w-4xl flex flex-col items-center"
             >
               <motion.span variants={fadeInUp} className="text-[#A8ABA2] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
                 Nossa forma de atuar
@@ -146,7 +146,7 @@ export default function LandingPage() {
               <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl leading-[1.1] mb-10">
                 Cada caso exige uma<br />estratégia própria.
               </motion.h2>
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-left md:text-center">
                 <motion.div variants={fadeInUp}>
                   <p className="mb-6">
                     A advocacia não se resume à aplicação de modelos. Fatos, documentos, riscos e
