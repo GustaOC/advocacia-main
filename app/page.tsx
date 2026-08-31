@@ -42,7 +42,11 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#E3E0D7] text-[#000000] font-sans selection:bg-[#95A08A] selection:text-white">
       {/* 1. HEADER */}
       <header 
-        className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-[#3C443D]"}`}
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
+          scrolled 
+            ? "opacity-100 translate-y-0 pointer-events-auto bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20 shadow-sm" 
+            : "opacity-0 -translate-y-4 pointer-events-none"
+        }`}
       >
         <div className="container mx-auto px-6 md:px-12 lg:px-24 h-[80px] flex justify-center items-center relative">
           <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
@@ -64,15 +68,15 @@ export default function LandingPage() {
         </div>
 
         {/* MOBILE MENU */}
-        <div className={`fixed inset-0 bg-[#3C443D] text-[#E3E0D7] z-40 flex flex-col justify-center px-6 transition-transform duration-700 ease-in-out ${menuOpen ? "translate-x-0" : "translate-x-full"}`}>
-          <nav className="flex flex-col space-y-8 text-2xl font-serif">
+        {menuOpen && (
+          <div className="lg:hidden fixed inset-0 bg-[#E3E0D7] z-40 flex flex-col justify-center items-center space-y-8 text-xl font-medium">
             <Link href="#atuacao" onClick={() => setMenuOpen(false)}>Atuação</Link>
             <Link href="#metodo" onClick={() => setMenuOpen(false)}>Método</Link>
             <Link href="#perfil" onClick={() => setMenuOpen(false)}>Perfil</Link>
             <Link href="#analises" onClick={() => setMenuOpen(false)}>Análises</Link>
             <Link href="#contato" onClick={() => setMenuOpen(false)}>Contato</Link>
-          </nav>
-        </div>
+          </div>
+        )}
       </header>
 
       <main>
@@ -100,16 +104,18 @@ export default function LandingPage() {
             </motion.div>
           </div>
           
-          {/* Lado Direito - 45% Foto */}
-          <div className="w-full lg:w-[45%] h-[60vh] lg:h-auto relative bg-[#E3E0D7]">
-            <Image 
-              src="/perfil.png" 
-              alt="Dr. Cássio Miguel" 
-              fill
-              priority
-              className="object-cover object-center"
-              sizes="(max-width: 1024px) 100vw, 45vw"
-            />
+          {/* Lado Direito - 45% Logotipo */}
+          <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative flex items-center justify-center bg-[#E3E0D7]">
+            <div className="relative w-2/3 h-2/3 max-w-sm mix-blend-multiply">
+              <Image 
+                src="/logo-vertical-cm.jpg" 
+                alt="Logo Cássio Miguel" 
+                fill
+                priority
+                className="object-contain object-center opacity-90"
+                sizes="(max-width: 1024px) 80vw, 30vw"
+              />
+            </div>
           </div>
         </section>
 
