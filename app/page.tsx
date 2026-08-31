@@ -386,26 +386,17 @@ export default function LandingPage() {
                      />
                    </div>
                 </div>
-                <h3 className="font-serif text-2xl md:text-3xl text-[#000000] mb-4 group-hover:text-[#3C443D] transition-colors">
-                  Quando uma decisão interlocutória pode ser impugnada imediatamente?
-                </h3>
               </motion.article>
 
               {/* Artigos Secundários */}
               <div className="lg:col-span-5 flex flex-col gap-12 lg:gap-0 justify-between">
                 
                 <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
-                  <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
-                    Recurso especial não é uma terceira instância: o que isso significa na prática?
-                  </h3>
                 </motion.article>
 
                 <div className="hidden lg:block w-full h-[1px] bg-[#A8ABA2]/20 my-auto"></div>
 
                 <motion.article initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="group cursor-pointer">
-                  <h3 className="font-serif text-xl md:text-2xl text-[#000000] mb-3 group-hover:text-[#3C443D] transition-colors">
-                    Tutela de urgência: o que realmente precisa ser demonstrado?
-                  </h3>
                 </motion.article>
 
               </div>
