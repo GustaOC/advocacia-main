@@ -44,29 +44,23 @@ export default function LandingPage() {
       <header 
         className={`fixed top-0 w-full z-50 transition-colors duration-700 ease-in-out ${scrolled ? "bg-[#E3E0D7] text-[#000000] border-b border-[#A8ABA2]/20" : "bg-transparent text-[#3C443D]"}`}
       >
-        <div className="container mx-auto h-[80px] flex w-full">
-          {/* Espaço vazio na esquerda (55%) */}
-          <div className="hidden lg:block w-[55%]"></div>
-          
-          {/* Navegação centralizada na direita (45%) */}
-          <div className="w-full lg:w-[45%] flex justify-end lg:justify-center px-6 lg:px-0">
-            <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
-              <Link href="#atuacao" className="hover:text-[#95A08A] transition-colors">Atuação</Link>
-              <Link href="#metodo" className="hover:text-[#95A08A] transition-colors">Método</Link>
-              <Link href="#perfil" className="hover:text-[#95A08A] transition-colors">Perfil</Link>
-              <Link href="#analises" className="hover:text-[#95A08A] transition-colors">Análises</Link>
-              <Link href="#contato" className="hover:text-[#95A08A] transition-colors">Contato</Link>
-            </nav>
+        <div className="container mx-auto px-6 md:px-12 lg:px-24 h-[80px] flex justify-center items-center relative">
+          <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
+            <Link href="#atuacao" className="hover:text-[#95A08A] transition-colors">Atuação</Link>
+            <Link href="#metodo" className="hover:text-[#95A08A] transition-colors">Método</Link>
+            <Link href="#perfil" className="hover:text-[#95A08A] transition-colors">Perfil</Link>
+            <Link href="#analises" className="hover:text-[#95A08A] transition-colors">Análises</Link>
+            <Link href="#contato" className="hover:text-[#95A08A] transition-colors">Contato</Link>
+          </nav>
 
-            <button 
-              className="lg:hidden z-50 focus:outline-none"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <span className={`block w-6 h-px mb-1.5 bg-current transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-              <span className={`block w-6 h-px mb-1.5 bg-current transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"}`}></span>
-              <span className={`block w-6 h-px bg-current transition-transform ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}></span>
-            </button>
-          </div>
+          <button 
+            className="lg:hidden absolute right-6 z-50 focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span className={`block w-6 h-px mb-1.5 bg-current transition-transform ${menuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
+            <span className={`block w-6 h-px mb-1.5 bg-current transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"}`}></span>
+            <span className={`block w-6 h-px bg-current transition-transform ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}></span>
+          </button>
         </div>
 
         {/* MOBILE MENU */}
