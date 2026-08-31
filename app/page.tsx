@@ -85,7 +85,7 @@ export default function LandingPage() {
         {/* 2. HERO */}
         <section className="relative w-full min-h-[90vh] flex flex-col lg:flex-row bg-[#3C443D] overflow-hidden">
           {/* Lado Esquerdo - 55% */}
-          <div className="w-full lg:w-[55%] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
+          <div className="w-full lg:w-[55%] flex flex-col items-center justify-center text-center px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
             <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl flex flex-col items-center">
               <motion.span variants={fadeInUp} className="text-[#95A08A] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
                 Advocacia Estratégica
@@ -93,7 +93,7 @@ export default function LandingPage() {
               <motion.h1 variants={fadeInUp} className="font-serif text-white text-[42px] md:text-[50px] lg:text-[64px] leading-[1.05] mb-8">
                 Técnica e confiança<br />que permanecem.
               </motion.h1>
-              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md text-justify">
+              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md">
                 Advocacia estratégica em Direito Privado e contencioso de maior complexidade, com análise individualizada, precisão processual e acompanhamento pessoal.
               </motion.p>
               <motion.button 
@@ -134,7 +134,7 @@ export default function LandingPage() {
               <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl leading-[1.1] mb-10">
                 Cada caso exige uma<br />estratégia própria.
               </motion.h2>
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-justify">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-left">
                 <motion.div variants={fadeInUp}>
                   <p className="mb-6">
                     A advocacia não se resume à aplicação de modelos. Fatos, documentos, riscos e
