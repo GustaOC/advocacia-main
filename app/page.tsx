@@ -85,8 +85,8 @@ export default function LandingPage() {
         {/* 2. HERO */}
         <section className="relative w-full min-h-[90vh] flex flex-col lg:flex-row bg-[#3C443D] overflow-hidden">
           {/* Lado Esquerdo - 55% */}
-          <div className="w-full lg:w-[55%] flex flex-col items-center justify-center text-center px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
-            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl flex flex-col items-center">
+          <div className="w-full lg:w-[55%] flex flex-col items-start justify-center text-left px-6 md:px-12 lg:px-24 pt-32 pb-16 lg:py-0 z-10">
+            <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-xl flex flex-col items-start">
               <motion.span variants={fadeInUp} className="text-[#95A08A] text-[11px] md:text-[13px] tracking-[0.2em] uppercase font-semibold mb-6 block">
                 Advocacia Estratégica
               </motion.span>
