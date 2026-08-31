@@ -106,7 +106,7 @@ export default function LandingPage() {
           
           {/* Lado Direito - 45% Logotipo */}
           <div className="w-full lg:w-[45%] h-[50vh] lg:h-auto relative flex items-center justify-center bg-[#E3E0D7]">
-            <div className="relative w-2/3 h-2/3 max-w-sm mix-blend-multiply">
+            <div className="relative w-3/4 h-3/4 max-w-md mix-blend-multiply">
               <Image 
                 src="/logo-vertical-cm.jpg" 
                 alt="Logo Cássio Miguel" 
