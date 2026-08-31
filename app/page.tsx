@@ -49,7 +49,7 @@ export default function LandingPage() {
           <div className="hidden lg:block w-[55%]"></div>
           
           {/* Navegação centralizada na direita (45%) */}
-          <div className="w-full lg:w-[45%] flex justify-end lg:justify-center items-center px-6 lg:px-0">
+          <div className="w-full lg:w-[45%] flex justify-end lg:justify-center px-6 lg:px-0">
             <nav className="hidden lg:flex space-x-10 items-center text-sm font-medium tracking-wide">
               <Link href="#atuacao" className="hover:text-[#95A08A] transition-colors">Atuação</Link>
               <Link href="#metodo" className="hover:text-[#95A08A] transition-colors">Método</Link>
@@ -93,7 +93,7 @@ export default function LandingPage() {
               <motion.h1 variants={fadeInUp} className="font-serif text-white text-[42px] md:text-[50px] lg:text-[64px] leading-[1.05] mb-8">
                 Técnica e confiança<br />que permanecem.
               </motion.h1>
-              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md">
+              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md text-justify">
                 Advocacia estratégica em Direito Privado e contencioso de maior complexidade, com análise individualizada, precisão processual e acompanhamento pessoal.
               </motion.p>
               <motion.button 
@@ -134,7 +134,7 @@ export default function LandingPage() {
               <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl leading-[1.1] mb-10">
                 Cada caso exige uma<br />estratégia própria.
               </motion.h2>
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-left md:text-center">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-justify">
                 <motion.div variants={fadeInUp}>
                   <p className="mb-6">
                     A advocacia não se resume à aplicação de modelos. Fatos, documentos, riscos e
