@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,9 +11,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Nenhum contexto fornecido.' }, { status: 400 });
     }
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json({ error: 'Chave da API do Gemini não configurada no servidor (GEMINI_API_KEY).' }, { status: 500 });
+    }
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     // Passo 1: Extrair palavras-chave e intenção com IA
     const systemPrompt = `Você é um assistente jurídico especialista em jurisprudência brasileira.
@@ -31,16 +33,15 @@ Retorne EXATAMENTE um array JSON no formato:
 ]
 Não invente julgados. Use julgados reais e notórios sobre o tema. Não adicione markdown \`\`\`json, apenas o array cru.`;
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: query }
-      ],
-      temperature: 0.2, // Baixa temperatura para evitar alucinações
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\nContexto do usuário: ' + query }] }],
+      config: {
+        temperature: 0.2,
+      }
     });
 
-    let resultText = response.choices[0]?.message?.content || '[]';
+    let resultText = response.text || '[]';
     
     // Limpar formatação markdown se a IA colocar acidentalmente
     resultText = resultText.replace(/```json/g, '').replace(/```/g, '').trim();
