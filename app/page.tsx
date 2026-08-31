@@ -132,21 +132,21 @@ export default function LandingPage() {
               <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl leading-[1.1] mb-10">
                 Cada caso exige uma<br />estratégia própria.
               </motion.h2>
-              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-justify">
+              <div className="grid md:grid-cols-2 gap-10 md:gap-16 text-base md:text-lg text-[#3C443D] leading-[1.6] font-light text-justify hyphens-auto">
                 <motion.div variants={fadeInUp}>
                   <p className="mb-6">
                     A advocacia não se resume à aplicação de modelos. Fatos, documentos, riscos e
-                    objetivos precisam ser compreendidos antes da definição do caminho jurídico.
+                    objetivos precisam ser com&shy;preen&shy;didos antes da defi&shy;nição do caminho jurídico.
                   </p>
                   <p>
-                    O trabalho do escritório parte dessa análise para construir estratégias adequadas às
-                    particularidades de cada caso, com atenção à prova, às questões processuais e às
-                    consequências práticas de cada decisão.
+                    O trabalho do escritório parte dessa análise para construir estra&shy;tégias ade&shy;quadas às
+                    parti&shy;cula&shy;ridades de cada caso, com atenção à prova, às questões pro&shy;cessuais e às
+                    conse&shy;quências práticas de cada decisão.
                   </p>
                 </motion.div>
                 <motion.div variants={fadeInUp}>
                   <p>
-                    A relação com o cliente é conduzida com clareza, discrição e acompanhamento próximo
+                    A relação com o cliente é conduzida com clareza, discrição e acom&shy;panha&shy;mento próximo
                     ao longo de toda a atuação.
                   </p>
                 </motion.div>
