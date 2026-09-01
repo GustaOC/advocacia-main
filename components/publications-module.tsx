@@ -166,6 +166,7 @@ export function PublicationsModule() {
       publication_date: pubDate,
       due_date: dueDate || null,
       assigned_to: assignedTo === 'none' ? null : assignedTo,
+      ...(editingPub ? { status: editingPub.status } : {}),
     };
 
     if (editingPub) {

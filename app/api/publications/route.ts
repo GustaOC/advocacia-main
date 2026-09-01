@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { requireAuth } from "@/lib/auth";
+import { stripPublicationHistory } from "@/lib/publication-history";
 
 export const dynamic = 'force-dynamic';
 
@@ -25,9 +26,7 @@ export async function GET(request: Request) {
 
     // Remove o historico embutido da descricao para nao poluir o frontend
     const cleanedData = (data || []).map(pub => {
-      if (pub.description) {
-        pub.description = pub.description.replace(/\\s*<!-- HISTORY: [\\s\\S]*? -->/, '');
-      }
+      pub.description = stripPublicationHistory(pub.description);
       return pub;
     });
 

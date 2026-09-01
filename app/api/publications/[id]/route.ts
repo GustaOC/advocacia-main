@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSessionUser, requireAuth } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
+import { extractPublicationHistory, stripPublicationHistory } from "@/lib/publication-history";
 
 export const dynamic = 'force-dynamic';
 
@@ -150,17 +151,14 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     
     // --- HISTÓRICO EMBUTIDO NA DESCRIÇÃO ---
-    let newDescription = body.description !== undefined ? body.description : (originalPub.description || '');
-    
-    // Extrai o histórico existente
-    let history = [];
-    const historyMatch = newDescription.match(/<!-- HISTORY: ([\\s\\S]*?) -->/);
-    if (historyMatch) {
-      try {
-        history = JSON.parse(historyMatch[1]);
-      } catch (e) {}
-      newDescription = newDescription.replace(/\\s*<!-- HISTORY: [\\s\\S]*? -->/, '');
-    }
+    const originalDescription = originalPub.description || '';
+    let newDescription = stripPublicationHistory(
+      body.description !== undefined ? body.description : originalDescription
+    );
+
+    // Lê e consolida todos os blocos já gravados, inclusive os duplicados
+    // gerados pela versão antiga.
+    let history = extractPublicationHistory(originalDescription);
     
     // Determina as ações que ocorreram
     const actions = [];
@@ -193,7 +191,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     }
     
     if (history.length > 0) {
-      newDescription = `${newDescription.trim()}\n\n<!-- HISTORY: ${JSON.stringify(history)} -->`;
+      newDescription = `${newDescription}\n\n<!-- HISTORY: ${JSON.stringify(history)} -->`.trim();
     }
     // ----------------------------------------
 

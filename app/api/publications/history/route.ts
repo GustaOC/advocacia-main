@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/server';
 import { getSessionUser } from '@/lib/auth';
+import { extractPublicationHistory } from '@/lib/publication-history';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,8 +18,8 @@ export async function GET(request: Request) {
     const { data: publications, error } = await supabase
       .from('publications')
       .select(`id, title, description, updated_at`)
-      .order('updated_at', { ascending: false })
-      .limit(200);
+      .like('description', '%<!-- HISTORY:%')
+      .order('updated_at', { ascending: false });
 
     if (error) {
       console.error("Erro ao buscar publicações:", error);
@@ -28,21 +29,14 @@ export async function GET(request: Request) {
     let allHistory: any[] = [];
 
     publications.forEach(pub => {
-      if (pub.description) {
-        const historyMatch = pub.description.match(/<!-- HISTORY: ([\\s\\S]*?) -->/);
-        if (historyMatch) {
-          try {
-            const history = JSON.parse(historyMatch[1]);
-            history.forEach((event: any) => {
-              allHistory.push({
-                ...event,
-                publication_id: pub.id,
-                publication_title: pub.title
-              });
-            });
-          } catch (e) {}
-        }
-      }
+      const history = extractPublicationHistory(pub.description);
+      history.forEach(event => {
+        allHistory.push({
+          ...event,
+          publication_id: pub.id,
+          publication_title: pub.title
+        });
+      });
     });
 
     // Sort flattened history by timestamp desc
