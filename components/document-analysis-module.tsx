@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   ArrowLeft, Upload, Sparkles, FileText, MessageSquare, 
-  Send, Loader2, Search, Plus, Trash2, Calendar
+  Send, Loader2, Search, ExternalLink, Plus, Trash2, Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -327,6 +327,11 @@ export function DocumentAnalysisModule() {
                         {formatFileSize(doc.file_size)} • {(doc.file_type || '').toUpperCase()}
                       </p>
                     </div>
+                    {doc.file_url && (
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-brand-sage hover:text-brand hover:bg-brand-light/50" onClick={() => window.open(doc.file_url, '_blank')}>
+                        <ExternalLink className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 ))}
                 {documents.length === 0 && !uploading && (
