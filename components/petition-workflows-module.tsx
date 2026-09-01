@@ -67,7 +67,7 @@ export function PetitionWorkflowsModule() {
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState(PETITION_DESCRIPTION_TEMPLATE);
   const [newCaseId, setNewCaseId] = useState<string>('none');
-  const [selectedCase, setSelectedCase] = useState<any | null>(null);
+  const [selectedPetition, setSelectedPetition] = useState<any | null>(null);
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
   const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string, stepName: string, workflowTitle: string} | null>(null);
   const [processNumber, setProcessNumber] = useState("");
@@ -802,6 +802,20 @@ A resposta será considerada adequada somente se:
                                 <Copy className="w-3 h-3 text-brand-gray" />
                               </Button>
                             )}
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 shrink-0 p-0 text-brand-gray hover:bg-brand-light/50 hover:text-brand"
+                              title="Ver descrição completa"
+                              aria-label={`Ver detalhes da petição ${workflow.title}`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setSelectedPetition(workflow);
+                              }}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
                           </div>
                           {workflow.description && (
                             <p className="mt-1 max-w-md whitespace-pre-line text-xs font-normal text-brand-gray line-clamp-3">
@@ -811,28 +825,7 @@ A resposta será considerada adequada somente se:
                         </div>
                       </TableCell>
                       <TableCell className="text-brand-gray text-sm">
-                        {workflow.case ? (
-                          <div className="flex items-center gap-2">
-                            <span>
-                              {workflow.case.case_number ? `${workflow.case.case_number} - ` : ''}
-                              {workflow.case.title}
-                            </span>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 w-7 shrink-0 p-0 text-brand-gray hover:bg-brand-light/50 hover:text-brand"
-                              title="Ver detalhes do caso"
-                              aria-label={`Ver detalhes do caso ${workflow.case.title}`}
-                              onClick={(event) => {
-                                event.stopPropagation();
-                                setSelectedCase(workflow.case);
-                              }}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        ) : '-'}
+                        {workflow.case ? `${workflow.case.case_number ? `${workflow.case.case_number} - ` : ''}${workflow.case.title}` : '-'}
                       </TableCell>
                       <TableCell>
                         {workflow.status === 'Concluída' ? (
@@ -978,29 +971,29 @@ A resposta será considerada adequada somente se:
         </CardContent>
       </Card>
 
-      <Dialog open={!!selectedCase} onOpenChange={(open) => !open && setSelectedCase(null)}>
+      <Dialog open={!!selectedPetition} onOpenChange={(open) => !open && setSelectedPetition(null)}>
         <DialogContent className="sm:max-w-lg bg-white">
           <DialogHeader>
             <DialogTitle className="text-2xl font-serif text-brand-black border-b border-brand-gray/20 pb-4">
-              Detalhes do Caso
+              Detalhes da Petição
             </DialogTitle>
           </DialogHeader>
-          {selectedCase && (
+          {selectedPetition && (
             <div className="space-y-5 py-3">
               <div className="space-y-1">
                 <Label className="text-brand-gray">Nome</Label>
-                <p className="font-semibold text-brand-black">{selectedCase.title}</p>
+                <p className="font-semibold text-brand-black">{selectedPetition.title}</p>
               </div>
               <div className="space-y-1">
                 <Label className="text-brand-gray">Descrição</Label>
                 <div className="max-h-[50vh] overflow-y-auto whitespace-pre-wrap rounded-md border border-brand-gray/20 bg-brand-light/10 p-4 text-sm leading-relaxed text-brand-black">
-                  {selectedCase.description || 'Nenhuma descrição fornecida.'}
+                  {selectedPetition.description || 'Nenhuma descrição fornecida.'}
                 </div>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedCase(null)}>Fechar</Button>
+            <Button variant="outline" onClick={() => setSelectedPetition(null)}>Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
