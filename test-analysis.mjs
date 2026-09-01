@@ -11,8 +11,11 @@ const supabase = createClient(
 async function test() {
   const { data, error } = await supabase
     .from("analysis_documents")
-    .select("id, original_name, file_url");
-  console.log("Data:", data);
-  console.log("Error:", error);
+    .select("id, original_name, extracted_text");
+  if (data) {
+    data.forEach(d => {
+      console.log(`${d.original_name}: ${d.extracted_text ? d.extracted_text.length : 'NULL'}`);
+    });
+  }
 }
 test();

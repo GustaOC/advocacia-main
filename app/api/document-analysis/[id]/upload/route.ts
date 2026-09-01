@@ -53,9 +53,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
         if (fileExt === 'pdf') {
           try {
-            const pdfModule = await import('pdf-parse');
-            const pdfParse = (pdfModule as any).default || pdfModule;
-            const data = await pdfParse(buffer);
+            const { PDFParse } = await import('pdf-parse');
+            const parser = new PDFParse({ data: new Uint8Array(arrayBuffer) });
+            const data = await parser.getText();
             extractedText = data.text;
           } catch (err) {
             console.error("Erro ao extrair texto do PDF:", err);
