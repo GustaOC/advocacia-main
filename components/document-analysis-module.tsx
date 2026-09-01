@@ -319,8 +319,11 @@ export function DocumentAnalysisModule() {
                       }} 
                     />
                     <FileText className="w-5 h-5 text-brand-sage flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-brand-black truncate" title={doc.suggested_name || doc.original_name}>
+                    <div 
+                      className="flex-1 min-w-0 cursor-pointer group"
+                      onClick={() => doc.file_url && window.open(doc.file_url, '_blank')}
+                    >
+                      <p className="text-sm font-medium text-brand-black truncate group-hover:text-brand group-hover:underline" title={doc.suggested_name || doc.original_name}>
                         {doc.suggested_name || doc.original_name}
                       </p>
                       <p className="text-xs text-brand-gray">

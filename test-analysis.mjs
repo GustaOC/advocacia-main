@@ -10,12 +10,8 @@ const supabase = createClient(
 
 async function test() {
   const { data, error } = await supabase
-    .from("analysis_sessions")
-    .select(`
-      *,
-      documents:analysis_documents(id),
-      created_user:user_profiles!analysis_sessions_created_by_fkey(id, name)
-    `);
+    .from("analysis_documents")
+    .select("id, original_name, file_url");
   console.log("Data:", data);
   console.log("Error:", error);
 }
