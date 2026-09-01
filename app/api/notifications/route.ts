@@ -17,7 +17,8 @@ export async function GET(req: Request) {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(50)
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .neq("title", "Novo Processo");
 
     const { data: notificationsData, error } = await query;
     if (error) throw error;

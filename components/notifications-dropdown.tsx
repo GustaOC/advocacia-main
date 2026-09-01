@@ -89,6 +89,7 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         channelParams,
         (payload) => {
           const novaNotificacao = payload.new as Notification;
+          if (novaNotificacao.title === 'Novo Processo') return;
           setNotifications(prev => {
             if (prev.find(n => n.id === novaNotificacao.id)) return prev;
             toast({ title: novaNotificacao.title, description: novaNotificacao.message });
@@ -107,7 +108,8 @@ export function NotificationsDropdown({ onNavigate }: NotificationsDropdownProps
         .select('*')
         .order('created_at', { ascending: false })
         .limit(5)
-        .eq('user_id', currentUserId);
+        .eq('user_id', currentUserId)
+        .neq('title', 'Novo Processo');
 
       const { data } = await query;
       if (data) {

@@ -15,7 +15,8 @@ export async function GET(req: Request) {
       .from("notifications")
       .select("*", { count: 'exact', head: true })
       .eq("is_read", false)
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .neq("title", "Novo Processo");
 
     const { count: notifCount, error } = await query;
     if (error) throw error;

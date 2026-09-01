@@ -249,6 +249,15 @@ export async function createCase(caseData: unknown, user: AuthUser) {
         throw new Error("Não foi possível criar o caso.");
       }
 
+      // O banco possui uma automação legada que cria um aviso para todos os
+      // usuários a cada processo cadastrado. Esse evento é apenas informativo
+      // e polui o sino, então removemos somente as notificações desse processo.
+      await supabase
+        .from("notifications")
+        .delete()
+        .eq("title", "Novo Processo")
+        .eq("message", `Um processo foi adicionado: ${newCase.title}`);
+
     const partiesToInsert = [
       { case_id: newCase.id, entity_id: client_entity_id, role: 'Cliente' },
       { case_id: newCase.id, entity_id: executed_entity_id, role: 'Executado' }
