@@ -148,7 +148,7 @@ export function DocumentAnalysisModule() {
       files.forEach(file => formData.append('files', file));
       
       const res = await (apiClient as any).uploadAnalysisDocuments(selectedSession.id, formData);
-      setDocuments(prev => [...prev, ...(res.documents || [])]);
+      setDocuments(prev => [...prev, ...(Array.isArray(res) ? res : (res.documents || []))]);
       toast({ title: "Sucesso", description: "Documentos enviados com sucesso" });
     } catch (err: any) {
       toast({ title: "Erro", description: err.message || "Falha ao enviar documentos", variant: "destructive" });
@@ -163,7 +163,7 @@ export function DocumentAnalysisModule() {
     setOrganizing(true);
     try {
       const res = await (apiClient as any).organizeDocuments(selectedSession.id);
-      const suggestions = res.suggestions || [];
+      const suggestions = Array.isArray(res) ? res : (res.suggestions || []);
       
       // Update each document sequentially or parallel
       await Promise.all(suggestions.map((sug: any) => 
