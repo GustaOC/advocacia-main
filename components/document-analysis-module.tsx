@@ -76,7 +76,7 @@ export function DocumentAnalysisModule() {
     queryFn: () => apiClient.getCases()
   });
 
-  const sessions = sessionsData?.sessions || [];
+  const sessions = Array.isArray(sessionsData) ? sessionsData : (sessionsData?.sessions || []);
   const cases: any[] = Array.isArray(casesData) ? casesData : (casesData?.cases || []);
 
   const createMutation = useMutation({
