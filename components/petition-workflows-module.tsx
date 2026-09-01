@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -66,7 +65,6 @@ export function PetitionWorkflowsModule() {
   const [selectedPromptStep, setSelectedPromptStep] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState(PETITION_DESCRIPTION_TEMPLATE);
-  const [newCaseId, setNewCaseId] = useState<string>('none');
   const [selectedPetition, setSelectedPetition] = useState<any | null>(null);
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
   const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string, stepName: string, workflowTitle: string} | null>(null);
@@ -84,20 +82,13 @@ export function PetitionWorkflowsModule() {
     queryFn: () => apiClient.getEmployees()
   });
 
-  const { data: casesData } = useQuery({
-    queryKey: ['cases'],
-    queryFn: () => apiClient.getCases()
-  });
-  const cases: any[] = Array.isArray(casesData) ? casesData : (casesData?.cases || []);
-
   const createMutation = useMutation({
-    mutationFn: (data: { title: string; description: string; case_id?: number }) => apiClient.createPetitionWorkflow(data),
+    mutationFn: (data: { title: string; description: string }) => apiClient.createPetitionWorkflow(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
       setIsNewModalOpen(false);
       setNewTitle('');
       setNewDescription(PETITION_DESCRIPTION_TEMPLATE);
-      setNewCaseId('none');
     }
   });
 
@@ -113,8 +104,7 @@ export function PetitionWorkflowsModule() {
     if (!newTitle.trim()) return;
     createMutation.mutate({
       title: newTitle,
-      description: newDescription,
-      case_id: newCaseId !== 'none' ? parseInt(newCaseId) : undefined
+      description: newDescription
     });
   };
 
@@ -754,7 +744,6 @@ A resposta será considerada adequada somente se:
               <TableRow className="bg-brand-light/20 hover:bg-brand-light/30 border-b border-brand-gray/20">
                 <TableHead className="w-12"></TableHead>
                 <TableHead className="text-brand-black font-semibold">Título</TableHead>
-                <TableHead className="text-brand-black font-semibold">Caso</TableHead>
                 <TableHead className="text-brand-black font-semibold">Etapa Atual</TableHead>
                 <TableHead className="text-brand-black font-semibold min-w-[200px]">Progresso</TableHead>
               </TableRow>
@@ -762,7 +751,7 @@ A resposta será considerada adequada somente se:
             <TableBody>
               {workflows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-12 text-brand-gray">
+                  <TableCell colSpan={4} className="text-center py-12 text-brand-gray">
                     Nenhuma petição encontrada.
                   </TableCell>
                 </TableRow>
@@ -824,9 +813,6 @@ A resposta será considerada adequada somente se:
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="text-brand-gray text-sm">
-                        {workflow.case ? `${workflow.case.case_number ? `${workflow.case.case_number} - ` : ''}${workflow.case.title}` : '-'}
-                      </TableCell>
                       <TableCell>
                         {workflow.status === 'Concluída' ? (
                           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Concluída</Badge>
@@ -852,7 +838,7 @@ A resposta será considerada adequada somente se:
                     {/* EXPANDED TIMELINE */}
                     {expandedWorkflowId === workflow.id && (
                       <TableRow className="bg-brand-light/5 hover:bg-brand-light/5">
-                        <TableCell colSpan={5} className="p-0 border-b border-brand-gray/10">
+                        <TableCell colSpan={4} className="p-0 border-b border-brand-gray/10">
                           <div className="p-8 max-w-4xl mx-auto">
                             <h4 className="font-serif text-xl text-brand-black mb-6">Linha do Tempo da Petição</h4>
                             <div className="space-y-0">
@@ -1023,21 +1009,6 @@ A resposta será considerada adequada somente se:
                 onChange={e => setNewDescription(e.target.value)}
                 className="min-h-[130px] resize-y"
               />
-            </div>
-            
-            <div className="space-y-2">
-              <Label>Vincular a um Caso (Opcional)</Label>
-              <Select value={newCaseId} onValueChange={setNewCaseId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um caso..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Nenhum</SelectItem>
-                  {cases.map((c: any) => (
-                    <SelectItem key={c.id} value={c.id.toString()}>{c.case_number ? `${c.case_number} - ` : ''}{c.title}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
           </div>
           <DialogFooter className="border-t border-brand-gray/20 pt-4">
