@@ -62,7 +62,7 @@ export async function PUT(
       updates.completed_by = user.id;
 
       // Lógica de avanço do workflow
-      if (step.step_number < 12) {
+      if (step.step_number < 15) {
         const nextStepNumber = step.step_number + 1;
         await supabase
           .from("petition_workflows")
@@ -121,8 +121,8 @@ export async function PUT(
           }
           } // fecha if assigned_to !== step.assigned_to
         }
-      } else if (step.step_number === 12) {
-        // Conclui o workflow inteiro se for a etapa 10
+      } else if (step.step_number === 15) {
+        // Conclui o workflow inteiro ao finalizar a última etapa
         await supabase
           .from("petition_workflows")
           .update({ status: "Concluída" })

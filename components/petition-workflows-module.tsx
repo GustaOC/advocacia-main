@@ -20,6 +20,7 @@ import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight,
 const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
 Possível tema:`;
+const TOTAL_WORKFLOW_STEPS = 15;
 
 export function PetitionWorkflowsModule() {
   const { user } = useAuth();
@@ -134,7 +135,7 @@ export function PetitionWorkflowsModule() {
       "Tese jurídica [Sonnet - temática / Opus - tese jurídica]": [{"title":"Consumidor e Bancário","text": "**Entrada mínima:**\n```\n/consumidor-e-bancario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Produto/serviço afetado]\n```"},{"title":"Contratual e Obrigações","text": "**Entrada mínima:**\n```\n/contratual-e-obrigacoes\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Contrato analisado]\n```"},{"title":"Direito do Trabalho","text": "**Entrada mínima:**\n```\n/direito-do-trabalho\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Relação de trabalho em questão]\n```"},{"title":"Imobiliário","text": "**Entrada mínima:**\n```\n/imobiliario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Imóvel/Matrícula em questão]\n```"},{"title":"Previdenciário","text": "**Entrada mínima:**\n```\n/previdenciario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Benefício pleiteado]\n```"},
   { title: "Tese Jurídica (Geral)", text: "**Entrada mínima:**\n```\n/tese-juridica\n\nRepresentamos: [PARTE].\nObjetivo material: [OBJETIVO]\nUtilize a análise documental anterior e os documentos originais.\n```" }
 ],
-      "Viabilidade e proposta e contrato de honorários, proc., decl., doc. pessoais. [GPT]": [
+      "Proposta de honorários": [
   {
     title: "Proposta de honorários",
     text: `### PAPEL
@@ -610,8 +611,8 @@ A resposta será considerada adequada somente se:
 - O arquivo final estiver disponível para download.`
   }
 ],
-                  "Elaborar petição": [{ title: "Petição Inicial", image: "/objetivo-processual.png", text: "**Entrada mínima:**\n```\n/peticao-inicial\n\nContratação formalizada.\n\nRepresentamos: [NOME DA PARTE AUTORA].\n\nObjetivo processual:\n[INFORMAR O PROVIMENTO JURISDICIONAL PRETENDIDO].\n\nUtilize automaticamente a tese jurídica consolidada, os relatórios, resumos, documentos e demais informações deste caso já disponíveis no contexto.\n\nElabore a versão final completa da petição inicial conforme a Skill, preservando integralmente a estratégia jurídica previamente definida.\n\nSe houver informação realmente impeditiva ou questão bloqueante ainda não definida pelo advogado, não crie solução jurídica autônoma. Prossiga até onde for possível e indique o ponto no controle interno antes do protocolo.\n\nContexto adicional:\n[INCLUIR SOMENTE SE HOUVER ORIENTAÇÃO ESPECÍFICA PARA ESTE CASO].\n\n```\n\n" }, { title: "Mandado de Segurança", text: "**Entrada mínima:**\n```\n/mandado-de-seguranca\n\nContratação formalizada.\nImpetrante: [PARTE]\nObjetivo: [OBJETIVO]\nNatureza do ato: [ADMINISTRATIVO / OMISSÃO / JUDICIAL]\n```\nPara ato judicial, acrescentar: `Aplique o protocolo reforçado de excepcionalidade.`\n\n" }, { title: "Execução e Cumprimento", text: "**Entrada mínima:**\n```\n/execucao-e-cumprimento\n\nRepresentamos: [EXEQUENTE / EXECUTADO]\nProcedimento: [cumprimento de sentença / execução de título extrajudicial]\nObjetivo: [OBJETIVO]\n```\nPara pedir apenas auditoria, sem peça: `Modo: auditoria de título e cálculo. Não elabore peça.`\n\n" }],
-      "Formatar word e auditoria [Sonnet]": [{ title: "Auditoria Pré-Protocolo", text: "**Entrada mínima:**\n```\n/auditoria-pre-protocolo\n\nAudite a versão final desta peça antes do protocolo.\nUtilize os documentos, a tese e as decisões do advogado disponíveis no contexto.\n```\n\n" }]
+                  "Elaborar petição (Claude)": [{ title: "Petição Inicial", image: "/objetivo-processual.png", text: "**Entrada mínima:**\n```\n/peticao-inicial\n\nContratação formalizada.\n\nRepresentamos: [NOME DA PARTE AUTORA].\n\nObjetivo processual:\n[INFORMAR O PROVIMENTO JURISDICIONAL PRETENDIDO].\n\nUtilize automaticamente a tese jurídica consolidada, os relatórios, resumos, documentos e demais informações deste caso já disponíveis no contexto.\n\nElabore a versão final completa da petição inicial conforme a Skill, preservando integralmente a estratégia jurídica previamente definida.\n\nSe houver informação realmente impeditiva ou questão bloqueante ainda não definida pelo advogado, não crie solução jurídica autônoma. Prossiga até onde for possível e indique o ponto no controle interno antes do protocolo.\n\nContexto adicional:\n[INCLUIR SOMENTE SE HOUVER ORIENTAÇÃO ESPECÍFICA PARA ESTE CASO].\n\n```\n\n" }, { title: "Mandado de Segurança", text: "**Entrada mínima:**\n```\n/mandado-de-seguranca\n\nContratação formalizada.\nImpetrante: [PARTE]\nObjetivo: [OBJETIVO]\nNatureza do ato: [ADMINISTRATIVO / OMISSÃO / JUDICIAL]\n```\nPara ato judicial, acrescentar: `Aplique o protocolo reforçado de excepcionalidade.`\n\n" }, { title: "Execução e Cumprimento", text: "**Entrada mínima:**\n```\n/execucao-e-cumprimento\n\nRepresentamos: [EXEQUENTE / EXECUTADO]\nProcedimento: [cumprimento de sentença / execução de título extrajudicial]\nObjetivo: [OBJETIVO]\n```\nPara pedir apenas auditoria, sem peça: `Modo: auditoria de título e cálculo. Não elabore peça.`\n\n" }],
+      "Auditoria (GPT)": [{ title: "Auditoria Pré-Protocolo", text: "**Entrada mínima:**\n```\n/auditoria-pre-protocolo\n\nAudite a versão final desta peça antes do protocolo.\nUtilize os documentos, a tese e as decisões do advogado disponíveis no contexto.\n```\n\n" }]
                             };
     return prompts[stepName] || [];
   };
@@ -825,11 +826,11 @@ A resposta será considerada adequada somente se:
                           <div className="flex-1 h-2 bg-brand-light/50 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-brand rounded-full transition-all duration-500"
-                              style={{ width: `${(workflow.current_step / 12) * 100}%` }}
+                              style={{ width: `${(workflow.current_step / TOTAL_WORKFLOW_STEPS) * 100}%` }}
                             />
                           </div>
                           <span className="text-xs text-brand-gray font-medium w-8">
-                            {workflow.current_step}/12
+                            {workflow.current_step}/{TOTAL_WORKFLOW_STEPS}
                           </span>
                         </div>
                       </TableCell>
