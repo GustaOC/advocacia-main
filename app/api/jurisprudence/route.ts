@@ -34,7 +34,7 @@ Retorne EXATAMENTE um array JSON no formato:
 Não invente julgados. Use julgados reais e notórios sobre o tema. Não adicione markdown \`\`\`json, apenas o array cru.`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.1-pro',
+      model: 'gemini-3.6-flash',
       contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\nContexto do usuário: ' + query }] }],
       config: {
         temperature: 0.2,
