@@ -261,6 +261,9 @@ export class ApiClient {
   async updatePetitionWorkflow(id: string, data: any): Promise<any> { return instance.put(`/petition-workflows/${id}`, data); }
   async deletePetitionWorkflow(id: string): Promise<any> { return instance.delete(`/petition-workflows/${id}`); }
   async updateWorkflowStep(workflowId: string, stepId: string, data: any): Promise<any> { return instance.put(`/petition-workflows/${workflowId}/steps/${stepId}`, data); }
+  async returnWorkflowStep(workflowId: string, stepId: string, data: { reason: string; observations?: string }): Promise<any> {
+    return instance.post(`/petition-workflows/${workflowId}/steps/${stepId}/return`, data);
+  }
 
   // Modelos
   async getTemplates(): Promise<any[]> { return instance.get('/document-templates'); }

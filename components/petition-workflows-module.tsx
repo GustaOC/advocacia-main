@@ -15,12 +15,32 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye } from 'lucide-react';
+import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning } from 'lucide-react';
 
 const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
 Possível tema:`;
 const TOTAL_WORKFLOW_STEPS = 15;
+const STEP_RETURN_PREFIX = "__WORKFLOW_RETURN__:";
+
+interface StepReturnInfo {
+  reason: string;
+  observations?: string;
+  fromStepNumber: number;
+  fromStepName: string;
+  returnedBy: string;
+  returnedAt: string;
+}
+
+const parseStepReturnInfo = (notes?: string | null): StepReturnInfo | null => {
+  if (!notes?.startsWith(STEP_RETURN_PREFIX)) return null;
+  try {
+    return JSON.parse(notes.slice(STEP_RETURN_PREFIX.length)) as StepReturnInfo;
+  } catch {
+    return null;
+  }
+};
+
 const isGptPromptStep = (stepName?: string | null) => Boolean(
   stepName && (
     stepName.includes("[GPT]") ||
@@ -77,6 +97,10 @@ export function PetitionWorkflowsModule() {
   const [selectedPetition, setSelectedPetition] = useState<any | null>(null);
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
   const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string, stepName: string, workflowTitle: string} | null>(null);
+  const [returningStep, setReturningStep] = useState<{workflowId: string, stepId: string, stepNumber: number, stepName: string} | null>(null);
+  const [returnReason, setReturnReason] = useState("");
+  const [returnObservations, setReturnObservations] = useState("");
+  const [viewingReturnInfo, setViewingReturnInfo] = useState<StepReturnInfo | null>(null);
   const [processNumber, setProcessNumber] = useState("");
   const [stepNotes, setStepNotes] = useState("");
   const [pendingAssignees, setPendingAssignees] = useState<Record<string, string>>({});
@@ -106,6 +130,21 @@ export function PetitionWorkflowsModule() {
       apiClient.updateWorkflowStep(workflowId, stepId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
+    }
+  });
+
+  const returnStepMutation = useMutation({
+    mutationFn: ({ workflowId, stepId, reason, observations }: { workflowId: string, stepId: string, reason: string, observations?: string }) =>
+      apiClient.returnWorkflowStep(workflowId, stepId, { reason, observations }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
+      setReturningStep(null);
+      setReturnReason("");
+      setReturnObservations("");
+      toast({ title: "Etapa devolvida", description: "A etapa anterior foi reaberta com o motivo informado." });
+    },
+    onError: (error: any) => {
+      toast({ title: "Erro ao voltar etapa", description: error.message, variant: "destructive" });
     }
   });
 
@@ -860,6 +899,7 @@ A resposta será considerada adequada somente se:
                                 const isCompleted = step.status === 'Concluída';
                                 const isCurrent = step.step_number === workflow.current_step && workflow.status !== 'Concluída';
                                 const isPending = !isCompleted && !isCurrent;
+                                const returnInfo = parseStepReturnInfo(step.notes);
                                 
                                 return (
                                   <div key={step.id} className={`relative pl-8 pb-6 border-l-2 ${
@@ -906,6 +946,18 @@ A resposta será considerada adequada somente se:
                                         </div>
                                         
                                         <div className="flex items-center gap-2">
+                                          {isCurrent && returnInfo && step.assigned_to === user?.id && (
+                                            <Button
+                                              size="sm"
+                                              variant="outline"
+                                              className="h-8 border-orange-200 bg-orange-50/50 px-2 text-orange-700 hover:bg-orange-50 hover:text-orange-800"
+                                              onClick={() => setViewingReturnInfo(returnInfo)}
+                                            >
+                                              <MessageSquareWarning className="mr-1.5 h-4 w-4" />
+                                              Ver retorno
+                                            </Button>
+                                          )}
+
                                           {getClaudePrompts(step.step_name).length > 0 && (
                                           <Button 
                                             size="sm" 
@@ -915,6 +967,28 @@ A resposta será considerada adequada somente se:
                                           >
                                             {isGptPromptStep(step.step_name) ? "Comando GPT" : "Comando skill"}
                                           </Button>
+                                          )}
+
+                                          {isCurrent && step.assigned_to === user?.id && step.step_number > 1 && (
+                                            <Button
+                                              size="sm"
+                                              variant="outline"
+                                              className="h-8 w-8 p-0 border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800 bg-red-50/50"
+                                              title="Voltar para a etapa anterior"
+                                              aria-label={`Voltar da etapa ${step.step_number} para a etapa anterior`}
+                                              onClick={() => {
+                                                setReturningStep({
+                                                  workflowId: workflow.id,
+                                                  stepId: step.id,
+                                                  stepNumber: step.step_number,
+                                                  stepName: step.step_name
+                                                });
+                                                setReturnReason("");
+                                                setReturnObservations("");
+                                              }}
+                                            >
+                                              <Undo2 className="h-4 w-4" />
+                                            </Button>
                                           )}
 
                                           {isCurrent && (
@@ -949,7 +1023,7 @@ A resposta será considerada adequada somente se:
                                         </div>
                                       </div>
                                       
-                                      {step.notes && (
+                                      {step.notes && !returnInfo && (
                                         <div className="mt-3 bg-brand-light/20 p-3 rounded-md border border-brand-gray/20 text-sm text-brand-black w-full">
                                           <span className="font-semibold block mb-1 text-brand-sage">Observação:</span>
                                           {step.notes}
@@ -1061,6 +1135,98 @@ A resposta será considerada adequada somente se:
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!returningStep} onOpenChange={(open) => !open && setReturningStep(null)}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl font-serif text-red-700">
+              <Undo2 className="h-5 w-5" />
+              Voltar etapa
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {returningStep && (
+              <p className="text-sm text-brand-gray">
+                A etapa {returningStep.stepNumber - 1} será reaberta e devolvida ao responsável anterior.
+              </p>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="return-reason">Motivo *</Label>
+              <Input
+                id="return-reason"
+                value={returnReason}
+                onChange={(event) => setReturnReason(event.target.value)}
+                placeholder="Ex: Informação incompleta, documento incorreto..."
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="return-observations">Observações</Label>
+              <Textarea
+                id="return-observations"
+                value={returnObservations}
+                onChange={(event) => setReturnObservations(event.target.value)}
+                rows={4}
+                placeholder="Detalhe o que precisa ser corrigido ou complementado..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setReturningStep(null)}>Cancelar</Button>
+            <Button
+              className="bg-red-700 text-white hover:bg-red-800"
+              disabled={!returnReason.trim() || returnStepMutation.isPending}
+              onClick={() => returningStep && returnStepMutation.mutate({
+                workflowId: returningStep.workflowId,
+                stepId: returningStep.stepId,
+                reason: returnReason.trim(),
+                observations: returnObservations.trim() || undefined
+              })}
+            >
+              {returnStepMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Confirmar retorno
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!viewingReturnInfo} onOpenChange={(open) => !open && setViewingReturnInfo(null)}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-xl font-serif text-orange-700">
+              <MessageSquareWarning className="h-5 w-5" />
+              Motivo do retorno
+            </DialogTitle>
+          </DialogHeader>
+          {viewingReturnInfo && (
+            <div className="space-y-4 py-4">
+              <div>
+                <Label className="text-brand-gray">Etapa que devolveu</Label>
+                <p className="mt-1 text-sm font-medium text-brand-black">
+                  Etapa {viewingReturnInfo.fromStepNumber}: {viewingReturnInfo.fromStepName}
+                </p>
+              </div>
+              <div>
+                <Label className="text-brand-gray">Motivo</Label>
+                <p className="mt-1 whitespace-pre-wrap rounded-md border border-orange-200 bg-orange-50/50 p-3 text-sm text-brand-black">
+                  {viewingReturnInfo.reason}
+                </p>
+              </div>
+              <div>
+                <Label className="text-brand-gray">Observações</Label>
+                <p className="mt-1 whitespace-pre-wrap rounded-md border border-brand-gray/20 bg-brand-light/10 p-3 text-sm text-brand-black">
+                  {viewingReturnInfo.observations || 'Nenhuma observação informada.'}
+                </p>
+              </div>
+              <p className="text-xs text-brand-gray">
+                Devolvido por {viewingReturnInfo.returnedBy} em {format(new Date(viewingReturnInfo.returnedAt), "dd/MM/yyyy HH:mm")}.
+              </p>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setViewingReturnInfo(null)}>Fechar</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
