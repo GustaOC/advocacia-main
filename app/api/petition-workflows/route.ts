@@ -20,6 +20,7 @@ export async function GET(request: Request) {
           *,
           assigned_user:user_profiles!petition_workflow_steps_assigned_to_fkey(id, name)
         ),
+        case:cases(id, title, case_number, description),
         created_user:user_profiles!petition_workflows_created_by_fkey(id, name)
       `)
       .order("created_at", { ascending: false });

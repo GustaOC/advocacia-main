@@ -16,7 +16,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy } from 'lucide-react';
+import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye } from 'lucide-react';
 
 const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
@@ -67,6 +67,7 @@ export function PetitionWorkflowsModule() {
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState(PETITION_DESCRIPTION_TEMPLATE);
   const [newCaseId, setNewCaseId] = useState<string>('none');
+  const [selectedCase, setSelectedCase] = useState<any | null>(null);
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
   const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string, stepName: string, workflowTitle: string} | null>(null);
   const [processNumber, setProcessNumber] = useState("");
@@ -810,7 +811,28 @@ A resposta será considerada adequada somente se:
                         </div>
                       </TableCell>
                       <TableCell className="text-brand-gray text-sm">
-                        {workflow.case ? `${workflow.case.case_number || ''} - ${workflow.case.title || ''}` : '-'}
+                        {workflow.case ? (
+                          <div className="flex items-center gap-2">
+                            <span>
+                              {workflow.case.case_number ? `${workflow.case.case_number} - ` : ''}
+                              {workflow.case.title}
+                            </span>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 shrink-0 p-0 text-brand-gray hover:bg-brand-light/50 hover:text-brand"
+                              title="Ver detalhes do caso"
+                              aria-label={`Ver detalhes do caso ${workflow.case.title}`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setSelectedCase(workflow.case);
+                              }}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ) : '-'}
                       </TableCell>
                       <TableCell>
                         {workflow.status === 'Concluída' ? (
@@ -955,6 +977,33 @@ A resposta será considerada adequada somente se:
           </Table>
         </CardContent>
       </Card>
+
+      <Dialog open={!!selectedCase} onOpenChange={(open) => !open && setSelectedCase(null)}>
+        <DialogContent className="sm:max-w-lg bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-serif text-brand-black border-b border-brand-gray/20 pb-4">
+              Detalhes do Caso
+            </DialogTitle>
+          </DialogHeader>
+          {selectedCase && (
+            <div className="space-y-5 py-3">
+              <div className="space-y-1">
+                <Label className="text-brand-gray">Nome</Label>
+                <p className="font-semibold text-brand-black">{selectedCase.title}</p>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-brand-gray">Descrição</Label>
+                <div className="max-h-[50vh] overflow-y-auto whitespace-pre-wrap rounded-md border border-brand-gray/20 bg-brand-light/10 p-4 text-sm leading-relaxed text-brand-black">
+                  {selectedCase.description || 'Nenhuma descrição fornecida.'}
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelectedCase(null)}>Fechar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isNewModalOpen} onOpenChange={setIsNewModalOpen}>
         <DialogContent className="sm:max-w-md bg-white">
