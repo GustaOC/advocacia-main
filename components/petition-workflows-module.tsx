@@ -25,7 +25,8 @@ const isGptPromptStep = (stepName?: string | null) => Boolean(
   stepName && (
     stepName.includes("[GPT]") ||
     stepName.includes("(GPT)") ||
-    stepName === "Proposta de honorários"
+    stepName === "Proposta de honorários" ||
+    stepName === "Elaborar contrato, procuração e declaração"
   )
 );
 
@@ -265,7 +266,8 @@ A resposta será considerada adequada somente se:
 - Os campos sem informação forem mantidos em branco ou preservados no formato original.
 - O arquivo final for disponibilizado para download.
 - Eventuais pendências forem informadas de forma objetiva.`
-  },
+  }],
+      "Elaborar contrato, procuração e declaração": [
   {
     title: "Procuração",
     text: `### PAPEL
