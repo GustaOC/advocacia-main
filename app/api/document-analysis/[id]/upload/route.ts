@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { getSessionUser } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 300; // Allow up to 5 minutes on Vercel Pro
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -28,9 +29,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const createdDocuments = [];
-
-    for (const file of files) {
+    // Process all files concurrently to speed up text extraction
+    const processPromises = files.map(async (file: any) => {
       try {
         const { filePath, originalName, fileType, fileSize } = file;
         const fileExt = originalName.split('.').pop()?.toLowerCase() || '';
@@ -87,11 +87,15 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
         if (insertError) throw insertError;
         
-        createdDocuments.push(newDoc);
+        return newDoc;
       } catch (fileErr) {
         console.error(`Erro ao processar arquivo ${file.originalName}:`, fileErr);
+        return null; // Return null on failure so Promise.all doesn't fail entirely
       }
-    }
+    });
+
+    const results = await Promise.all(processPromises);
+    const createdDocuments = results.filter(doc => doc !== null);
 
     return NextResponse.json(createdDocuments);
   } catch (error: any) {

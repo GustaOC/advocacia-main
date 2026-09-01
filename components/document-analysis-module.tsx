@@ -144,9 +144,8 @@ export function DocumentAnalysisModule() {
     if (files.length === 0) return;
     setUploading(true);
     try {
-      const uploadedFilesData = [];
-
-      for (const file of files) {
+      // Faz o upload de todos os arquivos de forma paralela (simultânea) para não demorar
+      const uploadPromises = files.map(async (file) => {
         // 1. Obter Signed URL
         const signedRes = await (apiClient as any).getAnalysisSignedUrl(selectedSession.id, {
           fileName: file.name,
@@ -164,15 +163,17 @@ export function DocumentAnalysisModule() {
 
         if (!uploadRes.ok) throw new Error(`Falha no upload de ${file.name}`);
 
-        uploadedFilesData.push({
+        return {
           filePath: signedRes.path,
           originalName: file.name,
           fileType: file.type,
           fileSize: file.size
-        });
-      }
+        };
+      });
+
+      const uploadedFilesData = await Promise.all(uploadPromises);
       
-      // 3. Notificar o backend para processar os arquivos já no Storage
+      // 3. Notificar o backend para processar os arquivos já no Storage (a extração de texto também será paralela)
       const res = await (apiClient as any).uploadAnalysisDocuments(selectedSession.id, { files: uploadedFilesData });
       
       setDocuments(prev => [...prev, ...(Array.isArray(res) ? res : (res.documents || []))]);
@@ -277,7 +278,7 @@ export function DocumentAnalysisModule() {
         {/* Split layout */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 flex-1 min-h-0">
           {/* Left Panel - Documents */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
+          <div className="lg:col-span-2 flex flex-col gap-4 min-h-0">
             <div 
               className="border-2 border-dashed border-brand-sage/50 rounded-lg p-6 text-center hover:border-brand hover:bg-brand/5 transition-all cursor-pointer bg-white"
               onDragOver={handleDragOver}
@@ -338,7 +339,7 @@ export function DocumentAnalysisModule() {
           </div>
           
           {/* Right Panel - Chat */}
-          <div className="lg:col-span-3 flex flex-col bg-white rounded-lg border border-brand-gray/20 shadow-sm overflow-hidden">
+          <div className="lg:col-span-3 flex flex-col bg-white min-h-0 rounded-lg border border-brand-gray/20 shadow-sm overflow-hidden">
             <div className="p-4 border-b border-brand-gray/20 bg-brand-light/10">
               <h3 className="font-semibold text-brand-black flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-brand" />
