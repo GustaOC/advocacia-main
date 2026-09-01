@@ -10,8 +10,14 @@ export async function POST(request: Request, { params }: { params: { id: string 
     if (!user) return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
 
     const { id } = params;
-    const formData = await request.formData();
-    const files = formData.getAll('files') as File[];
+    
+    // Check if JSON request (signed url flow)
+    const contentType = request.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+        return NextResponse.json({ error: 'Use JSON com arquivos pre-upados' }, { status: 400 });
+    }
+
+    const { files } = await request.json();
     
     if (!files || files.length === 0) {
       return NextResponse.json({ error: 'Nenhum arquivo enviado' }, { status: 400 });
@@ -26,24 +32,22 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     for (const file of files) {
       try {
-        const fileExt = file.name.split('.').pop()?.toLowerCase() || '';
-        const randomId = Math.random().toString(36).substring(2);
-        const fileName = `${id}/${randomId}-${Date.now()}.${fileExt}`;
+        const { filePath, originalName, fileType, fileSize } = file;
+        const fileExt = originalName.split('.').pop()?.toLowerCase() || '';
 
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-
-        const { error: uploadError } = await supabase.storage
+        // Download file from Supabase
+        const { data: fileData, error: downloadError } = await supabase.storage
           .from('analysis-documents')
-          .upload(fileName, buffer, {
-            contentType: file.type || 'application/octet-stream',
-          });
+          .download(filePath);
 
-        if (uploadError) throw uploadError;
+        if (downloadError) throw downloadError;
+
+        const arrayBuffer = await fileData.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
 
         const { data: { publicUrl } } = supabase.storage
           .from('analysis-documents')
-          .getPublicUrl(fileName);
+          .getPublicUrl(filePath);
 
         let extractedText = '';
 
@@ -72,10 +76,10 @@ export async function POST(request: Request, { params }: { params: { id: string 
           .from('analysis_documents')
           .insert({
             session_id: id,
-            original_name: file.name,
+            original_name: originalName,
             file_url: publicUrl,
-            file_type: file.type || 'application/octet-stream',
-            file_size: file.size,
+            file_type: fileType || 'application/octet-stream',
+            file_size: fileSize,
             extracted_text: extractedText
           })
           .select()
@@ -85,7 +89,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
         
         createdDocuments.push(newDoc);
       } catch (fileErr) {
-        console.error(`Erro ao processar arquivo ${file.name}:`, fileErr);
+        console.error(`Erro ao processar arquivo ${file.originalName}:`, fileErr);
       }
     }
 

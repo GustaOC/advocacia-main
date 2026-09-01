@@ -451,10 +451,11 @@ export class ApiClient {
   async getAnalysisSession(id: string): Promise<any> { return instance.get(`/document-analysis/${id}`); }
   async updateAnalysisSession(id: string, data: any): Promise<any> { return instance.put(`/document-analysis/${id}`, data); }
   async deleteAnalysisSession(id: string): Promise<any> { return instance.delete(`/document-analysis/${id}`); }
-  async uploadAnalysisDocuments(sessionId: string, formData: FormData): Promise<any> { 
-    return instance.post(`/document-analysis/${sessionId}/upload`, formData, { 
-      headers: { 'Content-Type': 'multipart/form-data' } 
-    }); 
+  async getAnalysisSignedUrl(sessionId: string, data: { fileName: string; contentType: string }): Promise<any> { 
+    return instance.post(`/document-analysis/${sessionId}/signed-url`, data); 
+  }
+  async uploadAnalysisDocuments(sessionId: string, data: { files: any[] }): Promise<any> { 
+    return instance.post(`/document-analysis/${sessionId}/upload`, data); 
   }
   async organizeDocuments(sessionId: string): Promise<any> { return instance.post(`/document-analysis/${sessionId}/organize`); }
   async chatWithDocuments(sessionId: string, data: { question: string; documentIds?: string[] }): Promise<any> { 

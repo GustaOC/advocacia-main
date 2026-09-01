@@ -144,12 +144,39 @@ export function DocumentAnalysisModule() {
     if (files.length === 0) return;
     setUploading(true);
     try {
-      const formData = new FormData();
-      files.forEach(file => formData.append('files', file));
+      const uploadedFilesData = [];
+
+      for (const file of files) {
+        // 1. Obter Signed URL
+        const signedRes = await (apiClient as any).getAnalysisSignedUrl(selectedSession.id, {
+          fileName: file.name,
+          contentType: file.type || 'application/octet-stream'
+        });
+
+        // 2. Fazer upload direto para o Supabase Storage (bypass limite Vercel)
+        const uploadRes = await fetch(signedRes.signedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'Content-Type': file.type || 'application/octet-stream'
+          }
+        });
+
+        if (!uploadRes.ok) throw new Error(`Falha no upload de ${file.name}`);
+
+        uploadedFilesData.push({
+          filePath: signedRes.path,
+          originalName: file.name,
+          fileType: file.type,
+          fileSize: file.size
+        });
+      }
       
-      const res = await (apiClient as any).uploadAnalysisDocuments(selectedSession.id, formData);
+      // 3. Notificar o backend para processar os arquivos já no Storage
+      const res = await (apiClient as any).uploadAnalysisDocuments(selectedSession.id, { files: uploadedFilesData });
+      
       setDocuments(prev => [...prev, ...(Array.isArray(res) ? res : (res.documents || []))]);
-      toast({ title: "Sucesso", description: "Documentos enviados com sucesso" });
+      toast({ title: "Sucesso", description: "Documentos enviados e processados com sucesso" });
     } catch (err: any) {
       toast({ title: "Erro", description: err.message || "Falha ao enviar documentos", variant: "destructive" });
     } finally {
