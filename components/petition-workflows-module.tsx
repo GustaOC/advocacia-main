@@ -917,18 +917,20 @@ A resposta será considerada adequada somente se:
                                           </Button>
                                           )}
 
-                                          {step.step_name.includes("Tese jurídica") && isCurrent && (
+                                          {isCurrent && (
                                             <Button 
                                               size="sm" 
                                               variant="outline"
-                                              className="border-amber-200 text-amber-700 hover:bg-amber-50 hover:text-amber-800 bg-amber-50/50"
+                                              className="h-8 w-8 p-0 border-amber-200 text-amber-700 hover:bg-amber-50 hover:text-amber-800 bg-amber-50/50"
+                                              title="Reportar problemática"
+                                              aria-label={`Reportar problemática na etapa ${step.step_number}: ${step.step_name}`}
                                               onClick={() => {
                                                 setProblemWorkflowId(workflow.id);
                                                 setProblemStepNumber(step.step_number);
                                                 setIsProblemModalOpen(true);
                                               }}
                                             >
-                                              Problemática
+                                              <AlertCircle className="h-4 w-4" />
                                             </Button>
                                           )}
 
