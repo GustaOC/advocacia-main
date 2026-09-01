@@ -237,7 +237,7 @@ Após preencher o documento, entregue:
    - Observação sobre padronização de gênero, se houver;
    - Confirmação de que nenhuma cláusula foi alterada.
 
-Sempre que possível, utilize Python e bibliotecas apropriadas, como `python-docx` para arquivos DOCX e `pypdf` ou equivalente para PDFs com campos preenchíveis.
+Sempre que possível, utilize Python e bibliotecas apropriadas, como \`python-docx\` para arquivos DOCX e \`pypdf\` ou equivalente para PDFs com campos preenchíveis.
 
 Todo texto inserido deve manter a mesma fonte, tamanho, estilo e formatação do trecho substituído no modelo original.
 
@@ -356,7 +356,7 @@ Após o preenchimento, entregue:
    - Observação sobre padronização de gênero, se aplicável;
    - Confirmação de que os poderes e demais cláusulas foram preservados sem alteração.
 
-Utilize Python e bibliotecas adequadas, como `python-docx` para DOCX e `pypdf` ou equivalente para PDF preenchível.
+Utilize Python e bibliotecas adequadas, como \`python-docx\` para DOCX e \`pypdf\` ou equivalente para PDF preenchível.
 
 Todo texto inserido deve manter a fonte, tamanho, estilo, espaçamento e formatação do trecho original substituído.
 
@@ -477,7 +477,7 @@ Após o preenchimento, entregue:
    - Confirmação de que nenhuma cláusula contratual foi alterada;
    - Confirmação de que nenhum dado foi inventado.
 
-Utilize Python e bibliotecas adequadas, como `python-docx` para arquivos DOCX e `pypdf` ou equivalente para PDFs com campos editáveis.
+Utilize Python e bibliotecas adequadas, como \`python-docx\` para arquivos DOCX e \`pypdf\` ou equivalente para PDFs com campos editáveis.
 
 Todo texto inserido deve manter a mesma fonte, tamanho, estilo, espaçamento e formatação do trecho substituído no modelo original.
 
@@ -593,7 +593,7 @@ Após o preenchimento, entregue:
    - Confirmação de que o texto padrão da declaração foi preservado;
    - Confirmação de que nenhum dado foi inventado.
 
-Utilize Python e bibliotecas adequadas, como `python-docx` para DOCX e `pypdf` ou equivalente para PDF preenchível.
+Utilize Python e bibliotecas adequadas, como \`python-docx\` para DOCX e \`pypdf\` ou equivalente para PDF preenchível.
 
 Todo texto inserido deve manter a mesma fonte, tamanho, estilo, espaçamento e formatação do trecho substituído no modelo original.
 

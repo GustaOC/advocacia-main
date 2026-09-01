@@ -56,6 +56,7 @@ interface ModernLayoutProps {
 }
 
 const ChatModule = dynamic(() => import('./chat-widget').then(m => m.ChatModule), { ssr: false });
+const DocumentAnalysisModule = dynamic(() => import('./document-analysis-module').then(m => m.DocumentAnalysisModule), { ssr: false });
 const JurisprudenceModule = dynamic(() => import('./jurisprudence-module').then(m => m.JurisprudenceModule), { ssr: false });
 import { onUnreadCountChange } from './chat-widget';
 
@@ -63,6 +64,7 @@ const menuItems = [
     { value: "overview", label: "Dashboard", icon: BarChart2, description: "Visão geral do escritório", color: "from-brand to-brand-700" },
     { value: "chat", label: "Chat", icon: MessageSquare, description: "Mensagens da equipe", color: "from-indigo-500 to-indigo-600" },
     { value: "jurisprudence", label: "Jurisprudência", icon: Scale, description: "Pesquisa inteligente", color: "from-blue-500 to-indigo-500" },
+    { value: "document-analysis", label: "Análise IA", icon: Sparkles, description: "Análise inteligente de documentos", color: "from-emerald-500 to-teal-500" },
     { value: "entities", label: "Clientes", icon: Users, description: "Gerenciar clientes e partes", color: "from-brand-sage to-brand-sage/90" },
     { value: "cases", label: "Processos", icon: Briefcase, description: "Acompanhar processos jurídicos", color: "from-brand-gray to-brand-gray/90" },
     { value: "cruzamento", label: "Cruzamento de Listas", icon: FileSearch, description: "Comparar pagamentos e judicializados", color: "from-brand-sage/80 to-brand-sage" },
@@ -525,6 +527,7 @@ export function Dashboard() {
       case 'overview': return null;
       case 'chat': return <ChatModule />;
       case 'jurisprudence': return <JurisprudenceModule />;
+      case 'document-analysis': return <DocumentAnalysisModule />;
       case 'entities': return <EntitiesModule />;
       case 'cases': return <CasesModule initialFilters={globalFilters.cases} />;
       case 'cruzamento': return <CruzamentoPage />;

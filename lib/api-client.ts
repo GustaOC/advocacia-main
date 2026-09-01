@@ -444,6 +444,22 @@ export class ApiClient {
     const installmentValue = data.installments > 0 ? remainingValue / data.installments : 0;
     return { remainingValue, installmentValue, entryPercentage: (data.entryValue / data.totalValue) * 100 };
   }
+
+  // Document Analysis (NotebookLM)
+  async getAnalysisSessions(): Promise<any> { return instance.get('/document-analysis'); }
+  async createAnalysisSession(data: { title: string; case_id?: number }): Promise<any> { return instance.post('/document-analysis', data); }
+  async getAnalysisSession(id: string): Promise<any> { return instance.get(`/document-analysis/${id}`); }
+  async updateAnalysisSession(id: string, data: any): Promise<any> { return instance.put(`/document-analysis/${id}`, data); }
+  async deleteAnalysisSession(id: string): Promise<any> { return instance.delete(`/document-analysis/${id}`); }
+  async uploadAnalysisDocuments(sessionId: string, formData: FormData): Promise<any> { 
+    return instance.post(`/document-analysis/${sessionId}/upload`, formData, { 
+      headers: { 'Content-Type': 'multipart/form-data' } 
+    }); 
+  }
+  async organizeDocuments(sessionId: string): Promise<any> { return instance.post(`/document-analysis/${sessionId}/organize`); }
+  async chatWithDocuments(sessionId: string, data: { question: string; documentIds?: string[] }): Promise<any> { 
+    return instance.post(`/document-analysis/${sessionId}/chat`, data); 
+  }
 }
 
 // ============================================================================
