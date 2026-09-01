@@ -58,6 +58,7 @@ Não invente julgados. Use julgados reais e notórios sobre o tema. Não adicion
 
   } catch (error: any) {
     console.error("Erro na busca de jurisprudência:", error);
-    return NextResponse.json({ error: 'Erro interno ao buscar jurisprudência.' }, { status: 500 });
+    const apiError = error?.message || error?.toString() || 'Erro interno ao buscar jurisprudência.';
+    return NextResponse.json({ error: `Erro do Google Gemini: ${apiError}` }, { status: 500 });
   }
 }
