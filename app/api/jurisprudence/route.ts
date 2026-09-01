@@ -28,10 +28,12 @@ Retorne EXATAMENTE um array JSON no formato:
     "data": "DD/MM/AAAA",
     "resultado": "Provido / Improvido / Concedido",
     "tribunal": "Sigla do Tribunal (ex: STJ - 3ª Turma)",
-    "link": "https://www.jusbrasil.com.br/jurisprudencia/busca?q=palavras+chave+especificas"
+    "link": "URL_DO_SITE_OFICIAL_DO_TRIBUNAL_OU_PDF"
   }
 ]
-Não invente julgados. Use julgados reais e notórios sobre o tema. Não adicione markdown \`\`\`json, apenas o array cru.`;
+Não invente julgados. Use julgados reais e notórios sobre o tema. 
+É TERMINANTEMENTE PROIBIDO usar links do Jusbrasil. Você DEVE fornecer o link do site OFICIAL do respectivo tribunal (STJ, STF, TJMS, TRT24, TST ou TRF3), de preferência o link direto para o Inteiro Teor (PDF) ou para a página de consulta do acórdão.
+Não adicione markdown \`\`\`json, apenas o array cru.`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-3.6-flash',
