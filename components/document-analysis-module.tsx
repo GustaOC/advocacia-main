@@ -524,7 +524,7 @@ export function DocumentAnalysisModule() {
 
       {/* Create Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle className="text-brand font-serif text-xl">Nova Análise</DialogTitle>
           </DialogHeader>
