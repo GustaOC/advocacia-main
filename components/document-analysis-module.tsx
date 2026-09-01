@@ -320,13 +320,13 @@ export function DocumentAnalysisModule() {
                     />
                     <FileText className="w-5 h-5 text-brand-sage flex-shrink-0" />
                     <div 
-                      className="flex-1 min-w-0 cursor-pointer group"
+                      className="flex-1 min-w-0 cursor-pointer group overflow-x-auto custom-scrollbar pb-1"
                       onClick={() => doc.file_url && window.open(doc.file_url, '_blank')}
                     >
-                      <p className="text-sm font-medium text-brand-black truncate group-hover:text-brand group-hover:underline" title={doc.suggested_name || doc.original_name}>
+                      <p className="text-sm font-medium text-brand-black whitespace-nowrap group-hover:text-brand group-hover:underline" title={doc.suggested_name || doc.original_name}>
                         {doc.suggested_name || doc.original_name}
                       </p>
-                      <p className="text-xs text-brand-gray">
+                      <p className="text-xs text-brand-gray mt-1">
                         {formatFileSize(doc.file_size)} • {(doc.file_type || '').toUpperCase()}
                       </p>
                     </div>
