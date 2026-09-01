@@ -257,7 +257,7 @@ export class ApiClient {
 
   // Petition Workflows
   async getPetitionWorkflows(): Promise<any> { return instance.get('/petition-workflows'); }
-  async createPetitionWorkflow(data: { title: string; case_id?: number }): Promise<any> { return instance.post('/petition-workflows', data); }
+  async createPetitionWorkflow(data: { title: string; description?: string; case_id?: number }): Promise<any> { return instance.post('/petition-workflows', data); }
   async updatePetitionWorkflow(id: string, data: any): Promise<any> { return instance.put(`/petition-workflows/${id}`, data); }
   async deletePetitionWorkflow(id: string): Promise<any> { return instance.delete(`/petition-workflows/${id}`); }
   async updateWorkflowStep(workflowId: string, stepId: string, data: any): Promise<any> { return instance.put(`/petition-workflows/${workflowId}/steps/${stepId}`, data); }

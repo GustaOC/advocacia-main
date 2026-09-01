@@ -18,6 +18,10 @@ import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
 import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy } from 'lucide-react';
 
+const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
+Objetivo processual:
+Possível tema:`;
+
 export function PetitionWorkflowsModule() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -61,6 +65,7 @@ export function PetitionWorkflowsModule() {
 
   const [selectedPromptStep, setSelectedPromptStep] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
+  const [newDescription, setNewDescription] = useState(PETITION_DESCRIPTION_TEMPLATE);
   const [newCaseId, setNewCaseId] = useState<string>('none');
   const [expandedWorkflowId, setExpandedWorkflowId] = useState<string | null>(null);
   const [completingStep, setCompletingStep] = useState<{workflowId: string, stepId: string, stepName: string, workflowTitle: string} | null>(null);
@@ -85,11 +90,12 @@ export function PetitionWorkflowsModule() {
   const cases: any[] = Array.isArray(casesData) ? casesData : (casesData?.cases || []);
 
   const createMutation = useMutation({
-    mutationFn: (data: { title: string; case_id?: number }) => apiClient.createPetitionWorkflow(data),
+    mutationFn: (data: { title: string; description: string; case_id?: number }) => apiClient.createPetitionWorkflow(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
       setIsNewModalOpen(false);
       setNewTitle('');
+      setNewDescription(PETITION_DESCRIPTION_TEMPLATE);
       setNewCaseId('none');
     }
   });
@@ -106,6 +112,7 @@ export function PetitionWorkflowsModule() {
     if (!newTitle.trim()) return;
     createMutation.mutate({
       title: newTitle,
+      description: newDescription,
       case_id: newCaseId !== 'none' ? parseInt(newCaseId) : undefined
     });
   };
@@ -773,25 +780,32 @@ A resposta será considerada adequada somente se:
                         )}
                       </TableCell>
                       <TableCell className="font-semibold text-brand-black relative group">
-                        <div className="flex items-center gap-2">
-                          {workflow.title}
-                          {workflow.title.includes(' - Proc: ') && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                              title="Copiar número do processo"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                const parts = workflow.title.split(' - Proc: ');
-                                if (parts.length > 1) {
-                                  navigator.clipboard.writeText(parts[1].trim());
-                                  toast({ title: "Copiado!", description: "Número do processo copiado para a área de transferência." });
-                                }
-                              }}
-                            >
-                              <Copy className="w-3 h-3 text-brand-gray" />
-                            </Button>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            {workflow.title}
+                            {workflow.title.includes(' - Proc: ') && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                title="Copiar número do processo"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const parts = workflow.title.split(' - Proc: ');
+                                  if (parts.length > 1) {
+                                    navigator.clipboard.writeText(parts[1].trim());
+                                    toast({ title: "Copiado!", description: "Número do processo copiado para a área de transferência." });
+                                  }
+                                }}
+                              >
+                                <Copy className="w-3 h-3 text-brand-gray" />
+                              </Button>
+                            )}
+                          </div>
+                          {workflow.description && (
+                            <p className="mt-1 max-w-md whitespace-pre-line text-xs font-normal text-brand-gray line-clamp-3">
+                              {workflow.description}
+                            </p>
                           )}
                         </div>
                       </TableCell>
@@ -956,6 +970,16 @@ A resposta será considerada adequada somente se:
                 value={newTitle} 
                 onChange={e => setNewTitle(e.target.value)} 
                 placeholder="Ex: Petição Inicial - João da Silva" 
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="petition-description">Descrição</Label>
+              <Textarea
+                id="petition-description"
+                value={newDescription}
+                onChange={e => setNewDescription(e.target.value)}
+                className="min-h-[130px] resize-y"
               />
             </div>
             

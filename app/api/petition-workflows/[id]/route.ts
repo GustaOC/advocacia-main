@@ -70,6 +70,9 @@ export async function PUT(
 
     const updates: any = {};
     if (body.title !== undefined) updates.title = body.title;
+    if (body.description !== undefined) {
+      updates.description = typeof body.description === "string" ? body.description.trim() || null : null;
+    }
     if (body.case_id !== undefined) updates.case_id = body.case_id;
 
     const { data, error } = await supabase

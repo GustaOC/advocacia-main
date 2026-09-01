@@ -57,6 +57,7 @@ export async function POST(request: Request) {
       .insert([
         {
           title: body.title,
+          description: typeof body.description === "string" ? body.description.trim() || null : null,
           case_id: body.case_id || null,
           created_by: user.id,
         },
