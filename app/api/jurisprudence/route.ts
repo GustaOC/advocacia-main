@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     // Passo 1: Extrair palavras-chave e intenção com IA
     const systemPrompt = `Você é um assistente jurídico especialista em jurisprudência brasileira.
 O usuário vai enviar o contexto de um caso ou um comando direto.
-Seu objetivo é gerar uma lista de 5 a 10 ementas REAIS e RELEVANTES de tribunais brasileiros (STJ, STF, TJMS, TJSP, etc) que se encaixem no contexto.
+Seu objetivo é gerar uma lista de 5 a 10 ementas REAIS e RELEVANTES. ATENÇÃO: Você deve filtrar e retornar EXCLUSIVAMENTE julgados dos seguintes tribunais: TJMS, STJ, STF, TRT24, TST ou TRF3. Não inclua jurisprudência de nenhum outro tribunal.
 Retorne EXATAMENTE um array JSON no formato:
 [
   {
