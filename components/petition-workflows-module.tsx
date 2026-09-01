@@ -21,6 +21,13 @@ const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
 Possível tema:`;
 const TOTAL_WORKFLOW_STEPS = 15;
+const isGptPromptStep = (stepName?: string | null) => Boolean(
+  stepName && (
+    stepName.includes("[GPT]") ||
+    stepName.includes("(GPT)") ||
+    stepName === "Proposta de honorários"
+  )
+);
 
 export function PetitionWorkflowsModule() {
   const { user } = useAuth();
@@ -904,7 +911,7 @@ A resposta será considerada adequada somente se:
                                             className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800 bg-blue-50/50"
                                             onClick={() => handleOpenPromptModal(step.step_name)}
                                           >
-                                            {step.step_name.includes("[GPT]") ? "Comando GPT" : "Comando skill"}
+                                            {isGptPromptStep(step.step_name) ? "Comando GPT" : "Comando skill"}
                                           </Button>
                                           )}
 
@@ -1058,7 +1065,7 @@ A resposta será considerada adequada somente se:
         <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              {selectedPromptStep?.includes("[GPT]") ? "Comandos GPT: " : "Comandos Skill: "}
+              {isGptPromptStep(selectedPromptStep) ? "Comandos GPT: " : "Comandos Skill: "}
               {selectedPromptStep?.replace(" [GPT]", "").replace(" [Sonnet]", "").replace(" [NotebookLM]", "")}
             </DialogTitle>
           </DialogHeader>
