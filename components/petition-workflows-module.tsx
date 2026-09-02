@@ -183,7 +183,6 @@ export function PetitionWorkflowsModule() {
       title: string;
       text: string;
       image?: string;
-      template?: { url: string; fileName: string };
     }[]> = {
       "Triagem inicial": [],
       "Organização e nomeação dos documentos [Gemini]": [],
@@ -318,10 +317,6 @@ A resposta será considerada adequada somente se:
       "Elaborar contrato, procuração e declaração": [
   {
     title: "Procuração",
-    template: {
-      url: "/modelos-peticao/modelo-procuracao-cassio-miguel.docx",
-      fileName: "Modelo de Procuração - Cássio Miguel.docx"
-    },
     text: `### PAPEL
 
 Você é um Especialista em Automação de Documentos Jurídicos, com atuação exclusiva no preenchimento fiel de modelos de Procuração, sejam eles judiciais, extrajudiciais, ad judicia, ad judicia et extra ou instrumentos semelhantes.
@@ -439,10 +434,6 @@ A resposta será considerada correta somente se:
   },
   {
     title: "Contrato",
-    template: {
-      url: "/modelos-peticao/modelo-contrato-prestacao-servicos-cassio-miguel.docx",
-      fileName: "Modelo de Contrato de Prestação de Serviços - Cássio Miguel.docx"
-    },
     text: `### PAPEL
 
 Você é um Especialista em Automação de Documentos Jurídicos, com foco exclusivo no preenchimento fiel de modelos de Contrato.
@@ -565,10 +556,6 @@ A resposta será considerada de alta qualidade somente se:
   },
   {
     title: "Declaração de hipossuficiência",
-    template: {
-      url: "/modelos-peticao/modelo-declaracao-hipossuficiencia.docx",
-      fileName: "Modelo de Declaração de Hipossuficiência.docx"
-    },
     text: `### PAPEL
 
 Você é um Especialista em Automação de Documentos Jurídicos, com foco exclusivo no preenchimento fiel de modelos de Declaração de Hipossuficiência, Declaração de Pobreza, Declaração de Insuficiência Econômica ou documentos equivalentes.
@@ -1371,19 +1358,6 @@ A resposta será considerada adequada somente se:
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <h4 className="font-semibold text-sm text-brand-black">{cmd.title}</h4>
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    {cmd.template && (
-                      <Button
-                        asChild
-                        size="sm"
-                        variant="outline"
-                        className="h-8 border-emerald-200 bg-emerald-50/50 text-xs text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-                      >
-                        <a href={cmd.template.url} download={cmd.template.fileName}>
-                          <Download className="mr-2 h-3.5 w-3.5" />
-                          Baixar modelo
-                        </a>
-                      </Button>
-                    )}
                     <Button
                       size="sm"
                       variant="outline"

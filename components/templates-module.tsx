@@ -1,174 +1,96 @@
-// components/templates-module.tsx 
 "use client";
 
-import React, { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Plus, Search, Edit, Trash2, Loader2, FileText } from 'lucide-react';
-import { apiClient } from '@/lib/api-client';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/use-auth';
+import { useMemo, useState } from "react";
+import { Download, FileText, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
-interface Template {
-  id: number;
-  title: string;
-  description: string | null;
-  category: string | null;
-  content: string;
-  created_at: string;
-}
+const DOCUMENT_MODELS = [
+  {
+    title: "Procuração",
+    category: "Documentos contratuais",
+    description: "Modelo de procuração da Cássio Miguel Sociedade Individual de Advocacia.",
+    url: "/modelos-peticao/modelo-procuracao-cassio-miguel.docx",
+    fileName: "Modelo de Procuração - Cássio Miguel.docx",
+  },
+  {
+    title: "Contrato de Prestação de Serviços",
+    category: "Documentos contratuais",
+    description: "Modelo de contrato de prestação de serviços advocatícios e honorários.",
+    url: "/modelos-peticao/modelo-contrato-prestacao-servicos-cassio-miguel.docx",
+    fileName: "Modelo de Contrato de Prestação de Serviços - Cássio Miguel.docx",
+  },
+  {
+    title: "Declaração de Hipossuficiência",
+    category: "Declarações",
+    description: "Modelo de declaração para pedido dos benefícios da justiça gratuita.",
+    url: "/modelos-peticao/modelo-declaracao-hipossuficiencia.docx",
+    fileName: "Modelo de Declaração de Hipossuficiência.docx",
+  },
+] as const;
 
 export function TemplatesModule() {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const { can } = useAuth();
-
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [currentTemplate, setCurrentTemplate] = useState<Partial<Template>>({});
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: templates = [], isLoading } = useQuery<Template[]>({
-    queryKey: ['templates'],
-    // ✅ CORREÇÃO APLICADA AQUI
-    queryFn: () => apiClient.getTemplates(),
-  });
+  const filteredModels = useMemo(() => {
+    const query = searchTerm.trim().toLocaleLowerCase("pt-BR");
+    if (!query) return DOCUMENT_MODELS;
 
-  const saveTemplateMutation = useMutation({
-    mutationFn: (templateData: Partial<Template>) => {
-      if (isEditMode) {
-        return apiClient.updateTemplate(templateData.id!, templateData);
-      }
-      return apiClient.createTemplate(templateData);
-    },
-    onSuccess: () => {
-      toast({ title: "Sucesso!", description: `Modelo ${isEditMode ? 'atualizado' : 'criado'} com sucesso.` });
-      queryClient.invalidateQueries({ queryKey: ['templates'] });
-      setModalOpen(false);
-    },
-    onError: (error: Error) => {
-      toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
-    },
-  });
-
-  const deleteTemplateMutation = useMutation({
-    mutationFn: (templateId: number) => apiClient.deleteTemplate(templateId),
-    onSuccess: () => {
-      toast({ title: "Sucesso!", description: "Modelo excluído." });
-      queryClient.invalidateQueries({ queryKey: ['templates'] });
-    },
-    onError: (error: Error) => {
-      toast({ title: "Erro ao excluir", description: error.message, variant: "destructive" });
-    },
-  });
-
-  const openModalForCreate = () => {
-    setIsEditMode(false);
-    setCurrentTemplate({ title: "", description: "", category: "", content: "" });
-    setModalOpen(true);
-  };
-
-  const openModalForEdit = (template: Template) => {
-    setIsEditMode(true);
-    setCurrentTemplate(template);
-    setModalOpen(true);
-  };
-
-  const handleSave = () => {
-    saveTemplateMutation.mutate(currentTemplate);
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm("Tem certeza que deseja excluir este modelo? Esta ação não pode ser desfeita.")) {
-      deleteTemplateMutation.mutate(id);
-    }
-  };
-
-  const filteredTemplates = useMemo(() =>
-    templates.filter(t =>
-      (t.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (t.category || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (t.description || "").toLowerCase().includes(searchTerm.toLowerCase())
-    ),
-    [templates, searchTerm]
-  );
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-96">
-        <Loader2 className="h-8 w-8 animate-spin text-brand-sage" />
-      </div>
+    return DOCUMENT_MODELS.filter((model) =>
+      `${model.title} ${model.category} ${model.description}`
+        .toLocaleLowerCase("pt-BR")
+        .includes(query)
     );
-  }
+  }, [searchTerm]);
 
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 text-white">
-        <div>
-          <h2 className="text-3xl font-bold mb-2">Modelos de Documentos</h2>
-          <p className="text-brand-gray text-lg">Crie e gerencie templates para automatizar a geração de documentos.</p>
-        </div>
+      <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-8 text-white">
+        <h2 className="mb-2 text-3xl font-bold">Modelos de Documentos</h2>
+        <p className="text-lg text-slate-300">Baixe os modelos oficiais do escritório em formato Word.</p>
       </div>
 
       <Card className="border-0 shadow-lg">
-        <CardContent className="p-6 flex justify-between items-center">
-          <Input placeholder="Buscar por título, categoria ou descrição..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="max-w-xs" />
-          {can('templates_create') && (
-            <Button onClick={openModalForCreate} className="bg-brand hover:bg-brand-black"><Plus className="mr-2 h-4 w-4" /> Novo Modelo</Button>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card className="border-0 shadow-lg">
-        <CardContent>
-          <Table>
-            <TableHeader><TableRow><TableHead>Título</TableHead><TableHead>Categoria</TableHead><TableHead>Descrição</TableHead><TableHead className="text-right">Ações</TableHead></TableRow></TableHeader>
-            <TableBody>
-              {filteredTemplates.map(template => (
-                <TableRow key={template.id}>
-                  <TableCell className="font-medium">{template.title}</TableCell>
-                  <TableCell>{template.category || '-'}</TableCell>
-                  <TableCell className="text-sm text-brand-gray">{template.description || '-'}</TableCell>
-                  <TableCell className="text-right">
-                    {can('templates_edit') && <Button variant="ghost" size="icon" onClick={() => openModalForEdit(template)}><Edit className="h-4 w-4" /></Button>}
-                    {can('templates_delete') && <Button variant="ghost" size="icon" onClick={() => handleDelete(template.id)}><Trash2 className="h-4 w-4 text-red-500" /></Button>}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-3xl bg-card">
-          <DialogHeader>
-            <DialogTitle>{isEditMode ? "Editar Modelo" : "Criar Novo Modelo de Documento"}</DialogTitle>
-            <CardDescription>Use variáveis como {`{{cliente.nome}}`}, {`{{cliente.cpf}}`}, {`{{processo.numero}}`} no conteúdo.</CardDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2"><Label htmlFor="title">Título *</Label><Input id="title" value={currentTemplate.title || ''} onChange={e => setCurrentTemplate({...currentTemplate, title: e.target.value})} /></div>
-              <div className="space-y-2"><Label htmlFor="category">Categoria</Label><Input id="category" value={currentTemplate.category || ''} onChange={e => setCurrentTemplate({...currentTemplate, category: e.target.value})} /></div>
-            </div>
-            <div className="space-y-2"><Label htmlFor="description">Descrição</Label><Textarea id="description" value={currentTemplate.description || ''} onChange={e => setCurrentTemplate({...currentTemplate, description: e.target.value})} /></div>
-            <div className="space-y-2"><Label htmlFor="content">Conteúdo do Modelo *</Label><Textarea id="content" value={currentTemplate.content || ''} onChange={e => setCurrentTemplate({...currentTemplate, content: e.target.value})} className="min-h-[300px] font-mono text-sm" /></div>
+        <CardContent className="p-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-gray" />
+            <Input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Buscar modelo..."
+              className="pl-9"
+            />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setModalOpen(false)}>Cancelar</Button>
-            <Button onClick={handleSave} disabled={saveTemplateMutation.isPending}>
-              {saveTemplateMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isEditMode ? "Salvar Alterações" : "Criar Modelo"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </CardContent>
+      </Card>
+
+      {filteredModels.length === 0 ? (
+        <Card className="border border-brand-gray/20 bg-white">
+          <CardContent className="p-12 text-center text-brand-gray">Nenhum modelo encontrado.</CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredModels.map((model) => (
+            <Card key={model.url} className="border border-brand-gray/20 bg-white shadow-sm transition-shadow hover:shadow-md">
+              <CardContent className="flex h-full flex-col p-6">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-brand-light/40 text-brand">
+                  <FileText className="h-6 w-6" />
+                </div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-brand-sage">{model.category}</p>
+                <h3 className="text-xl font-serif text-brand-black">{model.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-brand-gray">{model.description}</p>
+                <Button asChild className="mt-6 w-full bg-brand text-white hover:bg-brand/90">
+                  <a href={model.url} download={model.fileName}>
+                    <Download className="mr-2 h-4 w-4" />
+                    Baixar modelo Word
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
