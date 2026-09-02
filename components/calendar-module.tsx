@@ -30,6 +30,15 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
 import { apiClient, type Task } from '@/lib/api-client';
 import type { CalendarEventMetadata, CalendarEventType } from '@/lib/calendar-event-metadata';
+import {
+  combineDateAndTimePtBr,
+  formatDatePtBr,
+  formatIsoDate,
+  formatTime24,
+  maskDatePtBr,
+  maskTime24,
+  parseDatePtBr,
+} from '@/lib/calendar-date';
 import styles from './calendar-module.module.css';
 
 moment.locale('pt-br');
@@ -91,23 +100,6 @@ const VIEW_LABELS: Record<View, string> = {
   day: 'Dia',
   agenda: 'Programação',
 };
-
-function pad(value: number) {
-  return String(value).padStart(2, '0');
-}
-
-function toDateInput(date: Date) {
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-}
-
-function toTimeInput(date: Date) {
-  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
-
-function combineDateAndTime(dateValue: string, timeValue: string, allDay: boolean, end = false) {
-  const time = allDay ? (end ? '23:59' : '00:00') : (timeValue || '00:00');
-  return new Date(`${dateValue}T${time}:00`);
-}
 
 function roundToNextHalfHour(date: Date) {
   const rounded = new Date(date);
@@ -173,10 +165,10 @@ function emptyForm(start: Date, end: Date, assignedTo: string, allDay = false): 
   return {
     title: '',
     type: 'meeting',
-    startDate: toDateInput(start),
-    startTime: toTimeInput(start),
-    endDate: toDateInput(end),
-    endTime: toTimeInput(end),
+    startDate: formatDatePtBr(start),
+    startTime: formatTime24(start),
+    endDate: formatDatePtBr(end),
+    endTime: formatTime24(end),
     allDay,
     description: '',
     assignedTo,
@@ -193,6 +185,7 @@ export function CalendarModule() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [jumpDate, setJumpDate] = useState(formatDatePtBr(new Date()));
   const [view, setView] = useState<View>('week');
   const [search, setSearch] = useState('');
   const [visibleTypes, setVisibleTypes] = useState<Record<CalendarEventType, boolean>>({
@@ -263,6 +256,10 @@ export function CalendarModule() {
     if (!form.assignedTo && user?.id) setForm((current) => ({ ...current, assignedTo: user.id }));
   }, [user?.id]);
 
+  useEffect(() => {
+    setJumpDate(formatDatePtBr(currentDate));
+  }, [currentDate]);
+
   const filteredEvents = useMemo(() => {
     const query = search.trim().toLocaleLowerCase('pt-BR');
     return events.filter((event) => visibleTypes[event.type]
@@ -286,10 +283,10 @@ export function CalendarModule() {
     setForm({
       title: event.title,
       type: event.type,
-      startDate: toDateInput(event.start),
-      startTime: toTimeInput(event.start),
-      endDate: toDateInput(event.end),
-      endTime: toTimeInput(event.end),
+      startDate: formatDatePtBr(event.start),
+      startTime: formatTime24(event.start),
+      endDate: formatDatePtBr(event.end),
+      endTime: formatTime24(event.end),
       allDay: event.allDay,
       description: event.description,
       assignedTo: event.userId === 'unassigned' ? '' : event.userId,
@@ -298,8 +295,8 @@ export function CalendarModule() {
   };
 
   const parseFormDates = () => {
-    const start = combineDateAndTime(form.startDate, form.startTime, form.allDay);
-    const end = combineDateAndTime(form.endDate, form.endTime, form.allDay, true);
+    const start = combineDateAndTimePtBr(form.startDate, form.startTime, form.allDay);
+    const end = combineDateAndTimePtBr(form.endDate, form.endTime, form.allDay, true);
     return { start, end };
   };
 
@@ -323,7 +320,7 @@ export function CalendarModule() {
     }
     const { start, end } = parseFormDates();
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
-      toast({ title: 'Horário inválido', description: 'O término precisa ser posterior ao início.', variant: 'destructive' });
+      toast({ title: 'Data ou horário inválido', description: 'Use DD/MM/AAAA e horário de 00:00 a 23:59. O término deve ser posterior ao início.', variant: 'destructive' });
       return;
     }
 
@@ -334,7 +331,7 @@ export function CalendarModule() {
         const updates: Record<string, unknown> = {
           title: form.title.trim(),
           description: form.description,
-          due_date: toDateInput(start),
+          due_date: formatIsoDate(start),
           calendar_metadata: calendarMetadata,
         };
         if (form.assignedTo !== selectedEvent.userId) updates.assigned_to = form.assignedTo || null;
@@ -355,7 +352,7 @@ export function CalendarModule() {
         const createdTask = await apiClient.createTask({
           title: form.title.trim(),
           description: form.description,
-          due_date: toDateInput(start),
+          due_date: formatIsoDate(start),
           status: 'Em Andamento',
           priority: 'Média',
           assigned_to: form.assignedTo || user?.id || null,
@@ -400,7 +397,7 @@ export function CalendarModule() {
     setEvents((current) => current.map((item) => item.id === event.id ? updated : item));
     try {
       await updateTask(event.id, {
-        due_date: toDateInput(nextStart),
+        due_date: formatIsoDate(nextStart),
         calendar_metadata: buildMetadata(updated),
       });
     } catch (error) {
@@ -471,9 +468,21 @@ export function CalendarModule() {
             <Label htmlFor="calendar-date">Ir para uma data</Label>
             <Input
               id="calendar-date"
-              type="date"
-              value={toDateInput(currentDate)}
-              onChange={(event) => event.target.value && setCurrentDate(new Date(`${event.target.value}T12:00:00`))}
+              type="text"
+              inputMode="numeric"
+              maxLength={10}
+              placeholder="DD/MM/AAAA"
+              aria-label="Data no formato dia, mês e ano"
+              value={jumpDate}
+              onChange={(event) => {
+                const value = maskDatePtBr(event.target.value);
+                setJumpDate(value);
+                const parsed = parseDatePtBr(value);
+                if (parsed) {
+                  parsed.setHours(12, 0, 0, 0);
+                  setCurrentDate(parsed);
+                }
+              }}
             />
           </div>
 
@@ -578,11 +587,16 @@ export function CalendarModule() {
             <div className={styles.formRow}>
               <div className={styles.rowIcon}><Clock3 className="h-5 w-5" /></div>
               <div className={styles.dateGrid}>
-                <Input type="date" value={form.startDate} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, startDate: event.target.value }))} />
-                {!form.allDay && <Input type="time" step="900" value={form.startTime} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, startTime: event.target.value }))} />}
-                <span>até</span>
-                <Input type="date" value={form.endDate} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, endDate: event.target.value }))} />
-                {!form.allDay && <Input type="time" step="900" value={form.endTime} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, endTime: event.target.value }))} />}
+                <div className={styles.dateLine}>
+                  <Label>Início</Label>
+                  <Input type="text" inputMode="numeric" maxLength={10} placeholder="DD/MM/AAAA" aria-label="Data de início" value={form.startDate} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, startDate: maskDatePtBr(event.target.value) }))} />
+                  {!form.allDay && <Input type="text" inputMode="numeric" maxLength={5} placeholder="HH:MM" aria-label="Horário de início em 24 horas" value={form.startTime} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, startTime: maskTime24(event.target.value) }))} />}
+                </div>
+                <div className={styles.dateLine}>
+                  <Label>Término</Label>
+                  <Input type="text" inputMode="numeric" maxLength={10} placeholder="DD/MM/AAAA" aria-label="Data de término" value={form.endDate} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, endDate: maskDatePtBr(event.target.value) }))} />
+                  {!form.allDay && <Input type="text" inputMode="numeric" maxLength={5} placeholder="HH:MM" aria-label="Horário de término em 24 horas" value={form.endTime} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, endTime: maskTime24(event.target.value) }))} />}
+                </div>
                 <label className={styles.allDayToggle}>
                   <input type="checkbox" checked={form.allDay} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, allDay: event.target.checked }))} />
                   Dia inteiro

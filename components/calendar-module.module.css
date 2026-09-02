@@ -211,8 +211,11 @@
 }
 
 .eventDialog {
-  max-width: 680px;
-  overflow: hidden;
+  width: min(720px, calc(100vw - 24px));
+  max-width: 720px;
+  max-height: calc(100vh - 24px);
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 0;
   border: 0;
   border-radius: 12px;
@@ -270,14 +273,27 @@
 
 .dateGrid {
   display: grid;
-  grid-template-columns: minmax(130px, 1fr) 105px auto minmax(130px, 1fr) 105px;
-  align-items: center;
-  gap: 8px;
+  gap: 10px;
+  min-width: 0;
 }
 
-.dateGrid > span {
+.dateLine {
+  display: grid;
+  grid-template-columns: 64px minmax(150px, 1fr) 110px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dateLine label {
   color: #5f6368;
   font-size: 13px;
+  font-weight: 500;
+}
+
+.dateLine input {
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .allDayToggle {
@@ -445,13 +461,6 @@
     display: none;
   }
 
-  .dateGrid {
-    grid-template-columns: minmax(120px, 1fr) 100px auto;
-  }
-
-  .dateGrid input:nth-of-type(3) {
-    grid-column: 1;
-  }
 }
 
 @media (max-width: 820px) {
@@ -514,14 +523,6 @@
     grid-template-columns: 17px 10px auto;
   }
 
-  .dateGrid {
-    grid-template-columns: 1fr 100px;
-  }
-
-  .dateGrid > span {
-    display: none;
-  }
-
   .dialogFooter {
     gap: 8px;
   }
@@ -537,11 +538,11 @@
     width: 100%;
   }
 
-  .dateGrid {
-    grid-template-columns: 1fr;
+  .dateLine {
+    grid-template-columns: 1fr 92px;
   }
 
-  .dateGrid input:nth-of-type(3) {
-    grid-column: auto;
+  .dateLine label {
+    grid-column: 1 / -1;
   }
 }
