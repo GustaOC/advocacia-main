@@ -556,8 +556,10 @@ export function CalendarModule() {
                 agendaDateFormat: (date) => moment(date).format('ddd, D [de] MMM'),
               }}
               messages={{
-                next: 'Próximo', previous: 'Anterior', today: 'Hoje', month: 'Mês', week: 'Semana',
+                next: 'Próximo', previous: 'Anterior', yesterday: 'Ontem', tomorrow: 'Amanhã',
+                today: 'Hoje', month: 'Mês', week: 'Semana', work_week: 'Semana útil',
                 day: 'Dia', agenda: 'Programação', date: 'Data', time: 'Hora', event: 'Evento',
+                allDay: 'Dia inteiro',
                 noEventsInRange: 'Nenhum evento neste período.', showMore: (count) => `+${count} mais`,
               }}
             />
