@@ -179,7 +179,12 @@ export function PetitionWorkflowsModule() {
 
   
       const getClaudePrompts = (stepName: string) => {
-    const prompts: Record<string, {title: string, text: string, image?: string}[]> = {
+    const prompts: Record<string, {
+      title: string;
+      text: string;
+      image?: string;
+      template?: { url: string; fileName: string };
+    }[]> = {
       "Triagem inicial": [],
       "Organização e nomeação dos documentos [Gemini]": [],
       "Análise documental e Resumo [NotebookLM]": [{ title: "Análise Documental Jurídica", text: "**Entrada mínima:**\n```\n/analise-documental-juridica\n\nRepresentamos: [PARTE]\nAnalise todos os documentos deste caso.\nContexto adicional: [SE NECESSÁRIO]\n```" }],
@@ -313,6 +318,10 @@ A resposta será considerada adequada somente se:
       "Elaborar contrato, procuração e declaração": [
   {
     title: "Procuração",
+    template: {
+      url: "/modelos-peticao/modelo-procuracao-cassio-miguel.docx",
+      fileName: "Modelo de Procuração - Cássio Miguel.docx"
+    },
     text: `### PAPEL
 
 Você é um Especialista em Automação de Documentos Jurídicos, com atuação exclusiva no preenchimento fiel de modelos de Procuração, sejam eles judiciais, extrajudiciais, ad judicia, ad judicia et extra ou instrumentos semelhantes.
@@ -430,6 +439,10 @@ A resposta será considerada correta somente se:
   },
   {
     title: "Contrato",
+    template: {
+      url: "/modelos-peticao/modelo-contrato-prestacao-servicos-cassio-miguel.docx",
+      fileName: "Modelo de Contrato de Prestação de Serviços - Cássio Miguel.docx"
+    },
     text: `### PAPEL
 
 Você é um Especialista em Automação de Documentos Jurídicos, com foco exclusivo no preenchimento fiel de modelos de Contrato.
@@ -552,6 +565,10 @@ A resposta será considerada de alta qualidade somente se:
   },
   {
     title: "Declaração de hipossuficiência",
+    template: {
+      url: "/modelos-peticao/modelo-declaracao-hipossuficiencia.docx",
+      fileName: "Modelo de Declaração de Hipossuficiência.docx"
+    },
     text: `### PAPEL
 
 Você é um Especialista em Automação de Documentos Jurídicos, com foco exclusivo no preenchimento fiel de modelos de Declaração de Hipossuficiência, Declaração de Pobreza, Declaração de Insuficiência Econômica ou documentos equivalentes.
@@ -1351,25 +1368,40 @@ A resposta será considerada adequada somente se:
             )}
             {selectedPromptStep && getClaudePrompts(selectedPromptStep).map((cmd, idx) => (
               <div key={idx} className="space-y-2">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <h4 className="font-semibold text-sm text-brand-black">{cmd.title}</h4>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-8 text-xs border-blue-200 text-blue-700 hover:bg-blue-50"
-                    onClick={() => {
-                      const match = cmd.text.match(/```([\s\S]*?)```/);
-                      const textToCopy = match && match[1] ? match[1].trim() : cmd.text;
-                      navigator.clipboard.writeText(textToCopy);
-                      toast({
-                        title: "Copiado!",
-                        description: "Comando copiado para a área de transferência.",
-                      });
-                    }}
-                  >
-                    <Copy className="w-3 h-3 mr-2" />
-                    Copiar
-                  </Button>
+                  <div className="flex shrink-0 flex-wrap items-center gap-2">
+                    {cmd.template && (
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="outline"
+                        className="h-8 border-emerald-200 bg-emerald-50/50 text-xs text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+                      >
+                        <a href={cmd.template.url} download={cmd.template.fileName}>
+                          <Download className="mr-2 h-3.5 w-3.5" />
+                          Baixar modelo
+                        </a>
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 text-xs border-blue-200 text-blue-700 hover:bg-blue-50"
+                      onClick={() => {
+                        const match = cmd.text.match(/```([\s\S]*?)```/);
+                        const textToCopy = match && match[1] ? match[1].trim() : cmd.text;
+                        navigator.clipboard.writeText(textToCopy);
+                        toast({
+                          title: "Copiado!",
+                          description: "Comando copiado para a área de transferência.",
+                        });
+                      }}
+                    >
+                      <Copy className="w-3 h-3 mr-2" />
+                      Copiar
+                    </Button>
+                  </div>
                 </div>
                 <div className="bg-slate-50 p-4 rounded-md text-sm text-slate-700 border border-slate-200 whitespace-pre-wrap leading-relaxed shadow-inner">
                   {cmd.image && (
