@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getSessionUser, requireAuth } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
+import { decodeCalendarDescription, encodeCalendarDescription } from "@/lib/calendar-event-metadata";
 
 export const dynamic = 'force-dynamic';
 
 
 function formatDescriptionForEmail(text: string | null | undefined) {
-  if (!text) return '<p><em>Sem descrição detalhada.</em></p>';
+  const visibleText = decodeCalendarDescription(text).description;
+  if (!visibleText) return '<p><em>Sem descrição detalhada.</em></p>';
 
-  let htmlText = text;
+  let htmlText = visibleText;
 
   // Imagens
   htmlText = htmlText.replace(/!\[.*?\]\((.*?)\)/g, '<br/><img src="$1" alt="Anexo" style="max-width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #ddd;" />');
@@ -47,7 +49,16 @@ export async function GET(request: Request) {
       throw error;
     }
 
-    return NextResponse.json(data || []);
+    const tasks = (data || []).map((task: any) => {
+      const decoded = decodeCalendarDescription(task.description);
+      return {
+        ...task,
+        description: decoded.description,
+        calendar_metadata: decoded.calendarMetadata,
+      };
+    });
+
+    return NextResponse.json(tasks);
   } catch (error: any) {
     if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro GET /api/tasks:", error);
@@ -68,10 +79,26 @@ export async function PATCH(request: Request) {
     const body = await request.json();
     
     // Extrai o ID e o restante dos dados a serem atualizados, removendo campos de join
-    const { id, assigned_user, ...updates } = body;
+    const { id, assigned_user, calendar_metadata, ...updates } = body;
 
     if (!id) {
       return NextResponse.json({ error: "ID da tarefa é obrigatório." }, { status: 400 });
+    }
+
+    const { data: originalTask, error: originalTaskError } = await supabase
+      .from("tasks")
+      .select("description")
+      .eq("id", id)
+      .single();
+
+    if (originalTaskError) throw originalTaskError;
+
+    const originalDescription = decodeCalendarDescription(originalTask.description);
+    if (updates.description !== undefined || calendar_metadata !== undefined) {
+      updates.description = encodeCalendarDescription(
+        updates.description !== undefined ? updates.description : originalDescription.description,
+        calendar_metadata !== undefined ? calendar_metadata : originalDescription.calendarMetadata,
+      );
     }
 
     const { data, error } = await supabase
@@ -138,7 +165,12 @@ export async function PATCH(request: Request) {
       }
     }
 
-    return NextResponse.json(data);
+    const decoded = decodeCalendarDescription(data.description);
+    return NextResponse.json({
+      ...data,
+      description: decoded.description,
+      calendar_metadata: decoded.calendarMetadata,
+    });
   } catch (error: any) {
     if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro PATCH /api/tasks:", error);
@@ -189,7 +221,7 @@ export async function POST(request: Request) {
       .insert([
         {
           title: body.title,
-          description: body.description,
+          description: encodeCalendarDescription(body.description, body.calendar_metadata),
           priority: body.priority || "Média",
           status: body.status || "Pendente",
           assigned_to: body.assigned_to || null,
@@ -235,7 +267,12 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json(data);
+    const decoded = decodeCalendarDescription(data.description);
+    return NextResponse.json({
+      ...data,
+      description: decoded.description,
+      calendar_metadata: decoded.calendarMetadata,
+    });
   } catch (error: any) {
     if (error instanceof Error && error.message === 'UNAUTHORIZED') return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
     console.error("Erro POST /api/tasks:", error);

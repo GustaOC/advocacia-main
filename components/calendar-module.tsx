@@ -1,381 +1,638 @@
-// components/calendar-module.tsx
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Calendar as BigCalendar, momentLocalizer, type CalendarProps, type SlotInfo, type View } from 'react-big-calendar';
+import withDragAndDrop, { type EventInteractionArgs } from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
+import 'moment/locale/pt-br';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Plus, Clock, Loader2, TrendingUp, Calendar as CalendarIcon, AlertCircle, CheckCircle, Trash2 } from "lucide-react";
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from "@/hooks/use-toast";
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import {
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Clock3,
+  Loader2,
+  Menu,
+  Plus,
+  Search,
+  Trash2,
+  UserRound,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, type Task } from '@/lib/api-client';
+import type { CalendarEventMetadata, CalendarEventType } from '@/lib/calendar-event-metadata';
+import styles from './calendar-module.module.css';
 
+moment.locale('pt-br');
 const localizer = momentLocalizer(moment);
 
+interface Employee {
+  id: string;
+  name?: string;
+  email?: string;
+}
+
 interface CalendarEvent {
-  id: string | number;
+  id: string;
   title: string;
   start: Date;
   end: Date;
-  type: 'meeting' | 'hearing' | 'deadline' | 'task';
-  description?: string;
+  allDay: boolean;
+  type: CalendarEventType;
+  description: string;
   userId: string;
+  userName?: string;
+  source: 'task' | 'publication';
 }
 
-function CalendarStats({ events }: { events: CalendarEvent[] }) {
-  const stats = [
-    { label: "Total de Eventos", value: events.length.toString(), icon: CalendarIcon, color: "text-brand", bg: "from-brand-light/50 to-brand-light/20", trend: "+5%" },
-    { label: "Audiências", value: events.filter(e => e.type === 'hearing').length.toString(), icon: AlertCircle, color: "text-brand-sage", bg: "from-brand-sage/30 to-brand-sage/10", trend: "+8%" },
-    { label: "Reuniões", value: events.filter(e => e.type === 'meeting').length.toString(), icon: CheckCircle, color: "text-brand", bg: "from-brand-beige/50 to-brand-beige/20", trend: "+12%" },
-    { label: "Prazos", value: events.filter(e => e.type === 'deadline').length.toString(), icon: Clock, color: "text-brand", bg: "from-brand-gray/30 to-brand-gray/10", trend: "+3%" },
-  ];
+interface EventForm {
+  title: string;
+  type: CalendarEventType;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  allDay: boolean;
+  description: string;
+  assignedTo: string;
+}
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat, index) => {
-        const StatIcon = stat.icon;
-        return (
-          <Card key={index} className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">{stat.label}</p>
-                  <p className="text-3xl font-serif text-brand-black">{stat.value}</p>
-                  <div className="flex items-center space-x-1 pt-1">
-                    <TrendingUp className="w-4 h-4 text-brand-sage" />
-                    <span className="text-sm text-brand-sage font-medium">{stat.trend}</span>
-                  </div>
-                </div>
-                <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
-                  <StatIcon className="w-5 h-5 text-brand" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
-    </div>
-  );
+const DraggableCalendar = withDragAndDrop<CalendarEvent>(
+  BigCalendar as React.ComponentType<CalendarProps<CalendarEvent>>,
+);
+
+const EVENT_COLORS: Record<CalendarEventType, string> = {
+  task: '#7986cb',
+  meeting: '#0b8043',
+  hearing: '#f4511e',
+  deadline: '#d50000',
+};
+
+const EVENT_LABELS: Record<CalendarEventType, string> = {
+  task: 'Tarefa',
+  meeting: 'Reunião',
+  hearing: 'Audiência',
+  deadline: 'Prazo',
+};
+
+const VIEW_LABELS: Record<View, string> = {
+  month: 'Mês',
+  week: 'Semana',
+  work_week: 'Semana útil',
+  day: 'Dia',
+  agenda: 'Programação',
+};
+
+function pad(value: number) {
+  return String(value).padStart(2, '0');
+}
+
+function toDateInput(date: Date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function toTimeInput(date: Date) {
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function combineDateAndTime(dateValue: string, timeValue: string, allDay: boolean, end = false) {
+  const time = allDay ? (end ? '23:59' : '00:00') : (timeValue || '00:00');
+  return new Date(`${dateValue}T${time}:00`);
+}
+
+function roundToNextHalfHour(date: Date) {
+  const rounded = new Date(date);
+  rounded.setSeconds(0, 0);
+  const minutes = rounded.getMinutes();
+  rounded.setMinutes(minutes < 30 ? 30 : 60);
+  return rounded;
+}
+
+function inferType(title?: string): CalendarEventType {
+  const normalized = (title || '').toLocaleLowerCase('pt-BR');
+  if (normalized.includes('reunião') || normalized.includes('reuniao')) return 'meeting';
+  if (normalized.includes('audiência') || normalized.includes('audiencia')) return 'hearing';
+  if (normalized.includes('prazo')) return 'deadline';
+  return 'task';
+}
+
+function taskToEvent(task: Task): CalendarEvent {
+  const metadata = task.calendar_metadata;
+  if (metadata) {
+    return {
+      id: String(task.id),
+      title: task.title,
+      start: new Date(metadata.start),
+      end: new Date(metadata.end),
+      allDay: metadata.allDay,
+      type: metadata.type,
+      description: task.description || '',
+      userId: task.assigned_to || 'unassigned',
+      userName: task.assigned_user?.name,
+      source: 'task',
+    };
+  }
+
+  const date = task.due_date ? new Date(`${String(task.due_date).split('T')[0]}T00:00:00`) : new Date();
+  const end = new Date(date);
+  end.setHours(23, 59, 0, 0);
+  return {
+    id: String(task.id),
+    title: task.title,
+    start: date,
+    end,
+    allDay: true,
+    type: inferType(task.title),
+    description: task.description || '',
+    userId: task.assigned_to || 'unassigned',
+    userName: task.assigned_user?.name,
+    source: 'task',
+  };
+}
+
+function buildMetadata(event: Pick<CalendarEvent, 'type' | 'start' | 'end' | 'allDay'>): CalendarEventMetadata {
+  return {
+    version: 1,
+    type: event.type,
+    start: event.start.toISOString(),
+    end: event.end.toISOString(),
+    allDay: event.allDay,
+  };
+}
+
+function emptyForm(start: Date, end: Date, assignedTo: string, allDay = false): EventForm {
+  return {
+    title: '',
+    type: 'meeting',
+    startDate: toDateInput(start),
+    startTime: toTimeInput(start),
+    endDate: toDateInput(end),
+    endTime: toTimeInput(end),
+    allDay,
+    description: '',
+    assignedTo,
+  };
 }
 
 export function CalendarModule() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isDetailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
-  const [flashToday, setFlashToday] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [newEvent, setNewEvent] = useState({
-    title: '',
-    type: 'task' as CalendarEvent['type'],
-    start: new Date(),
-    end: new Date(),
-    description: ''
+  const [view, setView] = useState<View>('week');
+  const [search, setSearch] = useState('');
+  const [visibleTypes, setVisibleTypes] = useState<Record<CalendarEventType, boolean>>({
+    task: true,
+    meeting: true,
+    hearing: true,
+    deadline: true,
   });
-
-  const { user, can } = useAuth();
+  const now = roundToNextHalfHour(new Date());
+  const [form, setForm] = useState<EventForm>(emptyForm(now, moment(now).add(1, 'hour').toDate(), user?.id || ''));
 
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [tasks, publications] = await Promise.all([
+      const [tasks, publications, employeeList] = await Promise.all([
         apiClient.getTasks(),
-        apiClient.getPublications()
+        apiClient.getPublications(),
+        apiClient.getEmployees().catch(() => []),
       ]);
-      // Remove publicações concluídas ou canceladas da agenda
-      const activeTasks = tasks.filter((t: any) => {
-        const titleLower = t.title?.toLowerCase() || '';
-        const isPublication = titleLower.includes('publicação') || titleLower.includes('publicacao');
-        if (isPublication && (t.status === 'Concluída' || t.status === 'Cancelada' || t.status === 'Transferido')) {
-          return false;
-        }
-        return true;
-      });
-      
-      const mappedEvents: CalendarEvent[] = activeTasks.map((t: any) => {
-        const dateStr = t.due_date ? String(t.due_date).split('T')[0] : null;
-        const dateObj = dateStr ? new Date(`${dateStr}T12:00:00`) : new Date();
-        
-        // Tenta inferir o tipo
-        let type: 'deadline' | 'meeting' | 'hearing' | 'task' = 'task';
-        const titleLower = t.title?.toLowerCase() || '';
-        if (titleLower.includes('reunião') || titleLower.includes('reuniao')) type = 'meeting';
-        else if (titleLower.includes('audiência') || titleLower.includes('audiencia')) type = 'hearing';
 
-        return {
-          id: t.id,
-          title: t.title,
-          start: dateObj,
-          end: dateObj,
-          type,
-          description: t.description || '',
-          userId: t.assigned_to || 'unassigned',
-        };
+      setEmployees(employeeList || []);
+      const activeTasks = tasks.filter((task) => {
+        const title = task.title?.toLocaleLowerCase('pt-BR') || '';
+        const linkedPublication = title.includes('publicação') || title.includes('publicacao');
+        return !(linkedPublication && ['Concluída', 'Cancelada', 'Transferido'].includes(task.status));
       });
 
-      const hearingPubs = publications.filter((p: any) => p.status === 'Audiência');
-      const mappedPubs: CalendarEvent[] = hearingPubs.map((p: any) => {
-        const dateStr = p.due_date ? String(p.due_date).split('T')[0] : (p.publication_date ? String(p.publication_date).split('T')[0] : null);
-        const dateObj = dateStr ? new Date(`${dateStr}T12:00:00`) : new Date();
+      const taskEvents = activeTasks.map(taskToEvent);
+      const publicationEvents: CalendarEvent[] = publications
+        .filter((publication: any) => publication.status === 'Audiência')
+        .map((publication: any) => {
+          const rawDate = publication.due_date || publication.publication_date;
+          const start = rawDate ? new Date(`${String(rawDate).split('T')[0]}T00:00:00`) : new Date();
+          const end = new Date(start);
+          end.setHours(23, 59, 0, 0);
+          return {
+            id: `pub-${publication.id}`,
+            title: `Audiência: ${publication.title}`,
+            start,
+            end,
+            allDay: true,
+            type: 'hearing',
+            description: publication.description || '',
+            userId: publication.assigned_to || 'unassigned',
+            userName: publication.assigned_user?.name,
+            source: 'publication',
+          };
+        });
 
-        return {
-          id: `pub-${p.id}`,
-          title: `Audiência: ${p.title}`,
-          start: dateObj,
-          end: dateObj,
-          type: 'hearing',
-          description: p.description || '',
-          userId: p.assigned_to || 'unassigned',
-        };
-      });
-
-      const allEvents = [...mappedEvents, ...mappedPubs];
-
-      // Filtra as tarefas e eventos para mostrar as do usuário atual ou todas se for admin
-      const visibleEvents = allEvents.filter(event => {
+      const allowed = [...taskEvents, ...publicationEvents].filter((event) => {
         if (user?.role === 'admin') return true;
         return event.userId === user?.id;
       });
-
-      setEvents(visibleEvents);
-    } catch (err) {
-      console.error(err);
-      toast({ title: "Erro", description: "Não foi possível carregar as tarefas na agenda", variant: "destructive" });
+      setEvents(allowed);
+    } catch (error) {
+      console.error(error);
+      toast({ title: 'Erro', description: 'Não foi possível carregar a agenda.', variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
-  }, [toast, user, can]);
+  }, [toast, user?.id, user?.role]);
 
   useEffect(() => {
     fetchEvents();
   }, [fetchEvents]);
 
-  const handleSelectSlot = ({ start, end }: { start: Date, end: Date }) => {
-    setNewEvent({ ...newEvent, start, end, title: '', description: '', type: 'meeting' });
-    setModalOpen(true);
+  useEffect(() => {
+    if (!form.assignedTo && user?.id) setForm((current) => ({ ...current, assignedTo: user.id }));
+  }, [user?.id]);
+
+  const filteredEvents = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase('pt-BR');
+    return events.filter((event) => visibleTypes[event.type]
+      && (!query || `${event.title} ${event.description}`.toLocaleLowerCase('pt-BR').includes(query)));
+  }, [events, search, visibleTypes]);
+
+  const openNewEvent = useCallback((start = roundToNextHalfHour(new Date()), end?: Date, allDay = false) => {
+    const resolvedEnd = end || moment(start).add(1, 'hour').toDate();
+    const displayEnd = allDay && resolvedEnd > start ? new Date(resolvedEnd.getTime() - 1) : resolvedEnd;
+    setSelectedEvent(null);
+    setForm(emptyForm(start, displayEnd, user?.id || '', allDay));
+    setIsFormOpen(true);
+  }, [user?.id]);
+
+  const handleSelectSlot = (slot: SlotInfo) => {
+    openNewEvent(slot.start, slot.end, view === 'month');
   };
 
-  const handleSelectEvent = (event: any) => {
+  const openEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
-    setDetailsModalOpen(true);
+    setForm({
+      title: event.title,
+      type: event.type,
+      startDate: toDateInput(event.start),
+      startTime: toTimeInput(event.start),
+      endDate: toDateInput(event.end),
+      endTime: toTimeInput(event.end),
+      allDay: event.allDay,
+      description: event.description,
+      assignedTo: event.userId === 'unassigned' ? '' : event.userId,
+    });
+    setIsFormOpen(true);
   };
 
-  const handleNavigate = (newDate: Date, view: string, action: string) => {
-    setCurrentDate(newDate);
-    if (action === 'TODAY') {
-      setFlashToday(true);
-      setTimeout(() => setFlashToday(false), 1500);
-    }
+  const parseFormDates = () => {
+    const start = combineDateAndTime(form.startDate, form.startTime, form.allDay);
+    const end = combineDateAndTime(form.endDate, form.endTime, form.allDay, true);
+    return { start, end };
   };
 
-  const saveNewEvent = async () => {
-    if (!newEvent.title) {
-        toast({ title: "Erro", description: "O título do evento é obrigatório.", variant: "destructive" });
-        return;
+  const updateTask = async (id: string, updates: Record<string, unknown>) => {
+    const response = await fetch('/api/tasks', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, ...updates }),
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      throw new Error(body.error || 'Falha ao atualizar o evento.');
     }
-    
+    return response.json();
+  };
+
+  const saveEvent = async () => {
+    if (!form.title.trim()) {
+      toast({ title: 'Título obrigatório', description: 'Informe um título para o evento.', variant: 'destructive' });
+      return;
+    }
+    const { start, end } = parseFormDates();
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
+      toast({ title: 'Horário inválido', description: 'O término precisa ser posterior ao início.', variant: 'destructive' });
+      return;
+    }
+
+    const calendarMetadata = buildMetadata({ type: form.type, start, end, allDay: form.allDay });
+    setIsSaving(true);
     try {
-      const createdTask = await apiClient.createTask({
-        title: newEvent.title,
-        description: newEvent.description,
-        due_date: newEvent.start.toISOString(),
-        status: 'Em Andamento',
-        priority: 'Média',
-        assigned_to: user?.id,
-      });
-      
-      const eventToSave: CalendarEvent = {
-          ...newEvent,
-          id: createdTask.id,
-          userId: user?.id || 'unassigned',
-      };
-      setEvents([...events, eventToSave]);
-      toast({ title: "Sucesso!", description: "Evento criado e sincronizado com as tarefas." });
-      setModalOpen(false);
-    } catch (err) {
-      console.error(err);
-      toast({ title: "Erro", description: "Não foi possível criar o evento.", variant: "destructive" });
+      if (selectedEvent) {
+        const updates: Record<string, unknown> = {
+          title: form.title.trim(),
+          description: form.description,
+          due_date: toDateInput(start),
+          calendar_metadata: calendarMetadata,
+        };
+        if (form.assignedTo !== selectedEvent.userId) updates.assigned_to = form.assignedTo || null;
+        await updateTask(selectedEvent.id, updates);
+        setEvents((current) => current.map((event) => event.id === selectedEvent.id ? {
+          ...event,
+          title: form.title.trim(),
+          type: form.type,
+          description: form.description,
+          start,
+          end,
+          allDay: form.allDay,
+          userId: form.assignedTo || 'unassigned',
+          userName: employees.find((employee) => employee.id === form.assignedTo)?.name,
+        } : event));
+        toast({ title: 'Evento atualizado', description: 'As alterações de data e horário foram salvas.' });
+      } else {
+        const createdTask = await apiClient.createTask({
+          title: form.title.trim(),
+          description: form.description,
+          due_date: toDateInput(start),
+          status: 'Em Andamento',
+          priority: 'Média',
+          assigned_to: form.assignedTo || user?.id || null,
+          calendar_metadata: calendarMetadata,
+        });
+        setEvents((current) => [...current, taskToEvent(createdTask)]);
+        toast({ title: 'Evento criado', description: 'O compromisso foi adicionado à agenda.' });
+      }
+      setIsFormOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast({ title: 'Erro', description: error instanceof Error ? error.message : 'Não foi possível salvar o evento.', variant: 'destructive' });
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const deleteEvent = async () => {
-    if (!selectedEvent) return;
+    if (!selectedEvent || selectedEvent.source !== 'task') return;
+    setIsSaving(true);
     try {
-      await apiClient.deleteTask(String(selectedEvent.id));
-      setEvents(events.filter(e => e.id !== selectedEvent.id));
-      toast({ title: "Sucesso!", description: "Evento excluído." });
-      setDetailsModalOpen(false);
-    } catch (err) {
-      console.error(err);
-      toast({ title: "Erro", description: "Não foi possível excluir o evento.", variant: "destructive" });
+      await apiClient.deleteTask(selectedEvent.id);
+      setEvents((current) => current.filter((event) => event.id !== selectedEvent.id));
+      setIsFormOpen(false);
+      toast({ title: 'Evento excluído', description: 'O compromisso foi removido da agenda.' });
+    } catch (error) {
+      console.error(error);
+      toast({ title: 'Erro', description: 'Não foi possível excluir o evento.', variant: 'destructive' });
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const eventStyleGetter = (event: CalendarEvent) => {
-    const style = {
-      backgroundColor: '#3b82f6',
-      borderRadius: '5px',
-      opacity: 0.9,
-      color: 'white',
-      border: '0px',
-      display: 'block'
-    };
-    if (event.type === 'deadline') style.backgroundColor = '#ef4444';
-    if (event.type === 'hearing') style.backgroundColor = '#f97316';
-    if (event.type === 'meeting') style.backgroundColor = '#16a34a';
-    if (event.type === 'task') style.backgroundColor = '#8b5cf6'; // Roxo para tarefa
-    return { style };
+  const moveOrResizeEvent = async ({ event, start, end, isAllDay }: EventInteractionArgs<CalendarEvent>) => {
+    if (event.source !== 'task') {
+      toast({ title: 'Audiência vinculada', description: 'Altere esta data na aba Publicações.', variant: 'destructive' });
+      return;
+    }
+    const nextStart = new Date(start);
+    const nextEnd = new Date(end);
+    const updated = { ...event, start: nextStart, end: nextEnd, allDay: isAllDay ?? event.allDay };
+    setEvents((current) => current.map((item) => item.id === event.id ? updated : item));
+    try {
+      await updateTask(event.id, {
+        due_date: toDateInput(nextStart),
+        calendar_metadata: buildMetadata(updated),
+      });
+    } catch (error) {
+      console.error(error);
+      await fetchEvents();
+      toast({ title: 'Não foi possível mover', description: 'A alteração foi desfeita.', variant: 'destructive' });
+    }
   };
 
-  const dayPropGetter = (date: Date) => {
-    if (flashToday && moment(date).isSame(moment(), 'day')) {
-      return {
-        style: {
-          backgroundColor: '#bbf7d0', // green-200
-          transition: 'background-color 0.3s ease-in-out',
-        }
-      };
-    }
-    return {};
+  const navigate = (direction: -1 | 1) => {
+    const unit = view === 'day' ? 'day' : view === 'week' || view === 'work_week' ? 'week' : 'month';
+    setCurrentDate(moment(currentDate).add(direction, unit).toDate());
   };
+
+  const calendarTitle = useMemo(() => {
+    if (view === 'day') return moment(currentDate).format('D [de] MMMM [de] YYYY');
+    if (view === 'week' || view === 'work_week') {
+      const start = moment(currentDate).startOf('week');
+      const end = moment(currentDate).endOf('week');
+      return start.month() === end.month()
+        ? `${start.format('D')} – ${end.format('D [de] MMMM [de] YYYY')}`
+        : `${start.format('D [de] MMM')} – ${end.format('D [de] MMM [de] YYYY')}`;
+    }
+    return moment(currentDate).format('MMMM [de] YYYY');
+  }, [currentDate, view]);
+
+  const selectedIsReadOnly = selectedEvent?.source === 'publication';
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-end mb-8">
-        <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm">
-          <h2 className="text-3xl font-serif text-brand-black tracking-tight">Agenda Institucional</h2>
-          <p className="text-brand-gray mt-2 font-medium">Acompanhe todos os seus prazos processuais, audiências e reuniões corporativas.</p>
+    <div className={styles.googleCalendar}>
+      <header className={styles.topbar}>
+        <div className={styles.branding}>
+          <Menu className="h-5 w-5 text-slate-500" />
+          <div className={styles.calendarLogo}><CalendarDays className="h-5 w-5" /></div>
+          <span>Agenda</span>
         </div>
-        <Button onClick={() => handleSelectSlot({ start: new Date(), end: new Date() })} className="bg-brand text-white hover:bg-brand-dark shadow-sm rounded-none mb-6 px-6">
-          <Plus className="mr-2 h-4 w-4" /> Novo Evento
-        </Button>
-      </div>
 
-      <CalendarStats events={events} />
+        <div className={styles.navigation}>
+          <Button variant="outline" className={styles.todayButton} onClick={() => setCurrentDate(new Date())}>Hoje</Button>
+          <Button variant="ghost" size="icon" aria-label="Período anterior" onClick={() => navigate(-1)}><ChevronLeft className="h-5 w-5" /></Button>
+          <Button variant="ghost" size="icon" aria-label="Próximo período" onClick={() => navigate(1)}><ChevronRight className="h-5 w-5" /></Button>
+          <h1>{calendarTitle}</h1>
+        </div>
 
-      <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-        <CardContent className="p-6">
+        <div className={styles.topActions}>
+          <div className={styles.searchBox}>
+            <Search className="h-4 w-4" />
+            <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Pesquisar" />
+          </div>
+          <Select value={view} onValueChange={(value) => setView(value as View)}>
+            <SelectTrigger className={styles.viewSelect}><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {(['day', 'week', 'month', 'agenda'] as View[]).map((item) => (
+                <SelectItem key={item} value={item}>{VIEW_LABELS[item]}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </header>
+
+      <div className={styles.workspace}>
+        <aside className={styles.sidebar}>
+          <Button className={styles.createButton} onClick={() => openNewEvent()}>
+            <Plus className="h-5 w-5" /> Criar
+          </Button>
+
+          <div className={styles.miniDate}>
+            <Label htmlFor="calendar-date">Ir para uma data</Label>
+            <Input
+              id="calendar-date"
+              type="date"
+              value={toDateInput(currentDate)}
+              onChange={(event) => event.target.value && setCurrentDate(new Date(`${event.target.value}T12:00:00`))}
+            />
+          </div>
+
+          <div className={styles.calendarsList}>
+            <h2>Minhas agendas</h2>
+            {(Object.keys(EVENT_LABELS) as CalendarEventType[]).map((type) => (
+              <label key={type}>
+                <input
+                  type="checkbox"
+                  checked={visibleTypes[type]}
+                  onChange={(event) => setVisibleTypes((current) => ({ ...current, [type]: event.target.checked }))}
+                />
+                <span style={{ backgroundColor: EVENT_COLORS[type] }} />
+                {EVENT_LABELS[type]}
+              </label>
+            ))}
+          </div>
+
+          <div className={styles.sidebarHint}>
+            <Clock3 className="h-4 w-4" />
+            Arraste eventos para mudar o horário. Puxe a borda inferior para alterar a duração.
+          </div>
+        </aside>
+
+        <main className={styles.calendarPanel}>
           {isLoading ? (
-            <div className="h-[600px] flex items-center justify-center bg-brand-black rounded-2xl">
-              <div className="text-center space-y-4">
-                <Loader2 className="h-8 w-8 animate-spin text-brand-sage mx-auto"/>
-                <p className="text-brand-gray font-medium">Carregando agenda...</p>
-              </div>
+            <div className={styles.loading}>
+              <Loader2 className="h-7 w-7 animate-spin" />
+              <span>Carregando agenda...</span>
             </div>
           ) : (
-            <BigCalendar
+            <DraggableCalendar
               localizer={localizer}
-              events={events}
+              events={filteredEvents}
               date={currentDate}
+              view={view}
+              onView={setView}
+              onNavigate={setCurrentDate}
               startAccessor="start"
               endAccessor="end"
-              style={{ height: 600 }}
+              allDayAccessor="allDay"
+              titleAccessor="title"
+              style={{ height: 760 }}
+              toolbar={false}
               selectable
+              resizable
               popup
-              views={['month', 'day', 'agenda']}
+              step={30}
+              timeslots={2}
+              scrollToTime={new Date(1970, 0, 1, 8, 0)}
+              views={['month', 'week', 'day', 'agenda']}
               onSelectSlot={handleSelectSlot}
-              onSelectEvent={handleSelectEvent}
-              onNavigate={handleNavigate}
-              eventPropGetter={eventStyleGetter}
-              dayPropGetter={dayPropGetter}
+              onSelectEvent={openEvent}
+              onEventDrop={moveOrResizeEvent}
+              onEventResize={moveOrResizeEvent}
+              draggableAccessor={(event) => event.source === 'task'}
+              resizableAccessor={(event) => event.source === 'task' && !event.allDay}
+              eventPropGetter={(event) => ({
+                style: {
+                  backgroundColor: EVENT_COLORS[event.type],
+                  borderColor: EVENT_COLORS[event.type],
+                  color: '#fff',
+                },
+              })}
+              dayPropGetter={(date) => moment(date).isSame(moment(), 'day') ? { className: styles.todayCell } : {}}
+              formats={{
+                dayFormat: (date) => moment(date).format('ddd D'),
+                weekdayFormat: (date) => moment(date).format('ddd'),
+                timeGutterFormat: (date) => moment(date).format('HH:mm'),
+                agendaTimeFormat: (date) => moment(date).format('HH:mm'),
+                agendaDateFormat: (date) => moment(date).format('ddd, D [de] MMM'),
+              }}
               messages={{
-                  next: "Próximo",
-                  previous: "Anterior",
-                  today: "Hoje",
-                  month: "Mês",
-                  week: "Semana",
-                  day: "Dia",
-                  agenda: "Agenda",
-                  date: "Data",
-                  time: "Hora",
-                  event: "Evento",
-                  showMore: (count) => `+${count} mais`,
+                next: 'Próximo', previous: 'Anterior', today: 'Hoje', month: 'Mês', week: 'Semana',
+                day: 'Dia', agenda: 'Programação', date: 'Data', time: 'Hora', event: 'Evento',
+                noEventsInRange: 'Nenhum evento neste período.', showMore: (count) => `+${count} mais`,
               }}
             />
           )}
-        </CardContent>
-      </Card>
+        </main>
+      </div>
 
-      <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className={styles.eventDialog}>
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Adicionar Novo Evento</DialogTitle>
+            <DialogTitle>{selectedEvent ? (selectedIsReadOnly ? 'Detalhes da audiência' : 'Editar evento') : 'Novo evento'}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div>
-              <Label className="text-brand font-semibold">Título *</Label>
-              <Input value={newEvent.title} onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" />
+
+          <div className={styles.formBody}>
+            {selectedIsReadOnly && (
+              <div className={styles.readOnlyNotice}>Este evento veio de Publicações. Para alterar a data, edite a publicação vinculada.</div>
+            )}
+            <Input
+              className={styles.titleInput}
+              value={form.title}
+              disabled={selectedIsReadOnly}
+              onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
+              placeholder="Adicionar título"
+              autoFocus={!selectedEvent}
+            />
+
+            <div className={styles.formRow}>
+              <div className={styles.rowIcon}><Clock3 className="h-5 w-5" /></div>
+              <div className={styles.dateGrid}>
+                <Input type="date" value={form.startDate} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, startDate: event.target.value }))} />
+                {!form.allDay && <Input type="time" step="900" value={form.startTime} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, startTime: event.target.value }))} />}
+                <span>até</span>
+                <Input type="date" value={form.endDate} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, endDate: event.target.value }))} />
+                {!form.allDay && <Input type="time" step="900" value={form.endTime} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, endTime: event.target.value }))} />}
+                <label className={styles.allDayToggle}>
+                  <input type="checkbox" checked={form.allDay} disabled={selectedIsReadOnly} onChange={(event) => setForm((current) => ({ ...current, allDay: event.target.checked }))} />
+                  Dia inteiro
+                </label>
+              </div>
             </div>
-            <div>
-              <Label className="text-brand font-semibold">Tipo</Label>
-              <Select value={newEvent.type} onValueChange={(v: any) => setNewEvent({ ...newEvent, type: v })}>
-                <SelectTrigger className="bg-white border-2 border-brand-gray rounded-xl"><SelectValue /></SelectTrigger>
+
+            <div className={styles.formRow}>
+              <div className={styles.rowIcon}><CalendarDays className="h-5 w-5" /></div>
+              <Select disabled={selectedIsReadOnly} value={form.type} onValueChange={(value) => setForm((current) => ({ ...current, type: value as CalendarEventType }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="task">Tarefa</SelectItem>
-                  <SelectItem value="meeting">Reunião</SelectItem>
-                  <SelectItem value="hearing">Audiência</SelectItem>
-                  <SelectItem value="deadline">Prazo</SelectItem>
+                  {(Object.keys(EVENT_LABELS) as CalendarEventType[]).map((type) => <SelectItem key={type} value={type}>{EVENT_LABELS[type]}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label className="text-brand font-semibold">Descrição</Label>
-              <Textarea value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="bg-white border-2 border-brand-gray rounded-xl" />
+
+            <div className={styles.formRow}>
+              <div className={styles.rowIcon}><UserRound className="h-5 w-5" /></div>
+              <Select disabled={selectedIsReadOnly || user?.role !== 'admin'} value={form.assignedTo || user?.id || ''} onValueChange={(value) => setForm((current) => ({ ...current, assignedTo: value }))}>
+                <SelectTrigger><SelectValue placeholder="Responsável" /></SelectTrigger>
+                <SelectContent>
+                  {employees.map((employee) => <SelectItem key={employee.id} value={employee.id}>{employee.name || employee.email}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
+
+            <Textarea
+              value={form.description}
+              disabled={selectedIsReadOnly}
+              onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+              placeholder="Adicionar descrição"
+              rows={4}
+            />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Cancelar</Button>
-            <Button onClick={saveNewEvent} className="bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 shadow-lg rounded-xl">Salvar Evento</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      
-      <Dialog open={isDetailsModalOpen} onOpenChange={setDetailsModalOpen}>
-        <DialogContent className="sm:max-w-xl bg-white/95 backdrop-blur-lg border-0 shadow-2xl rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Detalhes do Evento</DialogTitle>
-          </DialogHeader>
-          {selectedEvent && (
-            <div className="space-y-4 py-4">
-              <div>
-                <Label className="text-brand font-semibold">Título</Label>
-                <p className="text-brand-black mt-1">{selectedEvent.title}</p>
-              </div>
-              <div>
-                <Label className="text-brand font-semibold">Tipo</Label>
-                <Badge className={`mt-2 ${
-                  selectedEvent.type === 'meeting' ? 'bg-gradient-to-r from-green-500 to-green-600' :
-                  selectedEvent.type === 'hearing' ? 'bg-gradient-to-r from-orange-500 to-orange-600' :
-                  selectedEvent.type === 'task' ? 'bg-gradient-to-r from-purple-500 to-purple-600' :
-                  'bg-gradient-to-r from-red-500 to-red-600'
-                } text-white border-0 shadow-lg`}>
-                  {selectedEvent.type === 'meeting' ? 'Reunião' : selectedEvent.type === 'hearing' ? 'Audiência' : selectedEvent.type === 'task' ? 'Tarefa' : 'Prazo'}
-                </Badge>
-              </div>
-              {selectedEvent.description && (
-                <div>
-                  <Label className="text-brand font-semibold">Descrição</Label>
-                  <p className="text-brand-black mt-1">{selectedEvent.description}</p>
-                </div>
+
+          <DialogFooter className={styles.dialogFooter}>
+            {selectedEvent?.source === 'task' && (
+              <Button type="button" variant="ghost" className={styles.deleteButton} disabled={isSaving} onClick={deleteEvent}>
+                <Trash2 className="h-4 w-4" /> Excluir
+              </Button>
+            )}
+            <div className={styles.footerActions}>
+              <Button type="button" variant="ghost" onClick={() => setIsFormOpen(false)}>Cancelar</Button>
+              {!selectedIsReadOnly && (
+                <Button type="button" className={styles.saveButton} disabled={isSaving} onClick={saveEvent}>
+                  {isSaving && <Loader2 className="h-4 w-4 animate-spin" />} Salvar
+                </Button>
               )}
             </div>
-          )}
-          <DialogFooter className="flex justify-between sm:justify-between items-center w-full">
-            <Button variant="ghost" onClick={deleteEvent} className="text-red-600 hover:text-red-700 hover:bg-red-50">
-              <Trash2 className="w-4 h-4 mr-2" /> Excluir
-            </Button>
-            <Button variant="outline" onClick={() => setDetailsModalOpen(false)} className="border-2 border-brand-gray rounded-xl">Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

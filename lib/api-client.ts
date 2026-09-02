@@ -1,6 +1,7 @@
 // lib/api-client.ts - VERSÃO CORRIGIDA E ATUALIZADA
 
 import axios, { AxiosResponse, AxiosError } from 'axios';
+import type { CalendarEventMetadata } from './calendar-event-metadata';
 
 export interface Task {
   id: string;
@@ -14,6 +15,7 @@ export interface Task {
   case_id?: number | null;
   created_at: string;
   assigned_user?: { name: string; email: string };
+  calendar_metadata?: CalendarEventMetadata | null;
 }
 
 export interface Publication {
