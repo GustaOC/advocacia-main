@@ -11,11 +11,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning } from 'lucide-react';
+import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning, Paperclip, X, Download } from 'lucide-react';
+import { parsePetitionStepData, serializePetitionStepData, type PetitionStepAttachment } from '@/lib/petition-step-data';
 
 const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
@@ -103,6 +105,8 @@ export function PetitionWorkflowsModule() {
   const [viewingReturnInfo, setViewingReturnInfo] = useState<StepReturnInfo | null>(null);
   const [processNumber, setProcessNumber] = useState("");
   const [stepNotes, setStepNotes] = useState("");
+  const [stepFiles, setStepFiles] = useState<File[]>([]);
+  const [isCompletingStep, setIsCompletingStep] = useState(false);
   const [pendingAssignees, setPendingAssignees] = useState<Record<string, string>>({});
 
   const { data: workflows = [], isLoading } = useQuery({
@@ -676,27 +680,47 @@ A resposta será considerada adequada somente se:
 
   const handleCompleteStep = (workflowId: string, stepId: string, stepName: string, workflowTitle: string) => {
     setStepNotes("");
+    setStepFiles([]);
     setCompletingStep({ workflowId, stepId, stepName, workflowTitle });
   };
   
   const confirmCompleteStep = async () => {
     if (!completingStep) return;
-    
-    if (processNumber && completingStep.stepName.includes("Protocolo")) {
-       try {
-         await apiClient.updatePetitionWorkflow(completingStep.workflowId, { title: `${completingStep.workflowTitle} - Proc: ${processNumber}` });
-       } catch (e) {
-         console.error("Failed to update workflow title with process number", e);
-       }
-    }
 
-    updateStepMutation.mutate({
-      workflowId: completingStep.workflowId,
-      stepId: completingStep.stepId,
-      data: { status: 'Concluída', notes: stepNotes }
-    });
-    setCompletingStep(null);
-    setProcessNumber("");
+    try {
+      setIsCompletingStep(true);
+      const attachments: PetitionStepAttachment[] = await Promise.all(stepFiles.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await fetch(
+          `/api/petition-workflows/${completingStep.workflowId}/steps/${completingStep.stepId}/attachments`,
+          { method: 'POST', body: formData }
+        );
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `Falha ao enviar ${file.name}`);
+        return { name: file.name, url: result.url, type: file.type || 'application/octet-stream', size: file.size };
+      }));
+
+      if (processNumber && completingStep.stepName.includes("Protocolo")) {
+        await apiClient.updatePetitionWorkflow(completingStep.workflowId, { title: `${completingStep.workflowTitle} - Proc: ${processNumber}` });
+      }
+
+      await updateStepMutation.mutateAsync({
+        workflowId: completingStep.workflowId,
+        stepId: completingStep.stepId,
+        data: {
+          status: 'Concluída',
+          notes: serializePetitionStepData({ observations: stepNotes, attachments })
+        }
+      });
+      setCompletingStep(null);
+      setProcessNumber("");
+      setStepFiles([]);
+    } catch (error: any) {
+      toast({ title: "Erro ao concluir etapa", description: error.message, variant: "destructive" });
+    } finally {
+      setIsCompletingStep(false);
+    }
   };
 
   const toggleExpand = (id: string) => {
@@ -900,6 +924,7 @@ A resposta será considerada adequada somente se:
                                 const isCurrent = step.step_number === workflow.current_step && workflow.status !== 'Concluída';
                                 const isPending = !isCompleted && !isCurrent;
                                 const returnInfo = parseStepReturnInfo(step.notes);
+                                const stepData = parsePetitionStepData(returnInfo ? null : step.notes);
                                 
                                 return (
                                   <div key={step.id} className={`relative pl-8 pb-6 border-l-2 ${
@@ -1023,10 +1048,33 @@ A resposta será considerada adequada somente se:
                                         </div>
                                       </div>
                                       
-                                      {step.notes && !returnInfo && (
-                                        <div className="mt-3 bg-brand-light/20 p-3 rounded-md border border-brand-gray/20 text-sm text-brand-black w-full">
-                                          <span className="font-semibold block mb-1 text-brand-sage">Observação:</span>
-                                          {step.notes}
+                                      {!returnInfo && (stepData.observations || stepData.attachments.length > 0) && (
+                                        <div className="mt-3 space-y-3 rounded-md border border-brand-gray/20 bg-brand-light/20 p-3 text-sm text-brand-black">
+                                          {stepData.observations && (
+                                            <div>
+                                              <span className="mb-1 block font-semibold text-brand-sage">Observação:</span>
+                                              <p className="whitespace-pre-wrap">{stepData.observations}</p>
+                                            </div>
+                                          )}
+                                          {stepData.attachments.length > 0 && (
+                                            <div>
+                                              <span className="mb-2 block font-semibold text-brand-sage">Anexos:</span>
+                                              <div className="flex flex-wrap gap-2">
+                                                {stepData.attachments.map((attachment, attachmentIndex) => (
+                                                  <a
+                                                    key={`${attachment.url}-${attachmentIndex}`}
+                                                    href={attachment.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1.5 rounded border border-brand-gray/20 bg-white px-2.5 py-1.5 text-xs text-brand hover:border-brand hover:underline"
+                                                  >
+                                                    <Download className="h-3.5 w-3.5" />
+                                                    {attachment.name}
+                                                  </a>
+                                                ))}
+                                              </div>
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                       
@@ -1111,27 +1159,85 @@ A resposta será considerada adequada somente se:
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!completingStep} onOpenChange={(open) => !open && setCompletingStep(null)}>
-        <DialogContent className="sm:max-w-md bg-white">
+      <Dialog open={!!completingStep} onOpenChange={(open) => {
+        if (!open && !isCompletingStep) {
+          setCompletingStep(null);
+          setStepFiles([]);
+        }
+      }}>
+        <DialogContent className="sm:max-w-lg bg-white">
           <DialogHeader>
             <DialogTitle className="text-xl font-serif text-brand-black">Concluir Etapa</DialogTitle>
           </DialogHeader>
           <div className="py-4 space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-brand-black">Alguma observação? (Opcional)</label>
-              <textarea
-                className="w-full h-24 p-3 border border-brand-gray/30 rounded-md focus:outline-none focus:ring-2 focus:ring-brand/50 text-brand-black"
-                placeholder="Deixe uma observação para a próxima pessoa..."
-                value={stepNotes}
-                onChange={(e) => setStepNotes(e.target.value)}
-              />
-            </div>
+            <Tabs defaultValue="observations" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="observations">Observações</TabsTrigger>
+                <TabsTrigger value="attachments" className="gap-2">
+                  <Paperclip className="h-4 w-4" />
+                  Anexos {stepFiles.length > 0 && `(${stepFiles.length})`}
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="observations" className="mt-4 space-y-2">
+                <Label htmlFor="step-observations">Observações (opcional)</Label>
+                <Textarea
+                  id="step-observations"
+                  className="min-h-32 resize-y"
+                  placeholder="Deixe uma observação para a próxima pessoa..."
+                  value={stepNotes}
+                  onChange={(event) => setStepNotes(event.target.value)}
+                />
+              </TabsContent>
+              <TabsContent value="attachments" className="mt-4 space-y-4">
+                <div className="rounded-md border-2 border-dashed border-brand-gray/30 p-4 text-center">
+                  <Paperclip className="mx-auto mb-2 h-6 w-6 text-brand-gray" />
+                  <Label htmlFor="step-attachments" className="cursor-pointer text-sm text-brand hover:underline">
+                    Selecionar arquivos
+                  </Label>
+                  <Input
+                    id="step-attachments"
+                    type="file"
+                    multiple
+                    className="sr-only"
+                    onChange={(event) => {
+                      const selectedFiles = Array.from(event.target.files || []);
+                      setStepFiles(current => [...current, ...selectedFiles]);
+                      event.target.value = '';
+                    }}
+                  />
+                  <p className="mt-1 text-xs text-brand-gray">Até 25 MB por arquivo.</p>
+                </div>
+                {stepFiles.length > 0 && (
+                  <div className="max-h-40 space-y-2 overflow-y-auto">
+                    {stepFiles.map((file, index) => (
+                      <div key={`${file.name}-${file.lastModified}-${index}`} className="flex items-center justify-between gap-3 rounded border border-brand-gray/20 bg-brand-light/10 p-2">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-brand-black">{file.name}</p>
+                          <p className="text-xs text-brand-gray">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 w-7 shrink-0 p-0 text-red-600"
+                          onClick={() => setStepFiles(current => current.filter((_, fileIndex) => fileIndex !== index))}
+                          aria-label={`Remover ${file.name}`}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
             <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setCompletingStep(null)} className="border-brand-gray text-brand-gray hover:bg-brand-gray/10">
+              <Button variant="outline" onClick={() => setCompletingStep(null)} disabled={isCompletingStep} className="border-brand-gray text-brand-gray hover:bg-brand-gray/10">
                 Cancelar
               </Button>
-              <Button onClick={confirmCompleteStep} className="bg-brand text-white hover:bg-brand/90">
-                Confirmar e Avançar
+              <Button onClick={confirmCompleteStep} disabled={isCompletingStep} className="bg-brand text-white hover:bg-brand/90">
+                {isCompletingStep && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isCompletingStep ? 'Enviando anexos...' : 'Confirmar e Avançar'}
               </Button>
             </div>
           </div>
