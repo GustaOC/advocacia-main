@@ -7,6 +7,7 @@ import './globals.css'
 // @ts-ignore
 import { QueryProvider } from '@/components/query-provider'
 import { Toaster } from "@/components/ui/toaster"
+import { ChunkLoadRecovery } from "@/components/chunk-load-recovery"
 
 const inter = Inter({
   subsets: ['latin'],
@@ -48,6 +49,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${inter.variable} ${marcellus.variable} scroll-smooth`}>
       <body className="bg-background text-foreground">
+        <ChunkLoadRecovery />
         <QueryProvider>
           <main>{children}</main>
           <Toaster />
