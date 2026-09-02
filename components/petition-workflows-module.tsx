@@ -16,8 +16,9 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning, Paperclip, X, Download } from 'lucide-react';
+import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning, Paperclip, X, Download, Pause, Play } from 'lucide-react';
 import { parsePetitionStepData, serializePetitionStepData, type PetitionStepAttachment } from '@/lib/petition-step-data';
+import { getVisiblePetitionStepNotes, isPetitionStepSuspended, parsePetitionStepSuspension } from '@/lib/petition-step-suspension';
 
 const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
@@ -150,6 +151,31 @@ export function PetitionWorkflowsModule() {
     onError: (error: any) => {
       toast({ title: "Erro ao voltar etapa", description: error.message, variant: "destructive" });
     }
+  });
+
+  const suspensionMutation = useMutation({
+    mutationFn: async ({ workflowId, stepId, action }: { workflowId: string; stepId: string; action: 'suspend' | 'resume' }) => {
+      const response = await fetch(`/api/petition-workflows/${workflowId}/steps/${stepId}/suspension`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Falha ao alterar a suspensão.');
+      return { ...result, action };
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
+      toast({
+        title: result.action === 'suspend' ? 'Prazo suspenso' : 'Prazo retomado',
+        description: result.action === 'suspend'
+          ? 'Esta etapa não será cobrada enquanto estiver suspensa.'
+          : 'A contagem do prazo foi reiniciada a partir de agora.',
+      });
+    },
+    onError: (error: any) => {
+      toast({ title: 'Erro ao alterar prazo', description: error.message, variant: 'destructive' });
+    },
   });
 
   const handleCreate = () => {
@@ -897,6 +923,10 @@ A resposta será considerada adequada somente se:
                       <TableCell>
                         {workflow.status === 'Concluída' ? (
                           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Concluída</Badge>
+                        ) : workflow.status === 'Suspensa' ? (
+                          <Badge variant="outline" className="border-amber-300 bg-amber-50 text-amber-800">
+                            <Pause className="mr-1 h-3.5 w-3.5" /> Prazo suspenso
+                          </Badge>
                         ) : (
                           <span className="text-sm font-medium text-brand">Etapa {workflow.current_step}</span>
                         )}
@@ -927,18 +957,23 @@ A resposta será considerada adequada somente se:
                                 const isCompleted = step.status === 'Concluída';
                                 const isCurrent = step.step_number === workflow.current_step && workflow.status !== 'Concluída';
                                 const isPending = !isCompleted && !isCurrent;
-                                const returnInfo = parseStepReturnInfo(step.notes);
-                                const stepData = parsePetitionStepData(returnInfo ? null : step.notes);
+                                const suspensionInfo = parsePetitionStepSuspension(step.notes);
+                                const isSuspended = isPetitionStepSuspended(step.notes);
+                                const visibleStepNotes = getVisiblePetitionStepNotes(step.notes);
+                                const returnInfo = parseStepReturnInfo(visibleStepNotes);
+                                const stepData = parsePetitionStepData(returnInfo ? null : visibleStepNotes);
                                 
                                 return (
                                   <div key={step.id} className={`relative pl-8 pb-6 border-l-2 ${
                                     isCompleted ? 'border-green-500' :
+                                    isSuspended ? 'border-amber-500' :
                                     isCurrent ? 'border-brand' :
                                     'border-brand-gray/30'
                                   }`}>
                                     {/* Circle indicator */}
                                     <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 ${
                                       isCompleted ? 'bg-green-500 border-green-500' :
+                                      isSuspended ? 'bg-amber-500 border-amber-500' :
                                       isCurrent ? 'bg-brand border-brand animate-pulse' :
                                       'bg-white border-brand-gray/30'
                                     }`} />
@@ -946,6 +981,7 @@ A resposta será considerada adequada somente se:
                                     {/* Step content */}
                                     <div className={`ml-4 p-4 rounded-md shadow-sm transition-all ${
                                       isCompleted ? 'bg-green-50/50 border border-green-100' :
+                                      isSuspended ? 'border border-amber-300 bg-amber-50/60 ring-1 ring-amber-100' :
                                       isCurrent ? 'bg-white border border-brand ring-1 ring-brand/10' :
                                       'bg-white border border-brand-gray/20 opacity-70'
                                     }`}>
@@ -954,6 +990,7 @@ A resposta será considerada adequada somente se:
                                           <div className="flex items-center gap-2">
                                             <span className={`font-bold ${
                                               isCompleted ? 'text-green-800' :
+                                              isSuspended ? 'text-amber-900' :
                                               isCurrent ? 'text-brand' :
                                               'text-brand-gray'
                                             }`}>
@@ -964,6 +1001,11 @@ A resposta será considerada adequada somente se:
                                                 ✅ Concluído em {format(new Date(step.completed_at), "dd/MM/yyyy HH:mm")}
                                               </span>
                                             )}
+                                            {isSuspended && suspensionInfo && (
+                                              <span className="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">
+                                                <Pause className="mr-1 h-3 w-3" /> Prazo suspenso
+                                              </span>
+                                            )}
                                           </div>
                                           
                                           <div className="mt-2 text-xs text-brand-gray flex items-center gap-1.5">
@@ -972,10 +1014,15 @@ A resposta será considerada adequada somente se:
                                               Responsável: <span className="font-medium text-brand-black">{step.assigned_user?.name || 'Não atribuído'}</span>
                                             </span>
                                           </div>
+                                          {isSuspended && suspensionInfo && (
+                                            <p className="mt-2 text-xs font-medium text-amber-800">
+                                              Suspenso em {format(new Date(suspensionInfo.suspendedAt), "dd/MM/yyyy HH:mm")}. O prazo não será cobrado até a retomada.
+                                            </p>
+                                          )}
                                         </div>
                                         
                                         <div className="flex items-center gap-2">
-                                          {isCurrent && returnInfo && step.assigned_to === user?.id && (
+                                          {isCurrent && !isSuspended && returnInfo && step.assigned_to === user?.id && (
                                             <Button
                                               size="sm"
                                               variant="outline"
@@ -998,7 +1045,7 @@ A resposta será considerada adequada somente se:
                                           </Button>
                                           )}
 
-                                          {isCurrent && step.assigned_to === user?.id && step.step_number > 1 && (
+                                          {isCurrent && !isSuspended && step.assigned_to === user?.id && step.step_number > 1 && (
                                             <Button
                                               size="sm"
                                               variant="outline"
@@ -1020,7 +1067,7 @@ A resposta será considerada adequada somente se:
                                             </Button>
                                           )}
 
-                                          {isCurrent && (
+                                          {isCurrent && !isSuspended && (
                                             <Button 
                                               size="sm" 
                                               variant="outline"
@@ -1037,8 +1084,34 @@ A resposta será considerada adequada somente se:
                                             </Button>
                                           )}
 
+                                          {isCurrent && step.step_name === 'Questões pendentes' && (step.assigned_to === user?.id || user?.role === 'admin') && (
+                                            <Button
+                                              size="sm"
+                                              variant="outline"
+                                              disabled={suspensionMutation.isPending}
+                                              className={isSuspended
+                                                ? "h-8 border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
+                                                : "h-8 border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 hover:text-amber-900"
+                                              }
+                                              onClick={() => suspensionMutation.mutate({
+                                                workflowId: workflow.id,
+                                                stepId: step.id,
+                                                action: isSuspended ? 'resume' : 'suspend',
+                                              })}
+                                            >
+                                              {suspensionMutation.isPending ? (
+                                                <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                                              ) : isSuspended ? (
+                                                <Play className="mr-1.5 h-4 w-4" />
+                                              ) : (
+                                                <Pause className="mr-1.5 h-4 w-4" />
+                                              )}
+                                              {isSuspended ? 'Retomar prazo' : 'Suspender prazo'}
+                                            </Button>
+                                          )}
+
                                           
-                                          {isCurrent && step.assigned_to === user?.id && (
+                                          {isCurrent && !isSuspended && step.assigned_to === user?.id && (
                                             <Button 
                                               size="sm" 
                                               onClick={() => handleCompleteStep(workflow.id, step.id, step.step_name, workflow.title)}

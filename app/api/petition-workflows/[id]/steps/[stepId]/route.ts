@@ -44,6 +44,13 @@ export async function PUT(
       return NextResponse.json({ error: "Workflow não encontrado." }, { status: 404 });
     }
 
+    if (workflow.status === "Suspensa" || step.status === "Suspensa") {
+      return NextResponse.json(
+        { error: "Retome o prazo antes de alterar ou concluir esta etapa." },
+        { status: 409 },
+      );
+    }
+
     const updates: any = {};
     if (body.notes !== undefined) updates.notes = body.notes;
     

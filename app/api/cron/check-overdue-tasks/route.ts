@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
+import { parsePetitionStepSuspension } from "@/lib/petition-step-suspension";
 
 export const dynamic = 'force-dynamic';
 
@@ -51,16 +52,18 @@ export async function GET(request: Request) {
         *,
         steps:petition_workflow_steps(*, assigned_user:user_profiles!petition_workflow_steps_assigned_to_fkey(name))
       `)
-      .neq("status", "Concluída");
+      .neq("status", "Concluída")
+      .neq("status", "Suspensa");
       
     const missedSteps: any[] = [];
 
     (activeWorkflows || []).forEach(wf => {
       const currentStepNum = wf.current_step;
       const currentStep = wf.steps?.find((s: any) => s.step_number === currentStepNum);
+      const suspension = parsePetitionStepSuspension(currentStep?.notes);
       
       // Se não tem etapa atual, ou já tá concluída, ou é do Cássio, ignora
-      if (!currentStep || currentStep.status === "Concluída" || currentStep.assigned_to === CASSIO_ID) {
+      if (!currentStep || currentStep.status === "Concluída" || currentStep.status === "Suspensa" || (suspension && !suspension.resumedAt) || currentStep.assigned_to === CASSIO_ID) {
         return;
       }
       
@@ -72,6 +75,12 @@ export async function GET(request: Request) {
         if (prevStep && prevStep.completed_at) {
           activeSince = new Date(prevStep.completed_at);
         }
+      }
+
+      // Ao retomar, a contagem de dois dias reinicia na data da retomada.
+      if (suspension?.resumedAt) {
+        const resumedAt = new Date(suspension.resumedAt);
+        if (!activeSince || resumedAt > activeSince) activeSince = resumedAt;
       }
       
       // Se tiver data de inicio e for menor que 2 dias atras
