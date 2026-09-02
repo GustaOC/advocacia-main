@@ -189,7 +189,7 @@ export function AudienciasModule() {
         title: newEvent.title,
         description: newEvent.description,
         due_date: newEvent.start.toISOString(),
-        status: 'Em Andamento',
+        status: 'Pendente',
         priority: 'Média',
         assigned_to: user?.id,
       });

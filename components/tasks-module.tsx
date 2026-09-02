@@ -1,12 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 // components/tasks-module.tsx 
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Loader2, CheckCircle, Clock, AlertTriangle, User, Calendar, Filter, Star, TrendingUp } from "lucide-react";
+import { Plus, Loader2, CheckCircle, Clock, AlertTriangle, Calendar, ClipboardList, Paperclip, Circle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,62 +25,33 @@ interface Employee {
 
 // Componente de estatísticas de tarefas
 function TasksStats({ tasks }: { tasks: Task[] }) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const overdue = tasks.filter((task) => {
+    if (task.status === 'Concluída' || !task.due_date) return false;
+    return taskDate(task.due_date) < today;
+  }).length;
+
   const stats = [
-    { 
-      label: "Total de Tarefas", 
-      value: tasks.length.toString(), 
-      icon: CheckCircle, 
-      color: "text-brand",
-      bg: "from-brand-light/50 to-brand-light/20",
-      trend: "+5%"
-    },
-    { 
-      label: "Em Andamento", 
-      value: tasks.filter(t => t.status === 'Em Andamento').length.toString(), 
-      icon: Clock, 
-      color: "text-brand-sage",
-      bg: "from-brand-sage/30 to-brand-sage/10",
-      trend: "+12%"
-    },
-    { 
-      label: "Concluídas", 
-      value: tasks.filter(t => t.status === 'Concluída').length.toString(), 
-      icon: CheckCircle, 
-      color: "text-brand",
-      bg: "from-brand-beige/50 to-brand-beige/20",
-      trend: "+8%"
-    },
-    { 
-      label: "Alta Prioridade", 
-      value: tasks.filter(t => t.priority === 'Alta').length.toString(), 
-      icon: AlertTriangle, 
-      color: "text-brand",
-      bg: "from-brand-gray/30 to-brand-gray/10",
-      trend: "-3%"
-    },
+    { label: "Total", value: tasks.length, icon: ClipboardList, iconClass: "bg-slate-100 text-slate-700" },
+    { label: "Pendentes", value: tasks.filter(t => t.status === 'Pendente').length, icon: Clock, iconClass: "bg-amber-50 text-amber-700" },
+    { label: "Concluídas", value: tasks.filter(t => t.status === 'Concluída').length, icon: CheckCircle, iconClass: "bg-emerald-50 text-emerald-700" },
+    { label: "Vencidas", value: overdue, icon: AlertTriangle, iconClass: "bg-red-50 text-red-700" },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat, index) => {
-        // Correção: Extrair o ícone corretamente
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {stats.map((stat) => {
         const StatIcon = stat.icon;
-        
         return (
-          <Card key={index} className="border border-brand-gray/20 bg-white rounded-sm shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <p className="text-xs text-brand-gray font-semibold uppercase tracking-wider">{stat.label}</p>
-                  <p className="text-3xl font-serif text-brand-black">{stat.value}</p>
-                  <div className="flex items-center space-x-1 pt-1">
-                    <TrendingUp className="w-4 h-4 text-brand-sage" />
-                    <span className="text-sm text-brand-sage font-medium">{stat.trend}</span>
-                  </div>
-                </div>
-                <div className="p-2 bg-brand-light/20 border border-brand-gray/10 rounded-sm">
-                  <StatIcon className="w-5 h-5 text-brand" />
-                </div>
+          <Card key={stat.label} className="rounded-2xl border-slate-200 bg-white shadow-sm">
+            <CardContent className="flex items-center gap-4 p-4">
+              <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${stat.iconClass}`}>
+                <StatIcon className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold leading-none text-slate-900">{stat.value}</p>
+                <p className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-500">{stat.label}</p>
               </div>
             </CardContent>
           </Card>
@@ -100,71 +70,66 @@ const TaskCard = ({
   onComplete 
 }: { task: Task, employees: Employee[], userRole?: string, onEdit?: (task: Task) => void, onComplete?: (taskId: string) => void }) => {
   const assignee = employees.find(e => e.id === task.assigned_to);
+  const assigneeName = task.assigned_user?.name || assignee?.name || 'Sem responsável';
+  const completed = task.status === 'Concluída';
+  const dueDate = task.due_date ? taskDate(task.due_date) : null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const overdue = Boolean(dueDate && !completed && dueDate < today);
   
   const priorityConfig = {
-    'Alta': { color: 'from-red-500 to-red-600', label: 'Alta', icon: AlertTriangle },
-    'Média': { color: 'from-yellow-500 to-orange-500', label: 'Média', icon: Clock },
-    'Baixa': { color: 'from-green-500 to-green-600', label: 'Baixa', icon: CheckCircle }
-  };
-
-  const statusConfig: Record<string, { bg: string, border: string }> = {
-    'Pendente': { bg: 'bg-brand-light/50', border: 'border-brand-gray' },
-    'Em Andamento': { bg: 'bg-brand-light/50', border: 'border-brand-light' },
-    'Concluída': { bg: 'bg-green-50', border: 'border-green-200' },
-    'Cancelada': { bg: 'bg-red-50', border: 'border-red-200' },
-    'Audiência': { bg: 'bg-amber-50', border: 'border-amber-200' },
-    'Transferido': { bg: 'bg-blue-50', border: 'border-blue-200' },
+    'Alta': { badge: 'border-red-200 bg-red-50 text-red-700', accent: 'bg-red-500', label: 'Alta', icon: AlertTriangle },
+    'Média': { badge: 'border-amber-200 bg-amber-50 text-amber-700', accent: 'bg-amber-500', label: 'Média', icon: Clock },
+    'Baixa': { badge: 'border-emerald-200 bg-emerald-50 text-emerald-700', accent: 'bg-emerald-500', label: 'Baixa', icon: Circle }
   };
 
   const currentPriority = task.priority || 'Média';
   const PriorityIcon = priorityConfig[currentPriority].icon;
   const priorityLabel = priorityConfig[currentPriority].label;
-  const priorityColor = priorityConfig[currentPriority].color;
-  
-  const currentStatus = task.status || 'Pendente';
-  const currentStatusConfig = (statusConfig[currentStatus] || statusConfig['Pendente']) as { bg: string, border: string };
+  const priorityBadge = priorityConfig[currentPriority].badge;
+  const priorityAccent = priorityConfig[currentPriority].accent;
 
   return (
-    <Card className={`group cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-2 ${currentStatusConfig.border} ${currentStatusConfig.bg} relative overflow-hidden`}>
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white to-transparent rounded-full transform translate-x-8 -translate-y-8"></div>
-      
-      <CardContent className="p-4 relative z-10">
+    <Card className={`group rounded-2xl border-slate-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${completed ? 'opacity-80' : ''}`}>
+      <div className={`absolute inset-y-0 left-0 w-1 ${completed ? 'bg-emerald-500' : priorityAccent}`} />
+      <CardContent className="p-5 pl-6">
         <div className="space-y-4">
-          <div className="space-y-2">
-            <h4 className="font-semibold text-brand-black line-clamp-2 group-hover:text-brand transition-colors">
-              {task.title}
-            </h4>
+          <div className="space-y-1.5">
+            <div className="flex items-start justify-between gap-3">
+              <h4 className={`font-semibold leading-snug text-slate-900 ${completed ? 'line-through decoration-slate-300' : ''}`}>
+                {task.title}
+              </h4>
+              {completed && <CheckCircle className="h-5 w-5 shrink-0 text-emerald-600" />}
+            </div>
             {renderDescription(task.description)}
           </div>
 
-          <div className="flex items-center justify-between">
-            <Badge className={`bg-gradient-to-r ${priorityColor} text-white border-0 px-3 py-1 font-semibold shadow-lg`}>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className={`rounded-full px-2.5 py-1 text-xs font-semibold ${priorityBadge}`}>
               <PriorityIcon className="h-3 w-3 mr-1" />
               {priorityLabel}
             </Badge>
-            
-            {task.due_date && (
-              <div className="flex items-center text-xs text-brand-sage">
-                <Calendar className="h-3 w-3 mr-1" />
-                {new Date(task.due_date).toLocaleDateString('pt-BR')}
+            {dueDate && (
+              <div className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${overdue ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-600'}`}>
+                <Calendar className="h-3 w-3" />
+                {overdue ? 'Vencida em' : 'Vence em'} {dueDate.toLocaleDateString('pt-BR')}
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-brand-gray/50">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-brand-black rounded-full flex items-center justify-center text-white text-xs font-bold">
-                {task.assigned_user?.name?.charAt(0) || assignee?.name?.charAt(0) || '?'}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-bold text-white">
+                {assigneeName.charAt(0).toUpperCase()}
               </div>
-              <span className="text-xs text-brand-gray">{task.assigned_user?.name || assignee?.name || 'N/A'}</span>
+              <span className="truncate text-xs font-medium text-slate-600">{assigneeName}</span>
             </div>
-            
-            <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              {task.status !== 'Concluída' && (
+            <div className="flex items-center gap-1">
+              {!completed && (
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-brand-sage hover:text-brand hover:bg-brand-light/50 h-8 px-2"
+                  className="h-8 rounded-lg px-2.5 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
                   onClick={(e) => { e.stopPropagation(); onComplete?.(task.id as string); }}
                 >
                   <CheckCircle className="h-4 w-4 mr-1" />
@@ -175,7 +140,7 @@ const TaskCard = ({
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="text-brand hover:text-brand hover:bg-brand-light/50 h-8 px-2"
+                  className="h-8 rounded-lg px-2.5 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                   onClick={(e) => { e.stopPropagation(); onEdit?.(task); }}
                 >
                   Editar
@@ -188,6 +153,10 @@ const TaskCard = ({
     </Card>
   );
 };
+
+function taskDate(value: string) {
+  return new Date(`${String(value).split('T')[0]}T12:00:00`);
+}
 
 
 const renderDescription = (text?: string | null) => {
@@ -215,21 +184,21 @@ const renderDescription = (text?: string | null) => {
   
   return (
     <>
-      {cleanText && <p className="text-sm text-brand-gray line-clamp-1 whitespace-pre-line">{cleanText}</p>}
+      {cleanText && <p className="line-clamp-2 whitespace-pre-line text-sm leading-relaxed text-slate-500">{cleanText}</p>}
       {images.length > 0 && (
-        <div className="mt-2 flex gap-2 flex-wrap">
+        <div className="mt-2 flex flex-wrap gap-2">
           {images.map((img, i) => (
-            <a key={i} href={img} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
-              <img src={img} alt="Anexo" className="w-12 h-12 object-cover rounded-md border border-brand-gray/30 hover:opacity-80 transition-opacity" />
+            <a key={i} href={img} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-300 hover:bg-slate-100">
+              <Paperclip className="h-3.5 w-3.5" /> Imagem anexada {images.length > 1 ? i + 1 : ''}
             </a>
           ))}
         </div>
       )}
       {links.length > 0 && (
-        <div className="mt-2 flex flex-col gap-1">
+        <div className="mt-2 flex flex-wrap gap-2">
           {links.map((link, i) => (
-            <a key={'link'+i} href={link.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-xs text-brand hover:underline inline-flex items-center gap-1">
-              {link.label}
+            <a key={'link'+i} href={link.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-slate-300 hover:bg-slate-100">
+              <Paperclip className="h-3.5 w-3.5 shrink-0" /> <span className="truncate">{link.label.replace(/^📄\s*/, '')}</span>
             </a>
           ))}
         </div>
@@ -389,20 +358,13 @@ export function TasksModule() {
     return tasks.filter(task => task.assigned_to === user?.id);
   }, [tasks, user]);
 
-  // Mostrar todas as tarefas atribuídas ao usuário no Kanban
   const activeTasks = useMemo(() => {
-    return visibleTasks.filter(task => {
-      // Opcional: Se quisermos esconder tarefas concluídas antigas, poderíamos fazer aqui.
-      // Mas como é um Kanban, vamos deixar o usuário ver o fluxo completo.
-      // Se houver muitas tarefas concluídas, podemos limitar depois.
-      return true;
-    });
+    return visibleTasks.filter(task => task.status === 'Pendente' || task.status === 'Concluída');
   }, [visibleTasks]);
 
   const columns = [
-    { id: 'Pendente', title: 'Pendente', color: 'from-brand-black to-brand-black/90 text-white' },
-    { id: 'Em Andamento', title: 'Em Andamento', color: 'from-blue-100 to-blue-200' },
-    { id: 'Concluída', title: 'Concluída', color: 'from-green-100 to-green-200' },
+    { id: 'Pendente', title: 'Pendentes', description: 'Tarefas que ainda precisam ser concluídas', icon: Clock, tone: 'border-amber-200 bg-amber-50 text-amber-800' },
+    { id: 'Concluída', title: 'Concluídas', description: 'Tarefas finalizadas pela equipe', icon: CheckCircle, tone: 'border-emerald-200 bg-emerald-50 text-emerald-800' },
   ];
 
   if (isLoading) {
@@ -417,27 +379,30 @@ export function TasksModule() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-end mb-8">
-        <div className="bg-white border-l-4 border-brand p-8 shadow-sm mb-6 rounded-sm">
-          <h2 className="text-3xl font-serif text-brand-black tracking-tight">Gestão de Tarefas</h2>
-          <p className="text-brand-gray mt-2 font-medium">Controle de delegações, andamentos e produtividade da equipe.</p>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-brand">
+            <ClipboardList className="h-4 w-4" /> Organização da equipe
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Tarefas</h2>
+          <p className="mt-1 text-sm text-slate-500">Acompanhe o que está pendente e o que já foi concluído.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           {user?.role === 'admin' && (
             <Button 
               onClick={() => setAllTasksModalOpen(true)}
               variant="outline"
-              className="border-brand text-brand hover:bg-brand-50"
+              className="rounded-xl border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
               size="lg"
             >
-              Ver Todas as Tarefas
+              Todas as tarefas
             </Button>
           )}
           {can && can('tasks_create') && (
             <Button 
               onClick={() => setModalOpen(true)} 
-              className="bg-brand text-white hover:bg-brand-dark shadow-sm rounded-none"
+              className="rounded-xl bg-brand text-white shadow-sm hover:bg-brand-dark"
               size="lg"
             >
               <Plus className="mr-2 h-5 w-5" /> 
@@ -447,30 +412,30 @@ export function TasksModule() {
         </div>
       </div>
 
-      {/* Estatísticas */}
       <TasksStats tasks={activeTasks} />
 
-      {/* Kanban Board Moderno */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {columns.map(column => (
-          <div key={column.id} className="space-y-4">
-            {/* Header da coluna */}
-            <Card className={`bg-gradient-to-r ${column.color} border-0 shadow-lg`}>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <h3 className={`font-bold text-lg ${column.color.includes("brand-black") ? "text-white" : "text-brand"}`}>{column.title}</h3>
-                  <Badge variant="secondary" className="bg-white/80 text-brand font-semibold shadow-sm">
-                    {activeTasks.filter(task => task.status === column.id).length}
-                  </Badge>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        {columns.map(column => {
+          const ColumnIcon = column.icon;
+          const columnTasks = activeTasks.filter(task => task.status === column.id);
+          return (
+          <section key={column.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/70">
+            <div className="flex items-center justify-between border-b border-slate-200 bg-white px-5 py-4">
+              <div className="flex min-w-0 items-center gap-3">
+                <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl border ${column.tone}`}>
+                  <ColumnIcon className="h-5 w-5" />
                 </div>
-              </CardContent>
-            </Card>
-            
-            {/* Tarefas da coluna */}
-            <div className="space-y-4 min-h-[500px]">
-              {activeTasks
-                .filter(task => task.status === column.id)
-                .map(task => (
+                <div className="min-w-0">
+                  <h3 className="font-semibold text-slate-900">{column.title}</h3>
+                  <p className="truncate text-xs text-slate-500">{column.description}</p>
+                </div>
+              </div>
+              <Badge variant="outline" className="rounded-full border-slate-200 bg-slate-50 px-2.5 text-slate-700">
+                {columnTasks.length}
+              </Badge>
+            </div>
+            <div className="min-h-[220px] space-y-3 p-4">
+              {columnTasks.map(task => (
                   <TaskCard 
                     key={task.id} 
                     task={task} 
@@ -481,15 +446,17 @@ export function TasksModule() {
                   />
                 ))}
               
-              {activeTasks.filter(task => task.status === column.id).length === 0 && (
-                <div className="text-center py-12 text-brand-gray">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                  <p className="font-medium">Nenhuma tarefa</p>
+              {columnTasks.length === 0 && (
+                <div className="grid min-h-[190px] place-items-center rounded-xl border border-dashed border-slate-300 bg-white/60 text-center text-slate-400">
+                  <div>
+                    <ColumnIcon className="mx-auto mb-2 h-8 w-8 opacity-40" />
+                    <p className="text-sm font-medium">Nenhuma tarefa</p>
+                  </div>
                 </div>
               )}
             </div>
-          </div>
-        ))}
+          </section>
+        )})}
       </div>
 
       {/* Modal de Nova Tarefa Moderno */}
@@ -648,7 +615,6 @@ export function TasksModule() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Pendente">Pendente</SelectItem>
-                      <SelectItem value="Em Andamento">Em Andamento</SelectItem>
                       <SelectItem value="Concluída">Concluída</SelectItem>
                       <SelectItem value="Cancelada">Cancelada</SelectItem>
                     </SelectContent>

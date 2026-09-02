@@ -353,7 +353,7 @@ export function CalendarModule() {
           title: form.title.trim(),
           description: form.description,
           due_date: formatIsoDate(start),
-          status: 'Em Andamento',
+          status: 'Pendente',
           priority: 'Média',
           assigned_to: form.assignedTo || user?.id || null,
           calendar_metadata: calendarMetadata,
