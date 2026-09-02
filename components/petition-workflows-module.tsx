@@ -20,7 +20,7 @@ import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight,
 const PETITION_DESCRIPTION_TEMPLATE = `Representamos:
 Objetivo processual:
 Possível tema:`;
-const TOTAL_WORKFLOW_STEPS = 15;
+const BASE_WORKFLOW_STEPS = 17;
 const STEP_RETURN_PREFIX = "__WORKFLOW_RETURN__:";
 
 interface StepReturnInfo {
@@ -179,9 +179,9 @@ export function PetitionWorkflowsModule() {
       "Triagem inicial": [],
       "Organização e nomeação dos documentos [Gemini]": [],
       "Análise documental e Resumo [NotebookLM]": [{ title: "Análise Documental Jurídica", text: "**Entrada mínima:**\n```\n/analise-documental-juridica\n\nRepresentamos: [PARTE]\nAnalise todos os documentos deste caso.\nContexto adicional: [SE NECESSÁRIO]\n```" }],
-      "Tese jurídica [Sonnet - temática / Opus - tese jurídica]": [{"title":"Consumidor e Bancário","text": "**Entrada mínima:**\n```\n/consumidor-e-bancario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Produto/serviço afetado]\n```"},{"title":"Contratual e Obrigações","text": "**Entrada mínima:**\n```\n/contratual-e-obrigacoes\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Contrato analisado]\n```"},{"title":"Direito do Trabalho","text": "**Entrada mínima:**\n```\n/direito-do-trabalho\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Relação de trabalho em questão]\n```"},{"title":"Imobiliário","text": "**Entrada mínima:**\n```\n/imobiliario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Imóvel/Matrícula em questão]\n```"},{"title":"Previdenciário","text": "**Entrada mínima:**\n```\n/previdenciario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Benefício pleiteado]\n```"},
-  { title: "Tese Jurídica (Geral)", text: "**Entrada mínima:**\n```\n/tese-juridica\n\nRepresentamos: [PARTE].\nObjetivo material: [OBJETIVO]\nUtilize a análise documental anterior e os documentos originais.\n```" }
-],
+      "Tese temática (Sonnet)": [{"title":"Consumidor e Bancário","text": "**Entrada mínima:**\n```\n/consumidor-e-bancario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Produto/serviço afetado]\n```"},{"title":"Contratual e Obrigações","text": "**Entrada mínima:**\n```\n/contratual-e-obrigacoes\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Contrato analisado]\n```"},{"title":"Direito do Trabalho","text": "**Entrada mínima:**\n```\n/direito-do-trabalho\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Relação de trabalho em questão]\n```"},{"title":"Imobiliário","text": "**Entrada mínima:**\n```\n/imobiliario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Imóvel/Matrícula em questão]\n```"},{"title":"Previdenciário","text": "**Entrada mínima:**\n```\n/previdenciario\n\nRepresentamos: [PARTE]\nObjetivo: [OBJETIVO]\n[Benefício pleiteado]\n```"}],
+      "Questões pendentes": [],
+      "Tese jurídica (Opus)": [{ title: "Tese Jurídica (Geral)", text: "**Entrada mínima:**\n```\n/tese-juridica\n\nRepresentamos: [PARTE].\nObjetivo material: [OBJETIVO]\nUtilize a análise documental anterior e os documentos originais.\n```" }],
       "Viabilidade (Claude)": [{
         title: "Proposta de honorários",
         text: "**Entrada mínima:**\n```\n/proposta-honorarios\n\nCliente: [CLIENTE]\nObjeto: [SERVIÇO]\nHonorários pretendidos: [VALOR OU MODELO]\n```"
@@ -878,11 +878,11 @@ A resposta será considerada adequada somente se:
                           <div className="flex-1 h-2 bg-brand-light/50 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-brand rounded-full transition-all duration-500"
-                              style={{ width: `${(workflow.current_step / TOTAL_WORKFLOW_STEPS) * 100}%` }}
+                              style={{ width: `${Math.min(100, (workflow.current_step / Math.max(...(workflow.steps || []).map((step: any) => step.step_number), BASE_WORKFLOW_STEPS)) * 100)}%` }}
                             />
                           </div>
                           <span className="text-xs text-brand-gray font-medium w-8">
-                            {workflow.current_step}/{TOTAL_WORKFLOW_STEPS}
+                            {workflow.current_step}/{Math.max(...(workflow.steps || []).map((step: any) => step.step_number), BASE_WORKFLOW_STEPS)}
                           </span>
                         </div>
                       </TableCell>

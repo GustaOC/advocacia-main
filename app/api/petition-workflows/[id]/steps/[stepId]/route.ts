@@ -61,8 +61,17 @@ export async function PUT(
       updates.completed_at = new Date().toISOString();
       updates.completed_by = user.id;
 
+      const { data: lastStep } = await supabase
+        .from("petition_workflow_steps")
+        .select("step_number")
+        .eq("workflow_id", workflowId)
+        .order("step_number", { ascending: false })
+        .limit(1)
+        .single();
+      const lastStepNumber = lastStep?.step_number ?? step.step_number;
+
       // Lógica de avanço do workflow
-      if (step.step_number < 15) {
+      if (step.step_number < lastStepNumber) {
         const nextStepNumber = step.step_number + 1;
         await supabase
           .from("petition_workflows")
@@ -121,7 +130,7 @@ export async function PUT(
           }
           } // fecha if assigned_to !== step.assigned_to
         }
-      } else if (step.step_number === 15) {
+      } else if (step.step_number === lastStepNumber) {
         // Conclui o workflow inteiro ao finalizar a última etapa
         await supabase
           .from("petition_workflows")
