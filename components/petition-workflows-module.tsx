@@ -84,7 +84,7 @@ export function PetitionWorkflowsModule() {
     },
     onSuccess: () => {
       toast({ title: "Problemática reportada", description: "O fluxo foi atualizado e enviado para o Dr. Cássio." });
-      queryClient.invalidateQueries({ queryKey: ["petitionWorkflows"] });
+      queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
       setIsProblemModalOpen(false);
       setProblemTitle("");
       setProblemDesc("");
@@ -112,7 +112,12 @@ export function PetitionWorkflowsModule() {
 
   const { data: workflows = [], isLoading } = useQuery({
     queryKey: ['petition-workflows'],
-    queryFn: () => apiClient.getPetitionWorkflows()
+    queryFn: () => apiClient.getPetitionWorkflows(),
+    staleTime: 0,
+    refetchInterval: 5_000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   const { data: employees = [] } = useQuery({
@@ -838,7 +843,10 @@ A resposta será considerada adequada somente se:
         </Card>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex flex-wrap items-center justify-end gap-3">
+        <span className="flex items-center gap-1.5 text-xs text-brand-gray">
+          <Clock className="h-3.5 w-3.5" /> Atualização automática a cada 5 segundos
+        </span>
         <Button onClick={() => setIsNewModalOpen(true)} className="bg-brand text-white hover:bg-brand/90 shadow-sm rounded-sm">
           <Plus className="mr-2 h-4 w-4" /> Nova Petição
         </Button>
