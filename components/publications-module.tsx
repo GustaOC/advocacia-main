@@ -184,7 +184,7 @@ export function PublicationsModule() {
       const res = await fetch('/api/run-robo', { method: 'POST' });
       const data = await res.json();
       console.log("🤖 [Robô Públicações] Resposta do servidor:", data);
-      if (res.ok) {
+      if (res.ok && !data.error) {
         toast({ title: "Sucesso", description: data.message || "Aguarde ~1 minuto e recarregue a página." });
       } else {
         toast({ title: "Erro", description: data.error || "Erro ao acionar robô.", variant: "destructive" });

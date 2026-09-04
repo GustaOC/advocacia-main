@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       // Alterado para retornar status 200 e passar o erro no corpo, para não confundir o painel da Vercel
       return NextResponse.json({ 
         error: `Falha no GitHub (Status ${response.status}): ${errorText || response.statusText}` 
-      }, { status: 200 });
+      }, { status: 400 });
     }
 
     return NextResponse.json({ success: true, message: 'Robô acionado com sucesso no GitHub Actions!' });
