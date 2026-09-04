@@ -16,7 +16,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { apiClient } from '@/lib/api-client';
 import { format } from 'date-fns';
-import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning, Paperclip, X, Download, Pause, Play } from 'lucide-react';
+import { FileText, CheckCircle, AlertCircle, Clock, Plus, Loader2, ChevronRight, ChevronDown, User, Sparkles, Copy, Eye, Undo2, MessageSquareWarning, Paperclip, X, Download, Pause, Play, Pencil } from 'lucide-react';
 import { parsePetitionStepData, serializePetitionStepData, type PetitionStepAttachment } from '@/lib/petition-step-data';
 import { getVisiblePetitionStepNotes, isPetitionStepSuspended, parsePetitionStepSuspension } from '@/lib/petition-step-suspension';
 
@@ -142,6 +142,29 @@ export function PetitionWorkflowsModule() {
       queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
     }
   });
+
+  const [editingPetition, setEditingPetition] = useState<{ id: string; title: string; description: string } | null>(null);
+
+  const updateWorkflowMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { title?: string; description?: string } }) =>
+      apiClient.updatePetitionWorkflow(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['petition-workflows'] });
+      toast({ title: 'Sucesso', description: 'Descrição da petição atualizada com sucesso.' });
+      setEditingPetition(null);
+    },
+    onError: (error: any) => {
+      toast({ title: 'Erro', description: error.message || 'Erro ao atualizar petição.', variant: 'destructive' });
+    },
+  });
+
+  const handleSaveDescription = () => {
+    if (!editingPetition) return;
+    updateWorkflowMutation.mutate({
+      id: editingPetition.id,
+      data: { description: editingPetition.description }
+    });
+  };
 
   const returnStepMutation = useMutation({
     mutationFn: ({ workflowId, stepId, reason, observations }: { workflowId: string, stepId: string, reason: string, observations?: string }) =>
@@ -920,6 +943,24 @@ A resposta será considerada adequada somente se:
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 w-7 shrink-0 p-0 text-brand-gray hover:bg-brand-light/50 hover:text-brand"
+                              title="Editar descrição da petição"
+                              aria-label={`Editar descrição da petição ${workflow.title}`}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setEditingPetition({
+                                  id: workflow.id,
+                                  title: workflow.title,
+                                  description: workflow.description || ''
+                                });
+                              }}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
                           </div>
                           {workflow.description && (
                             <p className="mt-1 max-w-md whitespace-pre-line text-xs font-normal text-brand-gray line-clamp-3">
@@ -959,7 +1000,33 @@ A resposta será considerada adequada somente se:
                       <TableRow className="bg-brand-light/5 hover:bg-brand-light/5">
                         <TableCell colSpan={4} className="p-0 border-b border-brand-gray/10">
                           <div className="p-8 max-w-4xl mx-auto">
-                            <h4 className="font-serif text-xl text-brand-black mb-6">Linha do Tempo da Petição</h4>
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6 pb-4 border-b border-brand-gray/15">
+                              <div className="space-y-1">
+                                <h4 className="font-serif text-xl text-brand-black">Linha do Tempo da Petição</h4>
+                                {workflow.description ? (
+                                  <p className="text-xs text-brand-gray whitespace-pre-wrap max-w-2xl leading-relaxed">
+                                    {workflow.description}
+                                  </p>
+                                ) : (
+                                  <p className="text-xs text-brand-gray/60 italic">
+                                    Nenhuma descrição cadastrada.
+                                  </p>
+                                )}
+                              </div>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setEditingPetition({
+                                  id: workflow.id,
+                                  title: workflow.title,
+                                  description: workflow.description || ''
+                                })}
+                                className="border-brand-gray/30 text-brand hover:bg-brand-light/50 shrink-0 self-start text-xs h-8"
+                              >
+                                <Pencil className="mr-1.5 h-3.5 w-3.5" /> Editar Descrição
+                              </Button>
+                            </div>
                             <div className="space-y-0">
                               {(workflow.steps ? [...workflow.steps].sort((a: any, b: any) => a.step_number - b.step_number) : []).map((step: any, index: number) => {
                                 const isCompleted = step.status === 'Concluída';
@@ -1201,8 +1268,65 @@ A resposta será considerada adequada somente se:
               </div>
             </div>
           )}
-          <DialogFooter>
+          <DialogFooter className="flex items-center justify-between sm:justify-between">
+            {selectedPetition && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setEditingPetition({
+                    id: selectedPetition.id,
+                    title: selectedPetition.title,
+                    description: selectedPetition.description || ''
+                  });
+                  setSelectedPetition(null);
+                }}
+                className="border-brand text-brand hover:bg-brand/10"
+              >
+                <Pencil className="mr-2 h-4 w-4" /> Editar Descrição
+              </Button>
+            )}
             <Button variant="outline" onClick={() => setSelectedPetition(null)}>Fechar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal para Editar Descrição da Petição */}
+      <Dialog open={!!editingPetition} onOpenChange={(open) => !open && setEditingPetition(null)}>
+        <DialogContent className="sm:max-w-lg bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-serif text-brand-black border-b border-brand-gray/20 pb-4">
+              Editar Descrição da Petição
+            </DialogTitle>
+          </DialogHeader>
+          {editingPetition && (
+            <div className="space-y-4 py-3">
+              <div className="space-y-1">
+                <Label className="text-brand-gray text-xs">Petições / Workflow</Label>
+                <p className="font-semibold text-brand-black text-sm">{editingPetition.title}</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-petition-description">Descrição</Label>
+                <Textarea
+                  id="edit-petition-description"
+                  value={editingPetition.description}
+                  onChange={(e) => setEditingPetition({ ...editingPetition, description: e.target.value })}
+                  placeholder="Insira a descrição ou orientações sobre esta petição..."
+                  className="min-h-[200px] resize-y font-mono text-xs leading-relaxed"
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter className="border-t border-brand-gray/20 pt-4">
+            <Button variant="outline" onClick={() => setEditingPetition(null)}>Cancelar</Button>
+            <Button
+              onClick={handleSaveDescription}
+              disabled={updateWorkflowMutation.isPending}
+              className="bg-brand text-white hover:bg-brand/90"
+            >
+              {updateWorkflowMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Salvar Alterações
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
