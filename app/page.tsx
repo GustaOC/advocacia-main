@@ -164,7 +164,7 @@ export default function LandingPage() {
                 <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">01</div>
                 <div>
                   <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Direito Privado e Patrimonial</h3>
-                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
+                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl text-justify hyphens-auto">
                     Atuação em questões contratuais, obrigacionais, patrimoniais e demais relações de direito privado, tanto na prevenção de conflitos quanto na condução de litígios que exijam análise jurídica aprofundada.
                   </p>
                 </div>
@@ -174,7 +174,7 @@ export default function LandingPage() {
                 <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">02</div>
                 <div>
                   <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Contencioso Estratégico e Recursos</h3>
-                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
+                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl text-justify hyphens-auto">
                     Atuação em processos judiciais de maior complexidade, recursos, tutelas de urgência, mandados de segurança e outras medidas processuais que demandem análise aprofundada dos fatos, da prova e da estratégia processual.
                   </p>
                 </div>
@@ -184,7 +184,7 @@ export default function LandingPage() {
                 <div className="text-[#95A08A] font-serif text-2xl md:text-3xl w-16">03</div>
                 <div>
                   <h3 className="font-serif text-[#000000] text-2xl md:text-3xl mb-4">Atuação perante o Superior Tribunal de Justiça</h3>
-                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl">
+                  <p className="text-[#3C443D] font-light leading-relaxed max-w-2xl text-justify hyphens-auto">
                     Atuação em recursos especiais e demais medidas processuais perante o Superior Tribunal de Justiça, desde a análise de viabilidade recursal até a estruturação da controvérsia de direito federal e o acompanhamento do processo perante a Corte.
                   </p>
                 </div>
@@ -221,7 +221,7 @@ export default function LandingPage() {
                     <span className="w-1.5 h-1.5 rounded-full bg-[#95A08A] mt-2.5 shrink-0"></span>
                     <div>
                       <p className="text-[#3C443D] text-lg font-medium">{item.title}</p>
-                      <p className="text-[#7A8077] text-sm mt-1 leading-relaxed">{item.desc}</p>
+                      <p className="text-[#7A8077] text-sm mt-1 leading-relaxed text-justify hyphens-auto">{item.desc}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -275,7 +275,7 @@ export default function LandingPage() {
                     <div className="absolute -top-10 left-0 w-3 h-3 rounded-full bg-[#95A08A]"></div>
                     <span className="font-serif text-[#95A08A] text-xl mb-2 block">0{idx + 1}</span>
                     <h4 className="text-white font-medium mb-3">{step.title}</h4>
-                    <p className="text-sm text-[#A8ABA2] font-light leading-relaxed">{step.desc}</p>
+                    <p className="text-sm text-[#A8ABA2] font-light leading-relaxed text-justify hyphens-auto">{step.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -300,7 +300,7 @@ export default function LandingPage() {
                   <div className="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-[#95A08A]"></div>
                   <span className="font-serif text-[#95A08A] text-xl mb-1 block">0{idx + 1}</span>
                   <h4 className="text-white font-medium mb-2">{step.title}</h4>
-                  <p className="text-sm text-[#A8ABA2] font-light leading-relaxed">{step.desc}</p>
+                  <p className="text-sm text-[#A8ABA2] font-light leading-relaxed text-justify hyphens-auto">{step.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -338,7 +338,7 @@ export default function LandingPage() {
                   <p className="text-[#95A08A] text-sm tracking-wide">OAB/MS nº 22.647</p>
                 </motion.div>
 
-                <motion.div variants={fadeInUp} className="space-y-6 text-[#3C443D] font-light leading-relaxed">
+                <motion.div variants={fadeInUp} className="space-y-6 text-[#3C443D] font-light leading-relaxed text-justify hyphens-auto">
                   <p>
                     Advogado com atuação profissional desde 2017, concentra sua prática em Direito Privado, Processo Civil e contencioso estratégico.
                   </p>
@@ -406,28 +406,28 @@ export default function LandingPage() {
               
               <motion.div variants={fadeInUp}>
                 <h4 className="font-medium text-[#000000] mb-3">Como funciona o primeiro contato?</h4>
-                <p className="text-[#3C443D] font-light leading-relaxed">
+                <p className="text-[#3C443D] font-light leading-relaxed text-justify hyphens-auto">
                   O primeiro contato destina-se a uma compreensão preliminar dos fatos. Solicitamos uma breve descrição do cenário para avaliarmos se a demanda se enquadra na área de especialidade e no escopo de atuação do escritório.
                 </p>
               </motion.div>
 
               <motion.div variants={fadeInUp}>
                 <h4 className="font-medium text-[#000000] mb-3">Como o escritório avalia uma nova demanda?</h4>
-                <p className="text-[#3C443D] font-light leading-relaxed">
+                <p className="text-[#3C443D] font-light leading-relaxed text-justify hyphens-auto">
                   Através de uma análise documental rigorosa. Não emitimos pareceres ou adotamos estratégias baseadas apenas em relatos verbais; cada passo é planejado mediante o estudo aprofundado dos autos e das provas disponíveis.
                 </p>
               </motion.div>
 
               <motion.div variants={fadeInUp}>
                 <h4 className="font-medium text-[#000000] mb-3">Como são definidos o escopo e os honorários?</h4>
-                <p className="text-[#3C443D] font-light leading-relaxed">
+                <p className="text-[#3C443D] font-light leading-relaxed text-justify hyphens-auto">
                   Os honorários são definidos após a análise inicial da demanda e da extensão do trabalho necessário. As condições da contratação são apresentadas individualmente, de acordo com o escopo da atuação.
                 </p>
               </motion.div>
 
               <motion.div variants={fadeInUp}>
                 <h4 className="font-medium text-[#000000] mb-3">Quem acompanha o processo?</h4>
-                <p className="text-[#3C443D] font-light leading-relaxed">
+                <p className="text-[#3C443D] font-light leading-relaxed text-justify hyphens-auto">
                   Cássio Miguel participa diretamente da definição da estratégia e do acompanhamento dos momentos relevantes dos casos conduzidos pelo escritório, com o apoio da equipe jurídica conforme as necessidades de cada demanda.
                 </p>
               </motion.div>
@@ -446,7 +446,7 @@ export default function LandingPage() {
               <motion.h2 variants={fadeInUp} className="font-serif text-[#000000] text-3xl md:text-5xl mb-6 leading-[1.1]">
                 Uma questão jurídica começa<br />por uma boa compreensão do caso.
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-[#3C443D] text-lg font-light mb-12">
+              <motion.p variants={fadeInUp} className="text-[#3C443D] text-lg font-light mb-12 text-justify hyphens-auto">
                 Para conhecer a atuação do escritório ou encaminhar uma questão para análise, entre em contato.
               </motion.p>
               <motion.button 
