@@ -91,7 +91,7 @@ export default function LandingPage() {
               <motion.h1 variants={fadeInUp} className="font-serif text-white text-[42px] md:text-[50px] lg:text-[64px] leading-[1.05] mb-8">
                 Técnica e confiança<br />que permanecem.
               </motion.h1>
-              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md">
+              <motion.p variants={fadeInUp} className="text-[#E3E0D7] text-base md:text-lg leading-[1.6] mb-12 font-light max-w-md text-justify hyphens-auto">
                 Advocacia estratégica em Direito Privado e contencioso de maior complexidade, com análise individualizada, precisão processual e acompanhamento pessoal.
               </motion.p>
               <motion.button 
